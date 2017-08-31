@@ -1,4 +1,4 @@
-package org.smartregister.kip.viewcomponents;
+package org.smartregister.kip.viewComponents;
 
 import android.util.Pair;
 import android.view.LayoutInflater;

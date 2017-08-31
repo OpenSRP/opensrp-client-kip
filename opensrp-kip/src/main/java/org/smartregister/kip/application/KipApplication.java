@@ -33,13 +33,13 @@ import org.smartregister.kip.receiver.KipSyncBroadcastReceiver;
 import org.smartregister.kip.receiver.SyncStatusBroadcastReceiver;
 import org.smartregister.kip.repository.DailyTalliesRepository;
 import org.smartregister.kip.repository.HIA2IndicatorsRepository;
+import org.smartregister.kip.repository.KipEventClientRepository;
 import org.smartregister.kip.repository.KipRepository;
 import org.smartregister.kip.repository.LocationRepository;
 import org.smartregister.kip.repository.MonthlyTalliesRepository;
 import org.smartregister.kip.repository.StockRepository;
 import org.smartregister.kip.repository.UniqueIdRepository;
 import org.smartregister.kip.sync.KipUpdateActionsTask;
-import org.smartregister.repository.EventClientRepository;
 import org.smartregister.repository.Repository;
 import org.smartregister.sync.DrishtiSyncScheduler;
 import org.smartregister.view.activity.DrishtiApplication;
@@ -71,7 +71,7 @@ public class KipApplication extends DrishtiApplication
     private DailyTalliesRepository dailyTalliesRepository;
     private MonthlyTalliesRepository monthlyTalliesRepository;
     private HIA2IndicatorsRepository hIA2IndicatorsRepository;
-    private EventClientRepository eventClientRepository;
+    private KipEventClientRepository eventClientRepository;
     private StockRepository stockRepository;
     private boolean lastModified;
     private LocationRepository locationRepository;
@@ -304,9 +304,9 @@ public class KipApplication extends DrishtiApplication
         return ImmunizationLibrary.getInstance().recurringServiceRecordRepository();
     }
 
-    public EventClientRepository eventClientRepository() {
+    public KipEventClientRepository eventClientRepository() {
         if (eventClientRepository == null) {
-            eventClientRepository = new EventClientRepository(getRepository());
+            eventClientRepository = new KipEventClientRepository(getRepository());
         }
         return eventClientRepository;
     }

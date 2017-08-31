@@ -83,8 +83,8 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
     public static final String OPENMRS_ENTITY_PARENT = "openmrs_entity_parent";
     public static final String OPENMRS_CHOICE_IDS = "openmrs_choice_ids";
     public static final String OPENMRS_DATA_TYPE = "openmrs_data_type";
-    public static final String MOTHER_DEFAULT_DOB = "01-01-1960";
-    public static final String FATHER_DEFAULT_DOB = "01-01-1960";
+    public static final String MOTHER_DEFAULT_DOB = "01-01-1900";
+    public static final String FATHER_DEFAULT_DOB = "01-01-1900";
 
     private static final String PERSON_ATTRIBUTE = "person_attribute";
     private static final String PERSON_INDENTIFIER = "person_identifier";
@@ -127,8 +127,9 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
     public static final SimpleDateFormat dd_MM_yyyy = new SimpleDateFormat("dd-MM-yyyy");
     //public static Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").create();
     //2007-03-31T04:00:00.000Z
-    public static final Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").registerTypeAdapter(DateTime.class, new DateTimeTypeConverter()).create();
-
+    public static final Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+            .registerTypeAdapter(DateTime.class, new DateTimeTypeConverter())
+            .setExclusionStrategies(new ClientExclusionStrategy()).create();
 
     public static void saveForm(Context context, org.smartregister.kip.context.Context openSrpContext,
                                 String jsonString, String providerId) {

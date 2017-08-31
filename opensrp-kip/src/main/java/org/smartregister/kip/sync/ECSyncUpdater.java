@@ -8,7 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.smartregister.domain.Response;
 import org.smartregister.kip.application.KipApplication;
-import org.smartregister.repository.EventClientRepository;
+import org.smartregister.kip.repository.KipEventClientRepository;
 import org.smartregister.service.HTTPAgent;
 import org.smartregister.util.Utils;
 
@@ -24,7 +24,7 @@ public class ECSyncUpdater {
     private static final String LAST_SYNC_TIMESTAMP = "LAST_SYNC_TIMESTAMP";
     private static final String LAST_CHECK_TIMESTAMP = "LAST_SYNC_CHECK_TIMESTAMP";
 
-    private final EventClientRepository db;
+    private final KipEventClientRepository db;
     private final Context context;
 
     private static ECSyncUpdater instance;

@@ -14,7 +14,7 @@ import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.kip.R;
 import org.smartregister.kip.activity.ChildDetailTabbedActivity;
 import org.smartregister.kip.application.KipApplication;
-import org.smartregister.kip.viewcomponents.WidgetFactory;
+import org.smartregister.kip.viewComponents.WidgetFactory;
 import org.smartregister.repository.DetailsRepository;
 import org.smartregister.util.DateUtil;
 import org.smartregister.util.Utils;

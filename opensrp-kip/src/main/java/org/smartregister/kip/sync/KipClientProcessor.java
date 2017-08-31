@@ -35,8 +35,10 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import util.KipConstants;
 import util.MoveToMyCatchmentUtils;
@@ -44,6 +46,8 @@ import util.MoveToMyCatchmentUtils;
 public class KipClientProcessor extends ClientProcessor {
 
     private static final String TAG = "KipClientProcessor";
+    private static final String detailsUpdated = "detailsUpdated";
+    private static final String[] openmrs_gen_ids = {"zeir_id"};
     private static KipClientProcessor instance;
 
     private KipClientProcessor(Context context) {
@@ -365,6 +369,183 @@ public class KipClientProcessor extends ClientProcessor {
         }
     }
 
+    @Override
+    public Boolean processCaseModel(JSONObject event, JSONObject client, JSONArray createsCase) {
+        try {
+
+            if (createsCase == null || createsCase.length() == 0) {
+                return false;
+            }
+            for (int openCase = 0; openCase < createsCase.length(); openCase++) {
+
+                String clientType = createsCase.getString(openCase);
+
+                JSONObject columnMappings = getColumnMappings(clientType);
+                JSONArray columns = columnMappings.getJSONArray("columns");
+                String baseEntityId = client.getString(baseEntityIdJSONKey);
+                String expectedEncounterType =
+                        event.has("eventType") ? event.getString("eventType") : null;
+
+                ContentValues contentValues = new ContentValues();
+                //Add the base_entity_id
+                contentValues.put("base_entity_id", baseEntityId);
+                contentValues.put("is_closed", 0);
+
+                for (int i = 0; i < columns.length(); i++) {
+                    JSONObject colObject = columns.getJSONObject(i);
+                    String docType = colObject.getString("type");
+                    String columnName = colObject.getString("column_name");
+                    JSONObject jsonMapping = colObject.getJSONObject("json_mapping");
+                    String dataSegment = null;
+                    String fieldName = jsonMapping.getString("field");
+                    String fieldValue = null;
+                    String responseKey = null;
+
+                    if (fieldName != null && fieldName.contains(".")) {
+                        String fieldNameArray[] = fieldName.split("\\.");
+                        dataSegment = fieldNameArray[0];
+                        fieldName = fieldNameArray[1];
+                        fieldValue = jsonMapping.has("concept") ? jsonMapping.getString("concept")
+                                : (jsonMapping.has("formSubmissionField") ? jsonMapping
+                                .getString("formSubmissionField") : null);
+                        if (fieldValue != null) {
+                            responseKey = VALUES_KEY;
+                        }
+                    }
+
+                    JSONObject jsonDocument = docType.equalsIgnoreCase("Event") ? event : client;
+
+                    Object jsonDocSegment;
+
+                    if (dataSegment != null) {
+                        // pick data from a specific section of the doc
+                        jsonDocSegment =
+                                jsonDocument.has(dataSegment) ? jsonDocument.get(dataSegment)
+                                        : null;
+
+                    } else {
+                        // else the use the main doc as the doc segment
+                        jsonDocSegment = jsonDocument;
+                    }
+
+                    // special handler needed to process address,
+                    if (dataSegment != null && dataSegment.equalsIgnoreCase("addresses")) {
+                        Map<String, String> addressMap = getClientAddressAsMap(client);
+                        if (addressMap.containsKey(fieldName)) {
+                            contentValues.put(columnName, addressMap.get(fieldName));
+                        }
+                        continue;
+                    }
+
+                    //special handler for relationalid
+                    if (dataSegment != null && dataSegment.equalsIgnoreCase("relationships")) {
+                        if(jsonDocument.has("relationships")) {
+                            JSONObject relationshipsObject = jsonDocument.getJSONObject("relationships");
+                            if(relationshipsObject.has(fieldName)) {
+                                JSONObject relationship = relationshipsObject.getJSONObject(fieldName);
+                                String relationalId = relationship.getString("relativeEntityId");
+                                contentValues.put(columnName, relationalId);
+                            }
+                        }
+                        continue;
+                    }
+
+                    //special handler for relationship types
+                    if (dataSegment != null && dataSegment.equalsIgnoreCase("relationshipTypes")) {
+                        if(jsonDocument.has("relationships")) {
+                            JSONObject relationshipsObject = jsonDocument.getJSONObject("relationships");
+                            if(relationshipsObject.has(fieldName)) {
+                                JSONObject relationship = relationshipsObject.getJSONObject(fieldName);
+                                String relationshipType = relationship.getString("relationshipType");
+                                contentValues.put(columnName, relationshipType);
+                            }
+                        }
+                        continue;
+                    }
+
+                    String encounterType =
+                            jsonMapping.has("event_type") ? jsonMapping.getString("event_type")
+                                    : null;
+
+                    if (jsonDocSegment instanceof JSONArray) {
+
+                        JSONArray jsonDocSegmentArray = (JSONArray) jsonDocSegment;
+
+                        for (int j = 0; j < jsonDocSegmentArray.length(); j++) {
+                            JSONObject jsonDocObject = jsonDocSegmentArray.getJSONObject(j);
+                            String columnValue = null;
+
+                            if (fieldValue == null) {
+                                // This means field_value and response_key are null so pick the
+                                // value from the json object for the field_name
+                                if (jsonDocObject.has(fieldName)) {
+                                    columnValue = jsonDocObject.getString(fieldName);
+                                }
+                            } else {
+                                // this means field_value and response_key are not null e.g when
+                                // retrieving some value in the events obs section
+                                String expectedFieldValue = jsonDocObject.getString(fieldName);
+                                // some events can only be differentiated by the event_type value
+                                // eg pnc1,pnc2, anc1,anc2
+                                // check if encountertype (the one in ec_client_fields.json) is
+                                // null or it matches the encounter type from the ec doc we're
+                                // processing
+                                boolean encounterTypeMatches =
+                                        (encounterType == null) || (encounterType != null
+                                                && encounterType
+                                                .equalsIgnoreCase(expectedEncounterType));
+
+                                if (encounterTypeMatches && expectedFieldValue
+                                        .equalsIgnoreCase(fieldValue)) {
+                                    columnValue = getValues(jsonDocObject.get(responseKey)).get(0);
+                                }
+                            }
+
+                            // after successfully retrieving the column name and value store it
+                            // in Content value
+                            if (columnValue != null) {
+                                columnValue = getHumanReadableConceptResponse(columnValue,
+                                        jsonDocObject);
+                                contentValues.put(columnName, columnValue);
+                            }
+                        }
+
+                    } else {
+                        //e.g client attributes section
+                        String columnValue = null;
+                        JSONObject jsonDocSegmentObject = (JSONObject) jsonDocSegment;
+                        columnValue = jsonDocSegmentObject.has(fieldName) ? jsonDocSegmentObject
+                                .getString(fieldName) : "";
+
+                        // after successfully retrieving the column name and value store it in
+                        // Content value
+                        if (columnValue != null) {
+                            columnValue = getHumanReadableConceptResponse(columnValue,
+                                    jsonDocSegmentObject);
+                            contentValues.put(columnName, columnValue);
+                        }
+                    }
+                }
+
+                // Modify openmrs generated identifier, Remove hyphen if it exists
+                updateIdenitifier(contentValues);
+
+                // save the values to db
+                Long id = executeInsertStatement(contentValues, clientType);
+                updateFTSsearch(clientType, baseEntityId, contentValues);
+                Long timestamp = getEventDate(event.get("eventDate"));
+                addContentValuesToDetailsTable(contentValues, timestamp);
+                updateClientDetailsTable(event, client);
+            }
+
+            return true;
+        } catch (Exception e) {
+            Log.e(TAG, e.toString(), e);
+
+            return null;
+        }
+
+    }
 
     private ContentValues processCaseModel(JSONObject entity, JSONObject clientClassificationJson) {
         try {
@@ -462,6 +643,171 @@ public class KipClientProcessor extends ClientProcessor {
     }
 
     @Override
+    public Boolean processEvent(JSONObject event, JSONObject client, JSONObject
+            clientClassificationJson) throws Exception {
+
+        try {
+            String baseEntityId = event.getString(baseEntityIdJSONKey);
+            if (event.has("creator")) {
+                Log.i(TAG, "EVENT from openmrs");
+            }
+            // For data integrity check if a client exists, if not pull one from cloudant and
+            // insert in drishti sqlite db
+
+            if (isNullOrEmptyJSONObject(client)) {
+                return false;
+            }
+
+            // Get the client type classification
+            JSONArray clientClasses = clientClassificationJson
+                    .getJSONArray("case_classification_rules");
+            if (isNullOrEmptyJSONArray(clientClasses)) {
+                return false;
+            }
+
+            // Check if child is deceased and skip
+            if (client.has("deathdate") && !client.getString("deathdate").isEmpty()) {
+
+                return false;
+            }
+
+            for (int i = 0; i < clientClasses.length(); i++) {
+                JSONObject clientClass = clientClasses.getJSONObject(i);
+                processClientClass(clientClass, event, client);
+            }
+
+            // Incase the details have not been updated
+            boolean updated = event.has(detailsUpdated) && event.getBoolean(detailsUpdated);
+
+            if (!updated) {
+                updateClientDetailsTable(event, client);
+            }
+
+            return true;
+        } catch (Exception e) {
+            Log.e(TAG, e.toString(), e);
+
+            return null;
+        }
+    }
+
+    @Override
+    public Boolean processClientClass(JSONObject clientClass, JSONObject event, JSONObject client) {
+
+        try {
+            if (clientClass == null || clientClass.length() == 0) {
+                return false;
+            }
+
+            if (event == null || event.length() == 0) {
+                return false;
+            }
+
+            if (client == null || client.length() == 0) {
+                return false;
+            }
+
+            JSONObject ruleObject = clientClass.getJSONObject("rule");
+            JSONArray fields = ruleObject.getJSONArray("fields");
+
+            for (int i = 0; i < fields.length(); i++) {
+                JSONObject fieldJson = fields.getJSONObject(i);
+                processField(fieldJson, event, client);
+            }
+            return true;
+        } catch (Exception e) {
+            Log.e(TAG, e.toString(), e);
+            return null;
+        }
+    }
+
+    @Override
+    public Boolean processField(JSONObject fieldJson, JSONObject event, JSONObject client) {
+
+        try {
+            if (fieldJson == null || fieldJson.length() == 0) {
+                return false;
+            }
+
+            // keep checking if the event data matches the values expected by each rule, break the
+            // moment the rule fails
+            String dataSegment = null;
+            String fieldName = fieldJson.has("field") ? fieldJson.getString("field") : null;
+            String fieldValue =
+                    fieldJson.has("field_value") ? fieldJson.getString("field_value") : null;
+            String responseKey = null;
+
+            if (fieldName != null && fieldName.contains(".")) {
+                String fieldNameArray[] = fieldName.split("\\.");
+                dataSegment = fieldNameArray[0];
+                fieldName = fieldNameArray[1];
+                String concept = fieldJson.has("concept") ? fieldJson.getString("concept") : null;
+
+                if (concept != null) {
+                    fieldValue = concept;
+                    responseKey = VALUES_KEY;
+                }
+            }
+
+            JSONArray createsCase =
+                    fieldJson.has("creates_case") ? fieldJson.getJSONArray("creates_case") : null;
+            JSONArray closesCase =
+                    fieldJson.has("closes_case") ? fieldJson.getJSONArray("closes_case") : null;
+
+            // some fields are in the main doc e.g event_type so fetch them from the main doc
+            if (dataSegment != null && !dataSegment.isEmpty()) {
+
+                JSONArray responseValue =
+                        fieldJson.has(responseKey) ? fieldJson.getJSONArray(responseKey) : null;
+                List<String> responseValues = getValues(responseValue);
+
+                if (event.has(dataSegment)) {
+                    JSONArray jsonDataSegment = event.getJSONArray(dataSegment);
+
+                    // Iterate in the segment e.g obs segment
+                    for (int j = 0; j < jsonDataSegment.length(); j++) {
+                        JSONObject segmentJsonObject = jsonDataSegment.getJSONObject(j);
+                        // let's discuss this further, to get the real value in the doc we've to
+                        // use the keys 'fieldcode' and 'value'
+                        String docSegmentFieldValue =
+                                segmentJsonObject.has(fieldName) ? segmentJsonObject.get(fieldName)
+                                        .toString() : "";
+                        List<String> docSegmentResponseValues =
+                                segmentJsonObject.has(responseKey) ? getValues(
+                                        segmentJsonObject.get(responseKey)) : null;
+
+                        if (docSegmentFieldValue.equalsIgnoreCase(fieldValue) && (!Collections
+                                .disjoint(responseValues, docSegmentResponseValues))) {
+                            // this is the event obs we're interested in put it in the respective
+                            // bucket specified by type variable
+                            processCaseModel(event, client, createsCase);
+                            closeCase(client, closesCase);
+                        }
+
+                    }
+                }
+
+            } else {
+                //fetch from the main doc
+                String docSegmentFieldValue =
+                        event.has(fieldName) ? event.get(fieldName).toString() : "";
+
+                if (docSegmentFieldValue.equalsIgnoreCase(fieldValue)) {
+                    processCaseModel(event, client, createsCase);
+                    closeCase(client, closesCase);
+                }
+
+            }
+
+            return true;
+        } catch (Exception e) {
+            Log.e(TAG, e.toString(), e);
+
+            return null;
+        }
+    }
+
+    @Override
     public void updateFTSsearch(String tableName, String entityId, ContentValues contentValues) {
         super.updateFTSsearch(tableName, entityId, contentValues);
 
@@ -556,5 +902,43 @@ public class KipClientProcessor extends ClientProcessor {
             Log.e(TAG, e.toString(), e);
         }
         return null;
+    }
+
+    /**
+     * Update given identifier, removes hyphen
+     *
+     * @param values
+     */
+    private void updateIdenitifier(ContentValues values) {
+        try {
+            for (String identifier : openmrs_gen_ids) {
+                Object value = values.get(identifier);
+                if (value != null && value instanceof String) {
+                    String sValue = value.toString();
+                    if (StringUtils.isNotBlank(sValue)) {
+                        values.remove(identifier);
+                        values.put(identifier, sValue.replace("-", ""));
+                    }
+                }
+            }
+        } catch (Exception e) {
+
+        }
+    }
+
+    private long getEventDate(Object eventDate) {
+        if (eventDate instanceof Long) {
+            return (Long) eventDate;
+        } else {
+            Date date = DateUtil.toDate(eventDate);
+            if (date != null) {
+                return date.getTime();
+            }
+        }
+        return new Date().getTime();
+    }
+
+    private boolean isNullOrEmptyJSONArray(JSONArray jsonArray) {
+        return (jsonArray == null || jsonArray.length() == 0);
     }
 }

@@ -78,27 +78,6 @@ public class LocationRepository extends BaseRepository {
         }
     }
 
-    public Long countUnUsedIds() {
-        long count = 0;
-        Cursor cursor = null;
-        try {
-            cursor = getWritableDatabase().rawQuery("SELECT COUNT (*) FROM " + LOCATIONS_TABLE_NAME,
-                    new String[]{});
-            if (null != cursor)
-                if (cursor.getCount() > 0) {
-                    cursor.moveToFirst();
-                    count = cursor.getInt(0);
-                }
-
-        } catch (SQLException e) {
-            Log.e(TAG, e.getMessage(), e);
-        } finally {
-            if (cursor != null)
-                cursor.close();
-        }
-        return count;
-    }
-
     public Location getLocationByName(String name) {
         Location location = null;
         Cursor cursor = null;

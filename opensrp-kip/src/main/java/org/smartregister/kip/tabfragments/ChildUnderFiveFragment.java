@@ -37,7 +37,7 @@ import org.smartregister.kip.R;
 import org.smartregister.kip.activity.ChildDetailTabbedActivity;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.sync.ECSyncUpdater;
-import org.smartregister.kip.viewcomponents.WidgetFactory;
+import org.smartregister.kip.viewComponents.WidgetFactory;
 import org.smartregister.repository.DetailsRepository;
 import org.smartregister.repository.EventClientRepository;
 import org.smartregister.service.AlertService;
