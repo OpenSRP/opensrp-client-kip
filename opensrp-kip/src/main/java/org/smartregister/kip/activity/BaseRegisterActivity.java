@@ -337,16 +337,7 @@ public abstract class BaseRegisterActivity extends SecuredNativeSmartRegisterAct
 
             }
         });
-        LinearLayout hia2 = (LinearLayout) drawer.findViewById(R.id.hia2reports);
-        hia2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), HIA2ReportsActivity.class);
-                startActivity(intent);
-                drawer.closeDrawer(GravityCompat.START);
 
-            }
-        });
         LinearLayout childregister = (LinearLayout) drawer.findViewById(R.id.child_register);
         childregister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -358,6 +349,17 @@ public abstract class BaseRegisterActivity extends SecuredNativeSmartRegisterAct
                 drawer.closeDrawer(GravityCompat.START);
 
 //                finish();
+            }
+        });
+
+        LinearLayout moh = (LinearLayout) drawer.findViewById(R.id.moh710);
+        moh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), Moh710ReportActivity.class);
+                startActivity(intent);
+                drawer.closeDrawer(GravityCompat.START);
+
             }
         });
 

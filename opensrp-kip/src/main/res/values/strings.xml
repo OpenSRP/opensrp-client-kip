@@ -181,4 +181,9 @@
     <string name="send">Send</string>
     <string name="n_a">"N/A"</string>
     <string name="confirm_button_label">Confirm</string>
+
+    <!-- MOH 710 -->
+    <string name="side_nav_moh710">MOH 710</string>
+    <string name="moh710_report">MOH 710 Report</string>
+    <string name="report_date">Report Date: </string>
 </resources>

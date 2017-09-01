@@ -10,11 +10,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.vijay.jsonwizard.constants.JsonFormConstants;
@@ -119,10 +117,6 @@ public class HIA2ReportsActivity extends BaseActivity {
     @Override
     public void onResume() {
         super.onResume();
-        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        // TODO: This should go to the base class?
-        LinearLayout hia2 = (LinearLayout) drawer.findViewById(R.id.hia2reports);
-        hia2.setBackgroundColor(getResources().getColor(R.color.tintcolor));
     }
 
     @Override

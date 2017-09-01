@@ -67,7 +67,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoTitle.NoActionBar" />
         <activity
-            android:name=".activity.HIA2ReportsActivity"
+            android:name=".activity.Moh710ReportActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoTitle.NoActionBar" />
         <activity
