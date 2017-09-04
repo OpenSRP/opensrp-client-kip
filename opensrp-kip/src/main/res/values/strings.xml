@@ -186,4 +186,12 @@
     <string name="side_nav_moh710">MOH 710</string>
     <string name="moh710_report">MOH 710 Report</string>
     <string name="report_date">Report Date: </string>
+    <string name="custom_dates">Custom Dates: </string>
+    <string name="custom_date_range">Custom Date range</string>
+    <string name="clear_date_range">Clear date range</string>
+    <string name="antigen">Antigen</string>
+    <string name="moh710_age">Age</string>
+    <string name="moh710_value">Value</string>
+    <string name="under_1_year">Under 1 Year</string>
+    <string name="above_1_year">Above 1 Year</string>
 </resources>

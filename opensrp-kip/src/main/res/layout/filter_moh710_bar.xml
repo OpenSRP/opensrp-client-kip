@@ -1,76 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-
-    android:layout_width="fill_parent"
-    android:layout_height="@dimen/ec_main_header_nav_layout_height"
-    android:layout_weight="2"
-    android:background="@color/filter_bar_light_grey"
-    android:gravity="center_vertical"
-    android:orientation="horizontal">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="@dimen/ec_main_header_search_layout_height"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_weight="1"
-        android:paddingLeft="15dp">
+        android:id="@+id/default_filter"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/ec_main_header_nav_layout_height"
+        android:background="@color/filter_bar_light_grey"
+        android:gravity="center_vertical">
 
-        <org.smartregister.view.customcontrols.CustomFontTextView
-            android:id="@+id/report_date_label"
-            style="@style/CustomFontTextViewStyle.ClientList.Light"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/ec_main_header_search_layout_height"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:orientation="horizontal"
+            android:paddingLeft="15dp">
+
+            <org.smartregister.view.customcontrols.CustomFontTextView
+                android:id="@+id/report_date_label"
+                style="@style/CustomFontTextViewStyle.ClientList.Light"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:gravity="center_vertical"
+                android:text="@string/report_date"
+                android:textColor="@color/text_black"
+                android:textSize="22sp" />
+
+            <Spinner
+                android:id="@+id/report_date_spinner"
+                style="@style/KipSpinnerUnderLined"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:minWidth="150dp"
+                android:padding="10dp"
+                android:spinnerMode="dropdown"
+                android:theme="@style/ThemeKipSpinner" />
+
+        </LinearLayout>
+
+
+        <Button
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginRight="10dp"
-            android:background="@android:color/transparent"
-            android:gravity="center_vertical"
-            android:text="@string/report_date"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="30dp"
+            android:background="@color/filter_bar_light_grey"
+            android:paddingLeft="10dp"
+            android:paddingRight="15dp"
+            android:text="@string/custom_date_range"
+            android:textAllCaps="false"
+            android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/text_black"
             android:textSize="22sp" />
 
-        <Spinner
-            android:id="@+id/report_date_spinner"
-            style="@style/KipSpinnerUnderLined"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_toRightOf="@+id/report_date_label"
-            android:padding="10dp"
-            android:spinnerMode="dropdown"
-            android:theme="@style/ThemeKipSpinner" />
-
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/custom_filter"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/ec_main_header_nav_layout_height"
+        android:background="@color/filter_bar_light_grey"
+        android:gravity="center_vertical">
 
-    <FrameLayout
-        android:id="@+id/scan_qr_code"
-        style="?android:attr/buttonStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="7dp"
-        android:layout_marginRight="15dp"
-        android:layout_weight="1"
-        android:background="@drawable/scan_qr_code_bg">
-
-        <TextView
-            style="?android:attr/buttonStyle"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@null"
-            android:clickable="false"
-            android:drawableLeft="@mipmap/ic_action_barcode_2"
-            android:drawablePadding="2dp"
-            android:focusable="false"
-            android:gravity="center"
-            android:minHeight="0dp"
-            android:minWidth="0dp"
-            android:text="@string/scan_qr_code"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:orientation="horizontal"
+            android:paddingLeft="15dp">
+
+            <org.smartregister.view.customcontrols.CustomFontTextView
+                style="@style/CustomFontTextViewStyle.ClientList.Light"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:gravity="center_vertical"
+                android:text="@string/custom_dates"
+                android:textColor="@color/text_black"
+                android:textSize="22sp" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <org.smartregister.view.customcontrols.CustomFontTextView
+                    android:id="@+id/custom_dates_value"
+                    style="@style/CustomFontTextViewStyle.ClientList.Light"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:background="@android:color/transparent"
+                    android:paddingBottom="5dp"
+                    android:text="14 Jun 2017 - 19 Jun 2017"
+                    android:textColor="@color/text_black"
+                    android:textSize="22sp" />
+
+                <View
+                    android:id="@+id/underlineView"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.25dp"
+                    android:layout_alignEnd="@+id/custom_dates_value"
+                    android:layout_alignLeft="@+id/custom_dates_value"
+                    android:layout_alignRight="@+id/custom_dates_value"
+                    android:layout_alignStart="@+id/custom_dates_value"
+                    android:layout_marginLeft="10dp"
+
+                    android:layout_below="@+id/custom_dates_value"
+                    android:background="@color/client_list_grey" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+        <Button
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="30dp"
+            android:background="@color/filter_bar_light_grey"
+            android:drawableLeft="@drawable/ic_cross"
+            android:drawablePadding="10dp"
+            android:text="@string/clear_date_range"
             android:textAllCaps="false"
-            android:textColor="@color/light_grey"
-            android:textSize="18sp" />
-    </FrameLayout>
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/text_black"
+            android:textSize="22sp" />
 
 
+    </RelativeLayout>
 </LinearLayout>

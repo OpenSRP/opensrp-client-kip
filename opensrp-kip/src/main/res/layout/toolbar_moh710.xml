@@ -1,6 +1,6 @@
 <android.support.design.widget.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="?attr/actionBarSize"
+    android:layout_height="wrap_content"
     android:background="#494949"
     android:theme="@style/AppThemeNoTitle.AppBarOverlay">
 
@@ -8,7 +8,7 @@
     <org.smartregister.kip.toolbar.LocationSwitcherToolbar
         android:id="@+id/location_switching_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="?attr/actionBarSize">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -32,5 +32,11 @@
                 android:visibility="invisible" />
         </FrameLayout>
     </org.smartregister.kip.toolbar.LocationSwitcherToolbar>
+
+    <include
+        layout="@layout/filter_moh710_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 
 </android.support.design.widget.AppBarLayout>
