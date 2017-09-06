@@ -28,7 +28,7 @@
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:gravity="center_vertical"
-                android:text="@string/report_date"
+                android:text="@string/report_month"
                 android:textColor="@color/text_black"
                 android:textSize="22sp" />
 
@@ -114,9 +114,9 @@
                     android:layout_alignLeft="@+id/custom_dates_value"
                     android:layout_alignRight="@+id/custom_dates_value"
                     android:layout_alignStart="@+id/custom_dates_value"
-                    android:layout_marginLeft="10dp"
-
                     android:layout_below="@+id/custom_dates_value"
+
+                    android:layout_marginLeft="10dp"
                     android:background="@color/client_list_grey" />
             </RelativeLayout>
 

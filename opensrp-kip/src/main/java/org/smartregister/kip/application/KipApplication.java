@@ -36,6 +36,7 @@ import org.smartregister.kip.repository.HIA2IndicatorsRepository;
 import org.smartregister.kip.repository.KipEventClientRepository;
 import org.smartregister.kip.repository.KipRepository;
 import org.smartregister.kip.repository.LocationRepository;
+import org.smartregister.kip.repository.Moh710IndicatorsRepository;
 import org.smartregister.kip.repository.MonthlyTalliesRepository;
 import org.smartregister.kip.repository.StockRepository;
 import org.smartregister.kip.repository.UniqueIdRepository;
@@ -75,6 +76,7 @@ public class KipApplication extends DrishtiApplication
     private StockRepository stockRepository;
     private boolean lastModified;
     private LocationRepository locationRepository;
+    private Moh710IndicatorsRepository moh710IndicatorsRepository;
 
     @Override
     public void onCreate() {
@@ -323,6 +325,13 @@ public class KipApplication extends DrishtiApplication
             locationRepository = new LocationRepository((KipRepository) getRepository());
         }
         return locationRepository;
+    }
+
+    public Moh710IndicatorsRepository moh710IndicatorsRepository() {
+        if (moh710IndicatorsRepository == null) {
+            moh710IndicatorsRepository = new Moh710IndicatorsRepository((KipRepository) getRepository());
+        }
+        return moh710IndicatorsRepository;
     }
 
     public VaccineTypeRepository vaccineTypeRepository() {

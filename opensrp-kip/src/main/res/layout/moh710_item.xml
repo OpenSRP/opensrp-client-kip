@@ -8,7 +8,7 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="0.8"
+        android:layout_weight="0.9"
         android:orientation="vertical">
 
         <org.smartregister.view.customcontrols.CustomFontTextView
@@ -21,111 +21,18 @@
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/moh710_vertical_margin"
             android:text="Antigen"
+            android:ellipsize="marquee"
             android:textColor="@color/black"
             android:textSize="17sp" />
 
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/age_value_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1.2"
-        android:orientation="vertical">
+        android:layout_weight="1.1"
+        android:orientation="vertical" />
 
-        <RelativeLayout
-            android:id="@+id/under_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <org.smartregister.view.customcontrols.CustomFontTextView
-                android:id="@+id/under"
-                style="@style/CustomFontTextViewStyle.ClientList.Light"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_centerVertical="true"
-                android:paddingBottom="@dimen/moh710_vertical_margin"
-                android:paddingLeft="@dimen/moh710_padding_left"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingTop="@dimen/moh710_vertical_margin"
-                android:text="@string/under_1_year"
-                android:textColor="@color/black"
-                android:textSize="17sp" />
-
-
-            <org.smartregister.view.customcontrols.CustomFontTextView
-                android:id="@+id/under_value"
-                style="@style/CustomFontTextViewStyle.ClientList.Light"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:layout_centerVertical="true"
-                android:paddingBottom="@dimen/moh710_vertical_margin"
-                android:paddingLeft="@dimen/moh710_padding_left"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingTop="@dimen/moh710_vertical_margin"
-                android:text="0"
-                android:textColor="@color/black"
-                android:textSize="17sp" />
-
-        </RelativeLayout>
-
-        <View
-            android:id="@+id/adapter_divider_bottom"
-            android:layout_width="wrap_content"
-            android:layout_height="0.25dp"
-            android:background="@color/light_grey"
-            android:visibility="visible" />
-
-        <RelativeLayout
-            android:id="@+id/above_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <org.smartregister.view.customcontrols.CustomFontTextView
-                android:id="@+id/above"
-                style="@style/CustomFontTextViewStyle.ClientList.Light"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_centerVertical="true"
-                android:paddingBottom="@dimen/moh710_vertical_margin"
-                android:paddingLeft="@dimen/moh710_padding_left"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingTop="@dimen/moh710_vertical_margin"
-                android:text="@string/above_1_year"
-                android:textColor="@color/black"
-                android:textSize="17sp" />
-
-
-            <org.smartregister.view.customcontrols.CustomFontTextView
-                android:id="@+id/above_value"
-                style="@style/CustomFontTextViewStyle.ClientList.Light"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:layout_centerVertical="true"
-                android:paddingBottom="@dimen/moh710_vertical_margin"
-                android:paddingLeft="@dimen/moh710_padding_left"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingTop="@dimen/moh710_vertical_margin"
-                android:text="0"
-                android:textColor="@color/black"
-                android:textSize="17sp" />
-
-
-        </RelativeLayout>
-
-
-    </LinearLayout>
 
 </LinearLayout>

@@ -89,6 +89,10 @@ public class KipRepository extends Repository {
                     break;
                 case 9:
                     upgradeToVersion9(db);
+                    break;
+                case 10:
+                    upgradeToVersion10(db);
+                    break;
                 default:
                     break;
             }
@@ -277,6 +281,15 @@ public class KipRepository extends Repository {
         }
     }
 
+    private void upgradeToVersion10(SQLiteDatabase database) {
+        try {
+            Moh710IndicatorsRepository.createTable(database);
+            dumpMOH710IndicatorsCSV(database);
+        } catch (Exception e) {
+            Log.e(TAG, "upgradeToVersion10 " + e.getMessage());
+        }
+    }
+
     private void addFieldsToFTSTable(SQLiteDatabase database, String originalTableName, List<String> newlyAddedFields) {
 
         // Create the new ec_child table
@@ -364,4 +377,13 @@ public class KipRepository extends Repository {
         hIA2IndicatorsRepository.save(db, csvData);
     }
 
+    private void dumpMOH710IndicatorsCSV(SQLiteDatabase db) {
+        List<Map<String, String>> csvData = util.Utils.populateMohIndicatorsTableFromCSV(
+                context,
+                Moh710IndicatorsRepository.INDICATORS_CSV_FILE,
+                Moh710IndicatorsRepository.CSV_COLUMN_MAPPING);
+        Moh710IndicatorsRepository moh710IndicatorsRepository = KipApplication.getInstance()
+                .moh710IndicatorsRepository();
+        moh710IndicatorsRepository.save(db, csvData);
+    }
 }

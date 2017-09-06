@@ -8,16 +8,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.smartregister.kip.R;
+import org.smartregister.kip.application.KipApplication;
+import org.smartregister.kip.domain.MohIndicator;
+import org.smartregister.kip.repository.Moh710IndicatorsRepository;
 import org.smartregister.kip.toolbar.LocationSwitcherToolbar;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by keyman on 01/09/2017.
@@ -71,18 +75,18 @@ public class Moh710ReportActivity extends BaseActivity {
         View view = getLayoutInflater().inflate(R.layout.moh710_header, null);
         listView.addHeaderView(view);
 
-        String[] antigents = {"BCG", "OPV", "OPV1", "OPV2", "OPV3", "IPV"};
-        final List<String> report = new ArrayList<>(Arrays.asList(antigents));
+        final Moh710IndicatorsRepository moh710IndicatorsRepository = KipApplication.getInstance().moh710IndicatorsRepository();
+        final List<String> antigens = moh710IndicatorsRepository.fetchDistinctAntigens();
 
         BaseAdapter baseAdapter = new BaseAdapter() {
             @Override
             public int getCount() {
-                return report.size();
+                return antigens.size();
             }
 
             @Override
             public Object getItem(int position) {
-                return report.get(position);
+                return antigens.get(position);
             }
 
             @Override
@@ -93,23 +97,47 @@ public class Moh710ReportActivity extends BaseActivity {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view;
+                LayoutInflater inflater =
+                        context.getLayoutInflater();
                 if (convertView == null) {
-                    LayoutInflater inflater =
-                            context.getLayoutInflater();
-
                     view = inflater.inflate(R.layout.moh710_item, null);
                 } else {
                     view = convertView;
                 }
 
+                String antigen = antigens.get(position);
+                List<MohIndicator> indicators = moh710IndicatorsRepository.findByAntigen(antigen);
+                if (indicators.isEmpty()) {
+                    return view;
+                }
+
                 TextView antigenTextView = (TextView) view.findViewById(R.id.antigen);
-                String antigen = report.get(position);
                 antigenTextView.setText(antigen);
 
-                TextView underValueTextView = (TextView) view.findViewById(R.id.under_value);
-                underValueTextView.setText("2");
+                LinearLayout ageValueLayout = (LinearLayout) view.findViewById(R.id.age_value_layout);
+                ageValueLayout.removeAllViews();
 
-                view.setTag(report.get(position));
+                for (int i = 0; i < indicators.size(); i++) {
+
+                    View ageValueView = inflater.inflate(R.layout.moh710_item_age_value, null);
+                    View divider = ageValueView.findViewById(R.id.adapter_divider_bottom);
+                    if (i == 0) {
+                        divider.setVisibility(View.GONE);
+                    }
+
+                    MohIndicator indicator = indicators.get(i);
+                    TextView ageView = (TextView) ageValueView.findViewById(R.id.age);
+
+                    // Remove double quotes
+                    String age = indicator.getAge().replaceAll("^\"|\"$", "");
+                    ageView.setText(age);
+
+                    TextView valueView = (TextView) ageValueView.findViewById(R.id.value);
+                    valueView.setText(String.valueOf(new Random().nextInt(100 + 1)));
+
+                    ageValueLayout.addView(ageValueView);
+                }
+
 
                 return view;
             }
