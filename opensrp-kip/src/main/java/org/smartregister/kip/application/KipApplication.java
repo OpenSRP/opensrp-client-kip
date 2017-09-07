@@ -28,11 +28,10 @@ import org.smartregister.kip.BuildConfig;
 import org.smartregister.kip.R;
 import org.smartregister.kip.activity.LoginActivity;
 import org.smartregister.kip.context.Context;
-import org.smartregister.kip.receiver.Hia2ServiceBroadcastReceiver;
 import org.smartregister.kip.receiver.KipSyncBroadcastReceiver;
+import org.smartregister.kip.receiver.Moh710ServiceBroadcastReceiver;
 import org.smartregister.kip.receiver.SyncStatusBroadcastReceiver;
 import org.smartregister.kip.repository.DailyTalliesRepository;
-import org.smartregister.kip.repository.HIA2IndicatorsRepository;
 import org.smartregister.kip.repository.KipEventClientRepository;
 import org.smartregister.kip.repository.KipRepository;
 import org.smartregister.kip.repository.LocationRepository;
@@ -71,7 +70,6 @@ public class KipApplication extends DrishtiApplication
     private UniqueIdRepository uniqueIdRepository;
     private DailyTalliesRepository dailyTalliesRepository;
     private MonthlyTalliesRepository monthlyTalliesRepository;
-    private HIA2IndicatorsRepository hIA2IndicatorsRepository;
     private KipEventClientRepository eventClientRepository;
     private StockRepository stockRepository;
     private boolean lastModified;
@@ -93,7 +91,7 @@ public class KipApplication extends DrishtiApplication
         }
         DrishtiSyncScheduler.setReceiverClass(KipSyncBroadcastReceiver.class);
 
-        Hia2ServiceBroadcastReceiver.init(this);
+        Moh710ServiceBroadcastReceiver.init(this);
         SyncStatusBroadcastReceiver.init(this);
         TimeChangedBroadcastReceiver.init(this);
         TimeChangedBroadcastReceiver.getInstance().addOnTimeChangedListener(this);
@@ -240,7 +238,6 @@ public class KipApplication extends DrishtiApplication
                 uniqueIdRepository();
                 dailyTalliesRepository();
                 monthlyTalliesRepository();
-                hIA2IndicatorsRepository();
                 eventClientRepository();
                 stockRepository();
                 locationRepository();
@@ -289,13 +286,6 @@ public class KipApplication extends DrishtiApplication
         }
 
         return monthlyTalliesRepository;
-    }
-
-    public HIA2IndicatorsRepository hIA2IndicatorsRepository() {
-        if (hIA2IndicatorsRepository == null) {
-            hIA2IndicatorsRepository = new HIA2IndicatorsRepository((KipRepository) getRepository());
-        }
-        return hIA2IndicatorsRepository;
     }
 
     public RecurringServiceTypeRepository recurringServiceTypeRepository() {

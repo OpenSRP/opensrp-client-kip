@@ -46,7 +46,7 @@
             android:paddingLeft="@dimen/moh710_padding_left"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/moh710_vertical_margin"
-            android:text="0"
+            android:text="N/A"
             android:textColor="@color/black"
             android:textSize="17sp" />
 

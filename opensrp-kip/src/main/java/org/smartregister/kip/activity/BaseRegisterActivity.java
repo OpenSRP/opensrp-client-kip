@@ -188,14 +188,11 @@ public abstract class BaseRegisterActivity extends SecuredNativeSmartRegisterAct
             startFormActivity("child_enrollment", null, null);
         } else if (id == R.id.nav_record_vaccination_out_catchment) {
             startFormActivity("out_of_catchment_service", null, null);
-        } else if (id == R.id.stock) {
+        } else if (id == R.id.stockcontrol) {
             Intent intent = new Intent(this, StockActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_sync) {
             startSync();
-        } else if (id == R.id.nav_hia2) {
-            Intent intent = new Intent(this, HIA2ReportsActivity.class);
-            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

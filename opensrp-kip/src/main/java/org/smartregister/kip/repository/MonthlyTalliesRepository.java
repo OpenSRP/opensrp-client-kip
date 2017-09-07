@@ -10,7 +10,7 @@ import net.sqlcipher.database.SQLiteDatabase;
 
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.domain.DailyTally;
-import org.smartregister.kip.domain.Hia2Indicator;
+import org.smartregister.kip.domain.MohIndicator;
 import org.smartregister.kip.domain.MonthlyTally;
 import org.smartregister.repository.BaseRepository;
 
@@ -244,8 +244,8 @@ public class MonthlyTalliesRepository extends BaseRepository {
         HashMap<String, ArrayList<MonthlyTally>> tallies = new HashMap<>();
         Cursor cursor = null;
         try {
-            HashMap<Long, Hia2Indicator> indicatorMap = KipApplication.getInstance()
-                    .hIA2IndicatorsRepository().findAll();
+            HashMap<Long, MohIndicator> indicatorMap = KipApplication.getInstance()
+                    .moh710IndicatorsRepository().findAll();
             cursor = getReadableDatabase()
                     .query(TABLE_NAME, TABLE_COLUMNS,
                             COLUMN_DATE_SENT + " IS NOT NULL", null, null, null, null, null);
@@ -352,8 +352,8 @@ public class MonthlyTalliesRepository extends BaseRepository {
 
     private List<MonthlyTally> readAllDataElements(Cursor cursor) {
         List<MonthlyTally> tallies = new ArrayList<>();
-        HashMap<Long, Hia2Indicator> indicatorMap = KipApplication.getInstance()
-                .hIA2IndicatorsRepository().findAll();
+        HashMap<Long, MohIndicator> indicatorMap = KipApplication.getInstance()
+                .moh710IndicatorsRepository().findAll();
 
         try {
             if (cursor != null && cursor.getCount() > 0) {
@@ -377,7 +377,7 @@ public class MonthlyTalliesRepository extends BaseRepository {
         return tallies;
     }
 
-    private MonthlyTally extractMonthlyTally(HashMap<Long, Hia2Indicator> indicatorMap, Cursor cursor) throws ParseException {
+    private MonthlyTally extractMonthlyTally(HashMap<Long, MohIndicator> indicatorMap, Cursor cursor) throws ParseException {
         long indicatorId = cursor.getLong(cursor.getColumnIndex(COLUMN_INDICATOR_ID));
         if (indicatorMap.containsKey(indicatorId)) {
             MonthlyTally curTally = new MonthlyTally();

@@ -6,30 +6,32 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.util.Log;
 
+import org.smartregister.kip.service.intent.Moh710IntentService;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Listens for broadcast responses from {@link org.smartregister.kip.service.intent.HIA2IntentService}
+ * Listens for broadcast responses from {@link Moh710IntentService}
  * service
  * Created by Jason Rogena - jrogena@ona.io on 10/07/2017.
  */
 
-public class Hia2ServiceBroadcastReceiver extends BroadcastReceiver {
-    private static final String TAG = Hia2ServiceListener.class.getCanonicalName();
+public class Moh710ServiceBroadcastReceiver extends BroadcastReceiver {
+    private static final String TAG = Moh710ServiceListener.class.getCanonicalName();
     public static final String TYPE = "TYPE";
-    public static final String ACTION_SERVICE_DONE = "HIA2_SERVICE_DONE";
+    public static final String ACTION_SERVICE_DONE = "MOH710_SERVICE_DONE";
     public static final String TYPE_GENERATE_DAILY_INDICATORS = "GENERATE_DAILY_INDICATORS";
     public static final String TYPE_GENERATE_MONTHLY_REPORT = "GENERATE_MONTHLY_REPORT";
-    private static Hia2ServiceBroadcastReceiver singleton;
-    private final List<Hia2ServiceListener> listeners;
+    private static Moh710ServiceBroadcastReceiver singleton;
+    private final List<Moh710ServiceListener> listeners;
 
     public static void init(Context context) {
         if (singleton != null) {
             destroy(context);
         }
 
-        singleton = new Hia2ServiceBroadcastReceiver();
+        singleton = new Moh710ServiceBroadcastReceiver();
         context.registerReceiver(singleton, new IntentFilter(ACTION_SERVICE_DONE));
     }
 
@@ -43,21 +45,21 @@ public class Hia2ServiceBroadcastReceiver extends BroadcastReceiver {
         }
     }
 
-    public static Hia2ServiceBroadcastReceiver getInstance() {
+    public static Moh710ServiceBroadcastReceiver getInstance() {
         return singleton;
     }
 
-    public Hia2ServiceBroadcastReceiver() {
+    public Moh710ServiceBroadcastReceiver() {
         this.listeners = new ArrayList<>();
     }
 
-    public void addHia2ServiceListener(Hia2ServiceListener listener) {
+    public void addHia2ServiceListener(Moh710ServiceListener listener) {
         if (!listeners.contains(listener)) {
             listeners.add(listener);
         }
     }
 
-    public void removeHia2ServiceListener(Hia2ServiceListener listener) {
+    public void removeHia2ServiceListener(Moh710ServiceListener listener) {
         if (listeners.contains(listener)) {
             listeners.remove(listener);
         }
@@ -66,12 +68,12 @@ public class Hia2ServiceBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String type = intent.getStringExtra(TYPE);
-        for (Hia2ServiceListener curListener : listeners) {
+        for (Moh710ServiceListener curListener : listeners) {
             curListener.onServiceFinish(type);
         }
     }
 
-    public interface Hia2ServiceListener {
+    public interface Moh710ServiceListener {
         void onServiceFinish(String actionType);
     }
 }

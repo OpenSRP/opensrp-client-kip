@@ -17,9 +17,7 @@ import org.smartregister.immunization.repository.VaccineTypeRepository;
 import org.smartregister.immunization.util.IMDatabaseUtils;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.repository.AlertRepository;
-import org.smartregister.repository.EventClientRepository;
 import org.smartregister.repository.Repository;
-import org.smartregister.util.Utils;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -44,10 +42,10 @@ public class KipRepository extends Repository {
     @Override
     public void onCreate(SQLiteDatabase database) {
         super.onCreate(database);
-        EventClientRepository.createTable(database, EventClientRepository.Table.client, EventClientRepository.client_column.values());
-        EventClientRepository.createTable(database, EventClientRepository.Table.address, EventClientRepository.address_column.values());
-        EventClientRepository.createTable(database, EventClientRepository.Table.event, EventClientRepository.event_column.values());
-        EventClientRepository.createTable(database, EventClientRepository.Table.obs, EventClientRepository.obs_column.values());
+        KipEventClientRepository.createTable(database, KipEventClientRepository.Table.client, KipEventClientRepository.client_column.values());
+        KipEventClientRepository.createTable(database, KipEventClientRepository.Table.address, KipEventClientRepository.address_column.values());
+        KipEventClientRepository.createTable(database, KipEventClientRepository.Table.event, KipEventClientRepository.event_column.values());
+        KipEventClientRepository.createTable(database, KipEventClientRepository.Table.obs, KipEventClientRepository.obs_column.values());
         UniqueIdRepository.createTable(database);
         WeightRepository.createTable(database);
         VaccineRepository.createTable(database);
@@ -234,11 +232,9 @@ public class KipRepository extends Repository {
             db.execSQL(WeightRepository.UPDATE_TABLE_ADD_OUT_OF_AREA_COL_INDEX);
             DailyTalliesRepository.createTable(db);
             MonthlyTalliesRepository.createTable(db);
-            EventClientRepository.createTable(db, EventClientRepository.Table.path_reports, EventClientRepository.report_column.values());
-            HIA2IndicatorsRepository.createTable(db);
+            KipEventClientRepository.createTable(db, KipEventClientRepository.Table.path_reports, KipEventClientRepository.report_column.values());
             db.execSQL(VaccineRepository.UPDATE_TABLE_ADD_HIA2_STATUS_COL);
 
-            dumpHIA2IndicatorsCSV(db);
         } catch (Exception e) {
             Log.e(TAG, "upgradeToVersion7Hia2 " + e.getMessage());
         }
@@ -247,7 +243,6 @@ public class KipRepository extends Repository {
     private void upgradeToVersion8RecurringServiceUpdate(SQLiteDatabase db) {
         try {
             db.execSQL(MonthlyTalliesRepository.INDEX_UNIQUE);
-            dumpHIA2IndicatorsCSV(db);
 
             // Recurring service json changed. update
             RecurringServiceTypeRepository recurringServiceTypeRepository = KipApplication.getInstance().recurringServiceTypeRepository();
@@ -365,16 +360,6 @@ public class KipRepository extends Repository {
         Log.d(TAG, "Rename query is\n---------------------------\n" + renameQuery);
         database.execSQL(renameQuery);
 
-    }
-
-    private void dumpHIA2IndicatorsCSV(SQLiteDatabase db) {
-        List<Map<String, String>> csvData = Utils.populateTableFromCSV(
-                context,
-                HIA2IndicatorsRepository.INDICATORS_CSV_FILE,
-                HIA2IndicatorsRepository.CSV_COLUMN_MAPPING);
-        HIA2IndicatorsRepository hIA2IndicatorsRepository = KipApplication.getInstance()
-                .hIA2IndicatorsRepository();
-        hIA2IndicatorsRepository.save(db, csvData);
     }
 
     private void dumpMOH710IndicatorsCSV(SQLiteDatabase db) {

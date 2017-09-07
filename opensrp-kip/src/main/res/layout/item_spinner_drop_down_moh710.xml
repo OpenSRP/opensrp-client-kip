@@ -2,7 +2,7 @@
     style="?android:attr/spinnerDropDownItemStyle"
     android:layout_width="match_parent"
     android:layout_height="?attr/dropdownListPreferredItemHeight"
-    android:background="@android:color/transparent"
+    android:background="@color/filter_bar_light_grey"
     android:ellipsize="marquee"
     android:gravity="center_vertical"
     android:paddingLeft="10dp"

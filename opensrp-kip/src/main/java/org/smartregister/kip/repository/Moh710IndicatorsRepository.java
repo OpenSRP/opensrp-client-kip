@@ -190,6 +190,27 @@ public class Moh710IndicatorsRepository extends BaseRepository {
     }
 
 
+    public HashMap<Long, MohIndicator> findAll() {
+        HashMap<Long, MohIndicator> response = new HashMap<>();
+        Cursor cursor = null;
+
+        try {
+            cursor = getReadableDatabase().query(MOH_INDICATORS_TABLE_NAME, MOH_TABLE_COLUMNS, null, null, null, null, null, null);
+            List<MohIndicator> mohIndicators = readAllDataElements(cursor);
+            for (MohIndicator curIndicator : mohIndicators) {
+                response.put(curIndicator.getId(), curIndicator);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return response;
+    }
+
     private List<MohIndicator> readAllDataElements(Cursor cursor) {
         List<MohIndicator> mohIndicators = new ArrayList<>();
         try {

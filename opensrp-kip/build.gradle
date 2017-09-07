@@ -193,3 +193,6 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebug']) {
 }
 
 //End testing and coveralls
+dependencies {
+    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
+}

@@ -10,8 +10,7 @@ import net.sqlcipher.database.SQLiteDatabase;
 
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.domain.DailyTally;
-import org.smartregister.kip.domain.Hia2Indicator;
-import org.smartregister.kip.service.HIA2Service;
+import org.smartregister.kip.domain.MohIndicator;
 import org.smartregister.repository.BaseRepository;
 
 import java.text.ParseException;
@@ -58,9 +57,6 @@ public class DailyTalliesRepository extends BaseRepository {
 
     static {
         IGNORED_INDICATOR_CODES = new ArrayList<>();
-        IGNORED_INDICATOR_CODES.add(HIA2Service.CHN3_027);
-        IGNORED_INDICATOR_CODES.add(HIA2Service.CHN3_027_O);
-        IGNORED_INDICATOR_CODES.add(HIA2Service.CHN3_090);
     }
 
     public DailyTalliesRepository(KipRepository kipRepository) {
@@ -79,22 +75,22 @@ public class DailyTalliesRepository extends BaseRepository {
     /**
      * Saves a set of tallies
      *
-     * @param day        The day the tallies correspond to
-     * @param hia2Report Object holding the tallies, the first key in the map holds the indicator
-     *                   code, and the second the DHIS id for the indicator. It's expected that
-     *                   the inner most map will always hold one value
+     * @param day       The day the tallies correspond to
+     * @param mohReport Object holding the tallies, the first key in the map holds the indicator
+     *                  code, and the second the DHIS id for the indicator. It's expected that
+     *                  the inner most map will always hold one value
      */
-    public void save(String day, Map<String, Object> hia2Report) {
+    public void save(String day, Map<String, Object> mohReport) {
         SQLiteDatabase database = getWritableDatabase();
         try {
             database.beginTransaction();
             String userName = KipApplication.getInstance().context().allSharedPreferences().fetchRegisteredANM();
-            for (String indicatorCode : hia2Report.keySet()) {
-                Integer indicatorValue = (Integer) hia2Report.get(indicatorCode);
+            for (String indicatorCode : mohReport.keySet()) {
+                Integer indicatorValue = (Integer) mohReport.get(indicatorCode);
 
                 // Get the HIA2 Indicator corresponding to the current tally
-                Hia2Indicator indicator = KipApplication.getInstance()
-                        .hIA2IndicatorsRepository()
+                MohIndicator indicator = KipApplication.getInstance()
+                        .moh710IndicatorsRepository()
                         .findByIndicatorCode(indicatorCode);
 
                 if (indicator != null) {
@@ -186,8 +182,8 @@ public class DailyTalliesRepository extends BaseRepository {
         Map<Long, List<DailyTally>> talliesFromMonth = new HashMap<>();
         Cursor cursor = null;
         try {
-            HashMap<Long, Hia2Indicator> indicatorMap = KipApplication.getInstance()
-                    .hIA2IndicatorsRepository().findAll();
+            HashMap<Long, MohIndicator> indicatorMap = KipApplication.getInstance()
+                    .moh710IndicatorsRepository().findAll();
 
             Calendar startDate = Calendar.getInstance();
             startDate.setTime(month);
@@ -257,8 +253,8 @@ public class DailyTalliesRepository extends BaseRepository {
         HashMap<String, ArrayList<DailyTally>> tallies = new HashMap<>();
         Cursor cursor = null;
         try {
-            HashMap<Long, Hia2Indicator> indicatorMap = KipApplication.getInstance()
-                    .hIA2IndicatorsRepository().findAll();
+            HashMap<Long, MohIndicator> indicatorMap = KipApplication.getInstance()
+                    .moh710IndicatorsRepository().findAll();
             cursor = getReadableDatabase()
                     .query(TABLE_NAME, TABLE_COLUMNS,
                             getDayBetweenDatesSelection(minDate, maxDate),
@@ -297,8 +293,8 @@ public class DailyTalliesRepository extends BaseRepository {
     private List<DailyTally> readAllDataElements(Cursor cursor) {
         List<DailyTally> tallies = new ArrayList<>();
         try {
-            HashMap<Long, Hia2Indicator> indicatorMap = KipApplication.getInstance()
-                    .hIA2IndicatorsRepository().findAll();
+            HashMap<Long, MohIndicator> indicatorMap = KipApplication.getInstance()
+                    .moh710IndicatorsRepository().findAll();
             if (cursor != null && cursor.getCount() > 0) {
                 for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
                     DailyTally curTally = extractDailyTally(indicatorMap, cursor);
@@ -318,10 +314,10 @@ public class DailyTalliesRepository extends BaseRepository {
         return tallies;
     }
 
-    private DailyTally extractDailyTally(HashMap<Long, Hia2Indicator> indicatorMap, Cursor cursor) {
+    private DailyTally extractDailyTally(HashMap<Long, MohIndicator> indicatorMap, Cursor cursor) {
         long indicatorId = cursor.getLong(cursor.getColumnIndex(COLUMN_INDICATOR_ID));
         if (indicatorMap.containsKey(indicatorId)) {
-            Hia2Indicator indicator = indicatorMap.get(indicatorId);
+            MohIndicator indicator = indicatorMap.get(indicatorId);
             if (!IGNORED_INDICATOR_CODES.contains(indicator.getIndicatorCode())) {
                 DailyTally curTally = new DailyTally();
                 curTally.setId(cursor.getLong(cursor.getColumnIndex(COLUMN_ID)));

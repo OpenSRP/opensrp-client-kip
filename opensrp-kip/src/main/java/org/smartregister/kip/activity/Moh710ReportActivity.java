@@ -1,25 +1,34 @@
 package org.smartregister.kip.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.smartregister.kip.R;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.domain.MohIndicator;
 import org.smartregister.kip.repository.Moh710IndicatorsRepository;
+import org.smartregister.kip.repository.MonthlyTalliesRepository;
 import org.smartregister.kip.toolbar.LocationSwitcherToolbar;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -27,6 +36,13 @@ import java.util.Random;
  * Created by keyman on 01/09/2017.
  */
 public class Moh710ReportActivity extends BaseActivity {
+    private static final SimpleDateFormat MMMYYYY = new SimpleDateFormat("MMMM yyyy");
+    private static final int MONTH_SUGGESTION_LIMIT = 10;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +53,9 @@ public class Moh710ReportActivity extends BaseActivity {
         toggle.setHomeAsUpIndicator(null);
 
 
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     @Override
@@ -48,15 +67,47 @@ public class Moh710ReportActivity extends BaseActivity {
 
     private void updateReportDates() {
 
+        MonthlyTalliesRepository monthlyTalliesRepository = KipApplication
+                .getInstance().monthlyTalliesRepository();
+        Calendar startDate = Calendar.getInstance();
+        startDate.set(Calendar.DAY_OF_MONTH, 1);
+        startDate.set(Calendar.HOUR_OF_DAY, 0);
+        startDate.set(Calendar.MINUTE, 0);
+        startDate.set(Calendar.SECOND, 0);
+        startDate.set(Calendar.MILLISECOND, 0);
+        startDate.add(Calendar.MONTH, -1 * MONTH_SUGGESTION_LIMIT);
+
+        Calendar endDate = Calendar.getInstance();
+        endDate.set(Calendar.DAY_OF_MONTH, 1);// Set date to first day of this month
+        endDate.set(Calendar.HOUR_OF_DAY, 23);
+        endDate.set(Calendar.MINUTE, 59);
+        endDate.set(Calendar.SECOND, 59);
+        endDate.set(Calendar.MILLISECOND, 999);
+        endDate.add(Calendar.DATE, -1);// Move the date to last day of last month
+
+        List<Date> dates = monthlyTalliesRepository.findUneditedDraftMonths(startDate.getTime(),
+                endDate.getTime());
+
         Spinner reportDateSpinner = (Spinner) findViewById(R.id.report_date_spinner);
-        List<String> list = new ArrayList<>();
-        list.add("list 1");
-        list.add("list 2");
-        list.add("list 3");
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
-                R.layout.item_spinner_moh710, list);
+        SpinnerAdapter dataAdapter = new SpinnerAdapter(this, R.layout.item_spinner_moh710, dates);
         dataAdapter.setDropDownViewResource(R.layout.item_spinner_drop_down_moh710);
         reportDateSpinner.setAdapter(dataAdapter);
+
+        reportDateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Object tag = view.getTag();
+                if (tag != null && tag instanceof Date) {
+                    Toast.makeText(Moh710ReportActivity.this, tag.toString(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
 
        /* View view = findViewById(R.id.custom_dates_value);
         if (view != null) {
@@ -167,4 +218,51 @@ public class Moh710ReportActivity extends BaseActivity {
         return null;
     }
 
+
+    private class SpinnerAdapter extends ArrayAdapter<Date> {
+
+        public SpinnerAdapter(Context context, int resource, List<Date> objects) {
+            super(context, resource, objects);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View view;
+            if (convertView == null) {
+                view = getLayoutInflater().inflate(R.layout.item_spinner_moh710, parent, false);
+            } else {
+                view = convertView;
+            }
+
+            if (view instanceof TextView) {
+                TextView textView = (TextView) view;
+                Date date = getItem(position);
+
+                String dateString = MMMYYYY.format(date);
+                textView.setText(dateString);
+                textView.setTag(date);
+            }
+            return view;
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+            View view;
+            if (convertView == null) {
+                view = getLayoutInflater().inflate(R.layout.item_spinner_drop_down_moh710, parent, false);
+            } else {
+                view = convertView;
+            }
+
+            if (view instanceof TextView) {
+                TextView textView = (TextView) view;
+                Date date = getItem(position);
+
+                String dateString = MMMYYYY.format(date);
+                textView.setText(dateString);
+                textView.setTag(date);
+            }
+            return view;
+        }
+    }
 }
