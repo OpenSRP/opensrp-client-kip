@@ -18,8 +18,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:orientation="horizontal"
-            android:paddingLeft="15dp">
+            android:orientation="horizontal">
 
             <org.smartregister.view.customcontrols.CustomFontTextView
                 android:id="@+id/report_date_label"
@@ -30,7 +29,7 @@
                 android:gravity="center_vertical"
                 android:text="@string/report_month"
                 android:textColor="@color/text_black"
-                android:textSize="22sp" />
+                android:textSize="19sp" />
 
             <Spinner
                 android:id="@+id/report_date_spinner"
@@ -51,15 +50,15 @@
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="30dp"
+            android:layout_marginRight="20dp"
             android:background="@color/filter_bar_light_grey"
             android:paddingLeft="10dp"
-            android:paddingRight="15dp"
+            android:paddingRight="10dp"
             android:text="@string/custom_date_range"
             android:textAllCaps="false"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/text_black"
-            android:textSize="22sp" />
+            android:textSize="19sp" />
 
     </RelativeLayout>
 
@@ -68,7 +67,8 @@
         android:layout_width="fill_parent"
         android:layout_height="@dimen/ec_main_header_nav_layout_height"
         android:background="@color/filter_bar_light_grey"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -77,8 +77,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:orientation="horizontal"
-            android:paddingLeft="15dp">
+            android:orientation="horizontal">
 
             <org.smartregister.view.customcontrols.CustomFontTextView
                 style="@style/CustomFontTextViewStyle.ClientList.Light"
@@ -88,7 +87,7 @@
                 android:gravity="center_vertical"
                 android:text="@string/custom_dates"
                 android:textColor="@color/text_black"
-                android:textSize="22sp" />
+                android:textSize="19sp" />
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -104,7 +103,7 @@
                     android:paddingBottom="5dp"
                     android:text="14 Jun 2017 - 19 Jun 2017"
                     android:textColor="@color/text_black"
-                    android:textSize="22sp" />
+                    android:textSize="19sp" />
 
                 <View
                     android:id="@+id/underlineView"
@@ -115,7 +114,6 @@
                     android:layout_alignRight="@+id/custom_dates_value"
                     android:layout_alignStart="@+id/custom_dates_value"
                     android:layout_below="@+id/custom_dates_value"
-
                     android:layout_marginLeft="10dp"
                     android:background="@color/client_list_grey" />
             </RelativeLayout>
@@ -129,15 +127,17 @@
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="30dp"
+            android:layout_marginRight="20dp"
             android:background="@color/filter_bar_light_grey"
             android:drawableLeft="@drawable/ic_cross"
-            android:drawablePadding="10dp"
+            android:drawablePadding="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:text="@string/clear_date_range"
             android:textAllCaps="false"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/text_black"
-            android:textSize="22sp" />
+            android:textSize="19sp" />
 
 
     </RelativeLayout>

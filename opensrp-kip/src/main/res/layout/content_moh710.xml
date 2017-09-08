@@ -12,6 +12,7 @@
     android:divider="@color/light_grey"
     android:dividerHeight="0.25dp"
     android:fadingEdge="none"
+    android:listSelector="@android:color/transparent"
     android:overScrollMode="ifContentScrolls"
     android:paddingBottom="@dimen/abc_dialog_list_padding_vertical_material"
     android:paddingTop="@dimen/abc_dialog_list_padding_vertical_material"

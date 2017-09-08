@@ -22,7 +22,6 @@ public class Moh710ServiceBroadcastReceiver extends BroadcastReceiver {
     public static final String TYPE = "TYPE";
     public static final String ACTION_SERVICE_DONE = "MOH710_SERVICE_DONE";
     public static final String TYPE_GENERATE_DAILY_INDICATORS = "GENERATE_DAILY_INDICATORS";
-    public static final String TYPE_GENERATE_MONTHLY_REPORT = "GENERATE_MONTHLY_REPORT";
     private static Moh710ServiceBroadcastReceiver singleton;
     private final List<Moh710ServiceListener> listeners;
 
@@ -53,13 +52,13 @@ public class Moh710ServiceBroadcastReceiver extends BroadcastReceiver {
         this.listeners = new ArrayList<>();
     }
 
-    public void addHia2ServiceListener(Moh710ServiceListener listener) {
+    public void addMoh710ServiceListener(Moh710ServiceListener listener) {
         if (!listeners.contains(listener)) {
             listeners.add(listener);
         }
     }
 
-    public void removeHia2ServiceListener(Moh710ServiceListener listener) {
+    public void removeMoh710ServiceListener(Moh710ServiceListener listener) {
         if (listeners.contains(listener)) {
             listeners.remove(listener);
         }

@@ -122,6 +122,6 @@
 
 
     <style name="KipSpinnerUnderLined" parent="Widget.AppCompat.Spinner.Underlined">
-        <item name="backgroundTint">@color/black</item>
+        <item name="backgroundTint">@color/client_list_grey</item>
     </style>
 </resources>

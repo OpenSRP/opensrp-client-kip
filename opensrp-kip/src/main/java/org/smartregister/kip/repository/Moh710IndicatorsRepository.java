@@ -189,6 +189,11 @@ public class Moh710IndicatorsRepository extends BaseRepository {
         return null;
     }
 
+    public List<MohIndicator> fetchAll() {
+        SQLiteDatabase database = getReadableDatabase();
+        Cursor cursor = database.query(MOH_INDICATORS_TABLE_NAME, MOH_TABLE_COLUMNS, null, null, null, null, ID_COLUMN + " asc ");
+        return readAllDataElements(cursor);
+    }
 
     public HashMap<Long, MohIndicator> findAll() {
         HashMap<Long, MohIndicator> response = new HashMap<>();

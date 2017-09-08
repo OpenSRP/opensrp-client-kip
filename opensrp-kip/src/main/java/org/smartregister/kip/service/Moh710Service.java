@@ -4,7 +4,6 @@ import android.database.Cursor;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
-import org.smartregister.kip.repository.KipEventClientRepository;
 import org.smartregister.util.Log;
 
 import java.text.DateFormat;
@@ -46,44 +45,43 @@ public class Moh710Service {
     private static final String MOH_023 = "MOH-023";
     private static final String MOH_024 = "MOH-024";
     private static final String MOH_025 = "MOH-025";
-    private static final String MOH_026 = "MOH-026";
+    public static final String MOH_026 = "MOH-026";
     private static final String MOH_027 = "MOH-027";
     private static final String MOH_028 = "MOH-028";
     private static final String MOH_029 = "MOH-029";
     private static final String MOH_030 = "MOH-030";
     private static final String MOH_031 = "MOH-031";
-    private static final String MOH_032 = "MOH-032";
-    private static final String MOH_033 = "MOH-033";
+    public static final String MOH_032 = "MOH-032";
+    public static final String MOH_033 = "MOH-033";
     private static final String MOH_034 = "MOH-034";
     private static final String MOH_035 = "MOH-035";
-    private static final String MOH_036 = "MOH-036";
-    private static final String MOH_037 = "MOH-037";
-    private static final String MOH_038 = "MOH-038";
-    private static final String MOH_039 = "MOH-039";
-    private static final String MOH_040 = "MOH-040";
+    public static final String MOH_036 = "MOH-036";
+    public static final String MOH_037 = "MOH-037";
+    public static final String MOH_038 = "MOH-038";
+    public static final String MOH_039 = "MOH-039";
+    public static final String MOH_040 = "MOH-040";
     private static final String MOH_041 = "MOH-041";
-    private static final String MOH_042 = "MOH-042";
-    private static final String MOH_043 = "MOH-043";
-    private static final String MOH_044 = "MOH-044";
+    public static final String MOH_042 = "MOH-042";
+    public static final String MOH_043 = "MOH-043";
+    public static final String MOH_044 = "MOH-044";
 
-    private final Map<String, Object> mohReport = new HashMap<>();
+    private Map<String, Object> mohReport = new HashMap<>();
     private SQLiteDatabase database;
-    public static final String PREVIOUS_REPORT_DATES_QUERY = "select distinct strftime('%Y-%m-%d'," + KipEventClientRepository.event_column.eventDate + ") as eventDate, " + KipEventClientRepository.event_column.updatedAt + " from " + KipEventClientRepository.Table.event.name();
-    public static final String MOH710_LAST_PROCESSED_DATE = "HIA2_LAST_PROCESSED_DATE";
     private String reportDate;
 
     //FIXME add month as a variable to allow generation of previous months reports
     //FIXME add last generated date to make this process incremental, should this date be per indicator? just in case an indicator was skipped due to exceptions
 
     /**
-     * Generate indicators populating them to mohReport map by executing various db queries.
-     * Order of execution matters since indicators with total values depend on the values being added together existing in the mohReport map
+     * Generate  vaccine indicators populating them to mohReport map by executing various db queries.
      *
      * @param _database
      */
-    public Map<String, Object> generateIndicators(final SQLiteDatabase _database, String day) {
+    public Map<String, Object> generateVaccineIndicators(final SQLiteDatabase _database, String day) {
         database = _database;
         reportDate = day;
+        mohReport = new HashMap<>();
+
         getMOH001();
         getMOH002();
         getMOH003();
@@ -109,25 +107,86 @@ public class Moh710Service {
         getMOH023();
         getMOH024();
         getMOH025();
-        getMOH026();
+
         getMOH027();
         getMOH028();
         getMOH029();
         getMOH030();
         getMOH031();
-        getMOH032();
-        getMOH033();
+
         getMOH034();
         getMOH035();
+
+        return mohReport;
+    }
+
+    /**
+     * Generate recurring services indicators populating them to mohReport map by executing various db queries.
+     *
+     * @param _database
+     */
+    public Map<String, Object> generateRecurringServiceIndicators(final SQLiteDatabase _database, String day) {
+        database = _database;
+        reportDate = day;
+        mohReport = new HashMap<>();
+
+        getMOH026();
+
+        getMOH032();
+        getMOH033();
+
+        getMOH042();
+        getMOH043();
+
+        return mohReport;
+    }
+
+    /**
+     * Generate tetanus indicators populating them to mohReport map by executing various db queries.
+     *
+     * @param _database
+     */
+    public Map<String, Object> generateTetanusIndicators(final SQLiteDatabase _database, String day) {
+        database = _database;
+        reportDate = day;
+        mohReport = new HashMap<>();
+
         getMOH036();
         getMOH037();
         getMOH038();
         getMOH039();
         getMOH040();
+
+        return mohReport;
+    }
+
+    /**
+     * Generate adverse effect indicators populating them to mohReport map by executing various db queries.
+     *
+     * @param _database
+     */
+    public Map<String, Object> generateAdverseEffectIndicators(final SQLiteDatabase _database, String day) {
+        database = _database;
+        reportDate = day;
+        mohReport = new HashMap<>();
+
         getMOH041();
-        getMOH042();
-        getMOH043();
+
+        return mohReport;
+    }
+
+    /**
+     * Generate white eye indicators populating them to mohReport map by executing various db queries.
+     *
+     * @param _database
+     */
+    public Map<String, Object> generateWhiteEyeIndicators(final SQLiteDatabase _database, String day) {
+        database = _database;
+        reportDate = day;
+        mohReport = new HashMap<>();
+
         getMOH044();
+
         return mohReport;
     }
 
@@ -160,7 +219,7 @@ public class Moh710Service {
      */
     private void getMOH003() {
         try {
-            int count = getVaccineCountAgeInDays("opv_0", "<=14");
+            int count = getVaccineCountAgeWithinDays("opv_0", "<=14");
             mohReport.put(MOH_003, count);
         } catch (Exception e) {
             Log.logError(TAG, MOH_003 + e.getMessage());
@@ -258,9 +317,9 @@ public class Moh710Service {
     private void getMOH011() {
         try {
             int count = getVaccineCount("ipv", ">=12");
-            mohReport.put(MOH_009, count);
+            mohReport.put(MOH_011, count);
         } catch (Exception e) {
-            Log.logError(TAG, MOH_009 + e.getMessage());
+            Log.logError(TAG, MOH_011 + e.getMessage());
         }
     }
 
@@ -439,6 +498,8 @@ public class Moh710Service {
     private void getMOH026() {
         try {
             //TODO VitaA at 6 months
+            int count = 0;
+            mohReport.put(MOH_026, count);
         } catch (Exception e) {
             Log.logError(TAG, MOH_026 + e.getMessage());
         }
@@ -498,7 +559,8 @@ public class Moh710Service {
      */
     private void getMOH031() {
         try {
-            //TODO Fully Immunized at 1 year
+            int count = getVaccineCountFullyImmunized("<12");
+            mohReport.put(MOH_031, count);
         } catch (Exception e) {
             Log.logError(TAG, MOH_031 + e.getMessage());
         }
@@ -510,6 +572,8 @@ public class Moh710Service {
     private void getMOH032() {
         try {
             //TODO VitaA at 1 year
+            int count = 0;
+            mohReport.put(MOH_032, count);
         } catch (Exception e) {
             Log.logError(TAG, MOH_032 + e.getMessage());
         }
@@ -521,6 +585,8 @@ public class Moh710Service {
     private void getMOH033() {
         try {
             //TODO VitaA At 1 ½ Years
+            int count = 0;
+            mohReport.put(MOH_033, count);
         } catch (Exception e) {
             Log.logError(TAG, MOH_033 + e.getMessage());
         }
@@ -556,6 +622,8 @@ public class Moh710Service {
     private void getMOH036() {
         try {
             //TODO Tetanus Toxoid for Pregnant Women 1st Dose
+            int count = 0;
+            mohReport.put(MOH_036, count);
         } catch (Exception e) {
             Log.logError(TAG, MOH_036 + e.getMessage());
         }
@@ -567,6 +635,8 @@ public class Moh710Service {
      */
     private void getMOH037() {
         try {
+            int count = 0;
+            mohReport.put(MOH_037, count);
             //TODO Tetanus Toxoid for Pregnant Women 2nd Dose
         } catch (Exception e) {
             Log.logError(TAG, MOH_037 + e.getMessage());
@@ -580,6 +650,8 @@ public class Moh710Service {
     private void getMOH038() {
         try {
             //TODO Tetanus Toxoid for Pregnant Women 3rd Dose
+            int count = 0;
+            mohReport.put(MOH_038, count);
         } catch (Exception e) {
             Log.logError(TAG, MOH_038 + e.getMessage());
         }
@@ -592,6 +664,8 @@ public class Moh710Service {
     private void getMOH039() {
         try {
             //TODO Tetanus Toxoid for Pregnant Women 4th Dose
+            int count = 0;
+            mohReport.put(MOH_039, count);
         } catch (Exception e) {
             Log.logError(TAG, MOH_039 + e.getMessage());
         }
@@ -603,6 +677,8 @@ public class Moh710Service {
     private void getMOH040() {
         try {
             //TODO Tetanus Toxoid for Pregnant Women 5th Dose
+            int count = 0;
+            mohReport.put(MOH_040, count);
         } catch (Exception e) {
             Log.logError(TAG, MOH_040 + e.getMessage());
         }
@@ -614,6 +690,8 @@ public class Moh710Service {
     private void getMOH041() {
         try {
             //TODO Adverse Events Following Immunization
+            int count = 0;
+            mohReport.put(MOH_041, count);
         } catch (Exception e) {
             Log.logError(TAG, MOH_041 + e.getMessage());
         }
@@ -625,6 +703,8 @@ public class Moh710Service {
     private void getMOH042() {
         try {
             //TODO Vitamin A  2 Years to 5 Years (200,000 IU)
+            int count = 0;
+            mohReport.put(MOH_042, count);
         } catch (Exception e) {
             Log.logError(TAG, MOH_042 + e.getMessage());
         }
@@ -636,6 +716,8 @@ public class Moh710Service {
     private void getMOH043() {
         try {
             //TODO Vitamin A  2 Years to 5 Years (200,000 IU)
+            int count = 0;
+            mohReport.put(MOH_043, count);
         } catch (Exception e) {
             Log.logError(TAG, MOH_043 + e.getMessage());
         }
@@ -647,6 +729,8 @@ public class Moh710Service {
     private void getMOH044() {
         try {
             //TODO Squint / White Eye Reflection (Under 1 Year)
+            int count = 0;
+            mohReport.put(MOH_044, count);
         } catch (Exception e) {
             Log.logError(TAG, MOH_044 + e.getMessage());
         }
@@ -674,15 +758,17 @@ public class Moh710Service {
     }
 
     /**
+     * Age is specified as different between vaccine date and dob
+     *
      * @param vaccine
-     * @param age     in days specified as e.g <=14
+     * @param age     within days specified as e.g <=14
      * @return
      */
-    private int getVaccineCountAgeInDays(String vaccine, String age) {
+    private int getVaccineCountAgeWithinDays(String vaccine, String age) {
         int count = 0;
         try {
             String vaccineCondition = vaccine.contains("measles") ? "(lower(v.name)='" + vaccine.toLowerCase() + "' or lower(v.name)='mr_1')" : "lower(v.name)='" + vaccine.toLowerCase() + "'";
-            String query = "select count(*) as count, " + ageQueryInDays() + " from vaccines v left join ec_child child on child.base_entity_id=v.base_entity_id " +
+            String query = "select count(*) as count, " + ageWithinDays() + " from vaccines v left join ec_child child on child.base_entity_id=v.base_entity_id " +
                     "where age " + age + " and  '" + reportDate + "'=strftime('%Y-%m-%d',datetime(v.date/1000, 'unixepoch')) and " + vaccineCondition;
             count = executeQueryAndReturnCount(query);
         } catch (Exception e) {
@@ -706,14 +792,14 @@ public class Moh710Service {
                     "'ipv', " +
                     "'penta_1', 'penta_2', 'penta_3', " +
                     "'pcv_1', 'pcv_2', 'pcv_3', " +
-                    "'rota_1', 'rota_2', yf, " +
+                    "'rota_1', 'rota_2', " +
                     "'measles_1', 'mr_1'" +
                     ") ";
             String query = "select count(*) as count, " + ageQuery() + " from vaccines v left join ec_child child on child.base_entity_id=v.base_entity_id " +
                     "where age " + age + " and  '" + reportDate + "'=strftime('%Y-%m-%d',datetime(v.date/1000, 'unixepoch')) and " + vaccineCondition;
             count = executeQueryAndReturnCount(query);
         } catch (Exception e) {
-            Log.logError(TAG, "HIA2_Status" + e.getMessage());
+            Log.logError(TAG, "FullyImmunized" + e.getMessage());
         }
 
         return count;
@@ -724,8 +810,8 @@ public class Moh710Service {
         return " CAST ((julianday('now') - julianday(strftime('%Y-%m-%d',child.dob)))/(365/12) AS INTEGER)as age ";
     }
 
-    private String ageQueryInDays() {
-        return " CAST ((julianday('now') - julianday(strftime('%Y-%m-%d',child.dob))) AS INTEGER)as age ";
+    private String ageWithinDays() {
+        return " CAST ((julianday(strftime('%Y-%m-%d',datetime(v.date/1000, 'unixepoch'))) - julianday(strftime('%Y-%m-%d',child.dob))) AS INTEGER)as age ";
     }
 
     private String eventDateEqualsCurrentMonthQuery() {
