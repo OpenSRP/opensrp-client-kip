@@ -1,5 +1,7 @@
 package org.smartregister.kip.activity;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -21,6 +24,8 @@ import org.smartregister.kip.R;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.domain.MohIndicator;
 import org.smartregister.kip.domain.MonthlyTally;
+import org.smartregister.kip.fragment.CustomDateRangeDialogFragment;
+import org.smartregister.kip.listener.DateRangeActionListener;
 import org.smartregister.kip.receiver.Moh710ServiceBroadcastReceiver;
 import org.smartregister.kip.repository.Moh710IndicatorsRepository;
 import org.smartregister.kip.repository.MonthlyTalliesRepository;
@@ -41,14 +46,15 @@ import java.util.Map;
 /**
  * Created by keyman on 01/09/2017.
  */
-public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceBroadcastReceiver.Moh710ServiceListener {
+public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceBroadcastReceiver.Moh710ServiceListener, DateRangeActionListener {
     private static final String TAG = Moh710ReportActivity.class.getCanonicalName();
+    private static final String DIALOG_TAG = Moh710ReportActivity.class.getCanonicalName().concat("DIALOG_TAG");
     private static final SimpleDateFormat MMMYYYY = new SimpleDateFormat("MMMM yyyy");
 
     //Global data variables
     private List<String> antigenList = new ArrayList<>();
     private Map<String, List<MohIndicator>> antigenMap = new HashMap<>();
-
+    private boolean customRange = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +83,53 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
 
     private void update() {
         Utils.startAsyncTask(new GenerateReportTask(this), null);
+        updateFilters(null, null);
+    }
+
+    private void updateFilters(Date startDate, Date endDate) {
+        View defaultFilter = findViewById(R.id.default_filter);
+        View customFilter = findViewById(R.id.custom_filter);
+        if (customRange) {
+            customFilter.setVisibility(View.VISIBLE);
+            defaultFilter.setVisibility(View.GONE);
+
+            if (startDate != null && endDate != null) {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
+                String text = dateFormat.format(startDate) + " - " + dateFormat.format(endDate);
+                TextView textView = (TextView) findViewById(R.id.custom_dates_value);
+                textView.setText(text);
+            }
+
+            View clearCustomView = findViewById(R.id.clear_custom_date_range);
+            if (clearCustomView != null) {
+                Button clearCustom = (Button) clearCustomView;
+                clearCustom.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        customRange = false;
+                        update();
+                    }
+                });
+            }
+
+        } else {
+            defaultFilter.setVisibility(View.VISIBLE);
+            customFilter.setVisibility(View.GONE);
+
+            View customDateRangeView = findViewById(R.id.set_custom_date_range);
+            if (customDateRangeView != null) {
+                Button customDateRange = (Button) customDateRangeView;
+                customDateRange.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        addCustomRangeDateDialogFragment();
+                    }
+                });
+            }
+
+        }
+
+
     }
 
     private void updateListViewHeader() {
@@ -88,25 +141,28 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
 
     private void updateReportDates(List<Date> dates) {
         if (dates != null && !dates.isEmpty()) {
-            Spinner reportDateSpinner = (Spinner) findViewById(R.id.report_date_spinner);
-            SpinnerAdapter dataAdapter = new SpinnerAdapter(this, R.layout.item_spinner_moh710, dates);
-            dataAdapter.setDropDownViewResource(R.layout.item_spinner_drop_down_moh710);
-            reportDateSpinner.setAdapter(dataAdapter);
+            View reportDateSpinnerView = findViewById(R.id.report_date_spinner);
+            if (reportDateSpinnerView != null) {
+                Spinner reportDateSpinner = (Spinner) reportDateSpinnerView;
+                SpinnerAdapter dataAdapter = new SpinnerAdapter(this, R.layout.item_spinner_moh710, dates);
+                dataAdapter.setDropDownViewResource(R.layout.item_spinner_drop_down_moh710);
+                reportDateSpinner.setAdapter(dataAdapter);
 
-            reportDateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    Object tag = view.getTag();
-                    if (tag != null && tag instanceof Date) {
-                        updateReportList((Date) tag);
+                reportDateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        Object tag = view.getTag();
+                        if (tag != null && tag instanceof Date) {
+                            updateReportList((Date) tag);
+                        }
                     }
-                }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
 
-                }
-            });
+                    }
+                });
+            }
         }
 
        /* View view = findViewById(R.id.custom_dates_value);
@@ -118,12 +174,11 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
 
     }
 
-    private void updateReportList(List<Date> dates, List<String> antigenList, Map<String, List<MohIndicator>> antigenMap, List<MonthlyTally> monthlyTallies) {
-        if (dates != null && !dates.isEmpty()) {
-            this.antigenList = antigenList;
-            this.antigenMap = antigenMap;
-            updateReportList(monthlyTallies);
-        }
+    private void updateReportList(List<String> antigenList, Map<String, List<MohIndicator>> antigenMap, List<MonthlyTally> monthlyTallies) {
+        this.antigenList = antigenList;
+        this.antigenMap = antigenMap;
+        updateReportList(monthlyTallies);
+
     }
 
     private void updateReportList(Date date) {
@@ -131,7 +186,16 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
         Utils.startAsyncTask(new UpdateReportTask(this), dates);
     }
 
+    private void updateReportList(Date startDate, Date endDate) {
+        Date[] dates = {startDate, endDate};
+        Utils.startAsyncTask(new UpdateReportTask(this), dates);
+    }
+
+
     private void updateReportList(final List<MonthlyTally> monthlyTallies) {
+        if (monthlyTallies == null || monthlyTallies.isEmpty()) {
+            return;
+        }
 
         BaseAdapter baseAdapter = new BaseAdapter() {
             @Override
@@ -263,6 +327,28 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
         }
     }
 
+    public void addCustomRangeDateDialogFragment() {
+
+        FragmentTransaction ft = this.getFragmentManager().beginTransaction();
+        Fragment prev = this.getFragmentManager().findFragmentByTag(DIALOG_TAG);
+        if (prev != null) {
+            ft.remove(prev);
+        }
+
+        ft.addToBackStack(null);
+
+        CustomDateRangeDialogFragment customDateRangeDialogFragment = CustomDateRangeDialogFragment.newInstance(this);
+        customDateRangeDialogFragment.show(ft, DIALOG_TAG);
+    }
+
+    @Override
+    public void onDateRangeSelected(Date startDate, Date endDate) {
+        customRange = true;
+        updateReportList(startDate, endDate);
+        updateFilters(startDate, endDate);
+
+    }
+
     ////////////////////////////////////////////////////////////////
     // Inner classes
     ////////////////////////////////////////////////////////////////
@@ -325,6 +411,7 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
             baseActivity.showProgressDialog();
         }
 
@@ -378,12 +465,9 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
 
                 MonthlyTalliesRepository monthlyTalliesRepository = KipApplication
                         .getInstance().monthlyTalliesRepository();
-                Date startDate = new Date(0);
-                Date endDate = new Date();
 
-                List<Date> dates = monthlyTalliesRepository.findUneditedDraftMonths(startDate,
-                        endDate);
-
+                List<Date> dates = monthlyTalliesRepository.findUneditedDraftMonths(new Date(0),
+                        new Date());
                 if (dates == null || dates.isEmpty()) {
                     return null;
                 }
@@ -402,6 +486,7 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
 
                 List<MonthlyTally> monthlyTallies = monthlyTalliesRepository
                         .findDrafts(MonthlyTalliesRepository.DF_YYYYMM.format(dates.get(0)));
+
 
                 Map<String, NamedObject<?>> map = new HashMap<>();
                 NamedObject<List<Date>> datesNamedObject = new NamedObject<>(Date.class.getName(), dates);
@@ -475,7 +560,7 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
             }
 
             updateReportDates(dates);
-            updateReportList(dates, antigenList, antigenMap, monthlyTallies);
+            updateReportList(antigenList, antigenMap, monthlyTallies);
         }
     }
 
@@ -500,12 +585,24 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
                 return new ArrayList<>();
             }
 
-            Date date = params[0];
-            MonthlyTalliesRepository monthlyTalliesRepository = KipApplication
-                    .getInstance().monthlyTalliesRepository();
+            if (params.length == 1) {
+                Date date = params[0];
+                MonthlyTalliesRepository monthlyTalliesRepository = KipApplication
+                        .getInstance().monthlyTalliesRepository();
 
-            return monthlyTalliesRepository
-                    .findDrafts(MonthlyTalliesRepository.DF_YYYYMM.format(date));
+                return monthlyTalliesRepository
+                        .findDrafts(MonthlyTalliesRepository.DF_YYYYMM.format(date));
+            } else if (params.length == 2) {
+                Date startDate = params[0];
+                Date endDate = params[1];
+                MonthlyTalliesRepository monthlyTalliesRepository = KipApplication
+                        .getInstance().monthlyTalliesRepository();
+
+                return monthlyTalliesRepository
+                        .findDrafts(startDate, endDate);
+            }
+
+            return new ArrayList<>();
 
         }
 

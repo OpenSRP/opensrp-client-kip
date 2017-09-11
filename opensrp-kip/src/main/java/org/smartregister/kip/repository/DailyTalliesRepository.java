@@ -231,88 +231,46 @@ public class DailyTalliesRepository extends BaseRepository {
         return talliesFromMonth;
     }
 
+    public Map<Long, List<DailyTally>> findTallies(Date startDate, Date endDate) {
+        Map<Long, List<DailyTally>> tallies = new HashMap<>();
+        Cursor cursor = null;
+        try {
+            HashMap<Long, MohIndicator> indicatorMap = KipApplication.getInstance()
+                    .moh710IndicatorsRepository().findAll();
+
+            cursor = getReadableDatabase().query(TABLE_NAME, TABLE_COLUMNS,
+                    getDayBetweenDatesSelection(startDate, endDate),
+                    null, null, null, null, null);
+            if (cursor != null && cursor.getCount() > 0) {
+                for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                    DailyTally curTally = extractDailyTally(indicatorMap, cursor);
+                    if (curTally != null) {
+                        if (!tallies.containsKey(curTally.getIndicator().getId())) {
+                            tallies.put(
+                                    curTally.getIndicator().getId(),
+                                    new ArrayList<DailyTally>());
+                        }
+
+                        tallies.get(curTally.getIndicator().getId()).add(curTally);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return tallies;
+    }
+
     private String getDayBetweenDatesSelection(Date startDate, Date endDate) {
         return COLUMN_DAY + " >= " + String.valueOf(startDate.getTime()) +
                 " AND " + COLUMN_DAY + " <= " + String.valueOf(endDate.getTime());
     }
 
-    public List<DailyTally> findByProviderIdAndDay(String providerId, String date) {
-        List<DailyTally> tallies = new ArrayList<>();
-        try {
-            Cursor cursor = getReadableDatabase().query(TABLE_NAME, TABLE_COLUMNS,
-                    COLUMN_DAY + " = Datetime(?) AND " + COLUMN_PROVIDER_ID + " = ? COLLATE NOCASE ",
-                    new String[]{date, providerId}, null, null, null, null);
-            tallies = readAllDataElements(cursor);
-        } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-        }
-        return tallies;
-    }
-
-    public HashMap<String, ArrayList<DailyTally>> findAll(SimpleDateFormat dateFormat, Date minDate, Date maxDate) {
-        HashMap<String, ArrayList<DailyTally>> tallies = new HashMap<>();
-        Cursor cursor = null;
-        try {
-            HashMap<Long, MohIndicator> indicatorMap = KipApplication.getInstance()
-                    .moh710IndicatorsRepository().findAll();
-            cursor = getReadableDatabase()
-                    .query(TABLE_NAME, TABLE_COLUMNS,
-                            getDayBetweenDatesSelection(minDate, maxDate),
-                            null, null, null, COLUMN_DAY + " DESC", null);
-            if (cursor != null && cursor.getCount() > 0) {
-                for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                    DailyTally curTally = extractDailyTally(indicatorMap, cursor);
-                    if (curTally != null) {
-                        final String dayString = dateFormat.format(curTally.getDay());
-                        if (!TextUtils.isEmpty(dayString)) {
-                            if (!tallies.containsKey(dayString) ||
-                                    tallies.get(dayString) == null) {
-                                tallies.put(dayString, new ArrayList<DailyTally>());
-                            }
-
-                            tallies.get(dayString).add(curTally);
-                        } else {
-                            Log.w(TAG, "There appears to be a daily tally with a null date");
-                        }
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-        } catch (NullPointerException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        return tallies;
-    }
-
-    private List<DailyTally> readAllDataElements(Cursor cursor) {
-        List<DailyTally> tallies = new ArrayList<>();
-        try {
-            HashMap<Long, MohIndicator> indicatorMap = KipApplication.getInstance()
-                    .moh710IndicatorsRepository().findAll();
-            if (cursor != null && cursor.getCount() > 0) {
-                for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                    DailyTally curTally = extractDailyTally(indicatorMap, cursor);
-                    if (curTally != null) {
-                        tallies.add(curTally);
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            Log.e(TAG, e.getMessage());
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        return tallies;
-    }
 
     private DailyTally extractDailyTally(HashMap<Long, MohIndicator> indicatorMap, Cursor cursor) {
         long indicatorId = cursor.getLong(cursor.getColumnIndex(COLUMN_INDICATOR_ID));

@@ -107,4 +107,14 @@
     <string name="moh710_value">Value</string>
     <string name="under_1_year">Under 1 Year</string>
     <string name="n_a">N/A</string>
+    <string name="set_custom_date_range">Set custom date range</string>
+    <string name="set_start_date">Set start date</string>
+    <string name="set_end_date">Set end date</string>
+    <string name="set_date">Set Date</string>
+    <string name="start_date_blank">Please select the start date.</string>
+    <string name="end_date_blank">Please select the end date.</string>
+    <string name="wrong_date_format">Wrong date format. Please use yyyy-mm-dd.</string>
+    <string name="start_after_end">Please set start date before end date.</string>
+    <string name="end_before_start">Please set end date after start date.</string>
+
 </resources>

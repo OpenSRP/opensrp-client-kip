@@ -497,8 +497,7 @@ public class Moh710Service {
      */
     private void getMOH026() {
         try {
-            //TODO VitaA at 6 months
-            int count = 0;
+            int count = getRecurringServiceCount("vit_a_1", ">=6", "<12");
             mohReport.put(MOH_026, count);
         } catch (Exception e) {
             Log.logError(TAG, MOH_026 + e.getMessage());
@@ -571,8 +570,7 @@ public class Moh710Service {
      */
     private void getMOH032() {
         try {
-            //TODO VitaA at 1 year
-            int count = 0;
+            int count = getRecurringServiceCount("vit_a_2", ">=12", "<18");
             mohReport.put(MOH_032, count);
         } catch (Exception e) {
             Log.logError(TAG, MOH_032 + e.getMessage());
@@ -584,8 +582,7 @@ public class Moh710Service {
      */
     private void getMOH033() {
         try {
-            //TODO VitaA At 1 ½ Years
-            int count = 0;
+            int count = getRecurringServiceCount("vit_a_3", ">=18", "<24");
             mohReport.put(MOH_033, count);
         } catch (Exception e) {
             Log.logError(TAG, MOH_033 + e.getMessage());
@@ -597,7 +594,7 @@ public class Moh710Service {
      */
     private void getMOH034() {
         try {
-            int count = getVaccineCount("measles_2", "between 18 and 24");
+            int count = getVaccineCount("measles_2", ">=18", "<24");
             mohReport.put(MOH_034, count);
         } catch (Exception e) {
             Log.logError(TAG, MOH_034 + e.getMessage());
@@ -621,7 +618,7 @@ public class Moh710Service {
      */
     private void getMOH036() {
         try {
-            //TODO Tetanus Toxoid for Pregnant Women 1st Dose
+            // No Source of Date, Leave Blank
             int count = 0;
             mohReport.put(MOH_036, count);
         } catch (Exception e) {
@@ -635,9 +632,9 @@ public class Moh710Service {
      */
     private void getMOH037() {
         try {
+            // No Source of Date, Leave Blank
             int count = 0;
             mohReport.put(MOH_037, count);
-            //TODO Tetanus Toxoid for Pregnant Women 2nd Dose
         } catch (Exception e) {
             Log.logError(TAG, MOH_037 + e.getMessage());
         }
@@ -649,7 +646,7 @@ public class Moh710Service {
      */
     private void getMOH038() {
         try {
-            //TODO Tetanus Toxoid for Pregnant Women 3rd Dose
+            // No Source of Date, Leave Blank
             int count = 0;
             mohReport.put(MOH_038, count);
         } catch (Exception e) {
@@ -663,7 +660,7 @@ public class Moh710Service {
      */
     private void getMOH039() {
         try {
-            //TODO Tetanus Toxoid for Pregnant Women 4th Dose
+            // No Source of Date, Leave Blank
             int count = 0;
             mohReport.put(MOH_039, count);
         } catch (Exception e) {
@@ -676,7 +673,7 @@ public class Moh710Service {
      */
     private void getMOH040() {
         try {
-            //TODO Tetanus Toxoid for Pregnant Women 5th Dose
+            // No Source of Date, Leave Blank
             int count = 0;
             mohReport.put(MOH_040, count);
         } catch (Exception e) {
@@ -702,8 +699,14 @@ public class Moh710Service {
      */
     private void getMOH042() {
         try {
-            //TODO Vitamin A  2 Years to 5 Years (200,000 IU)
-            int count = 0;
+            int count4 = getRecurringServiceCount("vit_a_4", ">=24", "<60");
+            int count5 = getRecurringServiceCount("vit_a_5", ">=24", "<60");
+            int count6 = getRecurringServiceCount("vit_a_6", ">=24", "<60");
+            int count7 = getRecurringServiceCount("vit_a_7", ">=24", "<60");
+            int count8 = getRecurringServiceCount("vit_a_8", ">=24", "<60");
+            int count9 = getRecurringServiceCount("vit_a_9", ">=24", "<60");
+            int count10 = getRecurringServiceCount("vit_a_10", ">=24", "<60");
+            int count = count4 + count5 + count6 + count7 + count8 + count9 + count10;
             mohReport.put(MOH_042, count);
         } catch (Exception e) {
             Log.logError(TAG, MOH_042 + e.getMessage());
@@ -715,7 +718,7 @@ public class Moh710Service {
      */
     private void getMOH043() {
         try {
-            //TODO Vitamin A  2 Years to 5 Years (200,000 IU)
+            // No Source of Date, Leave Blank
             int count = 0;
             mohReport.put(MOH_043, count);
         } catch (Exception e) {
@@ -728,7 +731,7 @@ public class Moh710Service {
      */
     private void getMOH044() {
         try {
-            //TODO Squint / White Eye Reflection (Under 1 Year)
+            // No Source of Date, Leave Blank
             int count = 0;
             mohReport.put(MOH_044, count);
         } catch (Exception e) {
@@ -776,7 +779,47 @@ public class Moh710Service {
         }
 
         return count;
+    }
 
+
+    /**
+     * @param vaccine
+     * @param minAge  in months specified as e.g <12 or >12
+     * @param maxAge  in months specified as e.g <12 or >12
+     * @return
+     */
+    private int getVaccineCount(String vaccine, String minAge, String maxAge) {
+        int count = 0;
+        try {
+            String ageCondition = " age " + minAge + " and  age " + maxAge;
+            String vaccineCondition = vaccine.contains("measles") ? "(lower(v.name)='" + vaccine.toLowerCase() + "' or lower(v.name)='mr_1')" : "lower(v.name)='" + vaccine.toLowerCase() + "'";
+            String query = "select count(*) as count, " + ageQuery() + " from vaccines v left join ec_child child on child.base_entity_id=v.base_entity_id " +
+                    "where " + ageCondition + " and  '" + reportDate + "'=strftime('%Y-%m-%d',datetime(v.date/1000, 'unixepoch')) and " + vaccineCondition;
+            count = executeQueryAndReturnCount(query);
+        } catch (Exception e) {
+            Log.logError(TAG, vaccine.toUpperCase() + e.getMessage());
+        }
+        return count;
+    }
+
+    /**
+     * @param recurringService
+     * @param minAge           in months specified as e.g <12 or >12
+     * @param maxAge           in months specified as e.g <12 or >12
+     * @return
+     */
+    private int getRecurringServiceCount(String recurringService, String minAge, String maxAge) {
+        int count = 0;
+        try {
+            String ageCondition = " age " + minAge + " and  age " + maxAge;
+            String recurringServiceCondition = "lower(v.name)='" + recurringService.toLowerCase() + "'";
+            String query = "select count(*) as count, " + ageQuery() + " from recurring_service_records r left join ec_child child on child.base_entity_id=v.base_entity_id " +
+                    "where " + ageCondition + " and  '" + reportDate + "'=strftime('%Y-%m-%d',datetime(r.date/1000, 'unixepoch')) and " + recurringServiceCondition;
+            count = executeQueryAndReturnCount(query);
+        } catch (Exception e) {
+            Log.logError(TAG, recurringService.toUpperCase() + e.getMessage());
+        }
+        return count;
     }
 
     /**
@@ -801,9 +844,7 @@ public class Moh710Service {
         } catch (Exception e) {
             Log.logError(TAG, "FullyImmunized" + e.getMessage());
         }
-
         return count;
-
     }
 
     private String ageQuery() {

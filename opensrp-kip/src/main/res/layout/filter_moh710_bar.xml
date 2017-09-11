@@ -45,6 +45,7 @@
 
 
         <Button
+            android:id="@+id/set_custom_date_range"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -122,6 +123,7 @@
 
 
         <Button
+            android:id="@+id/clear_custom_date_range"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
