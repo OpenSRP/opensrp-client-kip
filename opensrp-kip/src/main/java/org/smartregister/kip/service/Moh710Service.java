@@ -558,7 +558,9 @@ public class Moh710Service {
      */
     private void getMOH031() {
         try {
-            int count = getVaccineCountFullyImmunized("<12");
+            //TODO fix fully immunized
+            //int count = getVaccineCountFullyImmunized("<12");
+            int count = 0;
             mohReport.put(MOH_031, count);
         } catch (Exception e) {
             Log.logError(TAG, MOH_031 + e.getMessage());

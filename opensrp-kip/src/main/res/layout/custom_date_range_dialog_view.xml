@@ -47,9 +47,9 @@
                     android:id="@+id/start_date_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:hint="@string/set_start_date"
                     android:layout_marginRight="10dp"
-                    android:layout_weight="0.5">
+                    android:layout_weight="0.5"
+                    android:hint="@string/set_start_date">
 
                     <EditText
                         android:id="@+id/start_date"
@@ -69,7 +69,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:layout_weight="0.5">
+                    android:layout_weight="0.5"
+                    android:hint="@string/set_end_date">
 
                     <EditText
                         android:id="@+id/end_date"

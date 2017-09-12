@@ -16,7 +16,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
@@ -25,6 +24,7 @@ import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.domain.MohIndicator;
 import org.smartregister.kip.domain.MonthlyTally;
 import org.smartregister.kip.fragment.CustomDateRangeDialogFragment;
+import org.smartregister.kip.helper.SpinnerHelper;
 import org.smartregister.kip.listener.DateRangeActionListener;
 import org.smartregister.kip.receiver.Moh710ServiceBroadcastReceiver;
 import org.smartregister.kip.repository.Moh710IndicatorsRepository;
@@ -54,7 +54,7 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
     //Global data variables
     private List<String> antigenList = new ArrayList<>();
     private Map<String, List<MohIndicator>> antigenMap = new HashMap<>();
-    private boolean customRange = false;
+    private Holder holder = new Holder();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +70,7 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
     @Override
     protected void onResume() {
         super.onResume();
-        update();
+        generateReport();
         Moh710ServiceBroadcastReceiver.getInstance().addMoh710ServiceListener(this);
 
     }
@@ -81,21 +81,38 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
         Moh710ServiceBroadcastReceiver.getInstance().removeMoh710ServiceListener(this);
     }
 
-    private void update() {
+    private void generateReport() {
+        holder.setDefault(null);
         Utils.startAsyncTask(new GenerateReportTask(this), null);
-        updateFilters(null, null);
+        updateFilters();
     }
 
-    private void updateFilters(Date startDate, Date endDate) {
+    private void refresh(boolean showProgressBar) {
+        if (holder.isCustomRange() && (holder.getCustomStartDate() == null || holder.getCustomEndDate() == null)) {
+            generateReport();
+            return;
+        } else if (!holder.isCustomRange() && holder.getSelectedMonth() == null) {
+            generateReport();
+            return;
+        }
+
+        if (holder.isCustomRange()) {
+            Utils.startAsyncTask(new UpdateReportTask(this, showProgressBar), new Date[]{holder.getCustomStartDate(), holder.getCustomEndDate()});
+        } else {
+            Utils.startAsyncTask(new UpdateReportTask(this, showProgressBar), new Date[]{holder.getSelectedMonth()});
+        }
+    }
+
+    private void updateFilters() {
         View defaultFilter = findViewById(R.id.default_filter);
         View customFilter = findViewById(R.id.custom_filter);
-        if (customRange) {
+        if (holder.isCustomRange()) {
             customFilter.setVisibility(View.VISIBLE);
             defaultFilter.setVisibility(View.GONE);
 
-            if (startDate != null && endDate != null) {
+            if (holder.getCustomStartDate() != null && holder.getCustomEndDate() != null) {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
-                String text = dateFormat.format(startDate) + " - " + dateFormat.format(endDate);
+                String text = dateFormat.format(holder.getCustomStartDate()) + " - " + dateFormat.format(holder.getCustomEndDate());
                 TextView textView = (TextView) findViewById(R.id.custom_dates_value);
                 textView.setText(text);
             }
@@ -106,8 +123,19 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
                 clearCustom.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        customRange = false;
-                        update();
+                        holder.setDefault(null);
+                        refresh(true);
+                        updateFilters();
+                    }
+                });
+            }
+
+            View customDateRangeView = findViewById(R.id.custom_date_range_layout);
+            if (customDateRangeView != null) {
+                customDateRangeView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        addCustomRangeDateDialogFragment();
                     }
                 });
             }
@@ -126,7 +154,6 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
                     }
                 });
             }
-
         }
 
 
@@ -143,7 +170,7 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
         if (dates != null && !dates.isEmpty()) {
             View reportDateSpinnerView = findViewById(R.id.report_date_spinner);
             if (reportDateSpinnerView != null) {
-                Spinner reportDateSpinner = (Spinner) reportDateSpinnerView;
+                SpinnerHelper reportDateSpinner = new SpinnerHelper(reportDateSpinnerView);
                 SpinnerAdapter dataAdapter = new SpinnerAdapter(this, R.layout.item_spinner_moh710, dates);
                 dataAdapter.setDropDownViewResource(R.layout.item_spinner_drop_down_moh710);
                 reportDateSpinner.setAdapter(dataAdapter);
@@ -153,7 +180,8 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         Object tag = view.getTag();
                         if (tag != null && tag instanceof Date) {
-                            updateReportList((Date) tag);
+                            holder.setDefault((Date) tag);
+                            refresh(true);
                         }
                     }
 
@@ -162,16 +190,10 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
 
                     }
                 });
+
+                holder.setDefault(dates.get(0));
             }
         }
-
-       /* View view = findViewById(R.id.custom_dates_value);
-        if (view != null) {
-            TextView customDatesValue = (TextView) view;
-            customDatesValue.setPaintFlags(customDatesValue.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-            customDatesValue.setText("14 Jun 2017 - 19 Jun 2017");
-        }*/
-
     }
 
     private void updateReportList(List<String> antigenList, Map<String, List<MohIndicator>> antigenMap, List<MonthlyTally> monthlyTallies) {
@@ -179,16 +201,6 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
         this.antigenMap = antigenMap;
         updateReportList(monthlyTallies);
 
-    }
-
-    private void updateReportList(Date date) {
-        Date[] dates = {date};
-        Utils.startAsyncTask(new UpdateReportTask(this), dates);
-    }
-
-    private void updateReportList(Date startDate, Date endDate) {
-        Date[] dates = {startDate, endDate};
-        Utils.startAsyncTask(new UpdateReportTask(this), dates);
     }
 
 
@@ -323,7 +335,7 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
     @Override
     public void onServiceFinish(String actionType) {
         if (Moh710ServiceBroadcastReceiver.TYPE_GENERATE_DAILY_INDICATORS.equals(actionType)) {
-            update();
+            refresh(false);
         }
     }
 
@@ -337,15 +349,21 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
 
         ft.addToBackStack(null);
 
-        CustomDateRangeDialogFragment customDateRangeDialogFragment = CustomDateRangeDialogFragment.newInstance(this);
+        Date startDate = null;
+        Date endDate = null;
+        if (holder.isCustomRange()) {
+            startDate = holder.getCustomStartDate();
+            endDate = holder.getCustomEndDate();
+        }
+        CustomDateRangeDialogFragment customDateRangeDialogFragment = CustomDateRangeDialogFragment.newInstance(startDate, endDate);
         customDateRangeDialogFragment.show(ft, DIALOG_TAG);
     }
 
     @Override
     public void onDateRangeSelected(Date startDate, Date endDate) {
-        customRange = true;
-        updateReportList(startDate, endDate);
-        updateFilters(startDate, endDate);
+        holder.setCustom(true, startDate, endDate);
+        refresh(true);
+        updateFilters();
 
     }
 
@@ -411,7 +429,6 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
             baseActivity.showProgressDialog();
         }
 
@@ -567,15 +584,19 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
     public class UpdateReportTask extends AsyncTask<Date, Void, List<MonthlyTally>> {
 
         BaseActivity baseActivity;
+        boolean showProgressBar;
 
-        public UpdateReportTask(BaseActivity baseActivity) {
+        public UpdateReportTask(BaseActivity baseActivity, boolean showProgressBar) {
             this.baseActivity = baseActivity;
+            this.showProgressBar = showProgressBar;
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            baseActivity.showProgressDialog();
+            if (showProgressBar) {
+                baseActivity.showProgressDialog();
+            }
         }
 
         @Override
@@ -609,7 +630,9 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
         @Override
         protected void onPostExecute(List<MonthlyTally> monthlyTallies) {
             super.onPostExecute(monthlyTallies);
-            baseActivity.hideProgressDialog();
+            if (showProgressBar) {
+                baseActivity.hideProgressDialog();
+            }
             updateReportList(monthlyTallies);
 
         }
@@ -622,6 +645,43 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
         public NamedObject(String name, T object) {
             this.name = name;
             this.object = object;
+        }
+    }
+
+    private class Holder {
+        private boolean customRange;
+        private Date customStartDate;
+        private Date customEndDate;
+        private Date selectedMonth;
+
+
+        public void setCustom(boolean customRange, Date customStartDate, Date customEndDate) {
+            this.customRange = customRange;
+            this.customStartDate = customStartDate;
+            this.customEndDate = customEndDate;
+        }
+
+        public void setDefault(Date selectedMonth) {
+            this.customRange = false;
+            if (selectedMonth != null) {
+                this.selectedMonth = selectedMonth;
+            }
+        }
+
+        public boolean isCustomRange() {
+            return customRange;
+        }
+
+        public Date getCustomStartDate() {
+            return customStartDate;
+        }
+
+        public Date getCustomEndDate() {
+            return customEndDate;
+        }
+
+        public Date getSelectedMonth() {
+            return selectedMonth;
         }
     }
 }

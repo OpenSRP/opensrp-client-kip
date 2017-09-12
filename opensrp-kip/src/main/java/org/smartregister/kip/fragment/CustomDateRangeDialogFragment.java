@@ -3,7 +3,6 @@ package org.smartregister.kip.fragment;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DialogFragment;
-import android.content.Context;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,22 +22,26 @@ import org.smartregister.clientandeventmodel.DateUtil;
 import org.smartregister.kip.R;
 import org.smartregister.kip.listener.DatePickerListener;
 import org.smartregister.kip.listener.DateRangeActionListener;
+import org.smartregister.util.Log;
 
 import java.text.ParseException;
 import java.util.Date;
 
 @SuppressLint("ValidFragment")
 public class CustomDateRangeDialogFragment extends DialogFragment {
-    private final Context context;
     private DateRangeActionListener listener;
+    private Date startDate;
+    private Date endDate;
 
-    private CustomDateRangeDialogFragment(Context context) {
-        this.context = context;
+    private CustomDateRangeDialogFragment(Date startDate, Date endDate) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+
     }
 
     public static CustomDateRangeDialogFragment newInstance(
-            Context context) {
-        return new CustomDateRangeDialogFragment(context);
+            Date startDate, Date endDate) {
+        return new CustomDateRangeDialogFragment(startDate, endDate);
     }
 
     @Override
@@ -55,6 +58,13 @@ public class CustomDateRangeDialogFragment extends DialogFragment {
 
         final EditText startDateView = (EditText) dialogView.findViewById(R.id.start_date);
         final EditText endDateView = (EditText) dialogView.findViewById(R.id.end_date);
+        if (startDate != null) {
+            startDateView.setText(formatDate(startDate));
+        }
+
+        if (endDate != null) {
+            endDateView.setText(formatDate(endDate));
+        }
 
         final TextInputLayout startDateLayout = (TextInputLayout) dialogView.findViewById(R.id.start_date_layout);
         final TextInputLayout endDateLayout = (TextInputLayout) dialogView.findViewById(R.id.end_date_layout);
@@ -164,4 +174,12 @@ public class CustomDateRangeDialogFragment extends DialogFragment {
     }
 
 
+    private String formatDate(Date date) {
+        try {
+            return DateUtil.yyyyMMdd.format(date);
+        } catch (Exception e) {
+            Log.logError(e.getMessage());
+        }
+        return null;
+    }
 }
