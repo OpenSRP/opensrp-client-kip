@@ -4,10 +4,14 @@ import android.database.Cursor;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
+import org.apache.commons.lang3.StringUtils;
 import org.smartregister.util.Log;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -497,7 +501,7 @@ public class Moh710Service {
      */
     private void getMOH026() {
         try {
-            int count = getRecurringServiceCount("vit_a_1", ">=6", "<12");
+            int count = getRecurringServiceCount("Vit_A_1", ">=6", "<12");
             mohReport.put(MOH_026, count);
         } catch (Exception e) {
             Log.logError(TAG, MOH_026 + e.getMessage());
@@ -558,9 +562,7 @@ public class Moh710Service {
      */
     private void getMOH031() {
         try {
-            //TODO fix fully immunized
-            //int count = getVaccineCountFullyImmunized("<12");
-            int count = 0;
+            int count = getCountFullyImmunized("<12");
             mohReport.put(MOH_031, count);
         } catch (Exception e) {
             Log.logError(TAG, MOH_031 + e.getMessage());
@@ -572,7 +574,7 @@ public class Moh710Service {
      */
     private void getMOH032() {
         try {
-            int count = getRecurringServiceCount("vit_a_2", ">=12", "<18");
+            int count = getRecurringServiceCount("Vit_A_2", ">=12", "<18");
             mohReport.put(MOH_032, count);
         } catch (Exception e) {
             Log.logError(TAG, MOH_032 + e.getMessage());
@@ -584,7 +586,7 @@ public class Moh710Service {
      */
     private void getMOH033() {
         try {
-            int count = getRecurringServiceCount("vit_a_3", ">=18", "<24");
+            int count = getRecurringServiceCount("Vit_A_3", ">=18", "<24");
             mohReport.put(MOH_033, count);
         } catch (Exception e) {
             Log.logError(TAG, MOH_033 + e.getMessage());
@@ -701,13 +703,13 @@ public class Moh710Service {
      */
     private void getMOH042() {
         try {
-            int count4 = getRecurringServiceCount("vit_a_4", ">=24", "<60");
-            int count5 = getRecurringServiceCount("vit_a_5", ">=24", "<60");
-            int count6 = getRecurringServiceCount("vit_a_6", ">=24", "<60");
-            int count7 = getRecurringServiceCount("vit_a_7", ">=24", "<60");
-            int count8 = getRecurringServiceCount("vit_a_8", ">=24", "<60");
-            int count9 = getRecurringServiceCount("vit_a_9", ">=24", "<60");
-            int count10 = getRecurringServiceCount("vit_a_10", ">=24", "<60");
+            int count4 = getRecurringServiceCount("Vit_A_4", ">=24", "<60");
+            int count5 = getRecurringServiceCount("Vit_A_5", ">=24", "<60");
+            int count6 = getRecurringServiceCount("Vit_A_6", ">=24", "<60");
+            int count7 = getRecurringServiceCount("Vit_A_7", ">=24", "<60");
+            int count8 = getRecurringServiceCount("Vit_A_8", ">=24", "<60");
+            int count9 = getRecurringServiceCount("Vit_A_9", ">=24", "<60");
+            int count10 = getRecurringServiceCount("Vit_A_10", ">=24", "<60");
             int count = count4 + count5 + count6 + count7 + count8 + count9 + count10;
             mohReport.put(MOH_042, count);
         } catch (Exception e) {
@@ -750,7 +752,13 @@ public class Moh710Service {
     private int getVaccineCount(String vaccine, String age) {
         int count = 0;
         try {
-            String vaccineCondition = vaccine.contains("measles") ? "(lower(v.name)='" + vaccine.toLowerCase() + "' or lower(v.name)='mr_1')" : "lower(v.name)='" + vaccine.toLowerCase() + "'";
+            String vaccineCondition = "lower(v.name)='" + vaccine.toLowerCase() + "'";
+            if (vaccine.equals("measles_1")) {
+                vaccineCondition = "(lower(v.name)='" + vaccine.toLowerCase() + "' or lower(v.name)='mr_1')";
+            } else if (vaccine.equals("measles_2")) {
+                vaccineCondition = "(lower(v.name)='" + vaccine.toLowerCase() + "' or lower(v.name)='mr_2')";
+            }
+
             String query = "select count(*) as count, " + ageQuery() + " from vaccines v left join ec_child child on child.base_entity_id=v.base_entity_id " +
                     "where age " + age + " and  '" + reportDate + "'=strftime('%Y-%m-%d',datetime(v.date/1000, 'unixepoch')) and " + vaccineCondition;
             count = executeQueryAndReturnCount(query);
@@ -760,6 +768,32 @@ public class Moh710Service {
 
         return count;
 
+    }
+
+    /**
+     * @param vaccine
+     * @param minAge  in months specified as e.g <12 or >12
+     * @param maxAge  in months specified as e.g <12 or >12
+     * @return
+     */
+    private int getVaccineCount(String vaccine, String minAge, String maxAge) {
+        int count = 0;
+        try {
+            String vaccineCondition = "lower(v.name)='" + vaccine.toLowerCase() + "'";
+            if (vaccine.equals("measles_1")) {
+                vaccineCondition = "(lower(v.name)='" + vaccine.toLowerCase() + "' or lower(v.name)='mr_1')";
+            } else if (vaccine.equals("measles_2")) {
+                vaccineCondition = "(lower(v.name)='" + vaccine.toLowerCase() + "' or lower(v.name)='mr_2')";
+            }
+
+            String ageCondition = " age " + minAge + " and  age " + maxAge;
+            String query = "select count(*) as count, " + ageQuery() + " from vaccines v left join ec_child child on child.base_entity_id=v.base_entity_id " +
+                    "where " + ageCondition + " and  '" + reportDate + "'=strftime('%Y-%m-%d',datetime(v.date/1000, 'unixepoch')) and " + vaccineCondition;
+            count = executeQueryAndReturnCount(query);
+        } catch (Exception e) {
+            Log.logError(TAG, vaccine.toUpperCase() + e.getMessage());
+        }
+        return count;
     }
 
     /**
@@ -772,7 +806,7 @@ public class Moh710Service {
     private int getVaccineCountAgeWithinDays(String vaccine, String age) {
         int count = 0;
         try {
-            String vaccineCondition = vaccine.contains("measles") ? "(lower(v.name)='" + vaccine.toLowerCase() + "' or lower(v.name)='mr_1')" : "lower(v.name)='" + vaccine.toLowerCase() + "'";
+            String vaccineCondition = "lower(v.name)='" + vaccine.toLowerCase() + "'";
             String query = "select count(*) as count, " + ageWithinDays() + " from vaccines v left join ec_child child on child.base_entity_id=v.base_entity_id " +
                     "where age " + age + " and  '" + reportDate + "'=strftime('%Y-%m-%d',datetime(v.date/1000, 'unixepoch')) and " + vaccineCondition;
             count = executeQueryAndReturnCount(query);
@@ -785,26 +819,6 @@ public class Moh710Service {
 
 
     /**
-     * @param vaccine
-     * @param minAge  in months specified as e.g <12 or >12
-     * @param maxAge  in months specified as e.g <12 or >12
-     * @return
-     */
-    private int getVaccineCount(String vaccine, String minAge, String maxAge) {
-        int count = 0;
-        try {
-            String ageCondition = " age " + minAge + " and  age " + maxAge;
-            String vaccineCondition = vaccine.contains("measles") ? "(lower(v.name)='" + vaccine.toLowerCase() + "' or lower(v.name)='mr_1')" : "lower(v.name)='" + vaccine.toLowerCase() + "'";
-            String query = "select count(*) as count, " + ageQuery() + " from vaccines v left join ec_child child on child.base_entity_id=v.base_entity_id " +
-                    "where " + ageCondition + " and  '" + reportDate + "'=strftime('%Y-%m-%d',datetime(v.date/1000, 'unixepoch')) and " + vaccineCondition;
-            count = executeQueryAndReturnCount(query);
-        } catch (Exception e) {
-            Log.logError(TAG, vaccine.toUpperCase() + e.getMessage());
-        }
-        return count;
-    }
-
-    /**
      * @param recurringService
      * @param minAge           in months specified as e.g <12 or >12
      * @param maxAge           in months specified as e.g <12 or >12
@@ -814,8 +828,9 @@ public class Moh710Service {
         int count = 0;
         try {
             String ageCondition = " age " + minAge + " and  age " + maxAge;
-            String recurringServiceCondition = "lower(v.name)='" + recurringService.toLowerCase() + "'";
-            String query = "select count(*) as count, " + ageQuery() + " from recurring_service_records r left join ec_child child on child.base_entity_id=v.base_entity_id " +
+            String recurringServiceCondition = "t.name = '" + recurringService + "'";
+            String query = "select count(*) as count, " + ageQuery() + " from recurring_service_records r left join ec_child child on child.base_entity_id=r.base_entity_id " +
+                    "join recurring_service_types t on r.recurring_service_id =t._id " +
                     "where " + ageCondition + " and  '" + reportDate + "'=strftime('%Y-%m-%d',datetime(r.date/1000, 'unixepoch')) and " + recurringServiceCondition;
             count = executeQueryAndReturnCount(query);
         } catch (Exception e) {
@@ -828,21 +843,57 @@ public class Moh710Service {
      * @param age in months specified as e.g <12 or >12 or between 12 and 59
      * @return
      */
-    private int getVaccineCountFullyImmunized(String age) {
+    private int getCountFullyImmunized(String age) {
         int count = 0;
         try {
-            String vaccineCondition = " lower(v.name) in (" +
-                    "'bcg', " +
-                    "'opv_0', 'opv_1', 'opv_2', 'opv_3', " +
-                    "'ipv', " +
-                    "'penta_1', 'penta_2', 'penta_3', " +
-                    "'pcv_1', 'pcv_2', 'pcv_3', " +
-                    "'rota_1', 'rota_2', " +
-                    "'measles_1', 'mr_1'" +
-                    ") ";
-            String query = "select count(*) as count, " + ageQuery() + " from vaccines v left join ec_child child on child.base_entity_id=v.base_entity_id " +
-                    "where age " + age + " and  '" + reportDate + "'=strftime('%Y-%m-%d',datetime(v.date/1000, 'unixepoch')) and " + vaccineCondition;
-            count = executeQueryAndReturnCount(query);
+            Date dateReported = new SimpleDateFormat("yyyy-mm-dd").parse(reportDate);
+            Calendar reportCalendarDate = Calendar.getInstance();
+            reportCalendarDate.setTime(dateReported);
+            setEndOfDay(reportCalendarDate);
+
+            String query = "select  group_concat( v.name) v_list , group_concat( t.name) r_list, " + ageQuery() + "  from ec_child child join vaccines v  on child.base_entity_id=v.base_entity_id " +
+                    "join recurring_service_records r on child.base_entity_id = r.base_entity_id join recurring_service_types t on r.recurring_service_id = t._id " +
+                    "where age " + age + " and v.date <= " + reportCalendarDate.getTimeInMillis() + " and r.date <= " + reportCalendarDate.getTimeInMillis() + " group by  child.base_entity_id ";
+
+            ArrayList<HashMap<String, String>> list = executeRawQuery(query);executeRawQuery("select  group_concat( v.name) v_list , group_concat( t.name) r_list,  CAST ((julianday('now') - julianday(strftime('%Y-%m-%d',child.dob)))/(365/12) AS INTEGER)as age   from ec_child child join vaccines v  on child.base_entity_id=v.base_entity_id join recurring_service_records r on child.base_entity_id = r.base_entity_id join recurring_service_types t on r.recurring_service_id = t._id  group by  child.base_entity_id ")
+            String[] services = {"Vit_A_1"};
+            String[] vaccines = {"bcg", "opv_0", "opv_1", "pcv_1", "penta_1", "rota_1", "opv_2", "pcv_2", "penta_2", "rota_2", "opv_3", "pcv_3", "penta_3", "ipv", "measles_1"};
+
+            for (HashMap<String, String> map : list) {
+                Log.logError(map.toString());
+                String vlist = map.get("v_list");
+                String rlist = map.get("r_list");
+                if (StringUtils.isNotBlank(vlist) && StringUtils.isNotBlank(rlist)) {
+                    boolean allServiceExists = true;
+                    for (String service : services) {
+                        if (!rlist.contains(service)) {
+                            allServiceExists = false;
+                            break;
+                        }
+                    }
+
+                    boolean allVaccinesExist = true;
+                    for (String vaccine : vaccines) {
+                        if (vaccine.equals("measles_1")) {
+                            if (!(vlist.contains("measles_1") || vlist.contains("mr_1"))) {
+                                allVaccinesExist = false;
+                                break;
+                            }
+
+                        } else {
+                            if (!vlist.contains(vaccine)) {
+                                allVaccinesExist = false;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (allServiceExists && allVaccinesExist) {
+                        count++;
+                    }
+                }
+
+            }
         } catch (Exception e) {
             Log.logError(TAG, "FullyImmunized" + e.getMessage());
         }
@@ -881,5 +932,46 @@ public class Moh710Service {
             }
         }
         return count;
+    }
+
+    private ArrayList<HashMap<String, String>> executeRawQuery(String query) {
+        Cursor cursor = null;
+        try {
+            cursor = database.rawQuery(query, null);
+
+            ArrayList<HashMap<String, String>> maplist = new ArrayList<HashMap<String, String>>();
+            // looping through all rows and adding to list
+            if (cursor.moveToFirst()) {
+                do {
+                    HashMap<String, String> map = new HashMap<String, String>();
+                    for (int i = 0; i < cursor.getColumnCount(); i++) {
+                        map.put(cursor.getColumnName(i), cursor.getString(i));
+                    }
+
+                    maplist.add(map);
+                } while (cursor.moveToNext());
+            }
+
+            return maplist;
+        } catch (Exception e) {
+            android.util.Log.e(TAG, e.getMessage());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return null;
+    }
+
+    public static void setEndOfDay(Calendar calendarDate) {
+        calendarDate.set(Calendar.HOUR_OF_DAY, 0);
+        calendarDate.set(Calendar.MINUTE, 0);
+        calendarDate.set(Calendar.SECOND, 0);
+        calendarDate.set(Calendar.MILLISECOND, 0);
+
+        calendarDate.set(Calendar.HOUR_OF_DAY, 23);
+        calendarDate.set(Calendar.MINUTE, 59);
+        calendarDate.set(Calendar.SECOND, 59);
+        calendarDate.set(Calendar.MILLISECOND, 999);
     }
 }
