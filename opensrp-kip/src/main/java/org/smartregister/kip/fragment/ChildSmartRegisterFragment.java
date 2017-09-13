@@ -420,6 +420,14 @@ public class ChildSmartRegisterFragment extends BaseSmartRegisterFragment implem
         String mainCondition = " (inactive != 'true' and lost_to_follow_up != 'true') AND ( ";
         ArrayList<VaccineRepo.Vaccine> vaccines = VaccineRepo.getVaccines("child");
 
+        if (vaccines.contains(VaccineRepo.Vaccine.bcg2)) {
+            vaccines.remove(VaccineRepo.Vaccine.bcg2);
+        }
+
+        if (vaccines.contains(VaccineRepo.Vaccine.opv4)) {
+            vaccines.remove(VaccineRepo.Vaccine.opv4);
+        }
+
         for (int i = 0; i < vaccines.size(); i++) {
             VaccineRepo.Vaccine vaccine = vaccines.get(i);
             if (i == vaccines.size() - 1) {
