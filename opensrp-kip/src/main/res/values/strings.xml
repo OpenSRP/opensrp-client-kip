@@ -181,4 +181,7 @@
     <string name="send">Send</string>
     <string name="n_a">"N/A"</string>
     <string name="confirm_button_label">Confirm</string>
+
+    <!-- Defaulter List -->
+    <string name="defaulter_list">Defaulter List</string>
 </resources>

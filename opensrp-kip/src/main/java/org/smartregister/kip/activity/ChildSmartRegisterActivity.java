@@ -29,6 +29,7 @@ import org.smartregister.kip.adapter.KipRegisterActivityPagerAdapter;
 import org.smartregister.kip.fragment.AdvancedSearchFragment;
 import org.smartregister.kip.fragment.BaseSmartRegisterFragment;
 import org.smartregister.kip.fragment.ChildSmartRegisterFragment;
+import org.smartregister.kip.fragment.DefaulterListRegisterFragment;
 import org.smartregister.kip.view.LocationPickerView;
 import org.smartregister.provider.SmartRegisterClientsProvider;
 import org.smartregister.repository.AllSharedPreferences;
@@ -58,7 +59,9 @@ public class ChildSmartRegisterActivity extends BaseRegisterActivity {
     private FragmentPagerAdapter mPagerAdapter;
     private static final int REQUEST_CODE_GET_JSON = 3432;
     private int currentPage;
-    public static final int ADVANCED_SEARCH_POSITION = 1;
+    public static final int ADVANCED_SEARCH_POSITION = 2;
+    public static final int DEFAULTER_LIST_POSITION = 1;
+
 
     private android.support.v4.app.Fragment mBaseFragment = null;
 
@@ -72,7 +75,7 @@ public class ChildSmartRegisterActivity extends BaseRegisterActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         mBaseFragment = new ChildSmartRegisterFragment();
-        Fragment[] otherFragments = {new AdvancedSearchFragment()};
+        Fragment[] otherFragments = {new DefaulterListRegisterFragment(), new AdvancedSearchFragment()};
 
         // Instantiate a ViewPager and a PagerAdapter.
         mPagerAdapter = new KipRegisterActivityPagerAdapter(getSupportFragmentManager(), mBaseFragment, otherFragments);
@@ -174,6 +177,15 @@ public class ChildSmartRegisterActivity extends BaseRegisterActivity {
         if (advancedSearchFragment != null) {
             advancedSearchFragment.updateFilterCount(count);
         }
+    }
+
+    public void startDefaulterList() {
+        try {
+            mPager.setCurrentItem(DEFAULTER_LIST_POSITION, false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -279,16 +291,6 @@ public class ChildSmartRegisterActivity extends BaseRegisterActivity {
         BarcodeIntentIntegrator integ = new BarcodeIntentIntegrator(this);
         integ.addExtra(Barcode.SCAN_MODE, Barcode.QR_MODE);
         integ.initiateScan();
-    }
-
-    public void filterSelection() {
-        if (currentPage != 0) {
-            switchToBaseFragment(null);
-            BaseSmartRegisterFragment registerFragment = (BaseSmartRegisterFragment) findFragmentByPosition(0);
-            if (registerFragment != null && registerFragment instanceof ChildSmartRegisterFragment) {
-                ((ChildSmartRegisterFragment) registerFragment).triggerFilterSelection();
-            }
-        }
     }
 
     private void onQRCodeSucessfullyScanned(String qrCode) {

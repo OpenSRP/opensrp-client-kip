@@ -1118,7 +1118,7 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
                     goBack();
                     break;
                 case R.id.filter_selection:
-                    ((ChildSmartRegisterActivity) getActivity()).filterSelection();
+                    ((ChildSmartRegisterActivity) getActivity()).startDefaulterList();
                     break;
                 case R.id.search_layout:
                 case R.id.search:

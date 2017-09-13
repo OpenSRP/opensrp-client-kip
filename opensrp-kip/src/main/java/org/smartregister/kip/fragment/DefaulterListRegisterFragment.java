@@ -3,18 +3,14 @@ package org.smartregister.kip.fragment;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.github.ybq.android.spinkit.style.Circle;
 
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.commonregistry.CommonRepository;
@@ -23,7 +19,6 @@ import org.smartregister.cursoradapter.CursorCommonObjectSort;
 import org.smartregister.cursoradapter.CursorSortOption;
 import org.smartregister.cursoradapter.SmartRegisterPaginatedCursorAdapter;
 import org.smartregister.cursoradapter.SmartRegisterQueryBuilder;
-import org.smartregister.domain.FetchStatus;
 import org.smartregister.immunization.db.VaccineRepo;
 import org.smartregister.immunization.util.VaccinateActionUtils;
 import org.smartregister.kip.R;
@@ -36,11 +31,9 @@ import org.smartregister.kip.option.BasicSearchOption;
 import org.smartregister.kip.option.DateSort;
 import org.smartregister.kip.option.StatusSort;
 import org.smartregister.kip.provider.ChildSmartClientsProvider;
-import org.smartregister.kip.receiver.SyncStatusBroadcastReceiver;
 import org.smartregister.kip.servicemode.VaccinationServiceModeOption;
 import org.smartregister.kip.view.LocationPickerView;
 import org.smartregister.provider.SmartRegisterClientsProvider;
-import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.view.activity.SecuredNativeSmartRegisterActivity;
 import org.smartregister.view.dialog.DialogOption;
 import org.smartregister.view.dialog.FilterOption;
@@ -54,13 +47,13 @@ import util.KipConstants;
 
 import static android.view.View.INVISIBLE;
 
-public class ChildSmartRegisterFragment extends BaseSmartRegisterFragment implements SyncStatusBroadcastReceiver.SyncStatusListener {
+public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
     private final ClientActionHandler clientActionHandler = new ClientActionHandler();
     private TextView filterCount;
     private View filterSection;
+    private ImageView backButton;
     private TextView nameInitials;
-    private LinearLayout btnBackToHome;
-    private ProgressBar syncProgressBar;
+    private int dueOverdueCount = 0;
 
     @Override
     protected SecuredNativeSmartRegisterActivity.DefaultOptionsProvider getDefaultOptionsProvider() {
@@ -154,7 +147,6 @@ public class ChildSmartRegisterFragment extends BaseSmartRegisterFragment implem
         if (isPausedOrRefreshList()) {
             initializeQueries();
         }
-        updateSearchView();
         try {
             LoginActivity.setLanguage();
         } catch (Exception e) {
@@ -162,14 +154,11 @@ public class ChildSmartRegisterFragment extends BaseSmartRegisterFragment implem
         }
 
         updateLocationText();
-        SyncStatusBroadcastReceiver.getInstance().addSyncStatusListener(this);
-        refreshSyncStatusViews();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        SyncStatusBroadcastReceiver.getInstance().removeSyncStatusListener(this);
     }
 
     @Override
@@ -178,7 +167,7 @@ public class ChildSmartRegisterFragment extends BaseSmartRegisterFragment implem
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        View view = inflater.inflate(R.layout.smart_register_activity_customized, container, false);
+        View view = inflater.inflate(R.layout.smart_register_activity_defaulter_list, container, false);
         mView = view;
         onInitialization();
         setupViews(view);
@@ -193,6 +182,7 @@ public class ChildSmartRegisterFragment extends BaseSmartRegisterFragment implem
         view.findViewById(R.id.service_mode_selection).setVisibility(INVISIBLE);
 
         filterSection = view.findViewById(R.id.filter_selection);
+        filterSection.setBackgroundResource(R.drawable.transparent_clicked_background);
         filterSection.setOnClickListener(clientActionHandler);
 
         filterCount = (TextView) view.findViewById(R.id.filter_count);
@@ -207,50 +197,34 @@ public class ChildSmartRegisterFragment extends BaseSmartRegisterFragment implem
             }
         });
 
+        if (titleLabelView != null) {
+            titleLabelView.setText(getString(R.string.defaulter_list));
+        }
+
+
         clientsView.setVisibility(View.VISIBLE);
         clientsProgressView.setVisibility(View.INVISIBLE);
         setServiceModeViewDrawableRight(null);
         initializeQueries();
-        updateSearchView();
         populateClientListHeaderView(view);
 
-        View qrCode = view.findViewById(R.id.scan_qr_code);
-        qrCode.setOnClickListener(clientActionHandler);
-
+        backButton = (ImageView) view.findViewById(R.id.back_button);
         nameInitials = (TextView) view.findViewById(R.id.name_inits);
-        btnBackToHome = (LinearLayout) view.findViewById(R.id.btn_back_to_home);
-        syncProgressBar = (ProgressBar) view.findViewById(R.id.sync_progress_bar);
-        Circle circle = new Circle();
-        syncProgressBar.setIndeterminateDrawable(circle);
 
-        AllSharedPreferences allSharedPreferences = context().allSharedPreferences();
-        String preferredName = allSharedPreferences.getANMPreferredName(allSharedPreferences.fetchRegisteredANM());
-        if (!preferredName.isEmpty()) {
-            String[] preferredNameArray = preferredName.split(" ");
-            String initials = "";
-            if (preferredNameArray.length > 1) {
-                initials = String.valueOf(preferredNameArray[0].charAt(0)) + String.valueOf(preferredNameArray[1].charAt(0));
-            } else if (preferredNameArray.length == 1) {
-                initials = String.valueOf(preferredNameArray[0].charAt(0));
-            }
-            nameInitials.setText(initials);
-        }
+        nameInitials.setVisibility(View.GONE);
+        backButton.setVisibility(View.VISIBLE);
 
         View globalSearchButton = mView.findViewById(R.id.global_search);
         globalSearchButton.setOnClickListener(clientActionHandler);
     }
 
     @Override
-    protected void goBack() {
-        DrawerLayout drawer = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
-        if (!drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.openDrawer(GravityCompat.START);
-        }
+    public void setupSearchView(View view) {
     }
 
     @Override
-    public boolean onBackPressed() {
-        return false;
+    protected void goBack() {
+        ((ChildSmartRegisterActivity) getActivity()).switchToBaseFragment(null);
     }
 
     public LocationPickerView getLocationPickerView() {
@@ -269,10 +243,15 @@ public class ChildSmartRegisterFragment extends BaseSmartRegisterFragment implem
         setTablename(tableName);
         SmartRegisterQueryBuilder countqueryBUilder = new SmartRegisterQueryBuilder();
         countqueryBUilder.SelectInitiateMainTableCounts(tableName);
-        mainCondition = " dod is NULL OR dod = '' ";
+
+        filters = "";
+        joinTable = "";
+        mainCondition = " (dod is NULL OR dod = '') AND " + filterSelectionCondition(false);
         countSelect = countqueryBUilder.mainCondition(mainCondition);
+
         super.CountExecute();
         countOverDue();
+        countDueOverDue();
 
         SmartRegisterQueryBuilder queryBUilder = new SmartRegisterQueryBuilder();
         queryBUilder.SelectInitiateMainTable(tableName, new String[]{
@@ -309,35 +288,7 @@ public class ChildSmartRegisterFragment extends BaseSmartRegisterFragment implem
         currentoffset = 0;
 
         super.filterandSortInInitializeQueries();
-
-        updateSearchView();
         refresh();
-    }
-
-    private void refreshSyncStatusViews() {
-        if (SyncStatusBroadcastReceiver.getInstance().isSyncing()) {
-            syncProgressBar.setVisibility(View.VISIBLE);
-            btnBackToHome.setVisibility(View.GONE);
-        } else {
-            syncProgressBar.setVisibility(View.GONE);
-            btnBackToHome.setVisibility(View.VISIBLE);
-        }
-    }
-
-    @Override
-    public void onSyncStart() {
-        refreshSyncStatusViews();
-    }
-
-    @Override
-    public void onSyncComplete(FetchStatus fetchStatus) {
-        refreshSyncStatusViews();
-    }
-
-
-    private void updateSearchView() {
-        getSearchView().removeTextChangedListener(textWatcher);
-        getSearchView().addTextChangedListener(textWatcher);
     }
 
 
@@ -372,8 +323,21 @@ public class ChildSmartRegisterFragment extends BaseSmartRegisterFragment implem
             }
         }
 
-        return mainCondition + " ) ";
+        if (urgentOnly) {
+            return mainCondition + " ) ";
+        }
 
+        mainCondition += " or ";
+        for (int i = 0; i < vaccines.size(); i++) {
+            VaccineRepo.Vaccine vaccine = vaccines.get(i);
+            if (i == vaccines.size() - 1) {
+                mainCondition += " " + VaccinateActionUtils.addHyphen(vaccine.display()) + " = 'normal' ";
+            } else {
+                mainCondition += " " + VaccinateActionUtils.addHyphen(vaccine.display()) + " = 'normal' or ";
+            }
+        }
+
+        return mainCondition + " ) ";
     }
 
 
@@ -395,6 +359,10 @@ public class ChildSmartRegisterFragment extends BaseSmartRegisterFragment implem
         ((ChildSmartRegisterActivity) getActivity()).updateAdvancedSearchFilterCount(count);
     }
 
+    private void countDueOverDue() {
+        String mainCondition = filterSelectionCondition(false);
+        dueOverdueCount = count(mainCondition);
+    }
 
     private int count(String mainConditionString) {
 
@@ -433,7 +401,6 @@ public class ChildSmartRegisterFragment extends BaseSmartRegisterFragment implem
 
     }
 
-
     ////////////////////////////////////////////////////////////////
     // Inner classes
     ////////////////////////////////////////////////////////////////
@@ -449,6 +416,7 @@ public class ChildSmartRegisterFragment extends BaseSmartRegisterFragment implem
 
             switch (view.getId()) {
                 case R.id.child_profile_info_layout:
+
                     ChildImmunizationActivity.launchActivity(getActivity(), client, null);
                     break;
                 case R.id.record_weight:
@@ -461,7 +429,7 @@ public class ChildSmartRegisterFragment extends BaseSmartRegisterFragment implem
                     ChildImmunizationActivity.launchActivity(getActivity(), client, registerClickables);
                     break;
                 case R.id.filter_selection:
-                    ((ChildSmartRegisterActivity) getActivity()).startDefaulterList();
+                    goBack();
                     break;
 
                 case R.id.global_search:
