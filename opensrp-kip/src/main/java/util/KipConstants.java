@@ -32,7 +32,6 @@ public class KipConstants extends AllConstants {
     }
 
     public static final class ServiceType {
-
         public static final int DATA_SYNCHRONIZATION = 1;
         public static final int DAILY_TALLIES_GENERATION = 2;
         public static final int MONTHLY_TALLIES_GENERATION = 3;
@@ -44,17 +43,15 @@ public class KipConstants extends AllConstants {
 
 
     public static final class EventType {
-
         public static final String DEATH = "Death";
     }
 
     public static final class EntityType {
-
         public static final String CHILD = "child";
     }
 
     public static final class EC_CHILD_TABLE {
-
         public static final String DOD = "dod";
+        public static final String GENDER = "gender";
     }
 }

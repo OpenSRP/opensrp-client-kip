@@ -120,9 +120,21 @@
     <!-- Defaulter List -->
     <string name="defaulter_list">Defaulter List</string>
     <string name="total_overdue_due">TOTAL OVERDUE / DUE</string>
+    <string name="male">Male:</string>
+    <string name="female">Female:</string>
+    <string name="total">Total:</string>
     <string name="male_stats">Male: %1$d / %2$d</string>
     <string name="female_stats">Female: %1$d / %2$d</string>
     <string name="total_stats">Total: %1$d / %2$d</string>
     <string name="due_period">Due Period:</string>
-    <string name="only_show_overdue">Only show overdue (%1$d)</string>
+    <string name="only_show_overdue">Only show overdue</string>
+    <string name="only_show_overdue_with_count">Only show overdue (%1$d)</string>
+    <string name="contact">Contact</string>
+    <string-array name="due_period_array">
+        <item>Last 1 week</item>
+        <item>Last 2 weeks</item>
+        <item>Last 1 month</item>
+        <item>Last 3 months</item>
+    </string-array>
+
 </resources>

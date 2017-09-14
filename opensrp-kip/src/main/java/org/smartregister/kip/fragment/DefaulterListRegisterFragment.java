@@ -2,16 +2,22 @@ package org.smartregister.kip.fragment;
 
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.apache.commons.lang3.StringUtils;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.cursoradapter.CursorCommonObjectFilterOption;
@@ -27,13 +33,14 @@ import org.smartregister.kip.activity.ChildSmartRegisterActivity;
 import org.smartregister.kip.activity.LoginActivity;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.domain.RegisterClickables;
+import org.smartregister.kip.helper.SpinnerHelper;
 import org.smartregister.kip.option.BasicSearchOption;
 import org.smartregister.kip.option.DateSort;
 import org.smartregister.kip.option.StatusSort;
-import org.smartregister.kip.provider.ChildSmartClientsProvider;
+import org.smartregister.kip.provider.DefaulterListSmartClientsProvider;
 import org.smartregister.kip.servicemode.VaccinationServiceModeOption;
-import org.smartregister.kip.view.LocationPickerView;
 import org.smartregister.provider.SmartRegisterClientsProvider;
+import org.smartregister.util.Utils;
 import org.smartregister.view.activity.SecuredNativeSmartRegisterActivity;
 import org.smartregister.view.dialog.DialogOption;
 import org.smartregister.view.dialog.FilterOption;
@@ -49,10 +56,7 @@ import static android.view.View.INVISIBLE;
 
 public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
     private final ClientActionHandler clientActionHandler = new ClientActionHandler();
-    private TextView filterCount;
-    private View filterSection;
-    private ImageView backButton;
-    private TextView nameInitials;
+    private static final String defaultCondition = "(dod is NULL OR dod = '') AND ";
 
     @Override
     protected SecuredNativeSmartRegisterActivity.DefaultOptionsProvider getDefaultOptionsProvider() {
@@ -66,9 +70,9 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
             @Override
             public ServiceModeOption serviceMode() {
                 return new VaccinationServiceModeOption(null, "Linda Clinic", new int[]{
-                        R.string.child_profile, R.string.birthdate_age, R.string.epi_number, R.string.child_contact_number,
+                        R.string.child_profile, R.string.epi_number, R.string.contact,
                         R.string.child_next_vaccine
-                }, new int[]{5, 2, 2, 3, 3});
+                }, new int[]{4, 2, 2, 2});
             }
 
             @Override
@@ -177,35 +181,39 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
     @Override
     public void setupViews(View view) {
         super.setupViews(view);
-        view.findViewById(R.id.btn_report_month).setVisibility(INVISIBLE);
-        view.findViewById(R.id.service_mode_selection).setVisibility(INVISIBLE);
 
-        filterSection = view.findViewById(R.id.filter_selection);
+        // Status bar views
+        View filterSection = view.findViewById(R.id.filter_selection);
         filterSection.setBackgroundResource(R.drawable.transparent_clicked_background);
         filterSection.setOnClickListener(clientActionHandler);
-
-        filterCount = (TextView) view.findViewById(R.id.filter_count);
-        filterCount.setVisibility(View.GONE);
 
         if (titleLabelView != null) {
             titleLabelView.setText(getString(R.string.defaulter_list));
         }
 
-
+        // Client List
         clientsView.setVisibility(View.VISIBLE);
         clientsProgressView.setVisibility(View.INVISIBLE);
         setServiceModeViewDrawableRight(null);
         initializeQueries();
         populateClientListHeaderView(view);
-
-        backButton = (ImageView) view.findViewById(R.id.back_button);
-        nameInitials = (TextView) view.findViewById(R.id.name_inits);
-
-        nameInitials.setVisibility(View.GONE);
-        backButton.setVisibility(View.VISIBLE);
+        updateDatePeriodSpinner();
 
         View globalSearchButton = mView.findViewById(R.id.global_search);
         globalSearchButton.setOnClickListener(clientActionHandler);
+
+        // Disabled Views
+        view.findViewById(R.id.btn_report_month).setVisibility(INVISIBLE);
+        view.findViewById(R.id.service_mode_selection).setVisibility(INVISIBLE);
+
+        TextView filterCount = (TextView) view.findViewById(R.id.filter_count);
+        filterCount.setVisibility(View.GONE);
+
+        ImageView backButton = (ImageView) view.findViewById(R.id.back_button);
+        backButton.setVisibility(View.VISIBLE);
+
+        TextView nameInitials = (TextView) view.findViewById(R.id.name_inits);
+        nameInitials.setVisibility(View.GONE);
     }
 
     @Override
@@ -217,17 +225,13 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
         ((ChildSmartRegisterActivity) getActivity()).switchToBaseFragment(null);
     }
 
-    public LocationPickerView getLocationPickerView() {
-        return getClinicSelection();
-    }
-
     private void initializeQueries() {
         String tableName = KipConstants.CHILD_TABLE_NAME;
         String parentTableName = KipConstants.MOTHER_TABLE_NAME;
 
-        ChildSmartClientsProvider hhscp = new ChildSmartClientsProvider(getActivity(),
-                clientActionHandler, context().alertService(), KipApplication.getInstance().vaccineRepository(), KipApplication.getInstance().weightRepository());
-        clientAdapter = new SmartRegisterPaginatedCursorAdapter(getActivity(), null, hhscp, context().commonrepository(tableName));
+        DefaulterListSmartClientsProvider defaulterListSmartClientsProvider = new DefaulterListSmartClientsProvider(getActivity(),
+                clientActionHandler, context().alertService(), KipApplication.getInstance().vaccineRepository());
+        clientAdapter = new SmartRegisterPaginatedCursorAdapter(getActivity(), null, defaulterListSmartClientsProvider, context().commonrepository(tableName));
         clientsView.setAdapter(clientAdapter);
 
         setTablename(tableName);
@@ -236,12 +240,11 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
 
         filters = "";
         joinTable = "";
-        mainCondition = " (dod is NULL OR dod = '') AND " + filterSelectionCondition(false);
+        mainCondition = filterSelectionCondition(false);
         countSelect = countqueryBUilder.mainCondition(mainCondition);
 
         super.CountExecute();
-        countOverDue();
-        countDueOverDue();
+        updateCustomCount();
 
         SmartRegisterQueryBuilder queryBUilder = new SmartRegisterQueryBuilder();
         queryBUilder.SelectInitiateMainTable(tableName, new String[]{
@@ -255,7 +258,6 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
                 parentTableName + ".first_name as mother_first_name",
                 parentTableName + ".last_name as mother_last_name",
                 parentTableName + ".dob as mother_dob",
-                parentTableName + ".nrc_number as mother_nrc_number",
                 tableName + ".father_name",
                 tableName + ".dob",
                 tableName + ".epi_card_number",
@@ -268,7 +270,8 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
                 tableName + ".client_reg_date",
                 tableName + ".last_interacted_with",
                 tableName + ".inactive",
-                tableName + ".lost_to_follow_up"
+                tableName + ".lost_to_follow_up",
+                tableName + ".cwc_number"
         });
         queryBUilder.customJoin("LEFT JOIN " + parentTableName + " ON  " + tableName + ".relational_id =  " + parentTableName + ".id");
         mainSelect = queryBUilder.mainCondition(mainCondition);
@@ -281,19 +284,94 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
         refresh();
     }
 
+    @Override
+    protected void filter(String filterString, String joinTableString, String mainConditionString) {
+        filters = filterString;
+        joinTable = joinTableString;
+        mainCondition = mainConditionString;
+        CountExecute();
+        filterandSortExecute();
+    }
 
     private void populateClientListHeaderView(View view) {
         LinearLayout clientsHeaderLayout = (LinearLayout) view.findViewById(org.smartregister.R.id.clients_header_layout);
         clientsHeaderLayout.setVisibility(View.GONE);
 
-        LinearLayout headerLayout = (LinearLayout) getLayoutInflater(null).inflate(R.layout.smart_register_child_header, null);
+        LinearLayout headerLayout = (LinearLayout) getLayoutInflater(null).inflate(R.layout.smart_register_child_defaulter_list_header, null);
         clientsView.addHeaderView(headerLayout);
         clientsView.setEmptyView(getActivity().findViewById(R.id.empty_view));
+    }
 
+    private void updateCustomCount() {
+        final com.vijay.jsonwizard.customviews.CheckBox selectOnlyOverdue = (com.vijay.jsonwizard.customviews.CheckBox) mView.findViewById(R.id.select_only_overdue);
+        View selectOnlyOverDueLayout = mView.findViewById(R.id.only_overdue_layout);
+        selectOnlyOverDueLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectOnlyOverdue.toggle();
+            }
+        });
+
+        selectOnlyOverdue.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                filter("", "", filterSelectionCondition(isChecked));
+            }
+        });
+
+        TextView selectOnlyOverDueText = (TextView) mView.findViewById(R.id.only_overdue_text);
+        TextView totalStats = (TextView) mView.findViewById(R.id.total_stats);
+        TextView maleStats = (TextView) mView.findViewById(R.id.male_stats);
+        TextView femaleStats = (TextView) mView.findViewById(R.id.female_stats);
+
+        Utils.startAsyncTask(new UpdateCustomCountTask(maleStats, femaleStats, totalStats, selectOnlyOverDueText), null);
+    }
+
+    private void updateDatePeriodSpinner() {
+        View duePeriodSpinnerView = mView.findViewById(R.id.due_period_spinner);
+        final SpinnerHelper duePeriodSpinner = new SpinnerHelper(duePeriodSpinnerView);
+
+        View spinnerLayout = mView.findViewById(R.id.due_period_layout);
+        spinnerLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                duePeriodSpinner.getSpinner().performClick();
+            }
+        });
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.due_period_array, R.layout.item_spinner_default_list);
+        adapter.setDropDownViewResource(R.layout.item_spinner_drop_down_default_list);
+        duePeriodSpinner.setAdapter(adapter);
+
+        duePeriodSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String text = ((TextView) view).getText().toString();
+                Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+    }
+
+    private String filterSelectionCondition(String gender, boolean urgentOnly) {
+        String genderCondtion = "";
+        if (StringUtils.isNotBlank(gender)) {
+            genderCondtion = " gender = '" + gender + "' AND ";
+        }
+        String alertCondition = alertCondition(urgentOnly);
+        return defaultCondition + genderCondtion + alertCondition;
     }
 
     private String filterSelectionCondition(boolean urgentOnly) {
-        String mainCondition = " (inactive != 'true' and lost_to_follow_up != 'true') AND ( ";
+        return filterSelectionCondition(null, urgentOnly);
+    }
+
+    private String alertCondition(boolean urgentOnly) {
+        String alertCondition = " (inactive != 'true' and lost_to_follow_up != 'true') AND ( ";
         ArrayList<VaccineRepo.Vaccine> vaccines = VaccineRepo.getVaccines("child");
 
         if (vaccines.contains(VaccineRepo.Vaccine.bcg2)) {
@@ -307,46 +385,42 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
         for (int i = 0; i < vaccines.size(); i++) {
             VaccineRepo.Vaccine vaccine = vaccines.get(i);
             if (i == vaccines.size() - 1) {
-                mainCondition += " " + VaccinateActionUtils.addHyphen(vaccine.display()) + " = 'urgent' ";
+                alertCondition += " " + VaccinateActionUtils.addHyphen(vaccine.display()) + " = 'urgent' ";
             } else {
-                mainCondition += " " + VaccinateActionUtils.addHyphen(vaccine.display()) + " = 'urgent' or ";
+                alertCondition += " " + VaccinateActionUtils.addHyphen(vaccine.display()) + " = 'urgent' or ";
             }
         }
 
         if (urgentOnly) {
-            return mainCondition + " ) ";
+            return alertCondition + ") ";
         }
 
-        mainCondition += " or ";
+        alertCondition += " or ";
         for (int i = 0; i < vaccines.size(); i++) {
             VaccineRepo.Vaccine vaccine = vaccines.get(i);
             if (i == vaccines.size() - 1) {
-                mainCondition += " " + VaccinateActionUtils.addHyphen(vaccine.display()) + " = 'normal' ";
+                alertCondition += " " + VaccinateActionUtils.addHyphen(vaccine.display()) + " = 'normal' ";
             } else {
-                mainCondition += " " + VaccinateActionUtils.addHyphen(vaccine.display()) + " = 'normal' or ";
+                alertCondition += " " + VaccinateActionUtils.addHyphen(vaccine.display()) + " = 'normal' or ";
             }
         }
 
-        return mainCondition + " ) ";
+        return alertCondition + ") ";
     }
 
-
-    private void countOverDue() {
-        String mainCondition = filterSelectionCondition(true);
-        int overDueCount = count(mainCondition);
+    private int customCount(String gender, boolean urgentOnly) {
+        String mainCondition = filterSelectionCondition(gender, urgentOnly);
+        return count(mainCondition);
     }
 
-    private void countDueOverDue() {
-        String mainCondition = filterSelectionCondition(false);
-        int dueOverdueCount = count(mainCondition);
+    private int customCount(boolean urgentOnly) {
+        return customCount(null, urgentOnly);
     }
 
     private int count(String mainConditionString) {
 
         int count = 0;
-
         Cursor c = null;
-
         try {
             SmartRegisterQueryBuilder sqb = new SmartRegisterQueryBuilder(countSelect);
             String query = "";
@@ -373,9 +447,7 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
                 c.close();
             }
         }
-
         return count;
-
     }
 
     ////////////////////////////////////////////////////////////////
@@ -420,6 +492,58 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
                     break;
             }
         }
+    }
+
+    private class UpdateCustomCountTask extends AsyncTask<Void, Void, Integer[]> {
+        TextView selectOnlyOverDue;
+        TextView totalStats;
+        TextView maleStats;
+        TextView femaleStats;
+
+        public UpdateCustomCountTask(TextView maleStats, TextView femaleStats, TextView totalStats, TextView selectOnlyOverDue) {
+            this.maleStats = maleStats;
+            this.femaleStats = femaleStats;
+            this.totalStats = totalStats;
+            this.selectOnlyOverDue = selectOnlyOverDue;
+        }
+
+        @Override
+        protected Integer[] doInBackground(Void... params) {
+            final String male = "Male";
+            final String female = "Female";
+
+            int overDueCount = customCount(true);
+            int maleOverDue = customCount(male, true);
+            int femaleOverDue = customCount(female, true);
+
+            int dueOverDueCount = customCount(false);
+            int maleDueOverDueCount = customCount(male, false);
+            int femaleDueOverDueCount = customCount(female, false);
+
+
+            return new Integer[]{overDueCount, maleOverDue, femaleOverDue, dueOverDueCount, maleDueOverDueCount, femaleDueOverDueCount};
+        }
+
+        @Override
+        protected void onPostExecute(Integer[] integers) {
+            if (integers == null || integers.length != 6) {
+                return;
+            }
+
+            int overDueCount = integers[0];
+            int maleOverDue = integers[1];
+            int femaleOverDue = integers[2];
+
+            int dueOverDueCount = integers[3];
+            int maleDueOverDueCount = integers[4];
+            int femaleDueOverDueCount = integers[5];
+
+            maleStats.setText(String.format(getString(R.string.male_stats), maleOverDue, maleDueOverDueCount));
+            femaleStats.setText(String.format(getString(R.string.female_stats), femaleOverDue, femaleDueOverDueCount));
+            totalStats.setText(String.format(getString(R.string.total_stats), overDueCount, dueOverDueCount));
+            selectOnlyOverDue.setText(String.format(getString(R.string.only_show_overdue_with_count), overDueCount));
+        }
+
     }
 
 

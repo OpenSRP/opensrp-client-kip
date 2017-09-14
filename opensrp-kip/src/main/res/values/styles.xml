@@ -124,4 +124,14 @@
     <style name="KipSpinnerUnderLined" parent="Widget.AppCompat.Spinner.Underlined">
         <item name="backgroundTint">@color/client_list_grey</item>
     </style>
+
+    <style name="KipMaterialCheckBox" parent="Material.Drawable.CheckBox">
+        <item name="cbd_width">33dp</item>
+        <item name="cbd_height">30dp</item>
+        <item name="cbd_boxSize">18dp</item>
+        <item name="cbd_cornerRadius">0dp</item>
+        <item name="cbd_strokeSize">1.5dp</item>
+        <item name="cbd_tickColor">@color/actionbar</item>
+        <item name="cbd_strokeColor">@color/light_grey</item>
+    </style>
 </resources>

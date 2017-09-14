@@ -91,6 +91,9 @@ public class KipRepository extends Repository {
                 case 10:
                     upgradeToVersion10(db);
                     break;
+                case 11:
+                    upgradeToVersion11(db);
+                    break;
                 default:
                     break;
             }
@@ -282,6 +285,17 @@ public class KipRepository extends Repository {
             dumpMOH710IndicatorsCSV(database);
         } catch (Exception e) {
             Log.e(TAG, "upgradeToVersion10 " + e.getMessage());
+        }
+    }
+
+    private void upgradeToVersion11(SQLiteDatabase database) {
+        try {
+            ArrayList<String> newlyAddedFields = new ArrayList<>();
+            newlyAddedFields.add(KipConstants.EC_CHILD_TABLE.GENDER);
+
+            addFieldsToFTSTable(database, KipConstants.CHILD_TABLE_NAME, newlyAddedFields);
+        } catch (Exception e) {
+            Log.e(TAG, "upgradeToVersion11 " + e.getMessage());
         }
     }
 
