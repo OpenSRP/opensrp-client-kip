@@ -855,7 +855,7 @@ public class Moh710Service {
                     "join recurring_service_records r on child.base_entity_id = r.base_entity_id join recurring_service_types t on r.recurring_service_id = t._id " +
                     "where age " + age + " and v.date <= " + reportCalendarDate.getTimeInMillis() + " and r.date <= " + reportCalendarDate.getTimeInMillis() + " group by  child.base_entity_id ";
 
-            ArrayList<HashMap<String, String>> list = executeRawQuery(query);executeRawQuery("select  group_concat( v.name) v_list , group_concat( t.name) r_list,  CAST ((julianday('now') - julianday(strftime('%Y-%m-%d',child.dob)))/(365/12) AS INTEGER)as age   from ec_child child join vaccines v  on child.base_entity_id=v.base_entity_id join recurring_service_records r on child.base_entity_id = r.base_entity_id join recurring_service_types t on r.recurring_service_id = t._id  group by  child.base_entity_id ")
+            ArrayList<HashMap<String, String>> list = executeRawQuery(query);
             String[] services = {"Vit_A_1"};
             String[] vaccines = {"bcg", "opv_0", "opv_1", "pcv_1", "penta_1", "rota_1", "opv_2", "pcv_2", "penta_2", "rota_2", "opv_3", "pcv_3", "penta_3", "ipv", "measles_1"};
 
