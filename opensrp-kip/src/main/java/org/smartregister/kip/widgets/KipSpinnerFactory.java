@@ -77,10 +77,11 @@ public class KipSpinnerFactory extends SpinnerFactory {
                                     Location location = locationRepository.getLocationByName(value);
                                     ArrayAdapter<String> adapter;
                                     Log.d(TAG, "Name: " + value);
-                                    Log.d(TAG, "Location: " + location.toString());
 
                                     if (location != null) {
+                                        Log.d(TAG, "Location: " + location.toString());
                                         Log.i(TAG, "Parent location is not null: " + location.toString());
+
                                         List<Location> locations = locationRepository.getChildLocations(location.getLocationId());
                                         int size = locations.size();
                                         String[] locs = new String[Math.max(1, size)];

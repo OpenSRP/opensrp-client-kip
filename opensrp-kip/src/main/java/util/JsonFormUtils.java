@@ -38,13 +38,13 @@ import org.smartregister.kip.activity.KipJsonFormActivity;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.domain.Client;
 import org.smartregister.kip.domain.FormEntityConstants;
+import org.smartregister.kip.repository.KipEventClientRepository;
 import org.smartregister.kip.repository.LocationRepository;
 import org.smartregister.kip.repository.UniqueIdRepository;
 import org.smartregister.kip.sync.ECSyncUpdater;
 import org.smartregister.kip.sync.KipClientProcessor;
 import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.repository.BaseRepository;
-import org.smartregister.repository.EventClientRepository;
 import org.smartregister.repository.ImageRepository;
 import org.smartregister.sync.ClientProcessor;
 import org.smartregister.util.AssetHandler;
@@ -1732,7 +1732,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
                                           String jsonString, String providerId, String locationId, String entityId) {
 
         try {
-            EventClientRepository db = KipApplication.getInstance().eventClientRepository();
+            KipEventClientRepository db = KipApplication.getInstance().eventClientRepository();
 
             JSONObject jsonForm = new JSONObject(jsonString);
 
@@ -2113,7 +2113,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                EventClientRepository db = KipApplication.getInstance().eventClientRepository();
+                KipEventClientRepository db = KipApplication.getInstance().eventClientRepository();
 
                 JSONObject jsonForm = new JSONObject(jsonString);
 
