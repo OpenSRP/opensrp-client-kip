@@ -1,7 +1,6 @@
 package org.smartregister.kip.fragment;
 
 import android.content.pm.ActivityInfo;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -17,15 +16,12 @@ import android.widget.TextView;
 import com.github.ybq.android.spinkit.style.Circle;
 
 import org.smartregister.commonregistry.CommonPersonObjectClient;
-import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.cursoradapter.CursorCommonObjectFilterOption;
 import org.smartregister.cursoradapter.CursorCommonObjectSort;
 import org.smartregister.cursoradapter.CursorSortOption;
 import org.smartregister.cursoradapter.SmartRegisterPaginatedCursorAdapter;
 import org.smartregister.cursoradapter.SmartRegisterQueryBuilder;
 import org.smartregister.domain.FetchStatus;
-import org.smartregister.immunization.db.VaccineRepo;
-import org.smartregister.immunization.util.VaccinateActionUtils;
 import org.smartregister.kip.R;
 import org.smartregister.kip.activity.ChildImmunizationActivity;
 import org.smartregister.kip.activity.ChildSmartRegisterActivity;
@@ -47,16 +43,12 @@ import org.smartregister.view.dialog.FilterOption;
 import org.smartregister.view.dialog.ServiceModeOption;
 import org.smartregister.view.dialog.SortOption;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import util.KipConstants;
 
 import static android.view.View.INVISIBLE;
 
 public class ChildSmartRegisterFragment extends BaseSmartRegisterFragment implements SyncStatusBroadcastReceiver.SyncStatusListener {
     private final ClientActionHandler clientActionHandler = new ClientActionHandler();
-    private TextView filterCount;
     private View filterSection;
     private TextView nameInitials;
     private LinearLayout btnBackToHome;
@@ -195,17 +187,9 @@ public class ChildSmartRegisterFragment extends BaseSmartRegisterFragment implem
         filterSection = view.findViewById(R.id.filter_selection);
         filterSection.setOnClickListener(clientActionHandler);
 
-        filterCount = (TextView) view.findViewById(R.id.filter_count);
+        TextView filterCount = (TextView) view.findViewById(R.id.filter_count);
         filterCount.setVisibility(View.GONE);
-        filterCount.setClickable(false);
-        filterCount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (view.isClickable()) {
-                    filterSection.performClick();
-                }
-            }
-        });
+
 
         clientsView.setVisibility(View.VISIBLE);
         clientsProgressView.setVisibility(View.INVISIBLE);
@@ -272,7 +256,6 @@ public class ChildSmartRegisterFragment extends BaseSmartRegisterFragment implem
         mainCondition = " dod is NULL OR dod = '' ";
         countSelect = countqueryBUilder.mainCondition(mainCondition);
         super.CountExecute();
-        countOverDue();
 
         SmartRegisterQueryBuilder queryBUilder = new SmartRegisterQueryBuilder();
         queryBUilder.SelectInitiateMainTable(tableName, new String[]{
@@ -350,89 +333,6 @@ public class ChildSmartRegisterFragment extends BaseSmartRegisterFragment implem
         clientsView.setEmptyView(getActivity().findViewById(R.id.empty_view));
 
     }
-
-    private String filterSelectionCondition(boolean urgentOnly) {
-        String mainCondition = " (inactive != 'true' and lost_to_follow_up != 'true') AND ( ";
-        ArrayList<VaccineRepo.Vaccine> vaccines = VaccineRepo.getVaccines("child");
-
-        if (vaccines.contains(VaccineRepo.Vaccine.bcg2)) {
-            vaccines.remove(VaccineRepo.Vaccine.bcg2);
-        }
-
-        if (vaccines.contains(VaccineRepo.Vaccine.opv4)) {
-            vaccines.remove(VaccineRepo.Vaccine.opv4);
-        }
-
-        for (int i = 0; i < vaccines.size(); i++) {
-            VaccineRepo.Vaccine vaccine = vaccines.get(i);
-            if (i == vaccines.size() - 1) {
-                mainCondition += " " + VaccinateActionUtils.addHyphen(vaccine.display()) + " = 'urgent' ";
-            } else {
-                mainCondition += " " + VaccinateActionUtils.addHyphen(vaccine.display()) + " = 'urgent' or ";
-            }
-        }
-
-        return mainCondition + " ) ";
-
-    }
-
-
-    private void countOverDue() {
-        String mainCondition = filterSelectionCondition(true);
-        int count = count(mainCondition);
-
-        if (filterCount != null) {
-            if (count > 0) {
-                filterCount.setText(String.valueOf(count));
-                filterCount.setVisibility(View.VISIBLE);
-                filterCount.setClickable(true);
-            } else {
-                filterCount.setVisibility(View.GONE);
-                filterCount.setClickable(false);
-            }
-        }
-
-        ((ChildSmartRegisterActivity) getActivity()).updateAdvancedSearchFilterCount(count);
-    }
-
-
-    private int count(String mainConditionString) {
-
-        int count = 0;
-
-        Cursor c = null;
-
-        try {
-            SmartRegisterQueryBuilder sqb = new SmartRegisterQueryBuilder(countSelect);
-            String query = "";
-            if (isValidFilterForFts(commonRepository())) {
-                String sql = sqb.countQueryFts(tablename, "", mainConditionString, "");
-                List<String> ids = commonRepository().findSearchIds(sql);
-                query = sqb.toStringFts(ids, tablename + "." + CommonRepository.ID_COLUMN);
-                query = sqb.Endquery(query);
-            } else {
-                sqb.addCondition(filters);
-                query = sqb.orderbyCondition(Sortqueries);
-                query = sqb.Endquery(query);
-            }
-
-            Log.i(getClass().getName(), query);
-            c = commonRepository().rawCustomQueryForAdapter(query);
-            c.moveToFirst();
-            count = c.getInt(0);
-
-        } catch (Exception e) {
-            Log.e(getClass().getName(), e.toString(), e);
-        } finally {
-            if (c != null) {
-                c.close();
-            }
-        }
-
-        return count;
-
-    }
-
 
     ////////////////////////////////////////////////////////////////
     // Inner classes

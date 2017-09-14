@@ -117,8 +117,12 @@
     <string name="start_after_end">Please set start date before end date.</string>
     <string name="end_before_start">Please set end date after start date.</string>
 
-
     <!-- Defaulter List -->
     <string name="defaulter_list">Defaulter List</string>
-
+    <string name="total_overdue_due">TOTAL OVERDUE / DUE</string>
+    <string name="male_stats">Male: %1$d / %2$d</string>
+    <string name="female_stats">Female: %1$d / %2$d</string>
+    <string name="total_stats">Total: %1$d / %2$d</string>
+    <string name="due_period">Due Period:</string>
+    <string name="only_show_overdue">Only show overdue (%1$d)</string>
 </resources>

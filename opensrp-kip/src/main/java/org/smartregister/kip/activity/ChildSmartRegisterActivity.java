@@ -172,13 +172,6 @@ public class ChildSmartRegisterActivity extends BaseRegisterActivity {
 
     }
 
-    public void updateAdvancedSearchFilterCount(int count) {
-        AdvancedSearchFragment advancedSearchFragment = (AdvancedSearchFragment) findFragmentByPosition(ADVANCED_SEARCH_POSITION);
-        if (advancedSearchFragment != null) {
-            advancedSearchFragment.updateFilterCount(count);
-        }
-    }
-
     public void startDefaulterList() {
         try {
             mPager.setCurrentItem(DEFAULTER_LIST_POSITION, false);

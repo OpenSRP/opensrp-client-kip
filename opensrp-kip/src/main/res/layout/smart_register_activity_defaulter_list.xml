@@ -8,6 +8,10 @@
 
     <include layout="@layout/smart_register_nav_bar_customized" />
 
+    <include
+        layout="@layout/smart_register_status_bar_defaulter_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <include layout="@layout/smart_register_status_bar" />
 

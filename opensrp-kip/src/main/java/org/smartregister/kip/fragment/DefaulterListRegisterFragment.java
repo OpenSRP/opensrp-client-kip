@@ -53,7 +53,6 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
     private View filterSection;
     private ImageView backButton;
     private TextView nameInitials;
-    private int dueOverdueCount = 0;
 
     @Override
     protected SecuredNativeSmartRegisterActivity.DefaultOptionsProvider getDefaultOptionsProvider() {
@@ -187,15 +186,6 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
 
         filterCount = (TextView) view.findViewById(R.id.filter_count);
         filterCount.setVisibility(View.GONE);
-        filterCount.setClickable(false);
-        filterCount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (view.isClickable()) {
-                    filterSection.performClick();
-                }
-            }
-        });
 
         if (titleLabelView != null) {
             titleLabelView.setText(getString(R.string.defaulter_list));
@@ -343,25 +333,12 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
 
     private void countOverDue() {
         String mainCondition = filterSelectionCondition(true);
-        int count = count(mainCondition);
-
-        if (filterCount != null) {
-            if (count > 0) {
-                filterCount.setText(String.valueOf(count));
-                filterCount.setVisibility(View.VISIBLE);
-                filterCount.setClickable(true);
-            } else {
-                filterCount.setVisibility(View.GONE);
-                filterCount.setClickable(false);
-            }
-        }
-
-        ((ChildSmartRegisterActivity) getActivity()).updateAdvancedSearchFilterCount(count);
+        int overDueCount = count(mainCondition);
     }
 
     private void countDueOverDue() {
         String mainCondition = filterSelectionCondition(false);
-        dueOverdueCount = count(mainCondition);
+        int dueOverdueCount = count(mainCondition);
     }
 
     private int count(String mainConditionString) {
