@@ -1,6 +1,7 @@
 package org.smartregister.kip.provider;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
@@ -77,7 +78,7 @@ public class DefaulterListSmartClientsProvider implements SmartRegisterCLientsPr
     }
 
     @Override
-    public void getView(SmartRegisterClient client, final View convertView) {
+    public void getView(Cursor cursor, SmartRegisterClient client, final View convertView) {
         CommonPersonObjectClient pc = (CommonPersonObjectClient) client;
 
         fillValue((TextView) convertView.findViewById(R.id.child_unique_id), getValue(pc.getColumnmaps(), "zeir_id", false));
@@ -114,7 +115,7 @@ public class DefaulterListSmartClientsProvider implements SmartRegisterCLientsPr
 
         fillValue((TextView) convertView.findViewById(R.id.child_cwc_number), pc.getColumnmaps(), "cwc_number", false);
 
-        fillValue((TextView) convertView.findViewById(R.id.mother_phone_number), pc.getColumnmaps(), "contact_phone_number", false);
+        fillValue((TextView) convertView.findViewById(R.id.mother_phone_number), pc.getColumnmaps(), "mother_phone_number", false);
 
 
         String dobString = getValue(pc.getColumnmaps(), "dob", false);

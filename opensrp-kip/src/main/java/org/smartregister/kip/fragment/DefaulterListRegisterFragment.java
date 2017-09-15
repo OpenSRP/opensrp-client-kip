@@ -60,6 +60,7 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
     private final ClientActionHandler clientActionHandler = new ClientActionHandler();
     private static final String defaultCondition = " (" + KipConstants.EC_CHILD_TABLE.DOD + " is NULL OR " + KipConstants.EC_CHILD_TABLE.DOD + " = '') AND ";
     private Holder holder = new Holder();
+    com.vijay.jsonwizard.customviews.CheckBox selectOnlyOverdue;
 
     @Override
 
@@ -151,10 +152,6 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
     protected void onResumption() {
         super.onResumption();
         getDefaultOptionsProvider();
-        if (isPausedOrRefreshList()) {
-            initializeQueries();
-            holder = new Holder();
-        }
         try {
             LoginActivity.setLanguage();
         } catch (Exception e) {
@@ -167,6 +164,17 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
     @Override
     public void onPause() {
         super.onPause();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            holder = new Holder();
+            initializeQueries();
+            updateOnlyOverdueCheckbox();
+            updateDatePeriodSpinner();
+        }
     }
 
     @Override
@@ -200,7 +208,6 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
         clientsView.setVisibility(View.VISIBLE);
         clientsProgressView.setVisibility(View.INVISIBLE);
         setServiceModeViewDrawableRight(null);
-        initializeQueries();
         populateClientListHeaderView(view);
 
         View globalSearchButton = mView.findViewById(R.id.global_search);
@@ -249,7 +256,6 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
 
         super.CountExecute();
         updateCustomCount();
-        updateDatePeriodSpinner();
 
         SmartRegisterQueryBuilder queryBUilder = new SmartRegisterQueryBuilder();
         queryBUilder.SelectInitiateMainTable(tableName, new String[]{
@@ -263,6 +269,7 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
                 parentTableName + ".first_name as mother_first_name",
                 parentTableName + ".last_name as mother_last_name",
                 parentTableName + ".dob as mother_dob",
+                parentTableName + ".contact_phone_number as mother_phone_number",
                 tableName + ".father_name",
                 tableName + ".dob",
                 tableName + ".epi_card_number",
@@ -292,7 +299,7 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
     protected void filter() {
         filters = "";
         joinTable = "";
-        mainCondition = filterSelectionCondition(holder.getDuePeriod(), holder.isOnlyShowOverdue());
+        mainCondition = filterSelectionCondition(holder.duePeriod, holder.onlyShowOverdue);
         CountExecute();
         filterandSortExecute();
     }
@@ -306,8 +313,8 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
         clientsView.setEmptyView(getActivity().findViewById(R.id.empty_view));
     }
 
-    private void updateCustomCount() {
-        final com.vijay.jsonwizard.customviews.CheckBox selectOnlyOverdue = (com.vijay.jsonwizard.customviews.CheckBox) mView.findViewById(R.id.select_only_overdue);
+    private void updateOnlyOverdueCheckbox() {
+        selectOnlyOverdue = (com.vijay.jsonwizard.customviews.CheckBox) mView.findViewById(R.id.select_only_overdue);
         View selectOnlyOverDueLayout = mView.findViewById(R.id.only_overdue_layout);
         selectOnlyOverDueLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -323,7 +330,10 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
                 filter();
             }
         });
+        selectOnlyOverdue.setChecked(false);
+    }
 
+    private void updateCustomCount() {
         TextView selectOnlyOverDueText = (TextView) mView.findViewById(R.id.only_overdue_text);
         TextView totalStats = (TextView) mView.findViewById(R.id.total_stats);
         TextView maleStats = (TextView) mView.findViewById(R.id.male_stats);
@@ -355,6 +365,7 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
                 String text = ((TextView) view).getText().toString();
                 holder.setDuePeriod(text);
                 filter();
+                updateCustomCount();
             }
 
             @Override
@@ -381,10 +392,6 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
 
     private String filterSelectionCondition(boolean urgentOnly) {
         return filterSelectionCondition(null, null, urgentOnly);
-    }
-
-    private String filterSelectionCondition(String gender, boolean urgentOnly) {
-        return filterSelectionCondition(gender, null, urgentOnly);
     }
 
     private String filterSelectionCondition(Date dueDate, boolean urgentOnly) {
@@ -430,7 +437,7 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
     }
 
     private int customCount(String gender, boolean urgentOnly) {
-        String mainCondition = filterSelectionCondition(gender, urgentOnly);
+        String mainCondition = filterSelectionCondition(gender, holder.duePeriod, urgentOnly);
         return count(mainCondition);
     }
 
@@ -594,10 +601,6 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
             this.onlyShowOverdue = onlyShowOverdue;
         }
 
-        public boolean isOnlyShowOverdue() {
-            return onlyShowOverdue;
-        }
-
         public void setDuePeriod(String duePeriodText) {
             if (StringUtils.isNotBlank(duePeriodText)) {
                 Calendar cal = Calendar.getInstance();
@@ -615,12 +618,10 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
                 } else if (duePeriodText.equals(array[3]) && duePeriodText.contains("3 months")) { // Last 3 months
                     cal.add(Calendar.MONTH, -3);
                     this.duePeriod = cal.getTime();
+                } else if (duePeriodText.equals(array[4]) && duePeriodText.contains("all")) { // Show all
+                    this.duePeriod = null;
                 }
             }
-        }
-
-        public Date getDuePeriod() {
-            return duePeriod;
         }
 
         private void standardiseCalendarDate(Calendar calendarDate) {

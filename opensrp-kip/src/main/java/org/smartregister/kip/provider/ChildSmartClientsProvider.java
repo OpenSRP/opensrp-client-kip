@@ -1,6 +1,7 @@
 package org.smartregister.kip.provider;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -78,7 +79,7 @@ public class ChildSmartClientsProvider implements SmartRegisterCLientsProviderFo
     }
 
     @Override
-    public void getView(SmartRegisterClient client, final View convertView) {
+    public void getView(Cursor cursor, SmartRegisterClient client, final View convertView) {
         CommonPersonObjectClient pc = (CommonPersonObjectClient) client;
 
         fillValue((TextView) convertView.findViewById(R.id.child_zeir_id), getValue(pc.getColumnmaps(), "zeir_id", false));

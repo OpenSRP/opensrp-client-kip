@@ -39,7 +39,7 @@ public class AdvancedSearchClientsProvider extends ChildSmartClientsProvider {
     }
 
     public void getView(Cursor cursor, SmartRegisterClient client, View convertView) {
-        super.getView(client, convertView);
+        super.getView(cursor, client, convertView);
 
         CommonPersonObjectClient pc = (CommonPersonObjectClient) client;
 
@@ -89,12 +89,6 @@ public class AdvancedSearchClientsProvider extends ChildSmartClientsProvider {
 
         }
 
-    }
-
-    @Deprecated
-    @Override
-    public void getView(SmartRegisterClient client, View convertView) {
-        super.getView(client, convertView);
     }
 
     @Override
