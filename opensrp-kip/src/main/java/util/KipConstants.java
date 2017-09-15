@@ -53,5 +53,7 @@ public class KipConstants extends AllConstants {
     public static final class EC_CHILD_TABLE {
         public static final String DOD = "dod";
         public static final String GENDER = "gender";
+        public static final String DUE_DATE = "due_date";
+
     }
 }

@@ -113,7 +113,7 @@
                 android:id="@+id/due_period_spinner"
                 style="@style/KipSpinnerUnderLined"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:minWidth="150dp"
                 android:spinnerMode="dropdown"
                 android:theme="@style/ThemeKipSpinner" />

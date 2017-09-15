@@ -292,6 +292,7 @@ public class KipRepository extends Repository {
         try {
             ArrayList<String> newlyAddedFields = new ArrayList<>();
             newlyAddedFields.add(KipConstants.EC_CHILD_TABLE.GENDER);
+            newlyAddedFields.add(KipConstants.EC_CHILD_TABLE.DUE_DATE);
 
             addFieldsToFTSTable(database, KipConstants.CHILD_TABLE_NAME, newlyAddedFields);
         } catch (Exception e) {

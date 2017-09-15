@@ -1,5 +1,6 @@
 package org.smartregister.kip.fragment;
 
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -15,7 +16,6 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
@@ -48,6 +48,8 @@ import org.smartregister.view.dialog.ServiceModeOption;
 import org.smartregister.view.dialog.SortOption;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import util.KipConstants;
@@ -56,9 +58,11 @@ import static android.view.View.INVISIBLE;
 
 public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
     private final ClientActionHandler clientActionHandler = new ClientActionHandler();
-    private static final String defaultCondition = "(dod is NULL OR dod = '') AND ";
+    private static final String defaultCondition = " (" + KipConstants.EC_CHILD_TABLE.DOD + " is NULL OR " + KipConstants.EC_CHILD_TABLE.DOD + " = '') AND ";
+    private Holder holder = new Holder();
 
     @Override
+
     protected SecuredNativeSmartRegisterActivity.DefaultOptionsProvider getDefaultOptionsProvider() {
         return new SecuredNativeSmartRegisterActivity.DefaultOptionsProvider() {
             // FIXME path_conflict
@@ -149,6 +153,7 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
         getDefaultOptionsProvider();
         if (isPausedOrRefreshList()) {
             initializeQueries();
+            holder = new Holder();
         }
         try {
             LoginActivity.setLanguage();
@@ -197,7 +202,6 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
         setServiceModeViewDrawableRight(null);
         initializeQueries();
         populateClientListHeaderView(view);
-        updateDatePeriodSpinner();
 
         View globalSearchButton = mView.findViewById(R.id.global_search);
         globalSearchButton.setOnClickListener(clientActionHandler);
@@ -230,7 +234,7 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
         String parentTableName = KipConstants.MOTHER_TABLE_NAME;
 
         DefaulterListSmartClientsProvider defaulterListSmartClientsProvider = new DefaulterListSmartClientsProvider(getActivity(),
-                clientActionHandler, context().alertService(), KipApplication.getInstance().vaccineRepository());
+                clientActionHandler, context().alertService(), KipApplication.getInstance().vaccineRepository(), context().commonrepository(tableName));
         clientAdapter = new SmartRegisterPaginatedCursorAdapter(getActivity(), null, defaulterListSmartClientsProvider, context().commonrepository(tableName));
         clientsView.setAdapter(clientAdapter);
 
@@ -245,6 +249,7 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
 
         super.CountExecute();
         updateCustomCount();
+        updateDatePeriodSpinner();
 
         SmartRegisterQueryBuilder queryBUilder = new SmartRegisterQueryBuilder();
         queryBUilder.SelectInitiateMainTable(tableName, new String[]{
@@ -284,11 +289,10 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
         refresh();
     }
 
-    @Override
-    protected void filter(String filterString, String joinTableString, String mainConditionString) {
-        filters = filterString;
-        joinTable = joinTableString;
-        mainCondition = mainConditionString;
+    protected void filter() {
+        filters = "";
+        joinTable = "";
+        mainCondition = filterSelectionCondition(holder.getDuePeriod(), holder.isOnlyShowOverdue());
         CountExecute();
         filterandSortExecute();
     }
@@ -315,7 +319,8 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
         selectOnlyOverdue.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                filter("", "", filterSelectionCondition(isChecked));
+                holder.setOnlyShowOverdue(isChecked);
+                filter();
             }
         });
 
@@ -339,8 +344,8 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
             }
         });
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.due_period_array, R.layout.item_spinner_default_list);
+        CharSequence[] strings = getActivity().getResources().getTextArray(R.array.due_period_array);
+        HintAdapter<CharSequence> adapter = new HintAdapter<CharSequence>(getActivity(), R.layout.item_spinner_default_list, strings);
         adapter.setDropDownViewResource(R.layout.item_spinner_drop_down_default_list);
         duePeriodSpinner.setAdapter(adapter);
 
@@ -348,26 +353,42 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String text = ((TextView) view).getText().toString();
-                Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
+                holder.setDuePeriod(text);
+                filter();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+
+        duePeriodSpinner.setSelection(adapter.getCount());
     }
 
-    private String filterSelectionCondition(String gender, boolean urgentOnly) {
+    private String filterSelectionCondition(String gender, Date dueDate, boolean urgentOnly) {
         String genderCondtion = "";
         if (StringUtils.isNotBlank(gender)) {
-            genderCondtion = " gender = '" + gender + "' AND ";
+            genderCondtion = KipConstants.EC_CHILD_TABLE.GENDER + " = '" + gender + "' AND ";
         }
+        String dueDateCondition = "";
+        if (dueDate != null) {
+            dueDateCondition = KipConstants.EC_CHILD_TABLE.DUE_DATE + " >= '" + dueDate.getTime() + "' AND ";
+        }
+
         String alertCondition = alertCondition(urgentOnly);
-        return defaultCondition + genderCondtion + alertCondition;
+        return defaultCondition + genderCondtion + dueDateCondition + alertCondition;
     }
 
     private String filterSelectionCondition(boolean urgentOnly) {
-        return filterSelectionCondition(null, urgentOnly);
+        return filterSelectionCondition(null, null, urgentOnly);
+    }
+
+    private String filterSelectionCondition(String gender, boolean urgentOnly) {
+        return filterSelectionCondition(gender, null, urgentOnly);
+    }
+
+    private String filterSelectionCondition(Date dueDate, boolean urgentOnly) {
+        return filterSelectionCondition(null, dueDate, urgentOnly);
     }
 
     private String alertCondition(boolean urgentOnly) {
@@ -546,5 +567,68 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
 
     }
 
+    private class HintAdapter<T> extends ArrayAdapter {
+
+        public HintAdapter(Context context, int resource, T[] objects) {
+            super(context, resource, objects);
+        }
+
+        @Override
+        public int getCount() {
+            // don't display last item. It is used as hint.
+            int count = super.getCount();
+            return count > 0 ? count - 1 : count;
+        }
+    }
+
+    private class Holder {
+        private boolean onlyShowOverdue;
+        private Date duePeriod;
+
+        public Holder() {
+            this.onlyShowOverdue = false;
+            duePeriod = null;
+        }
+
+        public void setOnlyShowOverdue(boolean onlyShowOverdue) {
+            this.onlyShowOverdue = onlyShowOverdue;
+        }
+
+        public boolean isOnlyShowOverdue() {
+            return onlyShowOverdue;
+        }
+
+        public void setDuePeriod(String duePeriodText) {
+            if (StringUtils.isNotBlank(duePeriodText)) {
+                Calendar cal = Calendar.getInstance();
+                standardiseCalendarDate(cal);
+                String[] array = getResources().getStringArray(R.array.due_period_array);
+                if (duePeriodText.equals(array[0]) && duePeriodText.contains("1 week")) { // Last 1 week
+                    cal.add(Calendar.DAY_OF_MONTH, -7);
+                    this.duePeriod = cal.getTime();
+                } else if (duePeriodText.equals(array[1]) && duePeriodText.contains("2 weeks")) { // Last 2 weeks
+                    cal.add(Calendar.DAY_OF_MONTH, -14);
+                    this.duePeriod = cal.getTime();
+                } else if (duePeriodText.equals(array[2]) && duePeriodText.contains("1 month")) { // Last 1 month
+                    cal.add(Calendar.MONTH, -1);
+                    this.duePeriod = cal.getTime();
+                } else if (duePeriodText.equals(array[3]) && duePeriodText.contains("3 months")) { // Last 3 months
+                    cal.add(Calendar.MONTH, -3);
+                    this.duePeriod = cal.getTime();
+                }
+            }
+        }
+
+        public Date getDuePeriod() {
+            return duePeriod;
+        }
+
+        private void standardiseCalendarDate(Calendar calendarDate) {
+            calendarDate.set(Calendar.HOUR_OF_DAY, 0);
+            calendarDate.set(Calendar.MINUTE, 0);
+            calendarDate.set(Calendar.SECOND, 0);
+            calendarDate.set(Calendar.MILLISECOND, 0);
+        }
+    }
 
 }

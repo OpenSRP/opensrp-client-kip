@@ -135,6 +135,7 @@
         <item>Last 2 weeks</item>
         <item>Last 1 month</item>
         <item>Last 3 months</item>
+        <item>Select period</item>
     </string-array>
 
 </resources>

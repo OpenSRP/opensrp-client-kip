@@ -184,7 +184,7 @@ public class ChildSmartClientsProvider implements SmartRegisterCLientsProviderFo
 
     }
 
-    private void updateRecordVaccination(View convertView, List<Vaccine> vaccines, List<Alert> alertList, String dobString, String lostToFollowUp, String inactive) {
+    private void updateRecordVaccination(View convertView, List<Vaccine> vaccines, Map<String, Object> nv, String lostToFollowUp, String inactive) {
         View recordVaccination = convertView.findViewById(R.id.record_vaccination);
         recordVaccination.setVisibility(View.VISIBLE);
 
@@ -194,29 +194,9 @@ public class ChildSmartClientsProvider implements SmartRegisterCLientsProviderFo
 
         convertView.setLayoutParams(clientViewLayoutParams);
 
-        // Alerts
-        Map<String, Date> recievedVaccines = receivedVaccines(vaccines);
-
-        List<Map<String, Object>> sch = generateScheduleList("child", new DateTime(dobString), recievedVaccines, alertList);
 
         State state = State.FULLY_IMMUNIZED;
         String stateKey = null;
-
-        Map<String, Object> nv = null;
-        if (vaccines.isEmpty()) {
-            List<VaccineRepo.Vaccine> vList = Arrays.asList(VaccineRepo.Vaccine.values());
-            nv = nextVaccineDue(sch, vList);
-        }
-
-        if (nv == null) {
-            Date lastVaccine = null;
-            if (!vaccines.isEmpty()) {
-                Vaccine vaccine = vaccines.get(vaccines.size() - 1);
-                lastVaccine = vaccine.getDate();
-            }
-
-            nv = nextVaccineDue(sch, lastVaccine);
-        }
 
         if (nv != null) {
             DateTime dueDate = (DateTime) nv.get("date");
@@ -428,7 +408,7 @@ public class ChildSmartClientsProvider implements SmartRegisterCLientsProviderFo
         private final String lostToFollowUp;
         private final String inactive;
         private List<Vaccine> vaccines = new ArrayList<>();
-        private List<Alert> alerts = new ArrayList<>();
+        private Map<String, Object> nv = null;
 
         private VaccinationAsyncTask(View convertView,
                                      String entityId,
@@ -446,13 +426,34 @@ public class ChildSmartClientsProvider implements SmartRegisterCLientsProviderFo
         @Override
         protected Void doInBackground(Void... params) {
             vaccines = vaccineRepository.findByEntityId(entityId);
-            alerts = alertService.findByEntityIdAndAlertNames(entityId, VaccinateActionUtils.allAlertNames("child"));
+            List<Alert> alerts = alertService.findByEntityIdAndAlertNames(entityId, VaccinateActionUtils.allAlertNames("child"));
+
+            // Alerts
+            Map<String, Date> recievedVaccines = receivedVaccines(vaccines);
+
+            List<Map<String, Object>> sch = generateScheduleList("child", new DateTime(dobString), recievedVaccines, alerts);
+
+
+            if (vaccines.isEmpty()) {
+                List<VaccineRepo.Vaccine> vList = Arrays.asList(VaccineRepo.Vaccine.values());
+                nv = nextVaccineDue(sch, vList);
+            }
+
+            if (nv == null) {
+                Date lastVaccine = null;
+                if (!vaccines.isEmpty()) {
+                    Vaccine vaccine = vaccines.get(vaccines.size() - 1);
+                    lastVaccine = vaccine.getDate();
+                }
+
+                nv = nextVaccineDue(sch, lastVaccine);
+            }
             return null;
         }
 
         @Override
         protected void onPostExecute(Void param) {
-            updateRecordVaccination(convertView, vaccines, alerts, dobString, lostToFollowUp, inactive);
+            updateRecordVaccination(convertView, vaccines, nv, lostToFollowUp, inactive);
 
         }
     }

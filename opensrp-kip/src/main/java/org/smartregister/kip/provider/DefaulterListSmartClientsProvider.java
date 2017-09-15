@@ -13,6 +13,7 @@ import android.widget.TextView;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
+import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.cursoradapter.SmartRegisterCLientsProviderForCursorAdapter;
 import org.smartregister.domain.Alert;
 import org.smartregister.immunization.db.VaccineRepo;
@@ -40,6 +41,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import util.ImageUtils;
+import util.KipConstants;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static org.smartregister.immunization.util.VaccinatorUtils.generateScheduleList;
@@ -58,14 +60,17 @@ public class DefaulterListSmartClientsProvider implements SmartRegisterCLientsPr
     private final View.OnClickListener onClickListener;
     private final AlertService alertService;
     private final VaccineRepository vaccineRepository;
+    private final CommonRepository commonRepository;
     private final AbsListView.LayoutParams clientViewLayoutParams;
 
     public DefaulterListSmartClientsProvider(Context context, View.OnClickListener onClickListener,
-                                             AlertService alertService, VaccineRepository vaccineRepository) {
+                                             AlertService alertService, VaccineRepository vaccineRepository,
+                                             CommonRepository commonRepository) {
         this.onClickListener = onClickListener;
         this.context = context;
         this.alertService = alertService;
         this.vaccineRepository = vaccineRepository;
+        this.commonRepository = commonRepository;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         clientViewLayoutParams = new AbsListView.LayoutParams(MATCH_PARENT, (int) context.getResources().getDimension(org.smartregister.R.dimen.list_item_height));
@@ -142,7 +147,7 @@ public class DefaulterListSmartClientsProvider implements SmartRegisterCLientsPr
 
     }
 
-    private void updateRecordVaccination(View convertView, List<Vaccine> vaccines, List<Alert> alertList, String dobString, String lostToFollowUp, String inactive) {
+    private void updateRecordVaccination(View convertView, List<Vaccine> vaccines, Map<String, Object> nv, String lostToFollowUp, String inactive) {
         View recordVaccination = convertView.findViewById(R.id.record_vaccination);
         recordVaccination.setVisibility(View.VISIBLE);
 
@@ -152,29 +157,8 @@ public class DefaulterListSmartClientsProvider implements SmartRegisterCLientsPr
 
         convertView.setLayoutParams(clientViewLayoutParams);
 
-        // Alerts
-        Map<String, Date> recievedVaccines = receivedVaccines(vaccines);
-
-        List<Map<String, Object>> sch = generateScheduleList("child", new DateTime(dobString), recievedVaccines, alertList);
-
         State state = State.FULLY_IMMUNIZED;
         String stateKey = null;
-
-        Map<String, Object> nv = null;
-        if (vaccines.isEmpty()) {
-            List<VaccineRepo.Vaccine> vList = Arrays.asList(VaccineRepo.Vaccine.values());
-            nv = nextVaccineDue(sch, vList);
-        }
-
-        if (nv == null) {
-            Date lastVaccine = null;
-            if (!vaccines.isEmpty()) {
-                Vaccine vaccine = vaccines.get(vaccines.size() - 1);
-                lastVaccine = vaccine.getDate();
-            }
-
-            nv = nextVaccineDue(sch, lastVaccine);
-        }
 
         if (nv != null) {
             DateTime dueDate = (DateTime) nv.get("date");
@@ -355,7 +339,7 @@ public class DefaulterListSmartClientsProvider implements SmartRegisterCLientsPr
         private final String lostToFollowUp;
         private final String inactive;
         private List<Vaccine> vaccines = new ArrayList<>();
-        private List<Alert> alerts = new ArrayList<>();
+        Map<String, Object> nv = null;
 
         private VaccinationAsyncTask(View convertView,
                                      String entityId,
@@ -373,13 +357,40 @@ public class DefaulterListSmartClientsProvider implements SmartRegisterCLientsPr
         @Override
         protected Void doInBackground(Void... params) {
             vaccines = vaccineRepository.findByEntityId(entityId);
-            alerts = alertService.findByEntityIdAndAlertNames(entityId, VaccinateActionUtils.allAlertNames("child"));
+            List<Alert> alerts = alertService.findByEntityIdAndAlertNames(entityId, VaccinateActionUtils.allAlertNames("child"));
+
+            Map<String, Date> recievedVaccines = receivedVaccines(vaccines);
+
+            List<Map<String, Object>> sch = generateScheduleList("child", new DateTime(dobString), recievedVaccines, alerts);
+
+            if (vaccines.isEmpty()) {
+                List<VaccineRepo.Vaccine> vList = Arrays.asList(VaccineRepo.Vaccine.values());
+                nv = nextVaccineDue(sch, vList);
+            }
+
+            if (nv == null) {
+                Date lastVaccine = null;
+                if (!vaccines.isEmpty()) {
+                    Vaccine vaccine = vaccines.get(vaccines.size() - 1);
+                    lastVaccine = vaccine.getDate();
+                }
+                nv = nextVaccineDue(sch, lastVaccine);
+            }
+
+            final String date = "date";
+            if (nv != null && nv.containsKey(date) && nv.get(date) instanceof DateTime) {
+                DateTime dueDate = (DateTime) nv.get(date);
+                boolean updated = commonRepository.populateSearchValues(entityId, KipConstants.EC_CHILD_TABLE.DUE_DATE, String.valueOf(dueDate.getMillis()), null);
+                if (!updated) {
+                    Log.e(getClass().getName(), "Unable to update FTS due date for " + entityId);
+                }
+            }
             return null;
         }
 
         @Override
         protected void onPostExecute(Void param) {
-            updateRecordVaccination(convertView, vaccines, alerts, dobString, lostToFollowUp, inactive);
+            updateRecordVaccination(convertView, vaccines, nv, lostToFollowUp, inactive);
 
         }
     }

@@ -180,6 +180,7 @@ public class KipApplication extends DrishtiApplication
             names.add("lost_to_follow_up");
             names.add(KipConstants.EC_CHILD_TABLE.DOD);
             names.add(KipConstants.EC_CHILD_TABLE.GENDER);
+            names.add(KipConstants.EC_CHILD_TABLE.DUE_DATE);
 
             for (VaccineRepo.Vaccine vaccine : vaccines) {
                 names.add("alerts." + VaccinateActionUtils.addHyphen(vaccine.display()));
