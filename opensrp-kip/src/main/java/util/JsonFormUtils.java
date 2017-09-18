@@ -804,7 +804,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
     }
 
     /**
-     * return field values that are in sections e.g for the hia2 monthly draft form which has sections
+     * return field values that are in sections e.g for the moh 710 monthly draft form which has sections
      *
      * @param jsonForm
      * @return

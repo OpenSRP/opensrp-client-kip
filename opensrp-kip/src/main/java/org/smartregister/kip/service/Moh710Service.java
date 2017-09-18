@@ -5,6 +5,7 @@ import android.database.Cursor;
 import net.sqlcipher.database.SQLiteDatabase;
 
 import org.apache.commons.lang3.StringUtils;
+import org.smartregister.repository.EventClientRepository;
 import org.smartregister.util.Log;
 
 import java.text.DateFormat;
@@ -690,8 +691,7 @@ public class Moh710Service {
      */
     private void getMOH041() {
         try {
-            //TODO Adverse Events Following Immunization
-            int count = 0;
+            int count = getAEFICount();
             mohReport.put(MOH_041, count);
         } catch (Exception e) {
             Log.logError(TAG, MOH_041 + e.getMessage());
@@ -898,6 +898,25 @@ public class Moh710Service {
             Log.logError(TAG, "FullyImmunized" + e.getMessage());
         }
         return count;
+    }
+
+    /**
+     * @return
+     */
+    private int getAEFICount() {
+        int count = 0;
+        final String eventType = "'AEFI'";
+        try {
+            String query = "select count(*) as count from " + EventClientRepository.Table.event.name() +
+                    " where '" + reportDate + "'= strftime('%Y-%m-%d'," + EventClientRepository.event_column.eventDate.toString() + ") " +
+                    " and " + EventClientRepository.event_column.eventType.toString() + " = " + eventType;
+            count = executeQueryAndReturnCount(query);
+        } catch (Exception e) {
+            Log.logError(TAG, eventType + e.getMessage());
+        }
+
+        return count;
+
     }
 
     private String ageQuery() {
