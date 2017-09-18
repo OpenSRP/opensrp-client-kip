@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:weightSum="2">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.9"
+        android:orientation="vertical">
+
+        <org.smartregister.view.customcontrols.CustomFontTextView
+            android:id="@+id/antigen"
+            style="@style/CustomFontTextViewStyle.ClientList.Light"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/moh710_vertical_margin"
+            android:paddingLeft="@dimen/moh710_padding_left"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/moh710_vertical_margin"
+            android:text="Antigen"
+            android:ellipsize="marquee"
+            android:textColor="@color/black"
+            android:textSize="17sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/age_value_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.1"
+        android:orientation="vertical" />
+
+
+</LinearLayout>

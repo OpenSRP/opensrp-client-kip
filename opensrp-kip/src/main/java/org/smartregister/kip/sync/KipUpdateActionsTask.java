@@ -18,11 +18,11 @@ import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.domain.Stock;
 import org.smartregister.kip.receiver.SyncStatusBroadcastReceiver;
 import org.smartregister.kip.receiver.VaccinatorAlarmReceiver;
+import org.smartregister.kip.repository.KipEventClientRepository;
 import org.smartregister.kip.repository.StockRepository;
 import org.smartregister.kip.service.intent.PullUniqueIdsIntentService;
 import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.repository.BaseRepository;
-import org.smartregister.repository.EventClientRepository;
 import org.smartregister.service.ActionService;
 import org.smartregister.service.AllFormVersionSyncService;
 import org.smartregister.service.HTTPAgent;
@@ -185,7 +185,7 @@ public class KipUpdateActionsTask {
     }
 
     private void pushECToServer() {
-        EventClientRepository db = KipApplication.getInstance().eventClientRepository();
+        KipEventClientRepository db = KipApplication.getInstance().eventClientRepository();
         boolean keepSyncing = true;
         int limit = 50;
         try {
@@ -393,7 +393,7 @@ public class KipUpdateActionsTask {
     }
 
     private void pushReportsToServer() {
-        EventClientRepository db = KipApplication.getInstance().eventClientRepository();
+        KipEventClientRepository db = KipApplication.getInstance().eventClientRepository();
         try {
             boolean keepSyncing = true;
             int limit = 50;

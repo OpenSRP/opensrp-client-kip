@@ -36,10 +36,10 @@ import org.smartregister.immunization.view.ServiceRowGroup;
 import org.smartregister.kip.R;
 import org.smartregister.kip.activity.ChildDetailTabbedActivity;
 import org.smartregister.kip.application.KipApplication;
+import org.smartregister.kip.repository.KipEventClientRepository;
 import org.smartregister.kip.sync.ECSyncUpdater;
 import org.smartregister.kip.viewComponents.WidgetFactory;
 import org.smartregister.repository.DetailsRepository;
-import org.smartregister.repository.EventClientRepository;
 import org.smartregister.service.AlertService;
 import org.smartregister.util.DateUtil;
 import org.smartregister.util.Utils;
@@ -148,7 +148,7 @@ public class ChildUnderFiveFragment extends Fragment {
                 boolean less_than_three_months_event_created = false;
 
                 org.smartregister.domain.db.Event event = null;
-                EventClientRepository db = KipApplication.getInstance().eventClientRepository();
+                KipEventClientRepository db = KipApplication.getInstance().eventClientRepository();
                 if (weight.getEventId() != null) {
                     event = ecUpdater.convert(db.getEventsByEventId(weight.getEventId()), org.smartregister.domain.db.Event.class);
                 } else if (weight.getFormSubmissionId() != null) {
