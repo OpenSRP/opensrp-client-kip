@@ -118,7 +118,9 @@ public class Moh710IndicatorsRepository extends BaseRepository {
         } catch (Exception e) {
             Log.e(TAG, e.toString(), e);
         } finally {
-            if (mCursor != null) mCursor.close();
+            if (mCursor != null) {
+                mCursor.close();
+            }
         }
         return null;
     }

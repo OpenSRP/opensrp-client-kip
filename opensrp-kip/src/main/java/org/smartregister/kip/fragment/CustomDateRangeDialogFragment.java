@@ -152,8 +152,9 @@ public class CustomDateRangeDialogFragment extends DialogFragment {
                 display.getSize(size);
 
                 int width = size.x;
+                double widthScale = 0.9;
 
-                window.setLayout((int) (width * 0.9), FrameLayout.LayoutParams.WRAP_CONTENT);
+                window.setLayout((int) (width * widthScale), FrameLayout.LayoutParams.WRAP_CONTENT);
                 window.setGravity(Gravity.CENTER);
             }
         });

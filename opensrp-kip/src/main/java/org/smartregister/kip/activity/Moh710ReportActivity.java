@@ -50,6 +50,7 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
     private static final String TAG = Moh710ReportActivity.class.getCanonicalName();
     private static final String DIALOG_TAG = Moh710ReportActivity.class.getCanonicalName().concat("DIALOG_TAG");
     private static final SimpleDateFormat MMMYYYY = new SimpleDateFormat("MMMM yyyy");
+    private static final String UNDER_SCORE = "_";
 
     //Global data variables
     private List<String> antigenList = new ArrayList<>();
@@ -242,8 +243,8 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
                     return view;
                 }
 
-                if (antigen.contains("_")) {
-                    antigen = antigen.split("_")[0];
+                if (antigen.contains(UNDER_SCORE)) {
+                    antigen = antigen.split(UNDER_SCORE)[0];
                 }
                 TextView antigenTextView = (TextView) view.findViewById(R.id.antigen);
                 antigenTextView.setText(antigen);
@@ -318,8 +319,8 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
         }
 
         for (MonthlyTally monthlyTally : monthlyTallies) {
-            if (monthlyTally.getIndicator() != null && monthlyTally.getIndicator().getIndicatorCode()
-                    .equalsIgnoreCase(mohIndicator.getIndicatorCode())) {
+            if (monthlyTally.getIndicator() != null
+                    && monthlyTally.getIndicator().getIndicatorCode().equalsIgnoreCase(mohIndicator.getIndicatorCode())) {
                 return monthlyTally.getValue();
             }
         }
@@ -373,7 +374,7 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
 
     private class SpinnerAdapter extends ArrayAdapter<Date> {
 
-        public SpinnerAdapter(Context context, int resource, List<Date> objects) {
+        SpinnerAdapter(Context context, int resource, List<Date> objects) {
             super(context, resource, objects);
         }
 
@@ -433,8 +434,7 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
         }
 
         @Override
-        protected Map<String, NamedObject<?>> doInBackground
-                (Void... params) {
+        protected Map<String, NamedObject<?>> doInBackground(Void... params) {
             try {
                 Moh710IndicatorsRepository moh710IndicatorsRepository = KipApplication.getInstance().moh710IndicatorsRepository();
                 List<MohIndicator> indicators = moh710IndicatorsRepository.fetchAll();
@@ -460,7 +460,7 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
                                 antigen = previousCustomAntigen;
                             } else {
                                 previousAntigen = antigen;
-                                antigen = antigen.concat("_" + Math.random());
+                                antigen = antigen.concat(UNDER_SCORE + Math.random());
                                 previousCustomAntigen = antigen;
                             }
                         } else {
@@ -480,8 +480,7 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
                     }
                 }
 
-                MonthlyTalliesRepository monthlyTalliesRepository = KipApplication
-                        .getInstance().monthlyTalliesRepository();
+                MonthlyTalliesRepository monthlyTalliesRepository = KipApplication.getInstance().monthlyTalliesRepository();
 
                 List<Date> dates = monthlyTalliesRepository.findUneditedDraftMonths(new Date(0),
                         new Date());
@@ -492,18 +491,17 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
                 Collections.sort(dates, new Comparator<Date>() {
                     @Override
                     public int compare(Date lhs, Date rhs) {
-                        if (lhs.after(rhs))
+                        if (lhs.after(rhs)) {
                             return -1;
-                        else if (lhs.equals(rhs))
+                        } else if (lhs.equals(rhs)) {
                             return 0;
-                        else
+                        } else {
                             return 1;
+                        }
                     }
                 });
 
-                List<MonthlyTally> monthlyTallies = monthlyTalliesRepository
-                        .findDrafts(MonthlyTalliesRepository.DF_YYYYMM.format(dates.get(0)));
-
+                List<MonthlyTally> monthlyTallies = monthlyTalliesRepository.findDrafts(MonthlyTalliesRepository.DF_YYYYMM.format(dates.get(0)));
 
                 Map<String, NamedObject<?>> map = new HashMap<>();
                 NamedObject<List<Date>> datesNamedObject = new NamedObject<>(Date.class.getName(), dates);
@@ -583,8 +581,8 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
 
     public class UpdateReportTask extends AsyncTask<Date, Void, List<MonthlyTally>> {
 
-        BaseActivity baseActivity;
-        boolean showProgressBar;
+        private BaseActivity baseActivity;
+        private boolean showProgressBar;
 
         public UpdateReportTask(BaseActivity baseActivity, boolean showProgressBar) {
             this.baseActivity = baseActivity;
@@ -608,19 +606,16 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
 
             if (params.length == 1) {
                 Date date = params[0];
-                MonthlyTalliesRepository monthlyTalliesRepository = KipApplication
-                        .getInstance().monthlyTalliesRepository();
+                MonthlyTalliesRepository monthlyTalliesRepository = KipApplication.getInstance().monthlyTalliesRepository();
 
                 return monthlyTalliesRepository
                         .findDrafts(MonthlyTalliesRepository.DF_YYYYMM.format(date));
             } else if (params.length == 2) {
                 Date startDate = params[0];
                 Date endDate = params[1];
-                MonthlyTalliesRepository monthlyTalliesRepository = KipApplication
-                        .getInstance().monthlyTalliesRepository();
+                MonthlyTalliesRepository monthlyTalliesRepository = KipApplication.getInstance().monthlyTalliesRepository();
 
-                return monthlyTalliesRepository
-                        .findDrafts(startDate, endDate);
+                return monthlyTalliesRepository.findDrafts(startDate, endDate);
             }
 
             return new ArrayList<>();
@@ -642,7 +637,7 @@ public class Moh710ReportActivity extends BaseActivity implements Moh710ServiceB
         public final String name;
         public final T object;
 
-        public NamedObject(String name, T object) {
+        NamedObject(String name, T object) {
             this.name = name;
             this.object = object;
         }

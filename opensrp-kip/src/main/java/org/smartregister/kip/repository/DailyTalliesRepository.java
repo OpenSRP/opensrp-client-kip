@@ -89,9 +89,7 @@ public class DailyTalliesRepository extends BaseRepository {
                 Integer indicatorValue = (Integer) mohReport.get(indicatorCode);
 
                 // Get the Moh710 Indicator corresponding to the current tally
-                MohIndicator indicator = KipApplication.getInstance()
-                        .moh710IndicatorsRepository()
-                        .findByIndicatorCode(indicatorCode);
+                MohIndicator indicator = KipApplication.getInstance().moh710IndicatorsRepository().findByIndicatorCode(indicatorCode);
 
                 if (indicator != null) {
                     ContentValues cv = new ContentValues();

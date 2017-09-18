@@ -367,8 +367,7 @@ public class KipRepository extends Repository {
                 context,
                 Moh710IndicatorsRepository.INDICATORS_CSV_FILE,
                 Moh710IndicatorsRepository.CSV_COLUMN_MAPPING);
-        Moh710IndicatorsRepository moh710IndicatorsRepository = KipApplication.getInstance()
-                .moh710IndicatorsRepository();
+        Moh710IndicatorsRepository moh710IndicatorsRepository = KipApplication.getInstance().moh710IndicatorsRepository();
         moh710IndicatorsRepository.save(db, csvData);
     }
 }

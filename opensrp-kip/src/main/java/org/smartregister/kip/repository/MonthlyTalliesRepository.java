@@ -130,8 +130,7 @@ public class MonthlyTalliesRepository extends BaseRepository {
         try {
 
             Log.w(TAG, "Using daily tallies instead of monthly");
-            Map<Long, List<DailyTally>> dailyTallies = KipApplication.getInstance()
-                    .dailyTalliesRepository().findTalliesInMonth(DF_YYYYMM.parse(month));
+            Map<Long, List<DailyTally>> dailyTallies = KipApplication.getInstance().dailyTalliesRepository().findTalliesInMonth(DF_YYYYMM.parse(month));
             for (List<DailyTally> curList : dailyTallies.values()) {
                 MonthlyTally curTally = addUpDailyTallies(curList);
                 if (curTally != null) {
@@ -164,8 +163,7 @@ public class MonthlyTalliesRepository extends BaseRepository {
         try {
 
             Log.w(TAG, "Using daily tallies instead of monthly");
-            Map<Long, List<DailyTally>> dailyTallies = KipApplication.getInstance()
-                    .dailyTalliesRepository().findTallies(startDate, endDate);
+            Map<Long, List<DailyTally>> dailyTallies = KipApplication.getInstance().dailyTalliesRepository().findTallies(startDate, endDate);
             for (List<DailyTally> curList : dailyTallies.values()) {
                 MonthlyTally curTally = addUpDailyTallies(curList);
                 if (curTally != null) {
@@ -234,8 +232,7 @@ public class MonthlyTalliesRepository extends BaseRepository {
 
     private List<MonthlyTally> readAllDataElements(Cursor cursor) {
         List<MonthlyTally> tallies = new ArrayList<>();
-        HashMap<Long, MohIndicator> indicatorMap = KipApplication.getInstance()
-                .moh710IndicatorsRepository().findAll();
+        HashMap<Long, MohIndicator> indicatorMap = KipApplication.getInstance().moh710IndicatorsRepository().findAll();
 
         try {
             if (cursor != null && cursor.getCount() > 0) {

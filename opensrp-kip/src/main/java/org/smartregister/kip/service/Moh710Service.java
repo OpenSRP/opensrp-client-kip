@@ -753,9 +753,9 @@ public class Moh710Service {
         int count = 0;
         try {
             String vaccineCondition = "lower(v.name)='" + vaccine.toLowerCase() + "'";
-            if (vaccine.equals("measles_1")) {
+            if ("measles_1".equals(vaccine)) {
                 vaccineCondition = "(lower(v.name)='" + vaccine.toLowerCase() + "' or lower(v.name)='mr_1')";
-            } else if (vaccine.equals("measles_2")) {
+            } else if ("measles_2".equals(vaccine)) {
                 vaccineCondition = "(lower(v.name)='" + vaccine.toLowerCase() + "' or lower(v.name)='mr_2')";
             }
 
@@ -780,9 +780,9 @@ public class Moh710Service {
         int count = 0;
         try {
             String vaccineCondition = "lower(v.name)='" + vaccine.toLowerCase() + "'";
-            if (vaccine.equals("measles_1")) {
+            if ("measles_1".equals(vaccine)) {
                 vaccineCondition = "(lower(v.name)='" + vaccine.toLowerCase() + "' or lower(v.name)='mr_1')";
-            } else if (vaccine.equals("measles_2")) {
+            } else if ("measles_2".equals(vaccine)) {
                 vaccineCondition = "(lower(v.name)='" + vaccine.toLowerCase() + "' or lower(v.name)='mr_2')";
             }
 
@@ -874,7 +874,7 @@ public class Moh710Service {
 
                     boolean allVaccinesExist = true;
                     for (String vaccine : vaccines) {
-                        if (vaccine.equals("measles_1")) {
+                        if ("measles_1".equals(vaccine)) {
                             if (!(vlist.contains("measles_1") || vlist.contains("mr_1"))) {
                                 allVaccinesExist = false;
                                 break;
