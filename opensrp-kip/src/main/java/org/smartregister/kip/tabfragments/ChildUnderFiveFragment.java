@@ -16,6 +16,7 @@ import android.widget.TextView;
 import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.domain.Alert;
 import org.smartregister.growthmonitoring.domain.Weight;
@@ -56,6 +57,8 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import util.JsonFormUtils;
 
 
 public class ChildUnderFiveFragment extends Fragment {
@@ -224,18 +227,24 @@ public class ChildUnderFiveFragment extends Fragment {
         String supportedVaccinesString = readAssetContents(VACCINES_FILE);
         try {
             JSONArray supportedVaccines = new JSONArray(supportedVaccinesString);
+            JSONObject supportedVaccineGroup;
+
             for (int i = 0; i < supportedVaccines.length(); i++) {
-                ImmunizationRowGroup curGroup = new ImmunizationRowGroup(getActivity(), editmode);
-                curGroup.setData(supportedVaccines.getJSONObject(i), childDetails, vaccineList, alertList);
-                curGroup.setOnVaccineUndoClickListener(new ImmunizationRowGroup.OnVaccineUndoClickListener() {
-                    @Override
-                    public void onUndoClick(ImmunizationRowGroup vaccineGroup, VaccineWrapper vaccine) {
-                        addVaccinationDialogFragment(Arrays.asList(vaccine), vaccineGroup);
+                supportedVaccineGroup = JsonFormUtils.checkVaccinesConditions(supportedVaccines.getJSONObject(i), childDetails);
 
-                    }
-                });
+                if(supportedVaccineGroup.has("vaccines") && supportedVaccineGroup.getJSONArray("vaccines").length() > 0) {
+                    ImmunizationRowGroup curGroup = new ImmunizationRowGroup(getActivity(), editmode);
+                    curGroup.setData(supportedVaccineGroup, childDetails, vaccineList, alertList);
+                    curGroup.setOnVaccineUndoClickListener(new ImmunizationRowGroup.OnVaccineUndoClickListener() {
+                        @Override
+                        public void onUndoClick(ImmunizationRowGroup vaccineGroup, VaccineWrapper vaccine) {
+                            addVaccinationDialogFragment(Arrays.asList(vaccine), vaccineGroup);
 
-                vaccineGroupCanvasLL.addView(curGroup);
+                        }
+                    });
+
+                    vaccineGroupCanvasLL.addView(curGroup);
+                }
             }
         } catch (JSONException e) {
             Log.e(getClass().getName(), Log.getStackTraceString(e));

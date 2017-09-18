@@ -11,13 +11,19 @@ import com.vijay.jsonwizard.fragments.JsonFormFragment;
 import com.vijay.jsonwizard.interfaces.CommonListener;
 import com.vijay.jsonwizard.widgets.SpinnerFactory;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.api.domain.Location;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.repository.LocationRepository;
+import org.smartregister.util.StringUtil;
 
+import java.util.Arrays;
 import java.util.List;
+
+import util.JsonFormUtils;
 
 /**
  * Created by amosl on 6/13/17.
@@ -73,33 +79,45 @@ public class KipSpinnerFactory extends SpinnerFactory {
                                 }
 
                                 if (childSpinner != null) {
+                                    int selectedItemPosition = childSpinner.getSelectedItemPosition();
+                                    String selectedItem = selectedItemPosition != -1 ? childSpinner.getSelectedItem().toString() : null;
                                     LocationRepository locationRepository = KipApplication.getInstance().locationRepository();
                                     Location location = locationRepository.getLocationByName(value);
                                     ArrayAdapter<String> adapter;
                                     Log.d(TAG, "Name: " + value);
-                                    Log.d(TAG, "Location: " + location.toString());
+                                    Log.d(TAG, "Location: " + location != null ? location.toString() : " null");
+                                    String[] locs;
 
                                     if (location != null) {
                                         Log.i(TAG, "Parent location is not null: " + location.toString());
                                         List<Location> locations = locationRepository.getChildLocations(location.getLocationId());
                                         int size = locations.size();
-                                        String[] locs = new String[Math.max(1, size)];
+                                        locs = new String[Math.max(1, size)];
 
                                         if (size > 0) {
+                                            String locationName;
                                             for (int n = 0; n < size; n++) {
-                                                locs[n] = locations.get(n).getName();
+                                                locationName = locations.get(n).getName();
+                                                locs[n] = locationName;
+                                                if(locationName.equals(selectedItem)){
+                                                    selectedItemPosition = n;
+                                                } else {
+                                                    selectedItemPosition = -1;
+                                                }
                                             }
                                         } else {
                                             locs[0] = "Other";
                                         }
-                                        adapter = new ArrayAdapter<>(context, com.vijay.jsonwizard.R.layout.simple_list_item_1, locs);
                                     } else {
-                                        adapter = new ArrayAdapter<>(context, com.vijay.jsonwizard.R.layout.simple_list_item_1, new String[]{"Other"});
+                                        locs = new String[]{"Other"};
                                         Log.i(TAG, "Parent location is null");
                                     }
 
+                                    adapter = new ArrayAdapter<>(context, com.vijay.jsonwizard.R.layout.simple_list_item_1, locs);
                                     childSpinner.setAdapter(adapter);
-
+                                    if(selectedItemPosition != -1) {
+                                        childSpinner.setSelection(selectedItemPosition);
+                                    }
                                 }
                             }
                         }

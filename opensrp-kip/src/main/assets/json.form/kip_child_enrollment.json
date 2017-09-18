@@ -70,20 +70,6 @@
         "uploadButtonText": "Take a photo of the child"
       },
       {
-        "key": "Home_Facility",
-        "openmrs_entity_parent": "",
-        "openmrs_entity": "",
-        "openmrs_entity_id": "",
-        "openmrs_data_type": "text",
-        "type": "tree",
-        "hint": "Child's home health facility *",
-        "tree": [],
-        "v_required": {
-          "value": true,
-          "err": "Please enter the child's home facility"
-        }
-      },
-      {
         "key": "First_Name",
         "openmrs_entity_parent": "",
         "openmrs_entity": "person",

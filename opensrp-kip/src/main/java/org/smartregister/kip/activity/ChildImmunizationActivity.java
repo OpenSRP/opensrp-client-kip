@@ -406,9 +406,14 @@ public class ChildImmunizationActivity extends BaseActivity
 
             try {
                 JSONArray supportedVaccines = new JSONArray(supportedVaccinesString);
+                JSONObject supportedVaccineGroup;
 
                 for (int i = 0; i < supportedVaccines.length(); i++) {
-                    addVaccineGroup(-1, supportedVaccines.getJSONObject(i), vaccineList, alerts);
+                    supportedVaccineGroup = JsonFormUtils.checkVaccinesConditions(supportedVaccines.getJSONObject(i), childDetails);
+
+                    if(supportedVaccineGroup.has("vaccines") && supportedVaccineGroup.getJSONArray("vaccines").length() > 0) {
+                        addVaccineGroup(-1, supportedVaccineGroup, vaccineList, alerts);
+                    }
                 }
             } catch (JSONException e) {
                 Log.e(TAG, Log.getStackTraceString(e));
