@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -60,7 +61,7 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
     private final ClientActionHandler clientActionHandler = new ClientActionHandler();
     private static final String defaultCondition = " (" + KipConstants.EC_CHILD_TABLE.DOD + " is NULL OR " + KipConstants.EC_CHILD_TABLE.DOD + " = '') AND ";
     private Holder holder = new Holder();
-    com.vijay.jsonwizard.customviews.CheckBox selectOnlyOverdue;
+    private CheckBox selectOnlyOverdue;
 
     @Override
 
@@ -316,7 +317,7 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
     }
 
     private void updateOnlyOverdueCheckbox() {
-        selectOnlyOverdue = (com.vijay.jsonwizard.customviews.CheckBox) mView.findViewById(R.id.select_only_overdue);
+        selectOnlyOverdue = (CheckBox) mView.findViewById(R.id.select_only_overdue);
         View selectOnlyOverDueLayout = mView.findViewById(R.id.only_overdue_layout);
         selectOnlyOverDueLayout.setOnClickListener(new View.OnClickListener() {
             @Override

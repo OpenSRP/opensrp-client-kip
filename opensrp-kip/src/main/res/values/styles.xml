@@ -120,8 +120,17 @@
         <item name="colorControlNormal">@color/black</item>
     </style>
 
+    <style name="ThemeKipLightGreySpinner">
+        <item name="colorAccent">@color/light_grey</item>
+        <item name="colorControlNormal">@color/light_grey</item>
+    </style>
+
 
     <style name="KipSpinnerUnderLined" parent="Widget.AppCompat.Spinner.Underlined">
+        <item name="backgroundTint">@color/black</item>
+    </style>
+
+    <style name="KipSpinnerLightGreyUnderLined" parent="Widget.AppCompat.Spinner.Underlined">
         <item name="backgroundTint">@color/client_list_grey</item>
     </style>
 

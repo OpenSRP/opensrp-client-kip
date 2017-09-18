@@ -111,12 +111,12 @@
 
             <Spinner
                 android:id="@+id/due_period_spinner"
-                style="@style/KipSpinnerUnderLined"
+                style="@style/KipSpinnerLightGreyUnderLined"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:minWidth="150dp"
                 android:spinnerMode="dropdown"
-                android:theme="@style/ThemeKipSpinner" />
+                android:theme="@style/ThemeKipLightGreySpinner" />
 
         </LinearLayout>
 
@@ -131,13 +131,12 @@
             android:orientation="horizontal"
             android:padding="10dp">
 
-            <com.vijay.jsonwizard.customviews.CheckBox
+            <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/select_only_overdue"
-                style="@style/KipMaterialCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="3dp" />
+                android:layout_marginRight="3dp"
+                android:buttonTint="@color/light_grey" />
 
             <org.smartregister.view.customcontrols.CustomFontTextView
                 android:id="@+id/only_overdue_text"
