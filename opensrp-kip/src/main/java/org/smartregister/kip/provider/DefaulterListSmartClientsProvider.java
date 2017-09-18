@@ -2,12 +2,11 @@ package org.smartregister.kip.provider;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,17 +14,15 @@ import android.widget.TextView;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
+import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.cursoradapter.SmartRegisterCLientsProviderForCursorAdapter;
 import org.smartregister.domain.Alert;
-import org.smartregister.growthmonitoring.domain.Weight;
-import org.smartregister.growthmonitoring.repository.WeightRepository;
 import org.smartregister.immunization.db.VaccineRepo;
 import org.smartregister.immunization.domain.Vaccine;
 import org.smartregister.immunization.repository.VaccineRepository;
 import org.smartregister.immunization.util.VaccinateActionUtils;
 import org.smartregister.kip.R;
 import org.smartregister.service.AlertService;
-import org.smartregister.util.DateUtil;
 import org.smartregister.util.OpenSRPImageLoader;
 import org.smartregister.util.Utils;
 import org.smartregister.view.activity.DrishtiApplication;
@@ -45,6 +42,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import util.ImageUtils;
+import util.KipConstants;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static org.smartregister.immunization.util.VaccinatorUtils.generateScheduleList;
@@ -55,24 +53,25 @@ import static org.smartregister.util.Utils.getName;
 import static org.smartregister.util.Utils.getValue;
 
 /**
- * Created by Ahmed on 13-Oct-15.
+ * Created by Keyman on 14-Sep-17.
  */
-public class ChildSmartClientsProvider implements SmartRegisterCLientsProviderForCursorAdapter {
+public class DefaulterListSmartClientsProvider implements SmartRegisterCLientsProviderForCursorAdapter {
     private final LayoutInflater inflater;
     private final Context context;
     private final View.OnClickListener onClickListener;
     private final AlertService alertService;
     private final VaccineRepository vaccineRepository;
-    private final WeightRepository weightRepository;
+    private final CommonRepository commonRepository;
     private final AbsListView.LayoutParams clientViewLayoutParams;
 
-    public ChildSmartClientsProvider(Context context, View.OnClickListener onClickListener,
-                                     AlertService alertService, VaccineRepository vaccineRepository, WeightRepository weightRepository) {
+    public DefaulterListSmartClientsProvider(Context context, View.OnClickListener onClickListener,
+                                             AlertService alertService, VaccineRepository vaccineRepository,
+                                             CommonRepository commonRepository) {
         this.onClickListener = onClickListener;
         this.context = context;
         this.alertService = alertService;
         this.vaccineRepository = vaccineRepository;
-        this.weightRepository = weightRepository;
+        this.commonRepository = commonRepository;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         clientViewLayoutParams = new AbsListView.LayoutParams(MATCH_PARENT, (int) context.getResources().getDimension(org.smartregister.R.dimen.list_item_height));
@@ -82,7 +81,7 @@ public class ChildSmartClientsProvider implements SmartRegisterCLientsProviderFo
     public void getView(Cursor cursor, SmartRegisterClient client, final View convertView) {
         CommonPersonObjectClient pc = (CommonPersonObjectClient) client;
 
-        fillValue((TextView) convertView.findViewById(R.id.child_zeir_id), getValue(pc.getColumnmaps(), "zeir_id", false));
+        fillValue((TextView) convertView.findViewById(R.id.child_unique_id), getValue(pc.getColumnmaps(), "zeir_id", false));
 
         String firstName = getValue(pc.getColumnmaps(), "first_name", true);
         String lastName = getValue(pc.getColumnmaps(), "last_name", true);
@@ -94,31 +93,33 @@ public class ChildSmartClientsProvider implements SmartRegisterCLientsProviderFo
         }
         fillValue((TextView) convertView.findViewById(R.id.child_name), childName);
 
-        String motherName = getValue(pc.getColumnmaps(), "mother_first_name", true) + " " + getValue(pc, "mother_last_name", true);
-        if (!StringUtils.isNotBlank(motherName)) {
-            motherName = "M/G: " + motherName.trim();
-        }
-        fillValue((TextView) convertView.findViewById(R.id.child_mothername), motherName);
-
-        DateTime birthDateTime = new DateTime((new Date()).getTime());
-        String dobString = getValue(pc.getColumnmaps(), "dob", false);
-        String durationString = "";
-        if (StringUtils.isNotBlank(dobString)) {
-            try {
-                birthDateTime = new DateTime(dobString);
-                String duration = DateUtil.getDuration(birthDateTime);
-                if (duration != null) {
-                    durationString = duration;
-                }
-            } catch (Exception e) {
-                Log.e(getClass().getName(), e.toString(), e);
-            }
-        }
-        fillValue((TextView) convertView.findViewById(R.id.child_age), durationString);
-
-        fillValue((TextView) convertView.findViewById(R.id.child_card_number), pc.getColumnmaps(), "epi_card_number", false);
-
         String gender = getValue(pc.getColumnmaps(), "gender", true);
+        fillValue((TextView) convertView.findViewById(R.id.child_gender), gender);
+
+        String village = getValue(pc.getColumnmaps(), "village", true);
+        // String estate = getValue(pc.getColumnmaps(), "estate", true);
+        String landmark = getValue(pc.getColumnmaps(), "landmark", true);
+
+        List<String> velList = new ArrayList<>();
+        if (StringUtils.isNotBlank(village)) {
+            velList.add(village);
+        }
+        /*  if (StringUtils.isNotBlank(estate)) {
+            velList.add(estate);
+        }*/
+        if (StringUtils.isNotBlank(landmark)) {
+            velList.add(landmark);
+        }
+
+        fillValue((TextView) convertView.findViewById(R.id.child_ce_village), velList.isEmpty() ? "" : TextUtils.join(", ", velList));
+
+        fillValue((TextView) convertView.findViewById(R.id.child_cwc_number), pc.getColumnmaps(), "cwc_number", false);
+
+        fillValue((TextView) convertView.findViewById(R.id.mother_phone_number), pc.getColumnmaps(), "mother_phone_number", false);
+
+        fillValue((TextView) convertView.findViewById(R.id.chw_phone_number), pc.getColumnmaps(), "chw_phone_number", false);
+
+        String dobString = getValue(pc.getColumnmaps(), "dob", false);
 
         final ImageView profilePic = (ImageView) convertView.findViewById(R.id.child_profilepic);
         int defaultImageResId = ImageUtils.profileImageResourceByGender(gender);
@@ -132,12 +133,6 @@ public class ChildSmartClientsProvider implements SmartRegisterCLientsProviderFo
         convertView.findViewById(R.id.child_profile_info_layout).setTag(client);
         convertView.findViewById(R.id.child_profile_info_layout).setOnClickListener(onClickListener);
 
-        View recordWeight = convertView.findViewById(R.id.record_weight);
-        recordWeight.setBackground(context.getResources().getDrawable(R.drawable.record_weight_bg));
-        recordWeight.setTag(client);
-        recordWeight.setOnClickListener(onClickListener);
-        recordWeight.setVisibility(View.INVISIBLE);
-
         View recordVaccination = convertView.findViewById(R.id.record_vaccination);
         recordVaccination.setTag(client);
         recordVaccination.setOnClickListener(onClickListener);
@@ -147,40 +142,9 @@ public class ChildSmartClientsProvider implements SmartRegisterCLientsProviderFo
         String inactive = getValue(pc.getColumnmaps(), "inactive", false);
 
         try {
-            Utils.startAsyncTask(new WeightAsyncTask(convertView, pc.entityId(), lostToFollowUp, inactive), null);
             Utils.startAsyncTask(new VaccinationAsyncTask(convertView, pc.entityId(), dobString, lostToFollowUp, inactive), null);
         } catch (Exception e) {
             Log.e(getClass().getName(), e.getMessage(), e);
-        }
-
-    }
-
-    private void updateRecordWeight(View convertView, Weight weight, String lostToFollowUp, String inactive) {
-        View recordWeight = convertView.findViewById(R.id.record_weight);
-        recordWeight.setVisibility(View.VISIBLE);
-
-        if (weight != null) {
-            TextView recordWeightText = (TextView) convertView.findViewById(R.id.record_weight_text);
-            recordWeightText.setText(Utils.kgStringSuffix(weight.getKg()));
-
-            ImageView recordWeightCheck = (ImageView) convertView.findViewById(R.id.record_weight_check);
-            recordWeightCheck.setVisibility(View.VISIBLE);
-
-            recordWeight.setClickable(false);
-            recordWeight.setBackground(new ColorDrawable(context.getResources()
-                    .getColor(android.R.color.transparent)));
-        } else {
-            TextView recordWeightText = (TextView) convertView.findViewById(R.id.record_weight_text);
-            recordWeightText.setText(context.getString(R.string.record_weight_with_nl));
-
-            ImageView recordWeightCheck = (ImageView) convertView.findViewById(R.id.record_weight_check);
-            recordWeightCheck.setVisibility(View.GONE);
-            recordWeight.setClickable(true);
-        }
-
-        // Update active/inactive/lostToFollowup status
-        if (lostToFollowUp.equals(Boolean.TRUE.toString()) || inactive.equals(Boolean.TRUE.toString())) {
-            recordWeight.setVisibility(View.INVISIBLE);
         }
 
     }
@@ -194,7 +158,6 @@ public class ChildSmartClientsProvider implements SmartRegisterCLientsProviderFo
         recordVaccinationCheck.setVisibility(View.GONE);
 
         convertView.setLayoutParams(clientViewLayoutParams);
-
 
         State state = State.FULLY_IMMUNIZED;
         String stateKey = null;
@@ -226,7 +189,7 @@ public class ChildSmartClientsProvider implements SmartRegisterCLientsProviderFo
             }
         } else {
             state = State.WAITING;
-        }
+               }
 
 
         // Update active/inactive/lostToFollowup status
@@ -351,7 +314,7 @@ public class ChildSmartClientsProvider implements SmartRegisterCLientsProviderFo
 
     @Override
     public View inflatelayoutForCursorAdapter() {
-        return (ViewGroup) inflater().inflate(R.layout.smart_register_child_client, null);
+        return inflater().inflate(R.layout.smart_register_child_defaulter_list, null);
     }
 
     public LayoutInflater inflater() {
@@ -371,37 +334,6 @@ public class ChildSmartClientsProvider implements SmartRegisterCLientsProviderFo
         FULLY_IMMUNIZED
     }
 
-    private class WeightAsyncTask extends AsyncTask<Void, Void, Void> {
-        private final View convertView;
-        private final String entityId;
-        private final String lostToFollowUp;
-        private final String inactive;
-        private Weight weight;
-
-        private WeightAsyncTask(View convertView,
-                                String entityId,
-                                String lostToFollowUp,
-                                String inactive) {
-            this.convertView = convertView;
-            this.entityId = entityId;
-            this.lostToFollowUp = lostToFollowUp;
-            this.inactive = inactive;
-        }
-
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            weight = weightRepository.findUnSyncedByEntityId(entityId);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void param) {
-            updateRecordWeight(convertView, weight, lostToFollowUp, inactive);
-
-        }
-    }
-
     private class VaccinationAsyncTask extends AsyncTask<Void, Void, Void> {
         private final View convertView;
         private final String entityId;
@@ -409,7 +341,7 @@ public class ChildSmartClientsProvider implements SmartRegisterCLientsProviderFo
         private final String lostToFollowUp;
         private final String inactive;
         private List<Vaccine> vaccines = new ArrayList<>();
-        private Map<String, Object> nv = null;
+        Map<String, Object> nv = null;
 
         private VaccinationAsyncTask(View convertView,
                                      String entityId,
@@ -429,11 +361,9 @@ public class ChildSmartClientsProvider implements SmartRegisterCLientsProviderFo
             vaccines = vaccineRepository.findByEntityId(entityId);
             List<Alert> alerts = alertService.findByEntityIdAndAlertNames(entityId, VaccinateActionUtils.allAlertNames("child"));
 
-            // Alerts
             Map<String, Date> recievedVaccines = receivedVaccines(vaccines);
 
             List<Map<String, Object>> sch = generateScheduleList("child", new DateTime(dobString), recievedVaccines, alerts);
-
 
             if (vaccines.isEmpty()) {
                 List<VaccineRepo.Vaccine> vList = Arrays.asList(VaccineRepo.Vaccine.values());
@@ -446,8 +376,16 @@ public class ChildSmartClientsProvider implements SmartRegisterCLientsProviderFo
                     Vaccine vaccine = vaccines.get(vaccines.size() - 1);
                     lastVaccine = vaccine.getDate();
                 }
-
                 nv = nextVaccineDue(sch, lastVaccine);
+            }
+
+            final String date = "date";
+            if (nv != null && nv.containsKey(date) && nv.get(date) instanceof DateTime) {
+                DateTime dueDate = (DateTime) nv.get(date);
+                boolean updated = commonRepository.populateSearchValues(entityId, KipConstants.EC_CHILD_TABLE.DUE_DATE, String.valueOf(dueDate.getMillis()), null);
+                if (!updated) {
+                    Log.e(getClass().getName(), "Unable to update FTS due date for " + entityId);
+                }
             }
             return null;
         }

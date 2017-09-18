@@ -79,14 +79,11 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
     private View listViewLayout;
     private View advancedSearchForm;
 
-    private TextView filterCount;
-
     private ProgressDialog progressDialog;
 
     //private List<Integer> editedList = new ArrayList<>();
     private final Map<String, String> editMap = new HashMap<>();
     private boolean listMode = false;
-    private int overdueCount = 0;
     private boolean outOfArea = false;
     private AdvancedMatrixCursor matrixCursor;
 
@@ -151,17 +148,8 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
         final View filterSection = view.findViewById(R.id.filter_selection);
         filterSection.setOnClickListener(clientActionHandler);
 
-        filterCount = (TextView) view.findViewById(R.id.filter_count);
+        TextView filterCount = (TextView) view.findViewById(R.id.filter_count);
         filterCount.setVisibility(View.GONE);
-        if (overdueCount > 0) {
-            updateFilterCount(overdueCount);
-        }
-        filterCount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                filterSection.performClick();
-            }
-        });
 
         if (titleLabelView != null) {
             titleLabelView.setText(getString(R.string.advanced_search));
@@ -843,19 +831,6 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
         return hasSearchParams;
     }
 
-    public void updateFilterCount(int count) {
-        if (filterCount != null) {
-            if (count > 0) {
-                filterCount.setText(String.valueOf(count));
-                filterCount.setVisibility(View.VISIBLE);
-                filterCount.setClickable(true);
-            } else {
-                filterCount.setVisibility(View.GONE);
-                filterCount.setClickable(false);
-            }
-        }
-        overdueCount = count;
-    }
 
     private String getJsonString(JSONObject jsonObject, String field) {
         try {
@@ -1114,7 +1089,7 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
                     goBack();
                     break;
                 case R.id.filter_selection:
-                    ((ChildSmartRegisterActivity) getActivity()).filterSelection();
+                    ((ChildSmartRegisterActivity) getActivity()).startDefaulterList();
                     break;
                 case R.id.search_layout:
                 case R.id.search:
