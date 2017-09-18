@@ -283,7 +283,9 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
                 tableName + ".last_interacted_with",
                 tableName + ".inactive",
                 tableName + ".lost_to_follow_up",
-                tableName + ".cwc_number"
+                tableName + ".cwc_number",
+                tableName + ".chw_name",
+                tableName + ".chw_phone_number"
         });
         queryBUilder.customJoin("LEFT JOIN " + parentTableName + " ON  " + tableName + ".relational_id =  " + parentTableName + ".id");
         mainSelect = queryBUilder.mainCondition(mainCondition);

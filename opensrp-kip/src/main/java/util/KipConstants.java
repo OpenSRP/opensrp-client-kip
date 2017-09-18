@@ -54,6 +54,7 @@ public class KipConstants extends AllConstants {
         public static final String DOD = "dod";
         public static final String GENDER = "gender";
         public static final String DUE_DATE = "due_date";
-
+        public static final String CHW_NAME = "chw_name";
+        public static final String CHW_PHONE_NUMBER = "chw_phone_number";
     }
 }

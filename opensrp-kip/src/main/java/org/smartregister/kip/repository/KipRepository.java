@@ -295,6 +295,12 @@ public class KipRepository extends Repository {
             newlyAddedFields.add(KipConstants.EC_CHILD_TABLE.DUE_DATE);
 
             addFieldsToFTSTable(database, KipConstants.CHILD_TABLE_NAME, newlyAddedFields);
+
+            String ALTER_ADD_CHW_NAME_COLUMN = "ALTER TABLE " + KipConstants.CHILD_TABLE_NAME + " ADD COLUMN " + KipConstants.EC_CHILD_TABLE.CHW_NAME + " VARCHAR";
+            database.execSQL(ALTER_ADD_CHW_NAME_COLUMN);
+
+            String ALTER_ADD_CHW_PHONE_NUMBER_COLUMN = "ALTER TABLE " + KipConstants.CHILD_TABLE_NAME + " ADD COLUMN " + KipConstants.EC_CHILD_TABLE.CHW_PHONE_NUMBER + " VARCHAR";
+            database.execSQL(ALTER_ADD_CHW_PHONE_NUMBER_COLUMN);
         } catch (Exception e) {
             Log.e(TAG, "upgradeToVersion11 " + e.getMessage());
         }

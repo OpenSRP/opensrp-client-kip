@@ -117,6 +117,7 @@ public class DefaulterListSmartClientsProvider implements SmartRegisterCLientsPr
 
         fillValue((TextView) convertView.findViewById(R.id.mother_phone_number), pc.getColumnmaps(), "mother_phone_number", false);
 
+        fillValue((TextView) convertView.findViewById(R.id.chw_phone_number), pc.getColumnmaps(), "chw_phone_number", false);
 
         String dobString = getValue(pc.getColumnmaps(), "dob", false);
 
@@ -188,7 +189,7 @@ public class DefaulterListSmartClientsProvider implements SmartRegisterCLientsPr
             }
         } else {
             state = State.WAITING;
-        }
+               }
 
 
         // Update active/inactive/lostToFollowup status
