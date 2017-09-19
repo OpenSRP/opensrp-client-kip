@@ -471,7 +471,7 @@
           "parent_entity": "162586AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
           "entity": "concept",
           "entity_id": "1418AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-          "calculation": 1
+          "calculation": 6
         },
         "schedule": {
           "due": [
@@ -503,16 +503,15 @@
     "days_after_birth_due": 274,
     "vaccines": [
       {
-        "name": "Measles 1 / MR 1",
-        "type": "Measles / MR",
-        "vaccine_separator": " / ",
+        "name": "MR 1",
+        "type": "MR",
         "openmrs_date": {
-          "parent_entity": "36AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/162586AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "parent_entity": "162586AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
           "entity": "concept",
           "entity_id": "1410AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
         },
         "openmrs_calculate": {
-          "parent_entity": "36AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "parent_entity": "162586AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
           "entity": "concept",
           "entity_id": "1418AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
           "calculation": 1
@@ -588,16 +587,15 @@
     "days_after_birth_due": 548,
     "vaccines": [
       {
-        "name": "Measles 2 / MR 2",
-        "type": "Measles / MR",
-        "vaccine_separator": " / ",
+        "name": "MR 2",
+        "type": "MR",
         "openmrs_date": {
-          "parent_entity": "36AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/162586AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "parent_entity": "162586AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
           "entity": "concept",
           "entity_id": "1410AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
         },
         "openmrs_calculate": {
-          "parent_entity": "36AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "parent_entity": "162586AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
           "entity": "concept",
           "entity_id": "1418AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
           "calculation": 2

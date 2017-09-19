@@ -90,9 +90,6 @@ import util.ImageUtils;
 import util.JsonFormUtils;
 import util.KipConstants;
 
-import static org.smartregister.util.Utils.getName;
-import static org.smartregister.util.Utils.getValue;
-
 /**
  * Created by Jason Rogena - jrogena@ona.io on 16/02/2017.
  */
@@ -267,7 +264,7 @@ public class ChildImmunizationActivity extends BaseActivity
         String childId = "";
         if (isDataOk()) {
             name = constructChildName();
-            childId = getValue(childDetails.getColumnmaps(), "zeir_id", false);
+            childId = Utils.getValue(childDetails.getColumnmaps(), "zeir_id", false);
         }
 
         TextView nameTV = (TextView) findViewById(R.id.name_tv);
@@ -283,7 +280,7 @@ public class ChildImmunizationActivity extends BaseActivity
         String formattedAge = "";
         String formattedDob = "";
         if (isDataOk()) {
-            dobString = getValue(childDetails.getColumnmaps(), "dob", false);
+            dobString = Utils.getValue(childDetails.getColumnmaps(), "dob", false);
             if (!TextUtils.isEmpty(dobString)) {
                 DateTime dateTime = new DateTime(dobString);
                 Date dob = dateTime.toDate();
@@ -304,7 +301,7 @@ public class ChildImmunizationActivity extends BaseActivity
     private void updateGenderViews() {
         Gender gender = Gender.UNKNOWN;
         if (isDataOk()) {
-            String genderString = getValue(childDetails, "gender", false);
+            String genderString = Utils.getValue(childDetails, "gender", false);
             if (genderString != null && genderString.equalsIgnoreCase("female")) {
                 gender = Gender.FEMALE;
             } else if (genderString != null && genderString.equalsIgnoreCase("male")) {
@@ -406,9 +403,14 @@ public class ChildImmunizationActivity extends BaseActivity
 
             try {
                 JSONArray supportedVaccines = new JSONArray(supportedVaccinesString);
+                JSONObject supportedVaccineGroup;
 
                 for (int i = 0; i < supportedVaccines.length(); i++) {
-                    addVaccineGroup(-1, supportedVaccines.getJSONObject(i), vaccineList, alerts);
+                    supportedVaccineGroup = JsonFormUtils.checkVaccinesConditions(supportedVaccines.getJSONObject(i), childDetails);
+
+                    if (supportedVaccineGroup.has("vaccines") && supportedVaccineGroup.getJSONArray("vaccines").length() > 0) {
+                        addVaccineGroup(-1, supportedVaccineGroup, vaccineList, alerts);
+                    }
                 }
             } catch (JSONException e) {
                 Log.e(TAG, Log.getStackTraceString(e));
@@ -517,17 +519,17 @@ public class ChildImmunizationActivity extends BaseActivity
     private void updateWeightViews(Weight lastUnsyncedWeight) {
 
         String childName = constructChildName();
-        String gender = getValue(childDetails.getColumnmaps(), "gender", true);
-        String motherFirstName = getValue(childDetails.getColumnmaps(), "mother_first_name", true);
+        String gender = Utils.getValue(childDetails.getColumnmaps(), "gender", true);
+        String motherFirstName = Utils.getValue(childDetails.getColumnmaps(), "mother_first_name", true);
         if (StringUtils.isBlank(childName) && StringUtils.isNotBlank(motherFirstName)) {
             childName = "B/o " + motherFirstName.trim();
         }
 
-        String zeirId = getValue(childDetails.getColumnmaps(), "zeir_id", false);
+        String zeirId = Utils.getValue(childDetails.getColumnmaps(), "zeir_id", false);
         String duration = "";
-        String dobString = getValue(childDetails.getColumnmaps(), "dob", false);
+        String dobString = Utils.getValue(childDetails.getColumnmaps(), "dob", false);
         if (StringUtils.isNotBlank(dobString)) {
-            DateTime dateTime = new DateTime(getValue(childDetails.getColumnmaps(), "dob", false));
+            DateTime dateTime = new DateTime(Utils.getValue(childDetails.getColumnmaps(), "dob", false));
             duration = DateUtil.getDuration(dateTime);
         }
 
@@ -540,7 +542,7 @@ public class ChildImmunizationActivity extends BaseActivity
         weightWrapper.setPatientNumber(zeirId);
         weightWrapper.setPatientAge(duration);
         weightWrapper.setPhoto(photo);
-        weightWrapper.setPmtctStatus(getValue(childDetails.getColumnmaps(), "pmtct_status", false));
+        weightWrapper.setPmtctStatus(Utils.getValue(childDetails.getColumnmaps(), "pmtct_status", false));
 
         if (lastUnsyncedWeight != null) {
             weightWrapper.setWeight(lastUnsyncedWeight.getKg());
@@ -701,7 +703,7 @@ public class ChildImmunizationActivity extends BaseActivity
             }
 
             Gender gender = Gender.UNKNOWN;
-            String genderString = getValue(childDetails, "gender", false);
+            String genderString = Utils.getValue(childDetails, "gender", false);
             if (genderString != null && genderString.toLowerCase().equals("female")) {
                 gender = Gender.FEMALE;
             } else if (genderString != null && genderString.toLowerCase().equals("male")) {
@@ -709,7 +711,7 @@ public class ChildImmunizationActivity extends BaseActivity
             }
 
             Date dob = null;
-            String dobString = getValue(childDetails.getColumnmaps(), "dob", false);
+            String dobString = Utils.getValue(childDetails.getColumnmaps(), "dob", false);
             if (!TextUtils.isEmpty(dobString)) {
                 DateTime dateTime = new DateTime(dobString);
                 dob = dateTime.toDate();
@@ -758,7 +760,7 @@ public class ChildImmunizationActivity extends BaseActivity
 
         ft.addToBackStack(null);
         vaccineGroup.setModalOpen(true);
-        String dobString = getValue(childDetails.getColumnmaps(), "dob", false);
+        String dobString = Utils.getValue(childDetails.getColumnmaps(), "dob", false);
         Date dob = Calendar.getInstance().getTime();
         if (!TextUtils.isEmpty(dobString)) {
             DateTime dateTime = new DateTime(dobString);
@@ -954,9 +956,9 @@ public class ChildImmunizationActivity extends BaseActivity
     }
 
     private String constructChildName() {
-        String firstName = getValue(childDetails.getColumnmaps(), "first_name", true);
-        String lastName = getValue(childDetails.getColumnmaps(), "last_name", true);
-        return getName(firstName, lastName).trim();
+        String firstName = Utils.getValue(childDetails.getColumnmaps(), "first_name", true);
+        String lastName = Utils.getValue(childDetails.getColumnmaps(), "last_name", true);
+        return Utils.getName(firstName, lastName).trim();
     }
 
     @Override
@@ -1382,11 +1384,11 @@ public class ChildImmunizationActivity extends BaseActivity
             WeightRepository weightRepository = KipApplication.getInstance().weightRepository();
             List<Weight> allWeights = weightRepository.findByEntityId(childDetails.entityId());
             try {
-                String dobString = getValue(childDetails.getColumnmaps(), "dob", false);
-                if (!TextUtils.isEmpty(getValue(childDetails.getColumnmaps(), "Birth_Weight", false))
+                String dobString = Utils.getValue(childDetails.getColumnmaps(), "dob", false);
+                if (!TextUtils.isEmpty(Utils.getValue(childDetails.getColumnmaps(), "Birth_Weight", false))
                         && !TextUtils.isEmpty(dobString)) {
                     DateTime dateTime = new DateTime(dobString);
-                    Double birthWeight = Double.valueOf(getValue(childDetails.getColumnmaps(), "Birth_Weight", false));
+                    Double birthWeight = Double.valueOf(Utils.getValue(childDetails.getColumnmaps(), "Birth_Weight", false));
 
                     Weight weight = new Weight(-1l, null, (float) birthWeight.doubleValue(), dateTime.toDate(), null, null, null, Calendar.getInstance().getTimeInMillis(), null, null, 0);
                     allWeights.add(weight);
@@ -1481,7 +1483,7 @@ public class ChildImmunizationActivity extends BaseActivity
             }
 
             Pair<ArrayList<VaccineWrapper>, List<Vaccine>> pair = new Pair<>(list, vaccineList);
-            String dobString = getValue(childDetails.getColumnmaps(), "dob", false);
+            String dobString = Utils.getValue(childDetails.getColumnmaps(), "dob", false);
             if (!TextUtils.isEmpty(dobString)) {
                 DateTime dateTime = new DateTime(dobString);
                 affectedVaccines = VaccineSchedule.updateOfflineAlerts(childDetails.entityId(), dateTime, "child");
