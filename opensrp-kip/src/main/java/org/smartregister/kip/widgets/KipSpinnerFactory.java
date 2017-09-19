@@ -95,7 +95,7 @@ public class KipSpinnerFactory extends SpinnerFactory {
                                             for (int n = 0; n < size; n++) {
                                                 locationName = locations.get(n).getName();
                                                 locs[n] = locationName;
-                                                if(locationName.equals(selectedItem)){
+                                                if (locationName.equals(selectedItem)) {
                                                     selectedItemPosition = n;
                                                 } else {
                                                     selectedItemPosition = -1;
@@ -111,7 +111,7 @@ public class KipSpinnerFactory extends SpinnerFactory {
 
                                     adapter = new ArrayAdapter<>(context, com.vijay.jsonwizard.R.layout.simple_list_item_1, locs);
                                     childSpinner.setAdapter(adapter);
-                                    if(selectedItemPosition != -1) {
+                                    if (selectedItemPosition != -1) {
                                         childSpinner.setSelection(selectedItemPosition);
                                     }
                                 }

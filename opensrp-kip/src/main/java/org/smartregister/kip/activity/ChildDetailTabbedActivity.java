@@ -105,8 +105,10 @@ import util.ImageUtils;
 import util.JsonFormUtils;
 import util.KipConstants;
 
+import static org.smartregister.util.Utils.dobToDateTime;
 import static org.smartregister.util.Utils.getName;
 import static org.smartregister.util.Utils.getValue;
+import static org.smartregister.util.Utils.startAsyncTask;
 
 /**
  * Created by raihan on 1/03/2017.
@@ -457,10 +459,10 @@ public class ChildDetailTabbedActivity extends BaseActivity implements Vaccinati
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
 
                     if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("First_Name")) {
-                        jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(childDetails.getColumnmaps(), "first_name", true));
+                        jsonObject.put(JsonFormUtils.VALUE, getValue(childDetails.getColumnmaps(), "first_name", true));
                     }
                     if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Last_Name")) {
-                        jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(childDetails.getColumnmaps(), "last_name", true));
+                        jsonObject.put(JsonFormUtils.VALUE, getValue(childDetails.getColumnmaps(), "last_name", true));
                     }
                     if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Date_Birth")) {
                         DateTime dateTime = new DateTime(Utils.getValue(childDetails.getColumnmaps(), "dob", true));
@@ -468,28 +470,28 @@ public class ChildDetailTabbedActivity extends BaseActivity implements Vaccinati
                         jsonObject.put(JsonFormUtils.VALUE, DATE_FORMAT.format(dob));
                     }
                     if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Gender")) {
-                        jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(childDetails.getColumnmaps(), "gender", true));
+                        jsonObject.put(JsonFormUtils.VALUE, getValue(childDetails.getColumnmaps(), "gender", true));
                     }
                     if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Permanent_Register_Number")) {
-                        jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(childDetails.getColumnmaps(), "epi_card_number", true));
+                        jsonObject.put(JsonFormUtils.VALUE, getValue(childDetails.getColumnmaps(), "epi_card_number", true));
                     }
                     if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase(JsonFormUtils.KIP_ID)) {
-                        jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(childDetails.getColumnmaps(), "zeir_id", true).replace("-", ""));
+                        jsonObject.put(JsonFormUtils.VALUE, getValue(childDetails.getColumnmaps(), "zeir_id", true).replace("-", ""));
                     }
                     if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("National_Unique_Patient_Identifier")) {
-                        jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(childDetails.getColumnmaps(), "nupi_number", true));
+                        jsonObject.put(JsonFormUtils.VALUE, getValue(childDetails.getColumnmaps(), "nupi_number", true));
                     }
                     if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("CWC_Number")) {
-                        jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(childDetails.getColumnmaps(), "cwc_number", true));
+                        jsonObject.put(JsonFormUtils.VALUE, getValue(childDetails.getColumnmaps(), "cwc_number", true));
                     }
                     if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("HDSS_Number")) {
-                        jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(childDetails.getColumnmaps(), "hdss_number", true));
+                        jsonObject.put(JsonFormUtils.VALUE, getValue(childDetails.getColumnmaps(), "hdss_number", true));
                     }
                     if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Child_Birth_Notification")) {
-                        jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(detailmaps, "Child_Birth_Notification", true));
+                        jsonObject.put(JsonFormUtils.VALUE, getValue(detailmaps, "Child_Birth_Notification", true));
                     }
                     if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("First_Health_Facility_Contact")) {
-                        String dateString = Utils.getValue(detailmaps, "First_Health_Facility_Contact", false);
+                        String dateString = getValue(detailmaps, "First_Health_Facility_Contact", false);
                         if (!TextUtils.isEmpty(dateString)) {
                             Date date = JsonFormUtils.formatDate(dateString, false);
                             if (date != null) {
@@ -498,96 +500,93 @@ public class ChildDetailTabbedActivity extends BaseActivity implements Vaccinati
                         }
                     }
                     if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Mother_Guardian_First_Name")) {
-                        jsonObject.put(JsonFormUtils.VALUE, (Utils.getValue(childDetails.getColumnmaps(), "mother_first_name", true).isEmpty() ? Utils.getValue(childDetails.getDetails(), "mother_first_name", true) : Utils.getValue(childDetails.getColumnmaps(), "mother_first_name", true)));
+                        jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(childDetails.getColumnmaps(), "mother_first_name", true).isEmpty() ? getValue(childDetails.getDetails(), "mother_first_name", true) : getValue(childDetails.getColumnmaps(), "mother_first_name", true));
 
                     }
                     if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Mother_Guardian_Last_Name")) {
-                        jsonObject.put(JsonFormUtils.VALUE, (Utils.getValue(childDetails.getColumnmaps(), "mother_last_name", true).isEmpty() ? Utils.getValue(childDetails.getDetails(), "mother_last_name", true) : Utils.getValue(childDetails.getColumnmaps(), "mother_last_name", true)));
+                        jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(childDetails.getColumnmaps(), "mother_last_name", true).isEmpty() ? getValue(childDetails.getDetails(), "mother_last_name", true) : getValue(childDetails.getColumnmaps(), "mother_last_name", true));
                     }
-                    if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Mother_Guardian_Date_Birth")) {
-
-                        if (!TextUtils.isEmpty(Utils.getValue(childDetails.getColumnmaps(), "mother_dob", true))) {
-                            try {
-                                DateTime dateTime = new DateTime(Utils.getValue(childDetails.getColumnmaps(), "mother_dob", true));
-                                Date dob = dateTime.toDate();
-                                Date defaultDate = DATE_FORMAT.parse(JsonFormUtils.MOTHER_DEFAULT_DOB);
-                                long timeDiff = Math.abs(dob.getTime() - defaultDate.getTime());
-                                if (timeDiff > 86400000) {// Mother's date of birth occurs more than a day from the default date
-                                    jsonObject.put(JsonFormUtils.VALUE, DATE_FORMAT.format(dob));
-                                }
-                            } catch (Exception e) {
+                    if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Mother_Guardian_Date_Birth") && !TextUtils.isEmpty(Utils.getValue(childDetails.getColumnmaps(), "mother_dob", true))) {
+                        try {
+                            DateTime dateTime = new DateTime(Utils.getValue(childDetails.getColumnmaps(), "mother_dob", true));
+                            Date dob = dateTime.toDate();
+                            Date defaultDate = DATE_FORMAT.parse(JsonFormUtils.MOTHER_DEFAULT_DOB);
+                            long timeDiff = Math.abs(dob.getTime() - defaultDate.getTime());
+                            if (timeDiff > 86400000) { // Mother's date of birth occurs more than a day from the default date
+                                jsonObject.put(JsonFormUtils.VALUE, DATE_FORMAT.format(dob));
                             }
+                        } catch (Exception e) {
+                            Log.e(TAG, e.getMessage());
                         }
                     }
+
                     // Mother relationship type
                     if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Mother_Guardian_Relationship")) {
-                        jsonObject.put(JsonFormUtils.VALUE, JsonFormUtils.getRelationshipType(Context.getInstance(), Utils.getValue(childDetails.getColumnmaps(), "m_relationship_type", true)));
+                        jsonObject.put(JsonFormUtils.VALUE, JsonFormUtils.getRelationshipType(Context.getInstance(), getValue(childDetails.getColumnmaps(), "m_relationship_type", true)));
                     }
                     if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Mother_Guardian_ID")) {
-                        jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(childDetails.getColumnmaps(), "mother_id_number", true));
+                        jsonObject.put(JsonFormUtils.VALUE, getValue(childDetails.getColumnmaps(), "mother_id_number", true));
                     }
                     if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Mother_Guardian_Number")) {
-                        jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(detailmaps, "Mother_Guardian_Number", true));
+                        jsonObject.put(JsonFormUtils.VALUE, getValue(detailmaps, "Mother_Guardian_Number", true));
                     }
-                    String guardianName = Utils.getValue(childDetails.getColumnmaps(), "guardian_name", true);
-                    if(StringUtils.isNotBlank(guardianName)){
+                    String guardianName = getValue(childDetails.getColumnmaps(), "guardian_name", true);
+                    if (StringUtils.isNotBlank(guardianName)) {
                         if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Father_Guardian_Name")) {
                             jsonObject.put(JsonFormUtils.VALUE, guardianName);
                         }
                         if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Father_Guardian_Gender")) {
-                            jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(childDetails.getColumnmaps(), "guardian_gender", true));
+                            jsonObject.put(JsonFormUtils.VALUE, getValue(childDetails.getColumnmaps(), "guardian_gender", true));
                         }
-                        if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Father_Guardian_Date_Birth")) {
-
-                            if (!TextUtils.isEmpty(Utils.getValue(childDetails.getColumnmaps(), "guardian_dob", true))) {
-                                try {
-                                    DateTime dateTime = new DateTime(Utils.getValue(childDetails.getColumnmaps(), "guardian_dob", true));
-                                    Date dob = dateTime.toDate();
-                                    Date defaultDate = DATE_FORMAT.parse(JsonFormUtils.FATHER_DEFAULT_DOB);
-                                    long timeDiff = Math.abs(dob.getTime() - defaultDate.getTime());
-                                    if (timeDiff > 86400000) {// Guardian's date of birth occurs more than a day from the default date
-                                        jsonObject.put(JsonFormUtils.VALUE, DATE_FORMAT.format(dob));
-                                    }
-                                } catch (Exception e) {
+                        if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Father_Guardian_Date_Birth") && !TextUtils.isEmpty(Utils.getValue(childDetails.getColumnmaps(), "guardian_dob", true))) {
+                            try {
+                                DateTime dateTime = new DateTime(Utils.getValue(childDetails.getColumnmaps(), "guardian_dob", true));
+                                Date dob = dateTime.toDate();
+                                Date defaultDate = DATE_FORMAT.parse(JsonFormUtils.FATHER_DEFAULT_DOB);
+                                long timeDiff = Math.abs(dob.getTime() - defaultDate.getTime());
+                                if (timeDiff > 86400000) { // Guardian's date of birth occurs more than a day from the default date
+                                    jsonObject.put(JsonFormUtils.VALUE, DATE_FORMAT.format(dob));
                                 }
+                            } catch (Exception e) {
+                                Log.e(TAG, e.getMessage());
                             }
                         }
                         if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Father_Guardian_Relationship")) {
-                            jsonObject.put(JsonFormUtils.VALUE, JsonFormUtils.getRelationshipType(Context.getInstance(), Utils.getValue(childDetails.getColumnmaps(), "g_relationship_type", true)));
+                            jsonObject.put(JsonFormUtils.VALUE, JsonFormUtils.getRelationshipType(Context.getInstance(), getValue(childDetails.getColumnmaps(), "g_relationship_type", true)));
                         }
                         if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Father_Guardian_ID")) {
-                            jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(childDetails.getColumnmaps(), "guardian_id_number", true));
+                            jsonObject.put(JsonFormUtils.VALUE, getValue(childDetails.getColumnmaps(), "guardian_id_number", true));
                         }
                     }
                     if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Ce_County")) {
-                        jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(detailmaps, "stateProvince", true));
+                        jsonObject.put(JsonFormUtils.VALUE, getValue(detailmaps, "stateProvince", true));
                     }
                     if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Ce_Sub_County")) {
-                        jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(detailmaps, "countyDistrict", true));
+                        jsonObject.put(JsonFormUtils.VALUE, getValue(detailmaps, "countyDistrict", true));
                     }
                     if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Ce_Ward")) {
-                        jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(detailmaps, "cityVillage", true));
+                        jsonObject.put(JsonFormUtils.VALUE, getValue(detailmaps, "cityVillage", true));
                     }
                     if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Ce_Sub_Location")) {
-                        jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(detailmaps, "address4", true));
+                        jsonObject.put(JsonFormUtils.VALUE, getValue(detailmaps, "address4", true));
                     }
                     if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Ce_Village")) {
-                        jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(detailmaps, "address3", true));
+                        jsonObject.put(JsonFormUtils.VALUE, getValue(detailmaps, "address3", true));
                     }
                     if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Ce_Landmark")) {
-                        jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(detailmaps, "address2", true));
+                        jsonObject.put(JsonFormUtils.VALUE, getValue(detailmaps, "address2", true));
                     }
                     if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Ce_Address")) {
-                        jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(detailmaps, "address1", true));
+                        jsonObject.put(JsonFormUtils.VALUE, getValue(detailmaps, "address1", true));
                     }
                     if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("CHW_Name")) {
-                        jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(detailmaps, "CHW_Name", true));
+                        jsonObject.put(JsonFormUtils.VALUE, getValue(detailmaps, "CHW_Name", true));
                     }
                     if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("CHW_Phone_Number")) {
-                        jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(detailmaps, "CHW_Phone_Number", true));
+                        jsonObject.put(JsonFormUtils.VALUE, getValue(detailmaps, "CHW_Phone_Number", true));
                     }
                     if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("PMTCT_Status")) {
-                        jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(childDetails.getColumnmaps(), "pmtct_status", true));
+                        jsonObject.put(JsonFormUtils.VALUE, getValue(childDetails.getColumnmaps(), "pmtct_status", true));
                     }
                 }
 //            intent.putExtra("json", form.toString());
@@ -967,7 +966,7 @@ public class ChildDetailTabbedActivity extends BaseActivity implements Vaccinati
             wrappers.add(tag);
             updateVaccineGroupViews(view, wrappers, vaccineList, true);
 
-            Utils.startAsyncTask(new UpdateOfflineAlertsTask(), null);
+            startAsyncTask(new UpdateOfflineAlertsTask(), null);
         }
     }
 
@@ -1303,7 +1302,7 @@ public class ChildDetailTabbedActivity extends BaseActivity implements Vaccinati
 
     @Override
     public void onUndoService(ServiceWrapper tag, View view) {
-        Utils.startAsyncTask(new UndoServiceTask(tag, view), null);
+        startAsyncTask(new UndoServiceTask(tag, view), null);
     }
 
     private void saveService(ServiceWrapper tag, final View view) {
@@ -1315,7 +1314,7 @@ public class ChildDetailTabbedActivity extends BaseActivity implements Vaccinati
         SaveServiceTask backgroundTask = new SaveServiceTask();
 
         backgroundTask.setView(view);
-        Utils.startAsyncTask(backgroundTask, arrayTags);
+        startAsyncTask(backgroundTask, arrayTags);
     }
 
     private boolean showVaccineListCheck(String eventId, String formSubmissionId) {
@@ -1389,7 +1388,7 @@ public class ChildDetailTabbedActivity extends BaseActivity implements Vaccinati
                 RecurringServiceUtils.saveService(tag, childDetails.entityId(), null, null);
                 list.add(tag);
 
-                ServiceSchedule.updateOfflineAlerts(tag.getType(), childDetails.entityId(), Utils.dobToDateTime(childDetails));
+                ServiceSchedule.updateOfflineAlerts(tag.getType(), childDetails.entityId(), dobToDateTime(childDetails));
             }
 
             RecurringServiceRecordRepository recurringServiceRecordRepository = KipApplication.getInstance().recurringServiceRecordRepository();
@@ -1439,7 +1438,7 @@ public class ChildDetailTabbedActivity extends BaseActivity implements Vaccinati
     private class UpdateOfflineAlertsTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
-            DateTime birthDateTime = Utils.dobToDateTime(childDetails);
+            DateTime birthDateTime = dobToDateTime(childDetails);
             if (birthDateTime != null) {
                 VaccineSchedule.updateOfflineAlerts(childDetails.entityId(), birthDateTime, "child");
             }
@@ -1480,7 +1479,7 @@ public class ChildDetailTabbedActivity extends BaseActivity implements Vaccinati
                     wrappers = new ArrayList<>();
                     wrappers.add(tag);
 
-                    ServiceSchedule.updateOfflineAlerts(tag.getType(), childDetails.entityId(), Utils.dobToDateTime(childDetails));
+                    ServiceSchedule.updateOfflineAlerts(tag.getType(), childDetails.entityId(), dobToDateTime(childDetails));
 
                     RecurringServiceTypeRepository recurringServiceTypeRepository = KipApplication.getInstance().recurringServiceTypeRepository();
                     List<ServiceType> serviceTypes = recurringServiceTypeRepository.fetchAll();

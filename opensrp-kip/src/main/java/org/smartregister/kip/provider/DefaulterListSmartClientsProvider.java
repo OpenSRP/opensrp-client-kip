@@ -26,7 +26,6 @@ import org.smartregister.kip.application.KipApplication;
 import org.smartregister.repository.DetailsRepository;
 import org.smartregister.service.AlertService;
 import org.smartregister.util.OpenSRPImageLoader;
-import org.smartregister.util.Utils;
 import org.smartregister.view.activity.DrishtiApplication;
 import org.smartregister.view.contract.SmartRegisterClient;
 import org.smartregister.view.contract.SmartRegisterClients;
@@ -53,6 +52,7 @@ import static org.smartregister.immunization.util.VaccinatorUtils.receivedVaccin
 import static org.smartregister.util.Utils.fillValue;
 import static org.smartregister.util.Utils.getName;
 import static org.smartregister.util.Utils.getValue;
+import static org.smartregister.util.Utils.startAsyncTask;
 
 /**
  * Created by Keyman on 14-Sep-17.
@@ -101,9 +101,9 @@ public class DefaulterListSmartClientsProvider implements SmartRegisterCLientsPr
         DetailsRepository detailsRepository = KipApplication.getInstance().context().detailsRepository();
         Map<String, String> detailsMap = detailsRepository.getAllDetailsForClient(pc.entityId());
 
-        String village = Utils.getValue(detailsMap, "address3", true);
-        String estate = Utils.getValue(detailsMap, "address1", true);
-        String landmark = Utils.getValue(detailsMap, "address2", true);
+        String village = getValue(detailsMap, "address3", true);
+        String estate = getValue(detailsMap, "address1", true);
+        String landmark = getValue(detailsMap, "address2", true);
 
         List<String> velList = new ArrayList<>();
         if (StringUtils.isNotBlank(village)) {
@@ -147,7 +147,7 @@ public class DefaulterListSmartClientsProvider implements SmartRegisterCLientsPr
         String inactive = getValue(pc.getColumnmaps(), "inactive", false);
 
         try {
-            Utils.startAsyncTask(new VaccinationAsyncTask(convertView, pc.entityId(), dobString, lostToFollowUp, inactive), null);
+            startAsyncTask(new VaccinationAsyncTask(convertView, pc.entityId(), dobString, lostToFollowUp, inactive), null);
         } catch (Exception e) {
             Log.e(getClass().getName(), e.getMessage(), e);
         }

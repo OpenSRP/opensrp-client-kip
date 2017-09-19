@@ -48,7 +48,8 @@ import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.repository.BaseRepository;
 import org.smartregister.repository.ImageRepository;
 import org.smartregister.sync.ClientProcessor;
-import org.smartregister.util.*;
+import org.smartregister.util.AssetHandler;
+import org.smartregister.util.FormUtils;
 import org.smartregister.view.activity.DrishtiApplication;
 
 import java.io.File;
