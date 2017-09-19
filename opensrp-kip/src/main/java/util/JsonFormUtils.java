@@ -183,11 +183,11 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
             // Replace values for location questions with their corresponding location IDs
             for (int i = 0; i < fields.length(); i++) {
                 String key = fields.getJSONObject(i).getString("key");
-                if (key.equals("Mother_Guardian_Date_Birth")) {
+                if ("Mother_Guardian_Date_Birth".equals(key)) {
                     if (TextUtils.isEmpty(fields.getJSONObject(i).optString("value"))) {
                         fields.getJSONObject(i).put("value", MOTHER_DEFAULT_DOB);
                     }
-                } else if (key.equals("Father_Guardian_Date_Birth")) {
+                } else if ("Father_Guardian_Date_Birth".equals(key)) {
                     if (TextUtils.isEmpty(fields.getJSONObject(i).optString("value"))) {
                         fields.getJSONObject(i).put("value", FATHER_DEFAULT_DOB);
                     }
@@ -299,11 +299,11 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
 
             for (int i = 0; i < fields.length(); i++) {
                 String key = fields.getJSONObject(i).getString("key");
-                if (key.equals("Mother_Guardian_Date_Birth")) {
+                if ("Mother_Guardian_Date_Birth".equals(key)) {
                     if (TextUtils.isEmpty(fields.getJSONObject(i).optString("value"))) {
                         fields.getJSONObject(i).put("value", MOTHER_DEFAULT_DOB);
                     }
-                } else if (key.equals("Father_Guardian_Date_Birth")) {
+                } else if ("Father_Guardian_Date_Birth".equals(key)) {
                     if (TextUtils.isEmpty(fields.getJSONObject(i).optString("value"))) {
                         fields.getJSONObject(i).put("value", FATHER_DEFAULT_DOB);
                     }
@@ -2060,6 +2060,47 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
             return null;
         }
     }
+    
+    /**
+     * Amos L.
+     * Check if a vaccine within a vaccine group has a condition based on the child's attribute.
+     * Remove the vaccine from the group if it has a condition and the condition isn't met.
+     *
+     * @param supportedVaccineGroup
+     * @return
+     * @throws JSONException
+     */
+    public static JSONObject checkVaccinesConditions(JSONObject supportedVaccineGroup, CommonPersonObjectClient childDetails) throws JSONException {
+        if (supportedVaccineGroup.has("vaccines")) {
+            JSONArray vaccines = supportedVaccineGroup.getJSONArray("vaccines");
+            for (int i = 0; i < vaccines.length(); i++) {
+                JSONObject vaccine = vaccines.getJSONObject(i);
+                if (vaccine.has("schedule")) {
+                    JSONObject schedule = vaccine.getJSONObject("schedule");
+                    if (schedule.has("conditions")) {
+                        JSONArray conditions = schedule.getJSONArray("conditions");
+                        for (int n = 0; n < conditions.length(); n++) {
+                            JSONObject condition = conditions.getJSONObject(n);
+                            if (condition.has("attribute")) {
+                                String attribute = condition.getString("attribute");
+                                String value = condition.has("value") ? condition.getString("value") : "";
+
+                                String childAttributeValue = org.smartregister.util.Utils.getValue(childDetails.getColumnmaps(), attribute, false);
+                                if (childAttributeValue == null) {
+                                    childAttributeValue = childDetails.getDetails().get(attribute);
+                                }
+                                if (!childAttributeValue.equalsIgnoreCase(value)) {
+                                    vaccines.remove(i);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return supportedVaccineGroup;
+    }
 
     ////////////////////////////////////////////////////////////////
     // Inner classes
@@ -2204,44 +2245,4 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
         }
     }
 
-    /**
-     * Amos L.
-     * Check if a vaccine within a vaccine group has a condition based on the child's attribute.
-     * Remove the vaccine from the group if it has a condition and the condition isn't met.
-     *
-     * @param supportedVaccineGroup
-     * @return
-     * @throws JSONException
-     */
-    public static JSONObject checkVaccinesConditions(JSONObject supportedVaccineGroup, CommonPersonObjectClient childDetails) throws JSONException {
-        if (supportedVaccineGroup.has("vaccines")) {
-            JSONArray vaccines = supportedVaccineGroup.getJSONArray("vaccines");
-            for (int i = 0; i < vaccines.length(); i++) {
-                JSONObject vaccine = vaccines.getJSONObject(i);
-                if (vaccine.has("schedule")) {
-                    JSONObject schedule = vaccine.getJSONObject("schedule");
-                    if (schedule.has("conditions")) {
-                        JSONArray conditions = schedule.getJSONArray("conditions");
-                        for (int n = 0; n < conditions.length(); n++) {
-                            JSONObject condition = conditions.getJSONObject(n);
-                            if (condition.has("attribute")) {
-                                String attribute = condition.getString("attribute");
-                                String value = condition.has("value") ? condition.getString("value") : "";
-
-                                String childAttributeValue = org.smartregister.util.Utils.getValue(childDetails.getColumnmaps(), attribute, false);
-                                if (childAttributeValue == null) {
-                                    childAttributeValue = childDetails.getDetails().get(attribute);
-                                }
-                                if (!childAttributeValue.equalsIgnoreCase(value)) {
-                                    vaccines.remove(i);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return supportedVaccineGroup;
-    }
 }

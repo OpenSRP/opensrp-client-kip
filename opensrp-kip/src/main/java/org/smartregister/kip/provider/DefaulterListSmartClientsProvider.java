@@ -26,6 +26,7 @@ import org.smartregister.kip.application.KipApplication;
 import org.smartregister.repository.DetailsRepository;
 import org.smartregister.service.AlertService;
 import org.smartregister.util.OpenSRPImageLoader;
+import org.smartregister.util.Utils;
 import org.smartregister.view.activity.DrishtiApplication;
 import org.smartregister.view.contract.SmartRegisterClient;
 import org.smartregister.view.contract.SmartRegisterClients;
@@ -49,10 +50,6 @@ import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static org.smartregister.immunization.util.VaccinatorUtils.generateScheduleList;
 import static org.smartregister.immunization.util.VaccinatorUtils.nextVaccineDue;
 import static org.smartregister.immunization.util.VaccinatorUtils.receivedVaccines;
-import static org.smartregister.util.Utils.fillValue;
-import static org.smartregister.util.Utils.getName;
-import static org.smartregister.util.Utils.getValue;
-import static org.smartregister.util.Utils.startAsyncTask;
 
 /**
  * Created by Keyman on 14-Sep-17.
@@ -83,27 +80,27 @@ public class DefaulterListSmartClientsProvider implements SmartRegisterCLientsPr
     public void getView(Cursor cursor, SmartRegisterClient client, final View convertView) {
         CommonPersonObjectClient pc = (CommonPersonObjectClient) client;
 
-        fillValue((TextView) convertView.findViewById(R.id.child_unique_id), getValue(pc.getColumnmaps(), "zeir_id", false));
+        Utils.fillValue((TextView) convertView.findViewById(R.id.child_unique_id), Utils.getValue(pc.getColumnmaps(), "zeir_id", false));
 
-        String firstName = getValue(pc.getColumnmaps(), "first_name", true);
-        String lastName = getValue(pc.getColumnmaps(), "last_name", true);
-        String childName = getName(firstName, lastName);
+        String firstName = Utils.getValue(pc.getColumnmaps(), "first_name", true);
+        String lastName = Utils.getValue(pc.getColumnmaps(), "last_name", true);
+        String childName = Utils.getName(firstName, lastName);
 
-        String motherFirstName = getValue(pc.getColumnmaps(), "mother_first_name", true);
+        String motherFirstName = Utils.getValue(pc.getColumnmaps(), "mother_first_name", true);
         if (StringUtils.isBlank(childName) && StringUtils.isNotBlank(motherFirstName)) {
             childName = "B/o " + motherFirstName.trim();
         }
-        fillValue((TextView) convertView.findViewById(R.id.child_name), childName);
+        Utils.fillValue((TextView) convertView.findViewById(R.id.child_name), childName);
 
-        String gender = getValue(pc.getColumnmaps(), "gender", true);
-        fillValue((TextView) convertView.findViewById(R.id.child_gender), gender);
+        String gender = Utils.getValue(pc.getColumnmaps(), "gender", true);
+        Utils.fillValue((TextView) convertView.findViewById(R.id.child_gender), gender);
 
         DetailsRepository detailsRepository = KipApplication.getInstance().context().detailsRepository();
         Map<String, String> detailsMap = detailsRepository.getAllDetailsForClient(pc.entityId());
 
-        String village = getValue(detailsMap, "address3", true);
-        String estate = getValue(detailsMap, "address1", true);
-        String landmark = getValue(detailsMap, "address2", true);
+        String village = Utils.getValue(detailsMap, "address3", true);
+        String estate = Utils.getValue(detailsMap, "address1", true);
+        String landmark = Utils.getValue(detailsMap, "address2", true);
 
         List<String> velList = new ArrayList<>();
         if (StringUtils.isNotBlank(village)) {
@@ -116,15 +113,15 @@ public class DefaulterListSmartClientsProvider implements SmartRegisterCLientsPr
             velList.add(landmark);
         }
 
-        fillValue((TextView) convertView.findViewById(R.id.child_ce_village), velList.isEmpty() ? "" : TextUtils.join("/", velList));
+        Utils.fillValue((TextView) convertView.findViewById(R.id.child_ce_village), velList.isEmpty() ? "" : TextUtils.join("/", velList));
 
-        fillValue((TextView) convertView.findViewById(R.id.child_cwc_number), pc.getColumnmaps(), "cwc_number", false);
+        Utils.fillValue((TextView) convertView.findViewById(R.id.child_cwc_number), pc.getColumnmaps(), "cwc_number", false);
 
-        fillValue((TextView) convertView.findViewById(R.id.mother_phone_number), pc.getColumnmaps(), "contact_phone_number", false);
+        Utils.fillValue((TextView) convertView.findViewById(R.id.mother_phone_number), pc.getColumnmaps(), "contact_phone_number", false);
 
-        fillValue((TextView) convertView.findViewById(R.id.chw_phone_number), pc.getColumnmaps(), "chw_phone_number", false);
+        Utils.fillValue((TextView) convertView.findViewById(R.id.chw_phone_number), pc.getColumnmaps(), "chw_phone_number", false);
 
-        String dobString = getValue(pc.getColumnmaps(), "dob", false);
+        String dobString = Utils.getValue(pc.getColumnmaps(), "dob", false);
 
         final ImageView profilePic = (ImageView) convertView.findViewById(R.id.child_profilepic);
         int defaultImageResId = ImageUtils.profileImageResourceByGender(gender);
@@ -143,11 +140,11 @@ public class DefaulterListSmartClientsProvider implements SmartRegisterCLientsPr
         recordVaccination.setOnClickListener(onClickListener);
         recordVaccination.setVisibility(View.INVISIBLE);
 
-        String lostToFollowUp = getValue(pc.getColumnmaps(), "lost_to_follow_up", false);
-        String inactive = getValue(pc.getColumnmaps(), "inactive", false);
+        String lostToFollowUp = Utils.getValue(pc.getColumnmaps(), "lost_to_follow_up", false);
+        String inactive = Utils.getValue(pc.getColumnmaps(), "inactive", false);
 
         try {
-            startAsyncTask(new VaccinationAsyncTask(convertView, pc.entityId(), dobString, lostToFollowUp, inactive), null);
+            Utils.startAsyncTask(new VaccinationAsyncTask(convertView, pc.entityId(), dobString, lostToFollowUp, inactive), null);
         } catch (Exception e) {
             Log.e(getClass().getName(), e.getMessage(), e);
         }

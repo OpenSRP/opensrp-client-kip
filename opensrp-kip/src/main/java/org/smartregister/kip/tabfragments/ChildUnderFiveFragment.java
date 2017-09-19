@@ -232,7 +232,7 @@ public class ChildUnderFiveFragment extends Fragment {
             for (int i = 0; i < supportedVaccines.length(); i++) {
                 supportedVaccineGroup = JsonFormUtils.checkVaccinesConditions(supportedVaccines.getJSONObject(i), childDetails);
 
-                if(supportedVaccineGroup.has("vaccines") && supportedVaccineGroup.getJSONArray("vaccines").length() > 0) {
+                if (supportedVaccineGroup.has("vaccines") && supportedVaccineGroup.getJSONArray("vaccines").length() > 0) {
                     ImmunizationRowGroup curGroup = new ImmunizationRowGroup(getActivity(), editmode);
                     curGroup.setData(supportedVaccineGroup, childDetails, vaccineList, alertList);
                     curGroup.setOnVaccineUndoClickListener(new ImmunizationRowGroup.OnVaccineUndoClickListener() {
