@@ -188,19 +188,11 @@ public class ChildDetailTabbedActivityUnitTest extends BaseUnitTest {
 
     }*/
 
-    @Test
-    public void shouldRenderChildsHomeHealthFacilityRow() {
-        final ArrayList<View> outViews = new ArrayList<>();
-        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "Child\'s home health facility",
-                View.FIND_VIEWS_WITH_TEXT);
-        assertFalse(outViews.isEmpty());
-
-    }
 
     @Test
     public void shouldRenderChildsZeirIdRow() {
         final ArrayList<View> outViews = new ArrayList<>();
-        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "Child\'s ZEIR ID",
+        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "Child\'s KIP ID",
                 View.FIND_VIEWS_WITH_TEXT);
         assertFalse(outViews.isEmpty());
 
@@ -209,7 +201,7 @@ public class ChildDetailTabbedActivityUnitTest extends BaseUnitTest {
     @Test
     public void shouldRenderChildsRegisterCardNumberRow() {
         final ArrayList<View> outViews = new ArrayList<>();
-        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "Child\'s register card number",
+        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "CWC number",
                 View.FIND_VIEWS_WITH_TEXT);
         assertFalse(outViews.isEmpty());
 
@@ -218,7 +210,7 @@ public class ChildDetailTabbedActivityUnitTest extends BaseUnitTest {
     @Test
     public void shouldRenderChildBirthCertificateNumberRow() {
         final ArrayList<View> outViews = new ArrayList<>();
-        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "Child\'s birth certificate number",
+        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "Child\'s birth notification number",
                 View.FIND_VIEWS_WITH_TEXT);
         assertFalse(outViews.isEmpty());
 
@@ -245,16 +237,7 @@ public class ChildDetailTabbedActivityUnitTest extends BaseUnitTest {
     @Test
     public void shouldRenderSexRow() {
         final ArrayList<View> outViews = new ArrayList<>();
-        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "Sex",
-                View.FIND_VIEWS_WITH_TEXT);
-        assertFalse(outViews.isEmpty());
-
-    }
-
-    @Test
-    public void shouldRenderChildsDobRow() {
-        final ArrayList<View> outViews = new ArrayList<>();
-        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "Child\'s DOB",
+        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "Gender",
                 View.FIND_VIEWS_WITH_TEXT);
         assertFalse(outViews.isEmpty());
 
@@ -270,6 +253,33 @@ public class ChildDetailTabbedActivityUnitTest extends BaseUnitTest {
     }
 
     @Test
+    public void shouldRenderPermanentRegisterNumberRow() {
+        final ArrayList<View> outViews = new ArrayList<>();
+        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "Permanent Register number",
+                View.FIND_VIEWS_WITH_TEXT);
+        assertFalse(outViews.isEmpty());
+
+    }
+
+    @Test
+    public void shouldRenderNUPIRow() {
+        final ArrayList<View> outViews = new ArrayList<>();
+        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "NUPI",
+                View.FIND_VIEWS_WITH_TEXT);
+        assertFalse(outViews.isEmpty());
+
+    }
+
+    @Test
+    public void shouldRenderHDSSNumberRow() {
+        final ArrayList<View> outViews = new ArrayList<>();
+        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "HDSS number",
+                View.FIND_VIEWS_WITH_TEXT);
+        assertFalse(outViews.isEmpty());
+
+    }
+
+    @Test
     public void shouldRenderDateFirstSeenRow() {
         final ArrayList<View> outViews = new ArrayList<>();
         activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "Date first seen",
@@ -278,14 +288,6 @@ public class ChildDetailTabbedActivityUnitTest extends BaseUnitTest {
 
     }
 
-    @Test
-    public void shouldRenderBirthWeightRow() {
-        final ArrayList<View> outViews = new ArrayList<>();
-        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "Birth Weight",
-                View.FIND_VIEWS_WITH_TEXT);
-        assertFalse(outViews.isEmpty());
-
-    }
 
     @Test
     public void shouldRenderMotherGuardianFirstNameRow() {
@@ -306,6 +308,15 @@ public class ChildDetailTabbedActivityUnitTest extends BaseUnitTest {
     }
 
     @Test
+    public void shouldRenderMotherGuardianGenderRow() {
+        final ArrayList<View> outViews = new ArrayList<>();
+        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "Mother/guardian gender",
+                View.FIND_VIEWS_WITH_TEXT);
+        assertFalse(outViews.isEmpty());
+
+    }
+
+    @Test
     public void shouldRenderMotherGuardianDOBRow() {
         final ArrayList<View> outViews = new ArrayList<>();
         activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "Mother/guardian DOB",
@@ -317,7 +328,7 @@ public class ChildDetailTabbedActivityUnitTest extends BaseUnitTest {
     @Test
     public void shouldRenderMotherGuardianNRCNumberRow() {
         final ArrayList<View> outViews = new ArrayList<>();
-        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "Mother/guardian NRC number",
+        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "Mother/guardian ID number",
                 View.FIND_VIEWS_WITH_TEXT);
         assertFalse(outViews.isEmpty());
 
@@ -327,6 +338,15 @@ public class ChildDetailTabbedActivityUnitTest extends BaseUnitTest {
     public void shouldRenderMotherGuardianPhoneNumberRow() {
         final ArrayList<View> outViews = new ArrayList<>();
         activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "Mother/guardian phone number",
+                View.FIND_VIEWS_WITH_TEXT);
+        assertFalse(outViews.isEmpty());
+
+    }
+
+    @Test
+    public void shouldRenderRelationshipToChildRow() {
+        final ArrayList<View> outViews = new ArrayList<>();
+        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "Relationship to child",
                 View.FIND_VIEWS_WITH_TEXT);
         assertFalse(outViews.isEmpty());
 
@@ -344,43 +364,25 @@ public class ChildDetailTabbedActivityUnitTest extends BaseUnitTest {
     @Test
     public void shouldRenderFatherGuardianNRCnumberRow() {
         final ArrayList<View> outViews = new ArrayList<>();
-        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "Father/guardian NRC number",
+        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "Father/guardian ID number",
                 View.FIND_VIEWS_WITH_TEXT);
         assertFalse(outViews.isEmpty());
 
     }
 
     @Test
-    public void shouldRenderPlaceOfBirtRow() {
+    public void shouldRenderFatherGuardianGenderRow() {
         final ArrayList<View> outViews = new ArrayList<>();
-        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "Place of birth",
+        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "Father/guardian Gender",
                 View.FIND_VIEWS_WITH_TEXT);
         assertFalse(outViews.isEmpty());
 
     }
 
     @Test
-    public void shouldRenderMotherGuardianHealthFacilityRow() {
+    public void shouldRenderFatherGuardianBirthDateRow() {
         final ArrayList<View> outViews = new ArrayList<>();
-        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "Health facility the child was born in",
-                View.FIND_VIEWS_WITH_TEXT);
-        assertFalse(outViews.isEmpty());
-
-    }
-
-    @Test
-    public void shouldRenderChildsResidentialAreaRow() {
-        final ArrayList<View> outViews = new ArrayList<>();
-        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "Child\'s residential area",
-                View.FIND_VIEWS_WITH_TEXT);
-        assertFalse(outViews.isEmpty());
-
-    }
-
-    @Test
-    public void shouldRenderHomeAddressRow() {
-        final ArrayList<View> outViews = new ArrayList<>();
-        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "Home Address",
+        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "Father/guardian Birthdate",
                 View.FIND_VIEWS_WITH_TEXT);
         assertFalse(outViews.isEmpty());
 
@@ -390,6 +392,60 @@ public class ChildDetailTabbedActivityUnitTest extends BaseUnitTest {
     public void getChildDetailsMethodShouldNotReturnNull() {
 
         assertNotNull(activity.getChildDetails());
+
+    }
+
+    @Test
+    public void shouldRenderCountyRow() {
+        final ArrayList<View> outViews = new ArrayList<>();
+        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "County",
+                View.FIND_VIEWS_WITH_TEXT);
+        assertFalse(outViews.isEmpty());
+
+    }
+
+    @Test
+    public void shouldRenderSubCountyRow() {
+        final ArrayList<View> outViews = new ArrayList<>();
+        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "Sub County",
+                View.FIND_VIEWS_WITH_TEXT);
+        assertFalse(outViews.isEmpty());
+
+    }
+
+    @Test
+    public void shouldRenderWardRow() {
+        final ArrayList<View> outViews = new ArrayList<>();
+        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "Ward",
+                View.FIND_VIEWS_WITH_TEXT);
+        assertFalse(outViews.isEmpty());
+
+    }
+
+    @Test
+    public void shouldRenderSubLocationRow() {
+        final ArrayList<View> outViews = new ArrayList<>();
+        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "Sub Location",
+                View.FIND_VIEWS_WITH_TEXT);
+        assertFalse(outViews.isEmpty());
+
+    }
+
+    @Test
+    public void shouldRenderVillageRow() {
+        final ArrayList<View> outViews = new ArrayList<>();
+        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "Village",
+                View.FIND_VIEWS_WITH_TEXT);
+        assertFalse(outViews.isEmpty());
+
+    }
+
+    @Test
+    public void shouldRenderAddressRow() {
+        final ArrayList<View> outViews = new ArrayList<>();
+        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.rowholder).findViewsWithText(outViews, "Address",
+                View.FIND_VIEWS_WITH_TEXT);
+        assertFalse(outViews.isEmpty());
 
     }
 
@@ -438,23 +494,23 @@ public class ChildDetailTabbedActivityUnitTest extends BaseUnitTest {
         ArrayList<View> outViews = new ArrayList<>();
 
         //Validate correct form view loaded by validating various fields
-
+        // Home facility view removed
         activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.scrollView2).findViewsWithText(outViews, "Child's home health facility",
                 View.FIND_VIEWS_WITH_TEXT);
-        assertFalse(outViews.isEmpty());
+        assertTrue(outViews.isEmpty());
 
         outViews = new ArrayList<>();
-        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.scrollView2).findViewsWithText(outViews, "Child's ZEIR ID",
+        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.scrollView2).findViewsWithText(outViews, "Child's KIP ID",
                 View.FIND_VIEWS_WITH_TEXT);
         assertFalse(outViews.isEmpty());
 
         outViews = new ArrayList<>();
-        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.scrollView2).findViewsWithText(outViews, "Child's register card number",
+        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.scrollView2).findViewsWithText(outViews, "CWC number",
                 View.FIND_VIEWS_WITH_TEXT);
         assertFalse(outViews.isEmpty());
 
         outViews = new ArrayList<>();
-        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.scrollView2).findViewsWithText(outViews, "Child's birth certificate number",
+        activity.getViewPagerAdapter().getItem(0).getView().findViewById(R.id.scrollView2).findViewsWithText(outViews, "Child's birth notification number",
                 View.FIND_VIEWS_WITH_TEXT);
         assertFalse(outViews.isEmpty());
 

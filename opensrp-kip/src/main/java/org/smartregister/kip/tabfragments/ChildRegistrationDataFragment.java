@@ -3,7 +3,6 @@ package org.smartregister.kip.tabfragments;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import org.joda.time.DateTime;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.kip.R;
 import org.smartregister.kip.activity.ChildDetailTabbedActivity;
-import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.context.Context;
 import org.smartregister.kip.viewComponents.WidgetFactory;
 import org.smartregister.repository.DetailsRepository;
@@ -98,13 +96,13 @@ public class ChildRegistrationDataFragment extends Fragment {
             //layout.addView(wd.createTableRow(inflater, container, "Child's home health facility", JsonFormUtils.getOpenMrsReadableName(JsonFormUtils.getOpenMrsLocationName(Context.getInstance(), Utils.getValue(detailsMap, "Home_Facility", false)))));
             layout.addView(wd.createTableRow(inflater, container, "First name", Utils.getValue(childDetails.getColumnmaps(), "first_name", true)));
             layout.addView(wd.createTableRow(inflater, container, "Last name", Utils.getValue(childDetails.getColumnmaps(), "last_name", true)));
-            layout.addView(wd.createTableRow(inflater, container, "Child's DOB", ChildDetailTabbedActivity.DATE_FORMAT.format(new DateTime(Utils.getValue(childDetails.getColumnmaps(), "dob", true)).toDate())));
 
-            String formattedAge = "";
             String dobString = Utils.getValue(childDetails.getColumnmaps(), "dob", false);
+            String formattedAge = "";
             if (!TextUtils.isEmpty(dobString)) {
                 DateTime dateTime = new DateTime(dobString);
                 Date dob = dateTime.toDate();
+                layout.addView(wd.createTableRow(inflater, container, "Child's DOB", ChildDetailTabbedActivity.DATE_FORMAT.format(dob)));
                 long timeDiff = Calendar.getInstance().getTimeInMillis() - dob.getTime();
 
                 if (timeDiff >= 0) {
