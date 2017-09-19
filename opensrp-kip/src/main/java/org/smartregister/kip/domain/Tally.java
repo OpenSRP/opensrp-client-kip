@@ -12,14 +12,10 @@ import java.util.Date;
 
 public class Tally implements Serializable {
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-    private Hia2Indicator indicator;
-    @JsonProperty
+    private MohIndicator indicator;
     private long id;
-    @JsonProperty
     private String value;
-    @JsonProperty
     private String providerId;
-    @JsonProperty
     private Date updatedAt;
 
 
@@ -29,11 +25,11 @@ public class Tally implements Serializable {
     public Tally() {
     }
 
-    public Hia2Indicator getIndicator() {
+    public MohIndicator getIndicator() {
         return indicator;
     }
 
-    public void setIndicator(Hia2Indicator indicator) {
+    public void setIndicator(MohIndicator indicator) {
         this.indicator = indicator;
     }
 
@@ -77,21 +73,11 @@ public class Tally implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public ReportHia2Indicator getReportHia2Indicator() throws Exception {
-        ReportHia2Indicator reportHia2Indicator = new ReportHia2Indicator();
-        reportHia2Indicator.setValue(value);
-        reportHia2Indicator.setProviderId(providerId);
-        reportHia2Indicator.setCreatedAt(createdAt != null ? DATE_FORMAT.format(createdAt) : null);
-        reportHia2Indicator.setUpdatedAt(updatedAt != null ? DATE_FORMAT.format(updatedAt) : null);
-        reportHia2Indicator.setHia2Indicator(indicator);
-        return reportHia2Indicator;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (o != null && o instanceof Tally) {
             Tally tally = (Tally) o;
-            if (getIndicator().getDhisId().equals(tally.getIndicator().getDhisId())) {
+            if (getIndicator().getIndicatorCode().equals(tally.getIndicator().getIndicatorCode())) {
                 return true;
             }
         }

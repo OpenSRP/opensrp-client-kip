@@ -10,7 +10,7 @@ import org.smartregister.growthmonitoring.service.intent.WeightIntentService;
 import org.smartregister.immunization.service.intent.RecurringIntentService;
 import org.smartregister.immunization.service.intent.VaccineIntentService;
 import org.smartregister.kip.application.KipApplication;
-import org.smartregister.kip.service.intent.HIA2IntentService;
+import org.smartregister.kip.service.intent.Moh710IntentService;
 import org.smartregister.util.Log;
 
 import java.text.SimpleDateFormat;
@@ -39,7 +39,7 @@ public class VaccinatorAlarmReceiver extends BroadcastReceiver {
                     break;
                 case KipConstants.ServiceType.DAILY_TALLIES_GENERATION:
                     android.util.Log.i(TAG, "Started DAILY_TALLIES_GENERATION service at: " + dateFormatter.format(new Date()));
-                    serviceIntent = new Intent(context, HIA2IntentService.class);
+                    serviceIntent = new Intent(context, Moh710IntentService.class);
                     break;
                 case KipConstants.ServiceType.MONTHLY_TALLIES_GENERATION:
                     android.util.Log.i(TAG, "Started MONTHLY_TALLIES_GENERATION service at: " + dateFormatter.format(new Date()));

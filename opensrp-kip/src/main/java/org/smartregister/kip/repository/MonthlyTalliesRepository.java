@@ -1,8 +1,6 @@
 package org.smartregister.kip.repository;
 
-import android.content.ContentValues;
 import android.database.Cursor;
-import android.text.TextUtils;
 import android.util.Log;
 
 import net.sqlcipher.SQLException;
@@ -10,7 +8,7 @@ import net.sqlcipher.database.SQLiteDatabase;
 
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.domain.DailyTally;
-import org.smartregister.kip.domain.Hia2Indicator;
+import org.smartregister.kip.domain.MohIndicator;
 import org.smartregister.kip.domain.MonthlyTally;
 import org.smartregister.repository.BaseRepository;
 
@@ -99,31 +97,9 @@ public class MonthlyTalliesRepository extends BaseRepository {
     public List<Date> findUneditedDraftMonths(Date startDate, Date endDate) {
         List<String> allTallyMonths = KipApplication.getInstance().dailyTalliesRepository()
                 .findAllDistinctMonths(DF_YYYYMM, startDate, endDate);
-        Cursor cursor = null;
         try {
-            if (allTallyMonths != null) {
-                String monthsString = "";
-                for (String curMonthString : allTallyMonths) {
-                    if (!TextUtils.isEmpty(monthsString)) {
-                        monthsString = monthsString + ", ";
-                    }
-
-                    monthsString = monthsString + "'" + curMonthString + "'";
-                }
-
-                cursor = getReadableDatabase().query(
-                        TABLE_NAME,
-                        new String[]{COLUMN_MONTH}, COLUMN_MONTH + " IN(" + monthsString + ")",
-                        null, null, null, null);
-
-                if (cursor != null && cursor.getCount() > 0) {
-                    for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                        String curMonth = cursor.getString(cursor.getColumnIndex(COLUMN_MONTH));
-                        allTallyMonths.remove(curMonth);
-                    }
-                }
-
-                List<Date> unsentMonths = new ArrayList<>();
+            List<Date> unsentMonths = new ArrayList<>();
+            if (allTallyMonths != null && !allTallyMonths.isEmpty()) {
                 for (String curMonthString : allTallyMonths) {
                     Date curMonth = DF_YYYYMM.parse(curMonthString);
                     if ((startDate != null && curMonth.getTime() < startDate.getTime())
@@ -135,14 +111,8 @@ public class MonthlyTalliesRepository extends BaseRepository {
 
                 return unsentMonths;
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ParseException e) {
             Log.e(TAG, Log.getStackTraceString(e));
-        } catch (ParseException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
         }
 
         return new ArrayList<>();
@@ -155,27 +125,19 @@ public class MonthlyTalliesRepository extends BaseRepository {
      * @return
      */
     public List<MonthlyTally> findDrafts(String month) {
-        // Check if there exists any sent tally in the database for the month provided
         Cursor cursor = null;
         List<MonthlyTally> monthlyTallies = new ArrayList<>();
         try {
-            cursor = getReadableDatabase().query(TABLE_NAME, TABLE_COLUMNS,
-                    COLUMN_MONTH + " = '" + month +
-                            "' AND " + COLUMN_DATE_SENT + " IS NULL",
-                    null, null, null, null, null);
-            monthlyTallies = readAllDataElements(cursor);
 
-            if (monthlyTallies.size() == 0) { // No tallies generated yet
-                Log.w(TAG, "Using daily tallies instead of monthly");
-                Map<Long, List<DailyTally>> dailyTallies = KipApplication.getInstance()
-                        .dailyTalliesRepository().findTalliesInMonth(DF_YYYYMM.parse(month));
-                for (List<DailyTally> curList : dailyTallies.values()) {
-                    MonthlyTally curTally = addUpDailyTallies(curList);
-                    if (curTally != null) {
-                        monthlyTallies.add(curTally);
-                    }
+            Log.w(TAG, "Using daily tallies instead of monthly");
+            Map<Long, List<DailyTally>> dailyTallies = KipApplication.getInstance().dailyTalliesRepository().findTalliesInMonth(DF_YYYYMM.parse(month));
+            for (List<DailyTally> curList : dailyTallies.values()) {
+                MonthlyTally curTally = addUpDailyTallies(curList);
+                if (curTally != null) {
+                    monthlyTallies.add(curTally);
                 }
             }
+
         } catch (SQLException e) {
             Log.e(TAG, Log.getStackTraceString(e));
         } catch (ParseException e) {
@@ -184,6 +146,33 @@ public class MonthlyTalliesRepository extends BaseRepository {
             if (cursor != null) {
                 cursor.close();
             }
+        }
+
+        return monthlyTallies;
+    }
+
+    /**
+     * Returns a list of draft monthly tallies corresponding to a custom date range
+     *
+     * @param startDate The start date of the custom range
+     * @param endDate   The end date of the custom range
+     * @return
+     */
+    public List<MonthlyTally> findDrafts(Date startDate, Date endDate) {
+        List<MonthlyTally> monthlyTallies = new ArrayList<>();
+        try {
+
+            Log.w(TAG, "Using daily tallies instead of monthly");
+            Map<Long, List<DailyTally>> dailyTallies = KipApplication.getInstance().dailyTalliesRepository().findTallies(startDate, endDate);
+            for (List<DailyTally> curList : dailyTallies.values()) {
+                MonthlyTally curTally = addUpDailyTallies(curList);
+                if (curTally != null) {
+                    monthlyTallies.add(curTally);
+                }
+            }
+
+        } catch (SQLException e) {
+            Log.e(TAG, Log.getStackTraceString(e));
         }
 
         return monthlyTallies;
@@ -240,120 +229,10 @@ public class MonthlyTalliesRepository extends BaseRepository {
         return monthlyTally;
     }
 
-    public HashMap<String, ArrayList<MonthlyTally>> findAllSent(SimpleDateFormat dateFormat) {
-        HashMap<String, ArrayList<MonthlyTally>> tallies = new HashMap<>();
-        Cursor cursor = null;
-        try {
-            HashMap<Long, Hia2Indicator> indicatorMap = KipApplication.getInstance()
-                    .hIA2IndicatorsRepository().findAll();
-            cursor = getReadableDatabase()
-                    .query(TABLE_NAME, TABLE_COLUMNS,
-                            COLUMN_DATE_SENT + " IS NOT NULL", null, null, null, null, null);
-            if (cursor != null && cursor.getCount() > 0) {
-                for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                    MonthlyTally curTally = extractMonthlyTally(indicatorMap, cursor);
-                    if (curTally != null) {
-                        if (!tallies.containsKey(dateFormat.format(curTally.getMonth()))) {
-                            tallies.put(dateFormat.format(curTally.getMonth()),
-                                    new ArrayList<MonthlyTally>());
-                        }
-
-                        tallies.get(dateFormat.format(curTally.getMonth())).add(curTally);
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-        } catch (ParseException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        return tallies;
-    }
-
-    public boolean save(MonthlyTally tally) {
-        SQLiteDatabase database = getWritableDatabase();
-        try {
-            database.beginTransaction();
-            if (tally != null) {
-                ContentValues cv = new ContentValues();
-                cv.put(COLUMN_INDICATOR_ID, tally.getIndicator().getId());
-                cv.put(COLUMN_VALUE, tally.getValue());
-                cv.put(COLUMN_PROVIDER_ID, tally.getProviderId());
-                cv.put(COLUMN_MONTH, DF_YYYYMM.format(tally.getMonth()));
-                cv.put(COLUMN_DATE_SENT,
-                        tally.getDateSent() == null ? null : tally.getDateSent().getTime());
-                cv.put(COLUMN_EDITED, tally.isEdited() ? 1 : 0);
-                cv.put(COLUMN_CREATED_AT, Calendar.getInstance().getTimeInMillis());
-                database.insertWithOnConflict(TABLE_NAME, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
-                database.setTransactionSuccessful();
-
-                return true;
-            }
-        } catch (SQLException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-        } finally {
-            try {
-                database.endTransaction();
-            } catch (IllegalStateException e) {
-                Log.e(TAG, Log.getStackTraceString(e));
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * save data from the monthly draft form whereby in the map the key is indicator_id and value is the form value
-     * assumption here is that the data is edited..probably find a way to confirm this
-     *
-     * @param draftFormValues
-     * @param month
-     * @return
-     */
-    public boolean save(Map<String, String> draftFormValues, Date month) {
-        SQLiteDatabase database = getWritableDatabase();
-        try {
-            database.beginTransaction();
-            if (draftFormValues != null && !draftFormValues.isEmpty() && month != null) {
-                String userName = KipApplication.getInstance().context().allSharedPreferences().fetchRegisteredANM();
-
-                for (String key : draftFormValues.keySet()) {
-                    String value = draftFormValues.get(key);
-                    ContentValues cv = new ContentValues();
-                    cv.put(COLUMN_INDICATOR_ID, Integer.valueOf(key));
-                    cv.put(COLUMN_VALUE, value == null || value.isEmpty() ? 0 : Integer.valueOf(value));
-                    cv.put(COLUMN_MONTH, DF_YYYYMM.format(month));
-                    cv.put(COLUMN_EDITED, 1);
-                    cv.put(COLUMN_PROVIDER_ID, userName);
-                    cv.put(COLUMN_CREATED_AT, Calendar.getInstance().getTimeInMillis());
-                    database.insertWithOnConflict(TABLE_NAME, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
-                }
-                database.setTransactionSuccessful();
-
-                return true;
-            }
-        } catch (SQLException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-        } finally {
-            try {
-                database.endTransaction();
-            } catch (IllegalStateException e) {
-                Log.e(TAG, Log.getStackTraceString(e));
-            }
-        }
-
-        return false;
-    }
 
     private List<MonthlyTally> readAllDataElements(Cursor cursor) {
         List<MonthlyTally> tallies = new ArrayList<>();
-        HashMap<Long, Hia2Indicator> indicatorMap = KipApplication.getInstance()
-                .hIA2IndicatorsRepository().findAll();
+        HashMap<Long, MohIndicator> indicatorMap = KipApplication.getInstance().moh710IndicatorsRepository().findAll();
 
         try {
             if (cursor != null && cursor.getCount() > 0) {
@@ -377,7 +256,7 @@ public class MonthlyTalliesRepository extends BaseRepository {
         return tallies;
     }
 
-    private MonthlyTally extractMonthlyTally(HashMap<Long, Hia2Indicator> indicatorMap, Cursor cursor) throws ParseException {
+    private MonthlyTally extractMonthlyTally(HashMap<Long, MohIndicator> indicatorMap, Cursor cursor) throws ParseException {
         long indicatorId = cursor.getLong(cursor.getColumnIndex(COLUMN_INDICATOR_ID));
         if (indicatorMap.containsKey(indicatorId)) {
             MonthlyTally curTally = new MonthlyTally();
