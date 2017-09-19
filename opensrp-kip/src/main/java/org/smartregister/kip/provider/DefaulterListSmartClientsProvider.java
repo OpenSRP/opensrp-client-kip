@@ -22,6 +22,8 @@ import org.smartregister.immunization.domain.Vaccine;
 import org.smartregister.immunization.repository.VaccineRepository;
 import org.smartregister.immunization.util.VaccinateActionUtils;
 import org.smartregister.kip.R;
+import org.smartregister.kip.application.KipApplication;
+import org.smartregister.repository.DetailsRepository;
 import org.smartregister.service.AlertService;
 import org.smartregister.util.OpenSRPImageLoader;
 import org.smartregister.util.Utils;
@@ -96,26 +98,29 @@ public class DefaulterListSmartClientsProvider implements SmartRegisterCLientsPr
         String gender = getValue(pc.getColumnmaps(), "gender", true);
         fillValue((TextView) convertView.findViewById(R.id.child_gender), gender);
 
-        String village = getValue(pc.getColumnmaps(), "village", true);
-        // String estate = getValue(pc.getColumnmaps(), "estate", true);
-        String landmark = getValue(pc.getColumnmaps(), "landmark", true);
+        DetailsRepository detailsRepository = KipApplication.getInstance().context().detailsRepository();
+        Map<String, String> detailsMap = detailsRepository.getAllDetailsForClient(pc.entityId());
+
+        String village = Utils.getValue(detailsMap, "address3", true);
+        String estate = Utils.getValue(detailsMap, "address1", true);
+        String landmark = Utils.getValue(detailsMap, "address2", true);
 
         List<String> velList = new ArrayList<>();
         if (StringUtils.isNotBlank(village)) {
             velList.add(village);
         }
-        /*  if (StringUtils.isNotBlank(estate)) {
+        if (StringUtils.isNotBlank(estate)) {
             velList.add(estate);
-        }*/
+        }
         if (StringUtils.isNotBlank(landmark)) {
             velList.add(landmark);
         }
 
-        fillValue((TextView) convertView.findViewById(R.id.child_ce_village), velList.isEmpty() ? "" : TextUtils.join(", ", velList));
+        fillValue((TextView) convertView.findViewById(R.id.child_ce_village), velList.isEmpty() ? "" : TextUtils.join("/", velList));
 
         fillValue((TextView) convertView.findViewById(R.id.child_cwc_number), pc.getColumnmaps(), "cwc_number", false);
 
-        fillValue((TextView) convertView.findViewById(R.id.mother_phone_number), pc.getColumnmaps(), "mother_phone_number", false);
+        fillValue((TextView) convertView.findViewById(R.id.mother_phone_number), pc.getColumnmaps(), "contact_phone_number", false);
 
         fillValue((TextView) convertView.findViewById(R.id.chw_phone_number), pc.getColumnmaps(), "chw_phone_number", false);
 
@@ -189,7 +194,7 @@ public class DefaulterListSmartClientsProvider implements SmartRegisterCLientsPr
             }
         } else {
             state = State.WAITING;
-               }
+        }
 
 
         // Update active/inactive/lostToFollowup status
