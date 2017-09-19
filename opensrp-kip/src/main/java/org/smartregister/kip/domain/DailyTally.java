@@ -1,7 +1,5 @@
 package org.smartregister.kip.domain;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-
 import java.io.Serializable;
 import java.util.Date;
 
@@ -10,7 +8,6 @@ import java.util.Date;
  */
 
 public class DailyTally extends Tally implements Serializable {
-    @JsonProperty
     private Date day;
 
     public DailyTally() {

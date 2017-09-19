@@ -1,6 +1,5 @@
 package org.smartregister.kip.fragment;
 
-import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
@@ -16,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -26,7 +24,6 @@ import android.widget.Toast;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.vijay.jsonwizard.customviews.CheckBox;
 import com.vijay.jsonwizard.customviews.RadioButton;
-import com.vijay.jsonwizard.utils.DatePickerUtils;
 
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
@@ -44,11 +41,11 @@ import org.smartregister.kip.activity.ChildSmartRegisterActivity;
 import org.smartregister.kip.adapter.AdvancedSearchPaginatedCursorAdapter;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.domain.RegisterClickables;
+import org.smartregister.kip.listener.DatePickerListener;
 import org.smartregister.kip.provider.AdvancedSearchClientsProvider;
 import org.smartregister.util.Utils;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -82,14 +79,11 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
     private View listViewLayout;
     private View advancedSearchForm;
 
-    private TextView filterCount;
-
     private ProgressDialog progressDialog;
 
     //private List<Integer> editedList = new ArrayList<>();
     private final Map<String, String> editMap = new HashMap<>();
     private boolean listMode = false;
-    private int overdueCount = 0;
     private boolean outOfArea = false;
     private AdvancedMatrixCursor matrixCursor;
 
@@ -154,17 +148,8 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
         final View filterSection = view.findViewById(R.id.filter_selection);
         filterSection.setOnClickListener(clientActionHandler);
 
-        filterCount = (TextView) view.findViewById(R.id.filter_count);
+        TextView filterCount = (TextView) view.findViewById(R.id.filter_count);
         filterCount.setVisibility(View.GONE);
-        if (overdueCount > 0) {
-            updateFilterCount(overdueCount);
-        }
-        filterCount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                filterSection.performClick();
-            }
-        });
 
         if (titleLabelView != null) {
             titleLabelView.setText(getString(R.string.advanced_search));
@@ -764,9 +749,8 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
         }
     }
 
-
     private void setDatePicker(final EditText editText) {
-        editText.setOnClickListener(new DatePickerListener(editText));
+        editText.setOnClickListener(new DatePickerListener(getActivity(), editText));
     }
 
     private String removeLastComma(String str) {
@@ -847,19 +831,6 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
         return hasSearchParams;
     }
 
-    public void updateFilterCount(int count) {
-        if (filterCount != null) {
-            if (count > 0) {
-                filterCount.setText(String.valueOf(count));
-                filterCount.setVisibility(View.VISIBLE);
-                filterCount.setClickable(true);
-            } else {
-                filterCount.setVisibility(View.GONE);
-                filterCount.setClickable(false);
-            }
-        }
-        overdueCount = count;
-    }
 
     private String getJsonString(JSONObject jsonObject, String field) {
         try {
@@ -1118,7 +1089,7 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
                     goBack();
                     break;
                 case R.id.filter_selection:
-                    ((ChildSmartRegisterActivity) getActivity()).filterSelection();
+                    ((ChildSmartRegisterActivity) getActivity()).startDefaulterList();
                     break;
                 case R.id.search_layout:
                 case R.id.search:
@@ -1168,40 +1139,4 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
         }
 
     }
-
-    private class DatePickerListener implements View.OnClickListener {
-        private final EditText editText;
-
-        private DatePickerListener(EditText editText) {
-            this.editText = editText;
-        }
-
-        @Override
-        public void onClick(View view) {
-            //To show current date in the datepicker
-            Calendar mcurrentDate = Calendar.getInstance();
-            int mYear = mcurrentDate.get(Calendar.YEAR);
-            int mMonth = mcurrentDate.get(Calendar.MONTH);
-            int mDay = mcurrentDate.get(Calendar.DAY_OF_MONTH);
-
-            DatePickerDialog mDatePicker = new DatePickerDialog(getActivity(), android.app.AlertDialog.THEME_HOLO_LIGHT, new DatePickerDialog.OnDateSetListener() {
-                public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.set(Calendar.YEAR, selectedyear);
-                    calendar.set(Calendar.MONTH, selectedmonth);
-                    calendar.set(Calendar.DAY_OF_MONTH, selectedday);
-
-                    String dateString = DateUtil.yyyyMMdd.format(calendar.getTime());
-                    editText.setText(dateString);
-
-                }
-            }, mYear, mMonth, mDay);
-            mDatePicker.getDatePicker().setCalendarViewShown(false);
-            mDatePicker.show();
-
-            DatePickerUtils.themeDatePicker(mDatePicker, new char[]{'d', 'm', 'y'});
-        }
-
-    }
-
 }

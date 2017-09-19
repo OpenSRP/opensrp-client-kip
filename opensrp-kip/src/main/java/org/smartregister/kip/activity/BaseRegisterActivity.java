@@ -188,14 +188,11 @@ public abstract class BaseRegisterActivity extends SecuredNativeSmartRegisterAct
             startFormActivity("child_enrollment", null, null);
         } else if (id == R.id.nav_record_vaccination_out_catchment) {
             startFormActivity("out_of_catchment_service", null, null);
-        } else if (id == R.id.stock) {
+        } else if (id == R.id.stockcontrol) {
             Intent intent = new Intent(this, StockActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_sync) {
             startSync();
-        } else if (id == R.id.nav_hia2) {
-            Intent intent = new Intent(this, HIA2ReportsActivity.class);
-            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -337,16 +334,7 @@ public abstract class BaseRegisterActivity extends SecuredNativeSmartRegisterAct
 
             }
         });
-        LinearLayout hia2 = (LinearLayout) drawer.findViewById(R.id.hia2reports);
-        hia2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), HIA2ReportsActivity.class);
-                startActivity(intent);
-                drawer.closeDrawer(GravityCompat.START);
 
-            }
-        });
         LinearLayout childregister = (LinearLayout) drawer.findViewById(R.id.child_register);
         childregister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -358,6 +346,17 @@ public abstract class BaseRegisterActivity extends SecuredNativeSmartRegisterAct
                 drawer.closeDrawer(GravityCompat.START);
 
 //                finish();
+            }
+        });
+
+        LinearLayout moh = (LinearLayout) drawer.findViewById(R.id.moh710);
+        moh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), Moh710ReportActivity.class);
+                startActivity(intent);
+                drawer.closeDrawer(GravityCompat.START);
+
             }
         });
 

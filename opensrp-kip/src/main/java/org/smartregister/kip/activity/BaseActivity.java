@@ -298,11 +298,12 @@ public abstract class BaseActivity extends AppCompatActivity
 //                finish();
             }
         });
-        LinearLayout hia2 = (LinearLayout) drawer.findViewById(R.id.hia2reports);
-        hia2.setOnClickListener(new View.OnClickListener() {
+
+        LinearLayout moh710 = (LinearLayout) drawer.findViewById(R.id.moh710);
+        moh710.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), HIA2ReportsActivity.class);
+                Intent intent = new Intent(getApplicationContext(), Moh710ReportActivity.class);
                 startActivity(intent);
                 drawer.closeDrawer(GravityCompat.START);
 
@@ -582,10 +583,10 @@ public abstract class BaseActivity extends AppCompatActivity
     }
 
     private void showNotification(String message, Drawable notificationIcon, String positiveButtonText,
-                                    View.OnClickListener positiveButtonOnClick,
-                                    String negativeButtonText,
-                                    View.OnClickListener negativeButtonOnClick,
-                                    Object tag) {
+                                  View.OnClickListener positiveButtonOnClick,
+                                  String negativeButtonText,
+                                  View.OnClickListener negativeButtonOnClick,
+                                  Object tag) {
         Notification notification = new Notification(message, notificationIcon, positiveButtonText,
                 positiveButtonOnClick, negativeButtonText, negativeButtonOnClick, tag);
 

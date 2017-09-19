@@ -70,6 +70,7 @@ import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.context.Context;
 import org.smartregister.kip.fragment.StatusEditDialogFragment;
 import org.smartregister.kip.listener.StatusChangeListener;
+import org.smartregister.kip.repository.KipEventClientRepository;
 import org.smartregister.kip.sync.ECSyncUpdater;
 import org.smartregister.kip.sync.KipClientProcessor;
 import org.smartregister.kip.tabfragments.ChildRegistrationDataFragment;
@@ -79,7 +80,6 @@ import org.smartregister.kip.view.LocationPickerView;
 import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.repository.BaseRepository;
 import org.smartregister.repository.DetailsRepository;
-import org.smartregister.repository.EventClientRepository;
 import org.smartregister.service.AlertService;
 import org.smartregister.util.DateUtil;
 import org.smartregister.util.FormUtils;
@@ -311,7 +311,7 @@ public class ChildDetailTabbedActivity extends BaseActivity implements Vaccinati
         for (int i = 0; i < weightlist.size(); i++) {
             Weight weight = weightlist.get(i);
             org.smartregister.domain.db.Event event = null;
-            EventClientRepository db = KipApplication.getInstance().eventClientRepository();
+            KipEventClientRepository db = KipApplication.getInstance().eventClientRepository();
             if (weight.getEventId() != null) {
                 event = ecUpdater.convert(db.getEventsByEventId(weight.getEventId()), org.smartregister.domain.db.Event.class);
             } else if (weight.getFormSubmissionId() != null) {
@@ -1226,7 +1226,7 @@ public class ChildDetailTabbedActivity extends BaseActivity implements Vaccinati
     public void updateClientAttribute(String attributeName, Object attributeValue) {
         try {
             Date date = new Date();
-            EventClientRepository db = getVaccinatorApplicationInstance().eventClientRepository();
+            KipEventClientRepository db = getVaccinatorApplicationInstance().eventClientRepository();
             ECSyncUpdater ecUpdater = ECSyncUpdater.getInstance(this);
 
             JSONObject client = db.getClientByBaseEntityId(childDetails.entityId());
@@ -1321,7 +1321,7 @@ public class ChildDetailTabbedActivity extends BaseActivity implements Vaccinati
     private boolean showVaccineListCheck(String eventId, String formSubmissionId) {
         ECSyncUpdater ecUpdater = ECSyncUpdater.getInstance(ChildDetailTabbedActivity.this);
 
-        EventClientRepository db = KipApplication.getInstance().eventClientRepository();
+        KipEventClientRepository db = KipApplication.getInstance().eventClientRepository();
         org.smartregister.domain.db.Event event = null;
         if (eventId != null) {
             event = ecUpdater.convert(db.getEventsByEventId(eventId), org.smartregister.domain.db.Event.class);

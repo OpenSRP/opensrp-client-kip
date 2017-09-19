@@ -11,19 +11,13 @@ import com.vijay.jsonwizard.fragments.JsonFormFragment;
 import com.vijay.jsonwizard.interfaces.CommonListener;
 import com.vijay.jsonwizard.widgets.SpinnerFactory;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.api.domain.Location;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.repository.LocationRepository;
-import org.smartregister.util.StringUtil;
 
-import java.util.Arrays;
 import java.util.List;
-
-import util.JsonFormUtils;
 
 /**
  * Created by amosl on 6/13/17.
@@ -89,7 +83,9 @@ public class KipSpinnerFactory extends SpinnerFactory {
                                     String[] locs;
 
                                     if (location != null) {
+                                        Log.d(TAG, "Location: " + location.toString());
                                         Log.i(TAG, "Parent location is not null: " + location.toString());
+
                                         List<Location> locations = locationRepository.getChildLocations(location.getLocationId());
                                         int size = locations.size();
                                         locs = new String[Math.max(1, size)];

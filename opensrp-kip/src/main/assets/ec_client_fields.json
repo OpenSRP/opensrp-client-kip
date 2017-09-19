@@ -236,6 +236,20 @@
           }
         },
         {
+          "column_name": "chw_name",
+          "type": "Client",
+          "json_mapping": {
+            "field": "attributes.CHW_Name"
+          }
+        },
+        {
+          "column_name": "chw_phone_number",
+          "type": "Client",
+          "json_mapping": {
+            "field": "attributes.CHW_Phone_Number"
+          }
+        },
+        {
           "column_name": "relational_id",
           "type": "Client",
           "json_mapping": {

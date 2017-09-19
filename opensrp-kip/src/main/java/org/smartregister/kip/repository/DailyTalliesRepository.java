@@ -10,8 +10,7 @@ import net.sqlcipher.database.SQLiteDatabase;
 
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.domain.DailyTally;
-import org.smartregister.kip.domain.Hia2Indicator;
-import org.smartregister.kip.service.HIA2Service;
+import org.smartregister.kip.domain.MohIndicator;
 import org.smartregister.repository.BaseRepository;
 
 import java.text.ParseException;
@@ -58,9 +57,6 @@ public class DailyTalliesRepository extends BaseRepository {
 
     static {
         IGNORED_INDICATOR_CODES = new ArrayList<>();
-        IGNORED_INDICATOR_CODES.add(HIA2Service.CHN3_027);
-        IGNORED_INDICATOR_CODES.add(HIA2Service.CHN3_027_O);
-        IGNORED_INDICATOR_CODES.add(HIA2Service.CHN3_090);
     }
 
     public DailyTalliesRepository(KipRepository kipRepository) {
@@ -79,23 +75,21 @@ public class DailyTalliesRepository extends BaseRepository {
     /**
      * Saves a set of tallies
      *
-     * @param day        The day the tallies correspond to
-     * @param hia2Report Object holding the tallies, the first key in the map holds the indicator
-     *                   code, and the second the DHIS id for the indicator. It's expected that
-     *                   the inner most map will always hold one value
+     * @param day       The day the tallies correspond to
+     * @param mohReport Object holding the tallies, the first key in the map holds the indicator
+     *                  code, and the second the DHIS id for the indicator. It's expected that
+     *                  the inner most map will always hold one value
      */
-    public void save(String day, Map<String, Object> hia2Report) {
+    public void save(String day, Map<String, Object> mohReport) {
         SQLiteDatabase database = getWritableDatabase();
         try {
             database.beginTransaction();
             String userName = KipApplication.getInstance().context().allSharedPreferences().fetchRegisteredANM();
-            for (String indicatorCode : hia2Report.keySet()) {
-                Integer indicatorValue = (Integer) hia2Report.get(indicatorCode);
+            for (String indicatorCode : mohReport.keySet()) {
+                Integer indicatorValue = (Integer) mohReport.get(indicatorCode);
 
-                // Get the HIA2 Indicator corresponding to the current tally
-                Hia2Indicator indicator = KipApplication.getInstance()
-                        .hIA2IndicatorsRepository()
-                        .findByIndicatorCode(indicatorCode);
+                // Get the Moh710 Indicator corresponding to the current tally
+                MohIndicator indicator = KipApplication.getInstance().moh710IndicatorsRepository().findByIndicatorCode(indicatorCode);
 
                 if (indicator != null) {
                     ContentValues cv = new ContentValues();
@@ -186,8 +180,8 @@ public class DailyTalliesRepository extends BaseRepository {
         Map<Long, List<DailyTally>> talliesFromMonth = new HashMap<>();
         Cursor cursor = null;
         try {
-            HashMap<Long, Hia2Indicator> indicatorMap = KipApplication.getInstance()
-                    .hIA2IndicatorsRepository().findAll();
+            HashMap<Long, MohIndicator> indicatorMap = KipApplication.getInstance()
+                    .moh710IndicatorsRepository().findAll();
 
             Calendar startDate = Calendar.getInstance();
             startDate.setTime(month);
@@ -235,93 +229,51 @@ public class DailyTalliesRepository extends BaseRepository {
         return talliesFromMonth;
     }
 
+    public Map<Long, List<DailyTally>> findTallies(Date startDate, Date endDate) {
+        Map<Long, List<DailyTally>> tallies = new HashMap<>();
+        Cursor cursor = null;
+        try {
+            HashMap<Long, MohIndicator> indicatorMap = KipApplication.getInstance()
+                    .moh710IndicatorsRepository().findAll();
+
+            cursor = getReadableDatabase().query(TABLE_NAME, TABLE_COLUMNS,
+                    getDayBetweenDatesSelection(startDate, endDate),
+                    null, null, null, null, null);
+            if (cursor != null && cursor.getCount() > 0) {
+                for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                    DailyTally curTally = extractDailyTally(indicatorMap, cursor);
+                    if (curTally != null) {
+                        if (!tallies.containsKey(curTally.getIndicator().getId())) {
+                            tallies.put(
+                                    curTally.getIndicator().getId(),
+                                    new ArrayList<DailyTally>());
+                        }
+
+                        tallies.get(curTally.getIndicator().getId()).add(curTally);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return tallies;
+    }
+
     private String getDayBetweenDatesSelection(Date startDate, Date endDate) {
         return COLUMN_DAY + " >= " + String.valueOf(startDate.getTime()) +
                 " AND " + COLUMN_DAY + " <= " + String.valueOf(endDate.getTime());
     }
 
-    public List<DailyTally> findByProviderIdAndDay(String providerId, String date) {
-        List<DailyTally> tallies = new ArrayList<>();
-        try {
-            Cursor cursor = getReadableDatabase().query(TABLE_NAME, TABLE_COLUMNS,
-                    COLUMN_DAY + " = Datetime(?) AND " + COLUMN_PROVIDER_ID + " = ? COLLATE NOCASE ",
-                    new String[]{date, providerId}, null, null, null, null);
-            tallies = readAllDataElements(cursor);
-        } catch (Exception e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-        }
-        return tallies;
-    }
 
-    public HashMap<String, ArrayList<DailyTally>> findAll(SimpleDateFormat dateFormat, Date minDate, Date maxDate) {
-        HashMap<String, ArrayList<DailyTally>> tallies = new HashMap<>();
-        Cursor cursor = null;
-        try {
-            HashMap<Long, Hia2Indicator> indicatorMap = KipApplication.getInstance()
-                    .hIA2IndicatorsRepository().findAll();
-            cursor = getReadableDatabase()
-                    .query(TABLE_NAME, TABLE_COLUMNS,
-                            getDayBetweenDatesSelection(minDate, maxDate),
-                            null, null, null, COLUMN_DAY + " DESC", null);
-            if (cursor != null && cursor.getCount() > 0) {
-                for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                    DailyTally curTally = extractDailyTally(indicatorMap, cursor);
-                    if (curTally != null) {
-                        final String dayString = dateFormat.format(curTally.getDay());
-                        if (!TextUtils.isEmpty(dayString)) {
-                            if (!tallies.containsKey(dayString) ||
-                                    tallies.get(dayString) == null) {
-                                tallies.put(dayString, new ArrayList<DailyTally>());
-                            }
-
-                            tallies.get(dayString).add(curTally);
-                        } else {
-                            Log.w(TAG, "There appears to be a daily tally with a null date");
-                        }
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-        } catch (NullPointerException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        return tallies;
-    }
-
-    private List<DailyTally> readAllDataElements(Cursor cursor) {
-        List<DailyTally> tallies = new ArrayList<>();
-        try {
-            HashMap<Long, Hia2Indicator> indicatorMap = KipApplication.getInstance()
-                    .hIA2IndicatorsRepository().findAll();
-            if (cursor != null && cursor.getCount() > 0) {
-                for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-                    DailyTally curTally = extractDailyTally(indicatorMap, cursor);
-                    if (curTally != null) {
-                        tallies.add(curTally);
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            Log.e(TAG, e.getMessage());
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        return tallies;
-    }
-
-    private DailyTally extractDailyTally(HashMap<Long, Hia2Indicator> indicatorMap, Cursor cursor) {
+    private DailyTally extractDailyTally(HashMap<Long, MohIndicator> indicatorMap, Cursor cursor) {
         long indicatorId = cursor.getLong(cursor.getColumnIndex(COLUMN_INDICATOR_ID));
         if (indicatorMap.containsKey(indicatorId)) {
-            Hia2Indicator indicator = indicatorMap.get(indicatorId);
+            MohIndicator indicator = indicatorMap.get(indicatorId);
             if (!IGNORED_INDICATOR_CODES.contains(indicator.getIndicatorCode())) {
                 DailyTally curTally = new DailyTally();
                 curTally.setId(cursor.getLong(cursor.getColumnIndex(COLUMN_ID)));
