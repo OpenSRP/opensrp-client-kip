@@ -137,7 +137,7 @@
                     android:paddingBottom="10dp"
                     android:paddingRight="10dp"
                     android:paddingTop="10dp"
-                    android:src="@drawable/zeirbig" />
+                    android:src="@mipmap/ic_logo_kip" />
 
                 <org.smartregister.view.customcontrols.CustomFontTextView
                     android:id="@+id/child_registertextview"
