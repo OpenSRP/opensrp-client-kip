@@ -40,4 +40,7 @@
     <color name="snackbar_action_color">#eeff1c</color>
 
     <color name="filter_bar_light_grey">#EEEEEE</color>
+
+    <color name="light_green">#225A3F</color>
+    <color name="dark_green">#082F1A</color>
 </resources>

@@ -73,8 +73,8 @@ public class KipSpinnerFactory extends SpinnerFactory {
                                 }
 
                                 if (childSpinner != null) {
-                                    int selectedItemPosition = childSpinner.getSelectedItemPosition();
-                                    String selectedItem = selectedItemPosition != -1 ? childSpinner.getSelectedItem().toString() : null;
+                                    //int selectedItemPosition = childSpinner.getSelectedItemPosition();
+                                    //String selectedItem = selectedItemPosition != -1 ? childSpinner.getSelectedItem().toString() : null;
                                     LocationRepository locationRepository = KipApplication.getInstance().locationRepository();
                                     Location location = locationRepository.getLocationByName(value);
                                     ArrayAdapter<String> adapter;
@@ -95,11 +95,13 @@ public class KipSpinnerFactory extends SpinnerFactory {
                                             for (int n = 0; n < size; n++) {
                                                 locationName = locations.get(n).getName();
                                                 locs[n] = locationName;
+                                                /*
                                                 if (locationName.equals(selectedItem)) {
                                                     selectedItemPosition = n;
                                                 } else {
                                                     selectedItemPosition = -1;
                                                 }
+                                                */
                                             }
                                         } else {
                                             locs[0] = "Other";
@@ -111,9 +113,10 @@ public class KipSpinnerFactory extends SpinnerFactory {
 
                                     adapter = new ArrayAdapter<>(context, com.vijay.jsonwizard.R.layout.simple_list_item_1, locs);
                                     childSpinner.setAdapter(adapter);
+                                    /*
                                     if (selectedItemPosition != -1) {
                                         childSpinner.setSelection(selectedItemPosition);
-                                    }
+                                    }*/
                                 }
                             }
                         }

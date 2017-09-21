@@ -162,6 +162,7 @@ public class StockControlActivity extends AppCompatActivity {
 
             }
         });
+        /*
         LinearLayout stockregister = (LinearLayout) drawer.findViewById(R.id.stockcontrol);
         stockregister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,7 +172,7 @@ public class StockControlActivity extends AppCompatActivity {
                 drawer.closeDrawer(GravityCompat.START);
 
             }
-        });
+        });*/
         LinearLayout childregister = (LinearLayout) drawer.findViewById(R.id.child_register);
         childregister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -186,7 +187,7 @@ public class StockControlActivity extends AppCompatActivity {
 //                finish();
             }
         });
-        stockregister.setBackgroundColor(getResources().getColor(R.color.tintcolor));
+        //stockregister.setBackgroundColor(getResources().getColor(R.color.tintcolor));
 
     }
 

@@ -260,7 +260,7 @@ public abstract class BaseActivity extends AppCompatActivity
         addchild.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startJsonForm("child_enrollment", null);
+                startJsonForm("kip_child_enrollment", null);
                 drawer.closeDrawer(GravityCompat.START);
 
             }
@@ -274,6 +274,7 @@ public abstract class BaseActivity extends AppCompatActivity
 
             }
         });
+        /*
         LinearLayout stockregister = (LinearLayout) drawer.findViewById(R.id.stockcontrol);
         stockregister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -283,7 +284,7 @@ public abstract class BaseActivity extends AppCompatActivity
                 drawer.closeDrawer(GravityCompat.START);
 
             }
-        });
+        });*/
         LinearLayout childregister = (LinearLayout) drawer.findViewById(R.id.child_register);
         childregister.setOnClickListener(new View.OnClickListener() {
             @Override

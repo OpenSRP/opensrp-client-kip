@@ -4,7 +4,7 @@
     android:id="@+id/register_nav_bar_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/actionbar"
+    android:background="@color/dark_green"
     android:focusableInTouchMode="true"
     tools:showIn="@layout/smart_register_nav_bar_customized">
 

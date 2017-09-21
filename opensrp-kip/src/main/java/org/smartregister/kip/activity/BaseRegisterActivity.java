@@ -185,12 +185,9 @@ public abstract class BaseRegisterActivity extends SecuredNativeSmartRegisterAct
         int id = item.getItemId();
 
         if (id == R.id.nav_register) {
-            startFormActivity("child_enrollment", null, null);
+            startFormActivity("kip_child_enrollment", null, null);
         } else if (id == R.id.nav_record_vaccination_out_catchment) {
             startFormActivity("out_of_catchment_service", null, null);
-        } else if (id == R.id.stockcontrol) {
-            Intent intent = new Intent(this, StockActivity.class);
-            startActivity(intent);
         } else if (id == R.id.nav_sync) {
             startSync();
         }
@@ -310,7 +307,7 @@ public abstract class BaseRegisterActivity extends SecuredNativeSmartRegisterAct
         addchild.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startFormActivity("child_enrollment", null, null);
+                startFormActivity("kip_child_enrollment", null, null);
                 drawer.closeDrawer(GravityCompat.START);
 
             }
@@ -324,6 +321,7 @@ public abstract class BaseRegisterActivity extends SecuredNativeSmartRegisterAct
 
             }
         });
+        /*
         LinearLayout stockregister = (LinearLayout) drawer.findViewById(R.id.stockcontrol);
         stockregister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -333,7 +331,7 @@ public abstract class BaseRegisterActivity extends SecuredNativeSmartRegisterAct
                 drawer.closeDrawer(GravityCompat.START);
 
             }
-        });
+        });*/
 
         LinearLayout childregister = (LinearLayout) drawer.findViewById(R.id.child_register);
         childregister.setOnClickListener(new View.OnClickListener() {
