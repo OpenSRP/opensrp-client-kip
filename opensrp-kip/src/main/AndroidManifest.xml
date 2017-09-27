@@ -91,6 +91,16 @@
         <service android:name=".service.intent.Moh710IntentService" />
         <service android:name=".service.intent.LocationsIntentService" />
 
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.vijay.jsonwizard.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/captured_images_path" />
+        </provider>
+
         <activity
             android:name=".activity.StockControlActivity"
             android:label="@string/title_activity_stock_control"

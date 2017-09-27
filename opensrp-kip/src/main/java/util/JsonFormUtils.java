@@ -1874,7 +1874,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
                 } else {
                     JSONArray fields = form.getJSONObject("step1").getJSONArray("fields");
                     for (int i = 0; i < fields.length(); i++) {
-                        if (fields.getJSONObject(i).getString("key").equals("KIP_ID")) {
+                        if (fields.getJSONObject(i).getString("key").equals(JsonFormUtils.KIP_ID)) {
                             fields.getJSONObject(i).put(READ_ONLY, false);
                             break;
                         }

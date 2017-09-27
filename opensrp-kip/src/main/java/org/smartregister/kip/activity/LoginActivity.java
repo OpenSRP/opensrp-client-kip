@@ -153,7 +153,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void login(final View view) {
-        login(view, !getOpenSRPContext().allSharedPreferences().fetchForceRemoteLogin());
+        login(view, getOpenSRPContext().allSharedPreferences().fetchForceRemoteLogin());
     }
 
     private void login(final View view, boolean localLogin) {

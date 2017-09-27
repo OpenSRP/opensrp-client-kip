@@ -151,6 +151,7 @@
         "hint": "Child's KIP ID *",
         "scanButtonText": "Scan QR Code",
         "value": "0",
+        "read_only": true,
         "v_required": {
           "value": "true",
           "err": "Please enter the Child's KIP ID"

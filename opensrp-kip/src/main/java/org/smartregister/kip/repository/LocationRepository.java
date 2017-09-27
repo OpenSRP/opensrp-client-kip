@@ -20,7 +20,7 @@ import java.util.Set;
 
 public class LocationRepository extends BaseRepository {
     private static final String TAG = LocationRepository.class.getCanonicalName();
-    private static final String LOCATIONS_SQL = "CREATE TABLE locations(_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, uuid VARCHAR NOT NULL, name VARCHAR NOT NULL, tag VARCHAR NOT NULL, parent_uuid VARCHAR NULL)";
+    private static final String LOCATIONS_SQL = "CREATE TABLE locations(_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, uuid VARCHAR NOT NULL UNIQUE, name VARCHAR NOT NULL UNIQUE, tag VARCHAR NOT NULL, parent_uuid VARCHAR NULL)";
     public static final String LOCATIONS_TABLE_NAME = "locations";
     public static final String ID_COLUMN = "_id";
     public static final String UUID_COLUMN = "uuid";
@@ -68,7 +68,7 @@ public class LocationRepository extends BaseRepository {
                     values.put(PARENT_UUID_COLUMN, parent.getLocationId());
                 }
 
-                database.insert(LOCATIONS_TABLE_NAME, null, values);
+                database.insertWithOnConflict(LOCATIONS_TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
             }
             database.setTransactionSuccessful();
         } catch (SQLException e) {
@@ -111,7 +111,7 @@ public class LocationRepository extends BaseRepository {
                 cursor.close();
             }
         }
-        Log.i(TAG, "LocationsByTag list: " + locations.toString());
+        Log.i(TAG, "LocationsByTag: Tag: " + tag + ", list: " + locations.toString());
         return locations;
     }
 
