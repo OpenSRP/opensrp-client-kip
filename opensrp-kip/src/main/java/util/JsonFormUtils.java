@@ -138,7 +138,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
             JSONObject form = new JSONObject(jsonString);
             if (form.getString("encounter_type").equals("Out of Catchment Service")) {
                 saveOutOfAreaService(context, openSrpContext, jsonString);
-            } else if (form.getString("encounter_type").equals("Child Enrollment")) {
+            } else if (form.getString("encounter_type").equals(KipConstants.CHILD_ENROLLMENT)) {
                 saveChildEnrollment(context, openSrpContext, jsonString, providerId, "Child_Photo", "child");
             }
         } catch (JSONException e) {
@@ -275,7 +275,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
         }
     }
 
-    public static void editsave(Context context, org.smartregister.kip.context.Context openSrpContext, String jsonString, String providerId, String imageKey, String bindType, String subBindType) {
+    public static void editsave(Context context, org.smartregister.kip.context.Context openSrpContext, String jsonString, String providerId, String imageKey, String bindType) {
         if (context == null || StringUtils.isBlank(providerId) || StringUtils.isBlank(jsonString)) {
             return;
         }
@@ -385,7 +385,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
 
             // Unassign current id
             if (baseClient != null) {
-                String newZeirId = baseClient.getIdentifier(KIP_ID).replace("-", "");
+                String newZeirId = baseClient.getIdentifier(OPENMRS_ID).replace("-", "");
                 String currentZeirId = getString(jsonForm, "current_zeir_id").replace("-", "");
                 if (!newZeirId.equals(currentZeirId)) {
                     //ZEIR_ID was changed
