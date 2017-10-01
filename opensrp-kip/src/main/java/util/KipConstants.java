@@ -24,6 +24,8 @@ public class KipConstants extends AllConstants {
 
     public static final String DEFAULT_DATE_STRING = "1970-1-1";
 
+    public static final String CHILD_ENROLLMENT = "Child Enrollment";
+
     public static String openmrsUrl() {
         String baseUrl = KipApplication.getInstance().context().allSharedPreferences().fetchBaseURL("");
         int lastIndex = baseUrl.lastIndexOf("/");
@@ -58,5 +60,4 @@ public class KipConstants extends AllConstants {
         public static final String CHW_PHONE_NUMBER = "chw_phone_number";
     }
 
-    public static final String CHILD_ENROLLMENT = "Child Enrollment";
 }
