@@ -11,7 +11,6 @@ import com.vijay.jsonwizard.fragments.JsonFormFragment;
 import com.vijay.jsonwizard.interfaces.CommonListener;
 import com.vijay.jsonwizard.widgets.SpinnerFactory;
 
-import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.api.domain.Location;
@@ -97,8 +96,8 @@ public class KipSpinnerFactory extends SpinnerFactory {
                                         for (int n = 0; n < size; n++) {
                                             locationName = locations.get(n).getName();
                                             locs[n] = locationName;
-                                            if(sel.equalsIgnoreCase(locationName)){
-                                                indexToSelect = n+1;
+                                            if (sel.equalsIgnoreCase(locationName)) {
+                                                indexToSelect = n + 1;
                                             }
                                         }
                                     } else {
@@ -111,7 +110,7 @@ public class KipSpinnerFactory extends SpinnerFactory {
 
                                 adapter = new ArrayAdapter<>(context, com.vijay.jsonwizard.R.layout.simple_list_item_1, locs);
                                 childSpinner.setAdapter(adapter);
-                                if(indexToSelect != -1){
+                                if (indexToSelect != -1) {
                                     childSpinner.setSelection(indexToSelect);
                                 }
                             }

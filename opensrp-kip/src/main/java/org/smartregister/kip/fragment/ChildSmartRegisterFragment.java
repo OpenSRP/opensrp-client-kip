@@ -45,8 +45,6 @@ import org.smartregister.view.dialog.SortOption;
 
 import util.KipConstants;
 
-import static android.view.View.INVISIBLE;
-
 public class ChildSmartRegisterFragment extends BaseSmartRegisterFragment implements SyncStatusBroadcastReceiver.SyncStatusListener {
     private final ClientActionHandler clientActionHandler = new ClientActionHandler();
     private View filterSection;
@@ -181,8 +179,8 @@ public class ChildSmartRegisterFragment extends BaseSmartRegisterFragment implem
     @Override
     public void setupViews(View view) {
         super.setupViews(view);
-        view.findViewById(R.id.btn_report_month).setVisibility(INVISIBLE);
-        view.findViewById(R.id.service_mode_selection).setVisibility(INVISIBLE);
+        view.findViewById(R.id.btn_report_month).setVisibility(View.INVISIBLE);
+        view.findViewById(R.id.service_mode_selection).setVisibility(View.INVISIBLE);
 
         filterSection = view.findViewById(R.id.filter_selection);
         filterSection.setOnClickListener(clientActionHandler);
@@ -248,7 +246,7 @@ public class ChildSmartRegisterFragment extends BaseSmartRegisterFragment implem
         String guardianAlias = "g";
 
         ChildSmartClientsProvider hhscp = new ChildSmartClientsProvider(getActivity(),
-                clientActionHandler, context().alertService(), KipApplication.getInstance().vaccineRepository(), KipApplication.getInstance().weightRepository());
+                clientActionHandler, context().alertService(), KipApplication.getInstance().vaccineRepository(), KipApplication.getInstance().weightRepository(), context().commonrepository(tableName));
         clientAdapter = new SmartRegisterPaginatedCursorAdapter(getActivity(), null, hhscp, context().commonrepository(tableName));
         clientsView.setAdapter(clientAdapter);
 
@@ -273,7 +271,7 @@ public class ChildSmartRegisterFragment extends BaseSmartRegisterFragment implem
                 motherAlias + ".dob as mother_dob",
                 motherAlias + ".nrc_number as mother_id_number",
                 motherAlias + ".gender as mother_gender",
-                guardianAlias + ".first_name || ' ' || "+ guardianAlias + ".last_name as guardian_name",
+                guardianAlias + ".first_name || ' ' || " + guardianAlias + ".last_name as guardian_name",
                 guardianAlias + ".dob as guardian_dob",
                 guardianAlias + ".nrc_number as guardian_id_number",
                 guardianAlias + ".gender as guardian_gender",

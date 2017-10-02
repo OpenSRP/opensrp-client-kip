@@ -1356,12 +1356,20 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
             allLevels.add("Ward");
             allLevels.add("Health Facility");
 
+            JSONArray upToFacilities = generateLocationHierarchyTree(context, false, new ArrayList<>(allLevels.subList(4, 5)));
             JSONArray counties = generateLocationArray("County", context, true, new ArrayList<>(allLevels.subList(1, 2)));
             JSONArray subCounties = generateLocationArray("Sub County", context, true, new ArrayList<>(allLevels.subList(2, 3)));
             JSONArray wards = generateLocationArray("Ward", context, true, new ArrayList<>(allLevels.subList(3, 4)));
 
             for (int i = 0; i < questions.length(); i++) {
-                if (questions.getJSONObject(i).getString("key").equals("Ce_County")) {
+                if (questions.getJSONObject(i).getString("key").equals("Home_Facility")) {
+                    if (upToFacilities.length() > 0) {
+                        JSONObject facility = upToFacilities.getJSONObject(0);
+                        if (facility != null && facility.has("name")) {
+                            questions.getJSONObject(i).put("value", facility.getString("name"));
+                        }
+                    }
+                } else if (questions.getJSONObject(i).getString("key").equals("Ce_County")) {
                     questions.getJSONObject(i).remove(JsonFormUtils.VALUES);
                     questions.getJSONObject(i).put("values", counties);
 
@@ -2060,7 +2068,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
             return null;
         }
     }
-    
+
     /**
      * Amos L.
      * Check if a vaccine within a vaccine group has a condition based on the child's attribute.
