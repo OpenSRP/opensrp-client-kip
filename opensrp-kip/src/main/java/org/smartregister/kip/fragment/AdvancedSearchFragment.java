@@ -141,7 +141,7 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
         advancedSearchForm = view.findViewById(R.id.advanced_search_form);
 
         ImageButton imageButton = (ImageButton) view.findViewById(R.id.global_search);
-        imageButton.setBackgroundColor(getResources().getColor(R.color.transparent_dark_blue));
+        imageButton.setBackgroundColor(getResources().getColor(R.color.dark_green));
         imageButton.setOnClickListener(clientActionHandler);
 
 
@@ -172,7 +172,7 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
 
     @Override
     protected void startRegistration() {
-        ((ChildSmartRegisterActivity) getActivity()).startFormActivity("child_enrollment", null, null);
+        ((ChildSmartRegisterActivity) getActivity()).startFormActivity("kip_child_enrollment", null, null);
     }
 
     private void populateFormViews(View view) {

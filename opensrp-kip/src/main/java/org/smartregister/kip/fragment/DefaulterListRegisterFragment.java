@@ -198,7 +198,6 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
 
         // Status bar views
         View filterSection = view.findViewById(R.id.filter_selection);
-        filterSection.setBackgroundResource(R.drawable.transparent_clicked_background);
         filterSection.setOnClickListener(clientActionHandler);
 
         if (titleLabelView != null) {
@@ -312,7 +311,7 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
 
         LinearLayout headerLayout = (LinearLayout) getLayoutInflater(null).inflate(R.layout.smart_register_child_defaulter_list_header, null);
         clientsView.addHeaderView(headerLayout);
-        clientsView.setEmptyView(getActivity().findViewById(R.id.empty_view));
+        //clientsView.setEmptyView(getActivity().findViewById(R.id.empty_view));
     }
 
     private void updateOnlyOverdueCheckbox() {
