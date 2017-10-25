@@ -78,7 +78,6 @@ public class KipSpinnerFactory extends SpinnerFactory {
                                 Location location = locationRepository.getLocationByName(value);
                                 ArrayAdapter<String> adapter;
                                 Log.d(TAG, "Name: " + value);
-                                Log.d(TAG, "Location: " + location != null ? location.toString() : " null");
                                 String[] locs;
                                 int indexToSelect = -1;
 

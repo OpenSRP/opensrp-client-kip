@@ -415,7 +415,7 @@ public class ChildImmunizationActivity extends BaseActivity
             }
         }
 
-        showVaccineNotifications(vaccineList, alerts);
+        //showVaccineNotifications(vaccineList, alerts);
     }
 
     private void showVaccineNotifications(List<Vaccine> vaccineList, List<Alert> alerts) {
@@ -769,7 +769,7 @@ public class ChildImmunizationActivity extends BaseActivity
                 .findByEntityId(childDetails.entityId());
         if (vaccineList == null) vaccineList = new ArrayList<>();
 
-        VaccinationDialogFragment vaccinationDialogFragment = VaccinationDialogFragment.newInstance(dob, vaccineList, vaccineWrappers);
+        VaccinationDialogFragment vaccinationDialogFragment = VaccinationDialogFragment.newInstance(dob, vaccineList, vaccineWrappers, true);
         vaccinationDialogFragment.show(ft, DIALOG_TAG);
     }
 
@@ -783,11 +783,16 @@ public class ChildImmunizationActivity extends BaseActivity
 
         ft.addToBackStack(null);
         serviceGroup.setModalOpen(true);
+        String dobString = Utils.getValue(childDetails.getColumnmaps(), KipConstants.KEY.DOB, false);
+        DateTime dob = DateTime.now();
+        if (!TextUtils.isEmpty(dobString)) {
+            dob = new DateTime(dobString);
+        }
 
         List<ServiceRecord> serviceRecordList = KipApplication.getInstance().recurringServiceRecordRepository()
                 .findByEntityId(childDetails.entityId());
 
-        ServiceDialogFragment serviceDialogFragment = ServiceDialogFragment.newInstance(serviceRecordList, serviceWrapper);
+        ServiceDialogFragment serviceDialogFragment = ServiceDialogFragment.newInstance(dob, serviceRecordList, serviceWrapper, true);
         serviceDialogFragment.show(ft, DIALOG_TAG);
     }
 
@@ -1329,7 +1334,7 @@ public class ChildImmunizationActivity extends BaseActivity
 
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();
+            showProgressDialog(getString(R.string.updating_dialog_title), null);
         }
 
         @Override
@@ -1362,6 +1367,7 @@ public class ChildImmunizationActivity extends BaseActivity
         @Override
         protected void onPostExecute(Void params) {
             super.onPostExecute(params);
+            hideProgressDialog();
 
             tag.setUpdatedVaccineDate(null, false);
             tag.setDbKey(null);
@@ -1439,6 +1445,7 @@ public class ChildImmunizationActivity extends BaseActivity
         private List<String> affectedVaccines;
         private List<Vaccine> vaccineList;
         private List<Alert> alertList;
+        private List<VaccineWrapper> vaccines;
 
         public void setView(View view) {
             this.view = view;
@@ -1448,6 +1455,7 @@ public class ChildImmunizationActivity extends BaseActivity
             this.vaccineRepository = vaccineRepository;
             alertService = getOpenSRPContext().alertService();
             affectedVaccines = new ArrayList<>();
+            vaccines = new ArrayList<>();
         }
 
         @Override
@@ -1466,7 +1474,17 @@ public class ChildImmunizationActivity extends BaseActivity
             }
 
             updateVaccineGroupsUsingAlerts(affectedVaccines, vaccineList, alertList);
-            showVaccineNotifications(vaccineList, alertList);
+
+            for(VaccineWrapper vw : vaccines){
+                // Check if vaccine is a 6 week vaccine, show check BCG notification
+                if (vw.getName().equalsIgnoreCase(VaccineRepo.Vaccine.opv1.display())
+                        || vw.getName().equalsIgnoreCase(VaccineRepo.Vaccine.penta1.display())
+                        || vw.getName().equalsIgnoreCase(VaccineRepo.Vaccine.pcv1.display())
+                        || vw.getName().equalsIgnoreCase(VaccineRepo.Vaccine.rota1.display())){
+                    showVaccineNotifications(vaccineList, alertList);
+                    break;
+                }
+            }
         }
 
         @Override
@@ -1477,6 +1495,7 @@ public class ChildImmunizationActivity extends BaseActivity
                 for (VaccineWrapper tag : vaccineWrappers) {
                     saveVaccine(vaccineRepository, tag);
                     list.add(tag);
+                    vaccines.add(tag);
                 }
             }
 
@@ -1514,7 +1533,7 @@ public class ChildImmunizationActivity extends BaseActivity
 
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();
+            showProgressDialog(getString(R.string.updating_dialog_title), null);
         }
 
         @Override
@@ -1539,6 +1558,7 @@ public class ChildImmunizationActivity extends BaseActivity
 
         @Override
         protected void onPostExecute(Void params) {
+            hideProgressDialog();
             super.onPostExecute(params);
 
             // Refresh the vaccine group with the updated vaccine
@@ -1551,7 +1571,7 @@ public class ChildImmunizationActivity extends BaseActivity
             wrappers.add(tag);
             updateVaccineGroupViews(view, wrappers, vaccineList, true);
             updateVaccineGroupsUsingAlerts(affectedVaccines, vaccineList, alertList);
-            showVaccineNotifications(vaccineList, alertList);
+            //showVaccineNotifications(vaccineList, alertList);
         }
     }
 

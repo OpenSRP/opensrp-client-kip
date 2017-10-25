@@ -39,6 +39,7 @@
     <string name="edit_registration_data">Edit registration data</string>
     <string name="edit_immunization_data">Edit immunisation data</string>
     <string name="edit_recurring_services_data">Edit recurring services data</string>
+    <string name="record_bcg_2">Record BCG 2 (if no scar)</string>
     <string name="report_deceased">Report deceased</string>
     <string name="report_adverse_event">Report adverse event</string>
     <string name="syncing">Syncing...</string>
@@ -138,5 +139,6 @@
         <item>Show all</item>
         <item>Select period</item>
     </string-array>
+    <string name="validation_error">Validation Error</string>
 
 </resources>

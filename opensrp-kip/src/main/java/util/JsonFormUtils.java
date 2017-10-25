@@ -460,7 +460,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
                 serviceDate = curField.getString("value");
             } else if (curField.getString("key").equals("KIP_ID")) {
                 foundFields++;
-                zeirId = formatChildUniqueId(curField.getString("value"));
+                zeirId = curField.getString("value");
             }
 
             if (foundFields == 3) {
@@ -520,7 +520,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
             } else if (curField.getString("key").equals("OA_Service_Date")) {
                 serviceDate = curField.getString("value");
             } else if (curField.getString("key").equals("KIP_ID")) {
-                zeirId = formatChildUniqueId(curField.getString("value"));
+                zeirId = curField.getString("value");
             }
         }
 
@@ -736,30 +736,10 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
         if (entityVal != null && entityVal.equals(entity)) {
             String entityIdVal = getString(jsonObject, OPENMRS_ENTITY_ID);
 
-            if (entityIdVal.equals(KIP_ID)) {
-                value = formatChildUniqueId(value);
-            }
-
             pids.put(entityIdVal, value);
         }
 
 
-    }
-
-    /**
-     * This method formats the child unique id obtained from a JSON Form to something that is useable
-     *
-     * @param unformattedId The unformatted unique identifier
-     * @return A formatted ID or the original id if method is unable to format
-     */
-    private static String formatChildUniqueId(String unformattedId) {
-        if (StringUtils.isNotBlank(unformattedId) && !unformattedId.contains("-")) {
-            StringBuilder stringBuilder = new StringBuilder(unformattedId);
-            stringBuilder.insert(unformattedId.length() - 1, '-');
-            unformattedId = stringBuilder.toString();
-        }
-
-        return unformattedId;
     }
 
     // Helper functions
@@ -1852,8 +1832,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
                     UniqueIdRepository uniqueIdRepo = KipApplication.getInstance().uniqueIdRepository();
                     entityId = uniqueIdRepo.getNextUniqueId() != null ? uniqueIdRepo.getNextUniqueId().getOpenmrsId() : "";
 
-                    if (entityId.isEmpty() || uniqueIdRepo.countUnUsedIds() < 3) {
-                        // If entityId is empty or if unused < 3, to cater for child, mother & guardian
+                    if (entityId.isEmpty()) {
                         Toast.makeText(context, context.getString(R.string.no_openmrs_id), Toast.LENGTH_SHORT).show();
                         return;
                     }

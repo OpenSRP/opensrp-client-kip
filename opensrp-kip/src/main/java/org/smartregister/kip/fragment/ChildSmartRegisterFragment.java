@@ -242,8 +242,8 @@ public class ChildSmartRegisterFragment extends BaseSmartRegisterFragment implem
     private void initializeQueries() {
         String tableName = KipConstants.CHILD_TABLE_NAME;
         String parentTableName = KipConstants.MOTHER_TABLE_NAME;
-        String motherAlias = "m";
-        String guardianAlias = "g";
+        String motherAlias = KipConstants.MOTHER_TABLE_ALIAS;
+        String guardianAlias = KipConstants.GUARDIAN_TABLE_ALIAS;
 
         ChildSmartClientsProvider hhscp = new ChildSmartClientsProvider(getActivity(),
                 clientActionHandler, context().alertService(), KipApplication.getInstance().vaccineRepository(), KipApplication.getInstance().weightRepository(), context().commonrepository(tableName));

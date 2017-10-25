@@ -125,17 +125,12 @@ public class UniqueIdRepository extends BaseRepository {
      */
     public void close(String openmrsId) {
         try {
-            String id;
             String userName = KipApplication.getInstance().context().allSharedPreferences().fetchRegisteredANM();
-            if (!openmrsId.contains("-")) {
-                id = formatId(openmrsId);
-            } else {
-                id = openmrsId;
-            }
+
             ContentValues values = new ContentValues();
             values.put(STATUS_COLUMN, STATUS_USED);
             values.put(USED_BY_COLUMN, userName);
-            getWritableDatabase().update(UniqueIds_TABLE_NAME, values, OPENMRS_ID_COLUMN + " = ?", new String[]{id});
+            getWritableDatabase().update(UniqueIds_TABLE_NAME, values, OPENMRS_ID_COLUMN + " = ?", new String[]{openmrsId});
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }
@@ -148,9 +143,6 @@ public class UniqueIdRepository extends BaseRepository {
      */
     public void open(String openmrsId) {
         try {
-            if (!openmrsId.contains("-")) {
-                openmrsId = formatId(openmrsId);
-            }
             ContentValues values = new ContentValues();
             values.put(STATUS_COLUMN, STATUS_NOT_USED);
             values.put(USED_BY_COLUMN, "");
@@ -158,12 +150,6 @@ public class UniqueIdRepository extends BaseRepository {
         } catch (Exception e) {
             Log.e(TAG, e.getMessage(), e);
         }
-    }
-
-    private String formatId(String openmrsId) {
-        int lastIndex = openmrsId.length() - 1;
-        String tail = openmrsId.substring(lastIndex);
-        return openmrsId.substring(0, lastIndex) + "-" + tail;
     }
 
     private ContentValues createValuesFor(UniqueId uniqueId) {

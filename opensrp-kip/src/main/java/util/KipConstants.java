@@ -20,6 +20,8 @@ public class KipConstants extends AllConstants {
 
     public static final String CHILD_TABLE_NAME = "ec_child";
     public static final String MOTHER_TABLE_NAME = "ec_mother";
+    public static final String MOTHER_TABLE_ALIAS = "m";
+    public static final String GUARDIAN_TABLE_ALIAS = "g";
     public static final String CURRENT_LOCATION_ID = "CURRENT_LOCATION_ID";
 
     public static final String DEFAULT_DATE_STRING = "1970-1-1";

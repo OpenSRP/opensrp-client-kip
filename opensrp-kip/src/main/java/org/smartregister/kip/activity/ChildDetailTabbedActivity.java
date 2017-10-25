@@ -34,6 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import org.joda.time.DateTime;
 import org.json.JSONArray;
@@ -49,6 +50,7 @@ import org.smartregister.growthmonitoring.domain.WeightWrapper;
 import org.smartregister.growthmonitoring.fragment.EditWeightDialogFragment;
 import org.smartregister.growthmonitoring.listener.WeightActionListener;
 import org.smartregister.growthmonitoring.repository.WeightRepository;
+import org.smartregister.immunization.db.VaccineRepo;
 import org.smartregister.immunization.domain.ServiceRecord;
 import org.smartregister.immunization.domain.ServiceSchedule;
 import org.smartregister.immunization.domain.ServiceType;
@@ -56,6 +58,7 @@ import org.smartregister.immunization.domain.ServiceWrapper;
 import org.smartregister.immunization.domain.Vaccine;
 import org.smartregister.immunization.domain.VaccineSchedule;
 import org.smartregister.immunization.domain.VaccineWrapper;
+import org.smartregister.immunization.fragment.VaccinationDialogFragment;
 import org.smartregister.immunization.listener.ServiceActionListener;
 import org.smartregister.immunization.listener.VaccinationActionListener;
 import org.smartregister.immunization.repository.RecurringServiceRecordRepository;
@@ -105,6 +108,9 @@ import util.ImageUtils;
 import util.JsonFormUtils;
 import util.KipConstants;
 
+import static org.smartregister.util.Utils.getName;
+import static org.smartregister.util.Utils.getValue;
+
 /**
  * Created by raihan on 1/03/2017.
  */
@@ -144,6 +150,9 @@ public class ChildDetailTabbedActivity extends BaseActivity implements Vaccinati
     private Map<String, String> details;
     public static final String inactive = "inactive";
     public static final String lostToFollowUp = "lost_to_follow_up";
+    public static final String PMTCT_STATUS_LOWER_CASE = "pmtct_status";
+
+    private static final String CHILD = "child";
 
 
     @Override
@@ -239,7 +248,7 @@ public class ChildDetailTabbedActivity extends BaseActivity implements Vaccinati
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 android.app.Fragment prev = getFragmentManager().findFragmentByTag(DIALOG_TAG);
 
-                StatusEditDialogFragment.newInstance(ChildDetailTabbedActivity.this, details).show(ft, DIALOG_TAG);
+                StatusEditDialogFragment.newInstance(details).show(ft, DIALOG_TAG);
             }
         });
 
@@ -327,30 +336,19 @@ public class ChildDetailTabbedActivity extends BaseActivity implements Vaccinati
         if (!show_weight_edit) {
             overflow.findItem(R.id.weight_data).setEnabled(false);
         }
-        return true;
-    }
 
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        //super.onPrepareOptionsMenu(menu);
-        //getMenuInflater().inflate(R.menu.menu_child_detail_settings, menu);
+        AlertService alertService = getOpenSRPContext().alertService();
+        List<Alert> alertList = alertService.findByEntityIdAndAlertNames(childDetails.entityId(),
+                VaccinateActionUtils.allAlertNames(CHILD));
 
-//        if (details.containsKey(lostToFollowUp) && details.get(lostToFollowUp).equalsIgnoreCase(Boolean.TRUE.toString())) {
-//            menu.findItem(R.id.mark_as_lost_to_followup).setTitle(getResources().getString(R.string.mark_as_not_lost_to_followup));
-//        }else{
-//            menu.findItem(R.id.mark_as_lost_to_followup).setTitle(getResources().getString(R.string.mark_as_lost_to_followup));
-//
-//        }
-//
-//        if (details.containsKey(inactive) && details.get(inactive).equalsIgnoreCase(Boolean.TRUE.toString())) {
-//            menu.findItem(R.id.mark_inactive).setTitle(getResources().getString(R.string.mark_active));
-//        }else{
-//            menu.findItem(R.id.mark_inactive).setTitle(getResources().getString(R.string.mark_inactive));
-//        }
+        boolean showRecordBcg2 = showRecordBcg2(vaccineList, alertList);
+        if (!showRecordBcg2) {
+            overflow.findItem(R.id.record_bcg_2).setVisible(false);
+        }
 
         return true;
-    }
 
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -358,11 +356,13 @@ public class ChildDetailTabbedActivity extends BaseActivity implements Vaccinati
         switch (item.getItemId()) {
             case R.id.registration_data:
                 String formmetadata = getmetaDataForEditForm();
-                startFormActivity("kip_child_enrollment", childDetails.entityId(), formmetadata);
+                startFormActivity("child_enrollment", childDetails.entityId(), formmetadata);
                 // User chose the "Settings" item, show the app settings UI...
                 return true;
             case R.id.immunization_data:
-                viewPager.setCurrentItem(1);
+                if (viewPager.getCurrentItem() != 1) {
+                    viewPager.setCurrentItem(1);
+                }
                 childUnderFiveFragment.loadView(true, false, false);
                 saveButton.setVisibility(View.VISIBLE);
                 for (int i = 0; i < overflow.size(); i++) {
@@ -371,7 +371,9 @@ public class ChildDetailTabbedActivity extends BaseActivity implements Vaccinati
                 return true;
 
             case R.id.recurring_services_data:
-                viewPager.setCurrentItem(1);
+                if (viewPager.getCurrentItem() != 1) {
+                    viewPager.setCurrentItem(1);
+                }
                 childUnderFiveFragment.loadView(false, true, false);
                 saveButton.setVisibility(View.VISIBLE);
                 for (int i = 0; i < overflow.size(); i++) {
@@ -379,7 +381,9 @@ public class ChildDetailTabbedActivity extends BaseActivity implements Vaccinati
                 }
                 return true;
             case R.id.weight_data:
-                viewPager.setCurrentItem(1);
+                if (viewPager.getCurrentItem() != 1) {
+                    viewPager.setCurrentItem(1);
+                }
                 childUnderFiveFragment.loadView(false, false, true);
                 saveButton.setVisibility(View.VISIBLE);
                 for (int i = 0; i < overflow.size(); i++) {
@@ -394,28 +398,16 @@ public class ChildDetailTabbedActivity extends BaseActivity implements Vaccinati
             case R.id.change_status:
                 FragmentTransaction ft = this.getFragmentManager().beginTransaction();
                 android.app.Fragment prev = this.getFragmentManager().findFragmentByTag(DIALOG_TAG);
-
-                StatusEditDialogFragment.newInstance(this, details).show(ft, DIALOG_TAG);
-//                if (details.containsKey(inactive) && details.get(inactive).equalsIgnoreCase(Boolean.TRUE.toString())) {
-//                    updateClientAttribute(inactive, false);
-//
-//                } else {
-//                    updateClientAttribute(inactive, true);
-//
-//                }
-//                updateStatus();
+                if (prev != null) {
+                    ft.remove(prev);
+                }
+                StatusEditDialogFragment.newInstance(details).show(ft, DIALOG_TAG);
                 return true;
-//            case R.id.mark_as_lost_to_followup:
-//                if (details.containsKey(lostToFollowUp) && details.get(lostToFollowUp).equalsIgnoreCase(Boolean.TRUE.toString())) {
-//                    updateClientAttribute(lostToFollowUp, false);
-//                } else {
-//                    updateClientAttribute(lostToFollowUp, true);
-//
-//                }
-//                updateStatus();
-//                return true;
             case R.id.report_adverse_event:
                 return launchAdverseEventForm();
+            case R.id.record_bcg_2:
+                showBcg2DialogFragment();
+                return true;
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
@@ -1351,6 +1343,80 @@ public class ChildDetailTabbedActivity extends BaseActivity implements Vaccinati
         return detailsRepository;
     }
 
+    private boolean showRecordBcg2(List<Vaccine> vaccineList, List<Alert> alerts) {
+
+        if (VaccinateActionUtils.hasVaccine(vaccineList, VaccineRepo.Vaccine.bcg2)) {
+            return false;
+        }
+
+        Vaccine bcg = VaccinateActionUtils.getVaccine(vaccineList, VaccineRepo.Vaccine.bcg);
+        if (bcg == null) {
+            return false;
+        }
+
+        Alert alert = VaccinateActionUtils.getAlert(alerts, VaccineRepo.Vaccine.bcg2);
+        if (alert == null || alert.isComplete()) {
+            return false;
+        }
+
+        int bcgOffsetInWeeks = 12;
+        Calendar twelveWeeksLaterDate = Calendar.getInstance();
+        twelveWeeksLaterDate.setTime(bcg.getDate());
+        twelveWeeksLaterDate.add(Calendar.WEEK_OF_YEAR, bcgOffsetInWeeks);
+
+        Calendar today = Calendar.getInstance();
+
+        return today.getTime().after(twelveWeeksLaterDate.getTime()) || DateUtils.isSameDay(twelveWeeksLaterDate, today);
+    }
+
+
+    private void showBcg2DialogFragment() {
+
+        VaccineWrapper vaccineWrapper = new VaccineWrapper();
+        vaccineWrapper.setId(childDetails.entityId());
+        vaccineWrapper.setGender(childDetails.getDetails().get("gender"));
+        vaccineWrapper.setName(VaccineRepo.Vaccine.bcg2.display());
+        vaccineWrapper.setDefaultName(VaccineRepo.Vaccine.bcg2.display());
+
+        String dobString = getValue(childDetails.getColumnmaps(), "dob", false);
+        Date dob = Calendar.getInstance().getTime();
+        if (!TextUtils.isEmpty(dobString)) {
+            DateTime dateTime = new DateTime(dobString);
+            dob = dateTime.toDate();
+        }
+
+        Photo photo = org.smartregister.immunization.util.ImageUtils.profilePhotoByClient(childDetails);
+        vaccineWrapper.setPhoto(photo);
+
+        String zeirId = getValue(childDetails.getColumnmaps(), "zeir_id", false);
+        vaccineWrapper.setPatientNumber(zeirId);
+
+        String firstName = getValue(childDetails.getColumnmaps(), "first_name", true);
+        String lastName = getValue(childDetails.getColumnmaps(), "last_name", true);
+        String childName = getName(firstName, lastName);
+        vaccineWrapper.setPatientName(childName.trim());
+
+        ArrayList<VaccineWrapper> vaccineWrappers = new ArrayList<>();
+        vaccineWrappers.add(vaccineWrapper);
+
+        List<Vaccine> vaccineList = KipApplication.getInstance().vaccineRepository()
+                .findByEntityId(childDetails.entityId());
+        if (vaccineList == null) {
+            vaccineList = new ArrayList<>();
+        }
+
+        FragmentTransaction ft = this.getFragmentManager().beginTransaction();
+        android.app.Fragment prev = this.getFragmentManager().findFragmentByTag(DIALOG_TAG);
+        if (prev != null) {
+            ft.remove(prev);
+        }
+
+        ft.addToBackStack(null);
+
+        VaccinationDialogFragment vaccinationDialogFragment = VaccinationDialogFragment.newInstance(dob, vaccineList, vaccineWrappers, true);
+        vaccinationDialogFragment.show(ft, DIALOG_TAG);
+    }
+
 
     ////////////////////////////////////////////////////////////////
     // Inner classes
@@ -1457,7 +1523,7 @@ public class ChildDetailTabbedActivity extends BaseActivity implements Vaccinati
 
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();
+            showProgressDialog(getString(R.string.updating_dialog_title), null);
         }
 
         @Override
@@ -1490,6 +1556,7 @@ public class ChildDetailTabbedActivity extends BaseActivity implements Vaccinati
         @Override
         protected void onPostExecute(Void params) {
             super.onPostExecute(params);
+            hideProgressDialog();
 
             tag.setUpdatedVaccineDate(null, false);
             tag.setDbKey(null);
