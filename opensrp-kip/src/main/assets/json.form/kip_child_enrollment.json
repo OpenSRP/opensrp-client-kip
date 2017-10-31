@@ -440,7 +440,8 @@
         "v_required": {
           "value": true,
           "err": "Please enter the child's county"
-        }
+        },
+        "look_up": "true"
       },
       {
         "key": "Ce_Sub_County",
@@ -454,7 +455,8 @@
         "v_required": {
           "value": true,
           "err": "Please enter the child's sub county"
-        }
+        },
+        "look_up": "true"
       },
       {
         "key": "Ce_Ward",
@@ -468,7 +470,8 @@
         "v_required": {
           "value": true,
           "err": "Please enter the child's ward"
-        }
+        },
+        "look_up": "true"
       },
       {
         "key": "Ce_Sub_Location",

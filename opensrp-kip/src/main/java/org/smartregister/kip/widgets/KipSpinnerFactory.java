@@ -11,6 +11,7 @@ import com.vijay.jsonwizard.fragments.JsonFormFragment;
 import com.vijay.jsonwizard.interfaces.CommonListener;
 import com.vijay.jsonwizard.widgets.SpinnerFactory;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.api.domain.Location;
@@ -18,7 +19,9 @@ import org.smartregister.kip.R;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.repository.LocationRepository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by amosl on 6/13/17.
@@ -27,9 +30,14 @@ import java.util.List;
 public class KipSpinnerFactory extends SpinnerFactory {
 
     private static final String TAG = KipSpinnerFactory.class.getCanonicalName();
+    public static final String CE_COUNTY = "Ce_County";
+    public static final String CE_SUBCOUNTY = "Ce_Sub_County";
+    public static final String CE_WARD = "Ce_Ward";
 
     @Override
-    public List<View> getViewsFromJson(final String stepName, final Context context, final JsonFormFragment formFragment, JSONObject jsonObject, final CommonListener listener) throws Exception {
+    public List<View> getViewsFromJson(final String stepName, final Context context,
+                                       final JsonFormFragment formFragment, JSONObject jsonObject,
+                                       final CommonListener listener) throws Exception {
 
         final List<View> views = super.getViewsFromJson(stepName, context, formFragment, jsonObject, listener);
 
@@ -38,9 +46,9 @@ public class KipSpinnerFactory extends SpinnerFactory {
             final String key = jsonObject.getString("key");
             final String val = jsonObject.optString("value");
 
-            final MaterialSpinner spinner = (MaterialSpinner) views.get(0);
+            final MaterialSpinner spinner = hookLookup(formFragment, jsonObject, (MaterialSpinner) views.get(0));
 
-            if (key.equalsIgnoreCase("Ce_County") || key.equalsIgnoreCase("Ce_Sub_County") || key.equalsIgnoreCase("Ce_Ward")) {
+            if (key.equalsIgnoreCase(CE_COUNTY) || key.equalsIgnoreCase(CE_SUBCOUNTY) || key.equalsIgnoreCase(CE_WARD)) {
 
                 views.remove(spinner);
                 spinner.setTag(key);
@@ -67,23 +75,20 @@ public class KipSpinnerFactory extends SpinnerFactory {
                             MaterialSpinner childSpinner = null;
                             View v = (View) parent.getParent();
 
-                            if (key.equalsIgnoreCase("Ce_County")) {
-                                childSpinner = (MaterialSpinner) v.findViewWithTag("Ce_Sub_County");
-                            } else if (key.equalsIgnoreCase("Ce_Sub_County")) {
-                                childSpinner = (MaterialSpinner) v.findViewWithTag("Ce_Ward");
+                            if (key.equalsIgnoreCase(CE_COUNTY)) {
+                                childSpinner = (MaterialSpinner) v.findViewWithTag(CE_SUBCOUNTY);
+                            } else if (key.equalsIgnoreCase(CE_SUBCOUNTY)) {
+                                childSpinner = (MaterialSpinner) v.findViewWithTag(CE_WARD);
                             }
 
                             if (childSpinner != null) {
                                 LocationRepository locationRepository = KipApplication.getInstance().locationRepository();
                                 Location location = locationRepository.getLocationByName(value);
                                 ArrayAdapter<String> adapter;
-                                Log.d(TAG, "Name: " + value);
                                 String[] locs;
                                 int indexToSelect = -1;
 
                                 if (location != null) {
-                                    Log.d(TAG, "Location: " + location.toString());
-                                    Log.i(TAG, "Parent location is not null: " + location.toString());
 
                                     List<Location> locations = locationRepository.getChildLocations(location.getLocationId());
                                     int size = locations.size();
@@ -104,7 +109,6 @@ public class KipSpinnerFactory extends SpinnerFactory {
                                     }
                                 } else {
                                     locs = new String[]{"Other"};
-                                    Log.i(TAG, "Parent location is null");
                                 }
 
                                 adapter = new ArrayAdapter<>(context, com.vijay.jsonwizard.R.layout.simple_list_item_1, locs);
@@ -126,6 +130,31 @@ public class KipSpinnerFactory extends SpinnerFactory {
         }
 
         return views;
+    }
+
+    private MaterialSpinner hookLookup(JsonFormFragment formFragment, JSONObject jsonObject, MaterialSpinner spinner) throws JSONException {
+        if (jsonObject.has("look_up") && jsonObject.get("look_up").toString().equalsIgnoreCase(Boolean.TRUE.toString())) {
+
+            String entityId = jsonObject.optString("entity_id");
+            if (StringUtils.isBlank(entityId)) {
+                entityId = "mother";
+            }
+
+            Map<String, List<View>> lookupMap = formFragment.getLookUpMap();
+            List<View> lookUpViews = new ArrayList<>();
+            if (lookupMap.containsKey(entityId)) {
+                lookUpViews = lookupMap.get(entityId);
+            }
+
+            if (!lookUpViews.contains(spinner)) {
+                lookUpViews.add(spinner);
+            }
+            lookupMap.put(entityId, lookUpViews);
+
+            spinner.setTag(com.vijay.jsonwizard.R.id.after_look_up, false);
+        }
+
+        return spinner;
     }
 
 }

@@ -405,28 +405,21 @@
           "column_name":"county",
           "type":"Client",
           "json_mapping":{
-            "field":"addresses.addressFields.stateProvince"
+            "field":"addresses.stateProvince"
           }
         },
         {
           "column_name":"sub_county",
           "type":"Client",
           "json_mapping":{
-            "field":"addresses.addressFields.countyDistrict"
+            "field":"addresses.countyDistrict"
           }
         },
         {
           "column_name":"ward",
           "type":"Client",
           "json_mapping":{
-            "field":"addresses.addressFields.cityVillage"
-          }
-        },
-        {
-          "column_name":"location",
-          "type":"Client",
-          "json_mapping":{
-            "field":"addresses.addressFields.address5"
+            "field":"addresses.cityVillage"
           }
         },
         {

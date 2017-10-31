@@ -58,7 +58,6 @@
         "barcode_type": "qrcode",
         "hint": "KIP ID *",
         "scanButtonText": "Scan QR Code",
-        "read_only": true,
         "value": "",
         "v_required": {
           "value": "true",

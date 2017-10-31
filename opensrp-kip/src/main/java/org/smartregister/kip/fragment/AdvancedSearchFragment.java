@@ -403,7 +403,7 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
 
         String zeirIdString = zeirId.getText().toString();
         if (StringUtils.isNotBlank(zeirIdString)) {
-            searchCriteriaString += " ZEIR ID: \"" + bold(zeirIdString) + "\",";
+            searchCriteriaString += " KIP ID: \"" + bold(zeirIdString) + "\",";
             String key = ZEIR_ID;
             if (!outOfArea) {
                 key = tableName + "." + ZEIR_ID;
@@ -996,7 +996,10 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
         public void onEvent(final JSONArray jsonArray) {
 
 
-            String[] columns = new String[]{"_id", "relationalid", FIRST_NAME, "middle_name", LAST_NAME, "gender", "dob", ZEIR_ID, "epi_card_number", MOTHER_BASE_ENTITY_ID, MOTHER_GUARDIAN_FIRST_NAME, MOTHER_GUARDIAN_LAST_NAME, "inactive", "lost_to_follow_up"};
+            String[] columns = new String[]{"_id", "relationalid", FIRST_NAME, "middle_name",
+                    LAST_NAME, "gender", "dob", ZEIR_ID, "epi_card_number", MOTHER_BASE_ENTITY_ID,
+                    MOTHER_GUARDIAN_FIRST_NAME, MOTHER_GUARDIAN_LAST_NAME, "guardian_base_entity_id",
+                    "guardian_name", "inactive", "lost_to_follow_up"};
             matrixCursor = new AdvancedMatrixCursor(columns);
 
             if (jsonArray != null) {
@@ -1102,7 +1105,21 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
                         motherBaseEntityId = getJsonString(mother, "baseEntityId");
                     }
 
-                    matrixCursor.addRow(new Object[]{entityId, null, firstName, middleName, lastName, gender, dob, zeirId, epiCardNumber, motherBaseEntityId, motherFirstName, motherLastName, inactive, lostToFollowUp});
+                    String guardianBaseEntityId = "";
+                    String guardianName = "";
+
+                    if (client.has("guardian")) {
+                        JSONObject guardian = getJsonObject(client, "guardian");
+                        String guardianFirstName = getJsonString(guardian, "firstName");
+                        String guardianLastName = getJsonString(guardian, "lastName");
+                        guardianName = guardianFirstName + " " + guardianLastName;
+                        guardianBaseEntityId = getJsonString(guardian, "baseEntityId");
+                    }
+
+                    matrixCursor.addRow(new Object[]{entityId, null, firstName, middleName, lastName,
+                            gender, dob, zeirId, epiCardNumber, motherBaseEntityId, motherFirstName,
+                            motherLastName, guardianBaseEntityId, guardianName,
+                            inactive, lostToFollowUp});
                 }
             }
 
