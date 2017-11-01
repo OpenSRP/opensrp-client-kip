@@ -1395,7 +1395,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
         return jsonArray;
     }
 
-    public static void addAddAvailableVaccines(Context context, JSONObject form) {
+    public static void addAvailableVaccines(Context context, JSONObject form) {
         String supportedVaccinesString = VaccinatorUtils.getSupportedVaccines(context);
         if (StringUtils.isNotEmpty(supportedVaccinesString) && form != null) {
             // For each of the vaccine groups, create a checkbox question
@@ -1856,32 +1856,22 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
                     }
                 }
             } else if (formName.equals("out_of_catchment_service")) {
-                if (StringUtils.isNotBlank(entityId)) {
-                    entityId = entityId.replace("-", "");
-                } else {
-                    JSONArray fields = form.getJSONObject("step1").getJSONArray("fields");
-                    for (int i = 0; i < fields.length(); i++) {
-                        if (fields.getJSONObject(i).getString("key").equals(JsonFormUtils.KIP_ID)) {
-                            fields.getJSONObject(i).put(READ_ONLY, false);
-                            break;
-                        }
-                    }
-                }
-
                 JSONObject stepOne = form.getJSONObject(JsonFormUtils.STEP1);
-                JSONArray jsonArray = stepOne.getJSONArray(JsonFormUtils.FIELDS);
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                JSONArray fields = stepOne.getJSONArray(JsonFormUtils.FIELDS);
+
+                for (int i = 0; i < fields.length(); i++) {
+                    JSONObject jsonObject = fields.getJSONObject(i);
                     switch (jsonObject.getString(JsonFormUtils.KEY)) {
                         case JsonFormUtils.KIP_ID:
                             jsonObject.remove(JsonFormUtils.VALUE);
                             jsonObject.put(JsonFormUtils.VALUE, entityId);
+                            jsonObject.put(READ_ONLY, StringUtils.isNotBlank(entityId) ? true : false);
                             continue;
                         default:
                     }
                 }
 
-                JsonFormUtils.addAddAvailableVaccines(context, form);
+                JsonFormUtils.addAvailableVaccines(context, form);
             } else {
                 Log.w(TAG, "Unsupported form requested for launch " + formName);
             }

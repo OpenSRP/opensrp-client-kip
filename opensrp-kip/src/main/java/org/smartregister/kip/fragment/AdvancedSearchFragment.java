@@ -1054,7 +1054,7 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
                     String lastName = "";
                     String gender = "";
                     String dob = "";
-                    String zeirId = "";
+                    String openmrsId = "";
                     String epiCardNumber = "";
                     String inactive = "";
                     String lostToFollowUp = "";
@@ -1065,6 +1065,7 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
 
                     if (client.has("child")) {
                         JSONObject child = getJsonObject(client, "child");
+                        Log.i("onEvent", "Child: " + child.toString());
                         entityId = getJsonString(child, "baseEntityId");
                         firstName = getJsonString(child, "firstName");
                         middleName = getJsonString(child, "middleName");
@@ -1081,9 +1082,9 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
                                 Log.e(getClass().getName(), e.toString(), e);
                             }
                         }
-                        zeirId = getJsonString(getJsonObject(child, "identifiers"), JsonFormUtils.ZEIR_ID);
-                        if (StringUtils.isNotBlank(zeirId)) {
-                            zeirId = zeirId.replace("-", "");
+                        openmrsId = getJsonString(getJsonObject(child, "identifiers"), JsonFormUtils.OPENMRS_ID);
+                        if (StringUtils.isNotBlank(openmrsId)) {
+                            openmrsId = openmrsId.replace("-", "");
                         }
 
                         epiCardNumber = getJsonString(getJsonObject(child, "attributes"), "Child_Register_Card_Number");
@@ -1117,7 +1118,7 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
                     }
 
                     matrixCursor.addRow(new Object[]{entityId, null, firstName, middleName, lastName,
-                            gender, dob, zeirId, epiCardNumber, motherBaseEntityId, motherFirstName,
+                            gender, dob, openmrsId, epiCardNumber, motherBaseEntityId, motherFirstName,
                             motherLastName, guardianBaseEntityId, guardianName,
                             inactive, lostToFollowUp});
                 }
