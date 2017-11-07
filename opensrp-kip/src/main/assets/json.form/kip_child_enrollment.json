@@ -196,7 +196,7 @@
         "key": "Child_Birth_Notification",
         "openmrs_entity_parent": "",
         "openmrs_entity": "concept",
-        "openmrs_entity_id": "162051AAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "openmrs_entity_id": "162051AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
         "type": "edit_text",
         "hint": "Child's birth notification number"
       },
@@ -308,9 +308,8 @@
       {
         "key": "Mother_Guardian_ID",
         "openmrs_entity_parent": "",
-        "openmrs_entity": "person_identifier",
-        "openmrs_entity_id": "ID_NUMBER",
-        "entity_id": "mother",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "163084AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
         "type": "edit_text",
         "hint": "Mother/guardian ID number",
         "v_regex": {
@@ -412,9 +411,8 @@
       {
         "key": "Father_Guardian_ID",
         "openmrs_entity_parent": "",
-        "openmrs_entity": "person_identifier",
-        "openmrs_entity_id": "ID_NUMBER",
-        "entity_id": "guardian",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "163084AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
         "type": "edit_text",
         "hint": "Father/guardian ID number",
         "v_regex": {
@@ -562,9 +560,9 @@
           "Not Exposed (CNE)"
         ],
         "openmrs_choice_ids": {
-          "Exposed (CE)": "",
-          "Unkown (MSU)": "",
-          "Not Exposed (CNE)": ""
+          "Exposed (CE)": "703AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "Unkown (MSU)": "1067AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "Not Exposed (CNE)": "664AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
         }
       }
     ]

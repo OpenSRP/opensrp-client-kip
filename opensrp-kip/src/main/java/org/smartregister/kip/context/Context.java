@@ -1,8 +1,6 @@
 package org.smartregister.kip.context;
 
 
-import org.smartregister.kip.sync.SaveRelationshipTypesTask;
-
 /**
  * Created by amosl on 8/22/17.
  */
@@ -12,8 +10,6 @@ public class Context extends org.smartregister.Context {
     private static Context context = new Context();
 
     private AllSettings allSettings;
-
-    private SaveRelationshipTypesTask saveRelationshipTypesTask;
 
     public static Context getInstance() {
         if (context == null){
@@ -28,14 +24,6 @@ public class Context extends org.smartregister.Context {
             allSettings = new AllSettings(allSharedPreferences(), settingsRepository());
         }
         return allSettings;
-    }
-
-    private SaveRelationshipTypesTask saveRelationshipTypesTask() {
-
-        if (saveRelationshipTypesTask == null) {
-            saveRelationshipTypesTask = new SaveRelationshipTypesTask(allSettings());
-        }
-        return saveRelationshipTypesTask;
     }
 
 }

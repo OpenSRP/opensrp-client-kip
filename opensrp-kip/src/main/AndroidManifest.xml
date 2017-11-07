@@ -90,6 +90,7 @@
         <service android:name="org.smartregister.immunization.service.intent.RecurringIntentService" />
         <service android:name=".service.intent.Moh710IntentService" />
         <service android:name=".service.intent.LocationsIntentService" />
+        <service android:name=".service.intent.RelationshipTypesIntentService" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
