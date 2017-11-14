@@ -15,12 +15,14 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.rengwuxian.materialedittext.MaterialEditText;
+import com.vijay.jsonwizard.customviews.MaterialSpinner;
 import com.vijay.jsonwizard.fragments.JsonFormFragment;
 import com.vijay.jsonwizard.presenters.JsonFormFragmentPresenter;
 import com.vijay.jsonwizard.utils.FormUtils;
@@ -180,6 +182,10 @@ public class KipJsonFormFragment extends JsonFormFragment {
                         materialEditText.setText("");
 
 
+                    } else if (view instanceof MaterialSpinner) {
+                        MaterialSpinner materialSpinner = (MaterialSpinner) view;
+                        materialSpinner.setTag(com.vijay.jsonwizard.R.id.after_look_up, false);
+                        materialSpinner.setSelection(-1);
                     }
                 }
 
@@ -292,7 +298,6 @@ public class KipJsonFormFragment extends JsonFormFragment {
                 if (lookUpViews != null && !lookUpViews.isEmpty()) {
 
                     for (View view : lookUpViews) {
-
                         String key = (String) view.getTag(com.vijay.jsonwizard.R.id.key);
                         String text = "";
 
@@ -316,6 +321,18 @@ public class KipJsonFormFragment extends JsonFormFragment {
                             }
                         }
 
+                        if (StringUtils.containsIgnoreCase(key, MotherLookUpUtils.ce_county)) {
+                            text = getValue(pc.getColumnmaps(), MotherLookUpUtils.county, true);
+                        }
+
+                        if (StringUtils.containsIgnoreCase(key, MotherLookUpUtils.ce_subCounty)) {
+                            text = getValue(pc.getColumnmaps(), MotherLookUpUtils.subCounty, true);
+                        }
+
+                        if (StringUtils.containsIgnoreCase(key, MotherLookUpUtils.ce_ward)) {
+                            text = getValue(pc.getColumnmaps(), MotherLookUpUtils.ward, true);
+                        }
+
                         if (view instanceof MaterialEditText) {
                             MaterialEditText materialEditText = (MaterialEditText) view;
                             materialEditText.setTag(com.vijay.jsonwizard.R.id.after_look_up, true);
@@ -323,6 +340,20 @@ public class KipJsonFormFragment extends JsonFormFragment {
                             materialEditText.setInputType(InputType.TYPE_NULL);
                             disableEditText(materialEditText);
 
+                        } else if (view instanceof MaterialSpinner) {
+                            MaterialSpinner materialSpinner = (MaterialSpinner) view;
+                            materialSpinner.setTag(com.vijay.jsonwizard.R.id.after_look_up, true);
+                            materialSpinner.setTag(R.id.location_selected_value, text);
+                            if (StringUtils.isNotBlank(materialSpinner.getTag(R.id.key).toString())
+                                    && materialSpinner.getTag(R.id.key).toString().equalsIgnoreCase(MotherLookUpUtils.ce_county)) {
+                                Adapter adapter = materialSpinner.getAdapter();
+                                for (int n = 0; n < adapter.getCount(); n++) {
+                                    String s = (String) adapter.getItem(n);
+                                    if (s.equalsIgnoreCase(text)) {
+                                        materialSpinner.setSelection(n + 1);
+                                    }
+                                }
+                            }
                         }
                     }
 

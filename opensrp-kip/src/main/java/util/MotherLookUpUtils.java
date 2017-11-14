@@ -35,6 +35,12 @@ public class MotherLookUpUtils {
     public static final String birthDate = "date_birth";
     public static final String dob = "dob";
     public static final String baseEntityId = "base_entity_id";
+    public static final String ce_county = "Ce_County";
+    public static final String ce_subCounty = "Ce_Sub_County";
+    public static final String ce_ward = "Ce_Ward";
+    public static final String county = "county";
+    public static final String subCounty = "sub_county";
+    public static final String ward = "ward";
 
     public static void motherLookUp(final Context context, final EntityLookUp entityLookUp, final Listener<HashMap<CommonPersonObject, List<CommonPersonObject>>> listener, final ProgressBar progressBar) {
 
@@ -81,7 +87,7 @@ public class MotherLookUpUtils {
         List<CommonPersonObject> motherList = new ArrayList<>();
 
         CommonRepository commonRepository = context.commonrepository(tableName);
-        String query = lookUpQuery(entityLookUp.getMap(), tableName);
+        String query = lookUpQuery(entityLookUp.getMap(), tableName, childTableName);
 
         Cursor cursor = null;
         try {
@@ -136,28 +142,35 @@ public class MotherLookUpUtils {
 
     }
 
-    private static String lookUpQuery(Map<String, String> entityMap, String tableName) {
+    private static String lookUpQuery(Map<String, String> entityMap, String tableName, String childTableName) {
 
         SmartRegisterQueryBuilder queryBUilder = new SmartRegisterQueryBuilder();
+        String joinTableAlias = "j";
         queryBUilder.SelectInitiateMainTable(tableName, new String[]{
-                        "relationalid",
-                        "details",
-                        "zeir_id",
-                        "first_name",
-                        "last_name",
-                        "gender",
-                        "dob",
-                        "nrc_number",
-                        "contact_phone_number",
-                        "base_entity_id"}
+                tableName + ".relationalid as relationalid",
+                tableName + ".details as details",
+                tableName + ".zeir_id as zeir_id",
+                tableName + ".first_name as first_name",
+                tableName + ".last_name as last_name",
+                tableName + ".gender as gender",
+                tableName + ".dob as dob",
+                tableName + ".nrc_number as nrc_number",
+                tableName + ".contact_phone_number as contact_phone_number",
+                tableName + ".base_entity_id as base_entity_id",
+                joinTableAlias + ".county as county",
+                joinTableAlias + ".sub_county as sub_county",
+                joinTableAlias + ".ward as ward"}
 
         );
-        String query = queryBUilder.mainCondition(getMainConditionString(entityMap));
+        String joinTable = "(select relational_id, county, sub_county, ward FROM " + childTableName
+                + " c where c.id = (select min(id) from " + childTableName + " ec where ec.relational_id = c.relational_id))";
+        queryBUilder.customJoin("JOIN " + joinTable + " " + joinTableAlias + " ON  " + tableName + ".id = " + joinTableAlias + ".relational_id");
+        String query = queryBUilder.mainCondition(getMainConditionString(tableName, entityMap));
         return queryBUilder.Endquery(query);
     }
 
 
-    private static String getMainConditionString(Map<String, String> entityMap) {
+    private static String getMainConditionString(String tableName, Map<String, String> entityMap) {
 
         String mainConditionString = "";
         for (Map.Entry<String, String> entry : entityMap.entrySet()) {
@@ -165,18 +178,18 @@ public class MotherLookUpUtils {
             String value = entry.getValue();
 
             if (StringUtils.containsIgnoreCase(key, firstName)) {
-                key = firstName;
+                key = tableName + "." + firstName;
             }
 
             if (StringUtils.containsIgnoreCase(key, lastName)) {
-                key = lastName;
+                key = tableName + "." + lastName;
             }
 
             if (StringUtils.containsIgnoreCase(key, birthDate)) {
                 if (!isDate(value)) {
                     continue;
                 }
-                key = dob;
+                key = tableName + "." + dob;
             }
 
             if (!key.equals(dob)) {

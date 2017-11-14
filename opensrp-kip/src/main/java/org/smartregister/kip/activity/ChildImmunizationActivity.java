@@ -264,7 +264,7 @@ public class ChildImmunizationActivity extends BaseActivity
         String childId = "";
         if (isDataOk()) {
             name = constructChildName();
-            childId = Utils.getValue(childDetails.getColumnmaps(), "zeir_id", false);
+            childId = Utils.getValue(childDetails.getColumnmaps(), KipConstants.KEY.ZEIR_ID, false);
         }
 
         TextView nameTV = (TextView) findViewById(R.id.name_tv);
@@ -280,7 +280,7 @@ public class ChildImmunizationActivity extends BaseActivity
         String formattedAge = "";
         String formattedDob = "";
         if (isDataOk()) {
-            dobString = Utils.getValue(childDetails.getColumnmaps(), "dob", false);
+            dobString = Utils.getValue(childDetails.getColumnmaps(), KipConstants.KEY.DOB, false);
             if (!TextUtils.isEmpty(dobString)) {
                 DateTime dateTime = new DateTime(dobString);
                 Date dob = dateTime.toDate();
@@ -301,7 +301,7 @@ public class ChildImmunizationActivity extends BaseActivity
     private void updateGenderViews() {
         Gender gender = Gender.UNKNOWN;
         if (isDataOk()) {
-            String genderString = Utils.getValue(childDetails, "gender", false);
+            String genderString = Utils.getValue(childDetails, KipConstants.KEY.GENDER, false);
             if (genderString != null && genderString.equalsIgnoreCase("female")) {
                 gender = Gender.FEMALE;
             } else if (genderString != null && genderString.equalsIgnoreCase("male")) {
@@ -344,11 +344,9 @@ public class ChildImmunizationActivity extends BaseActivity
                 }
 
                 for (ServiceRecord serviceRecord : serviceRecordList) {
-                    if (serviceRecord.getSyncStatus().equals(RecurringServiceTypeRepository.TYPE_Unsynced)) {
-                        if (serviceRecord.getType().equals(type)) {
-                            foundServiceTypeMap.put(type, serviceTypeMap.get(type));
-                            break;
-                        }
+                    if (serviceRecord.getSyncStatus().equals(RecurringServiceTypeRepository.TYPE_Unsynced) && serviceRecord.getType().equals(type)) {
+                        foundServiceTypeMap.put(type, serviceTypeMap.get(type));
+                        break;
                     }
                 }
 
@@ -417,7 +415,7 @@ public class ChildImmunizationActivity extends BaseActivity
             }
         }
 
-        showVaccineNotifications(vaccineList, alerts);
+        //showVaccineNotifications(vaccineList, alerts);
     }
 
     private void showVaccineNotifications(List<Vaccine> vaccineList, List<Alert> alerts) {
@@ -519,17 +517,17 @@ public class ChildImmunizationActivity extends BaseActivity
     private void updateWeightViews(Weight lastUnsyncedWeight) {
 
         String childName = constructChildName();
-        String gender = Utils.getValue(childDetails.getColumnmaps(), "gender", true);
-        String motherFirstName = Utils.getValue(childDetails.getColumnmaps(), "mother_first_name", true);
+        String gender = Utils.getValue(childDetails.getColumnmaps(), KipConstants.KEY.GENDER, true);
+        String motherFirstName = Utils.getValue(childDetails.getColumnmaps(), KipConstants.KEY.MOTHER_FIRST_NAME, true);
         if (StringUtils.isBlank(childName) && StringUtils.isNotBlank(motherFirstName)) {
             childName = "B/o " + motherFirstName.trim();
         }
 
-        String zeirId = Utils.getValue(childDetails.getColumnmaps(), "zeir_id", false);
+        String zeirId = Utils.getValue(childDetails.getColumnmaps(), KipConstants.KEY.ZEIR_ID, false);
         String duration = "";
-        String dobString = Utils.getValue(childDetails.getColumnmaps(), "dob", false);
+        String dobString = Utils.getValue(childDetails.getColumnmaps(), KipConstants.KEY.DOB, false);
         if (StringUtils.isNotBlank(dobString)) {
-            DateTime dateTime = new DateTime(Utils.getValue(childDetails.getColumnmaps(), "dob", false));
+            DateTime dateTime = new DateTime(Utils.getValue(childDetails.getColumnmaps(), KipConstants.KEY.DOB, false));
             duration = DateUtil.getDuration(dateTime);
         }
 
@@ -542,7 +540,7 @@ public class ChildImmunizationActivity extends BaseActivity
         weightWrapper.setPatientNumber(zeirId);
         weightWrapper.setPatientAge(duration);
         weightWrapper.setPhoto(photo);
-        weightWrapper.setPmtctStatus(Utils.getValue(childDetails.getColumnmaps(), "pmtct_status", false));
+        weightWrapper.setPmtctStatus(Utils.getValue(childDetails.getColumnmaps(), KipConstants.KEY.PMTCT_STATUS, false));
 
         if (lastUnsyncedWeight != null) {
             weightWrapper.setWeight(lastUnsyncedWeight.getKg());
@@ -639,7 +637,7 @@ public class ChildImmunizationActivity extends BaseActivity
         Intent intent = new Intent(fromContext, ChildDetailTabbedActivity.class);
         Bundle bundle = new Bundle();
         try {
-            bundle.putString("location_name", JsonFormUtils.getOpenMrsLocationId(getOpenSRPContext(), toolbar.getCurrentLocation()));
+            bundle.putString(KipConstants.KEY.LOCATION_NAME, JsonFormUtils.getOpenMrsLocationId(getOpenSRPContext(), toolbar.getCurrentLocation()));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -703,15 +701,15 @@ public class ChildImmunizationActivity extends BaseActivity
             }
 
             Gender gender = Gender.UNKNOWN;
-            String genderString = Utils.getValue(childDetails, "gender", false);
-            if (genderString != null && genderString.toLowerCase().equals("female")) {
+            String genderString = Utils.getValue(childDetails, KipConstants.KEY.GENDER, false);
+            if (genderString != null && genderString.toLowerCase().equals(KipConstants.GENDER.FEMALE)) {
                 gender = Gender.FEMALE;
-            } else if (genderString != null && genderString.toLowerCase().equals("male")) {
+            } else if (genderString != null && genderString.toLowerCase().equals(KipConstants.GENDER.MALE)) {
                 gender = Gender.MALE;
             }
 
             Date dob = null;
-            String dobString = Utils.getValue(childDetails.getColumnmaps(), "dob", false);
+            String dobString = Utils.getValue(childDetails.getColumnmaps(), KipConstants.KEY.DOB, false);
             if (!TextUtils.isEmpty(dobString)) {
                 DateTime dateTime = new DateTime(dobString);
                 dob = dateTime.toDate();
@@ -771,7 +769,7 @@ public class ChildImmunizationActivity extends BaseActivity
                 .findByEntityId(childDetails.entityId());
         if (vaccineList == null) vaccineList = new ArrayList<>();
 
-        VaccinationDialogFragment vaccinationDialogFragment = VaccinationDialogFragment.newInstance(dob, vaccineList, vaccineWrappers);
+        VaccinationDialogFragment vaccinationDialogFragment = VaccinationDialogFragment.newInstance(dob, vaccineList, vaccineWrappers, true);
         vaccinationDialogFragment.show(ft, DIALOG_TAG);
     }
 
@@ -785,11 +783,16 @@ public class ChildImmunizationActivity extends BaseActivity
 
         ft.addToBackStack(null);
         serviceGroup.setModalOpen(true);
+        String dobString = Utils.getValue(childDetails.getColumnmaps(), KipConstants.KEY.DOB, false);
+        DateTime dob = DateTime.now();
+        if (!TextUtils.isEmpty(dobString)) {
+            dob = new DateTime(dobString);
+        }
 
         List<ServiceRecord> serviceRecordList = KipApplication.getInstance().recurringServiceRecordRepository()
                 .findByEntityId(childDetails.entityId());
 
-        ServiceDialogFragment serviceDialogFragment = ServiceDialogFragment.newInstance(serviceRecordList, serviceWrapper);
+        ServiceDialogFragment serviceDialogFragment = ServiceDialogFragment.newInstance(dob, serviceRecordList, serviceWrapper, true);
         serviceDialogFragment.show(ft, DIALOG_TAG);
     }
 
@@ -956,8 +959,8 @@ public class ChildImmunizationActivity extends BaseActivity
     }
 
     private String constructChildName() {
-        String firstName = Utils.getValue(childDetails.getColumnmaps(), "first_name", true);
-        String lastName = Utils.getValue(childDetails.getColumnmaps(), "last_name", true);
+        String firstName = Utils.getValue(childDetails.getColumnmaps(), KipConstants.KEY.FIRST_NAME, true);
+        String lastName = Utils.getValue(childDetails.getColumnmaps(), KipConstants.KEY.LAST_NAME, true);
         return Utils.getName(firstName, lastName).trim();
     }
 
@@ -967,7 +970,7 @@ public class ChildImmunizationActivity extends BaseActivity
             String tableName = KipConstants.CHILD_TABLE_NAME;
             AllCommonsRepository allCommonsRepository = getOpenSRPContext().allCommonsRepositoryobjects(tableName);
             ContentValues contentValues = new ContentValues();
-            contentValues.put("last_interacted_with", (new Date()).getTime());
+            contentValues.put(KipConstants.KEY.LAST_INTERACTED_WITH, (new Date()).getTime());
             allCommonsRepository.update(tableName, contentValues, childDetails.entityId());
             allCommonsRepository.updateSearch(childDetails.entityId());
         }
@@ -1200,10 +1203,10 @@ public class ChildImmunizationActivity extends BaseActivity
 
         @Override
         protected Map<String, NamedObject<?>> doInBackground(Void... voids) {
-            String dobString = Utils.getValue(childDetails.getColumnmaps(), "dob", false);
+            String dobString = Utils.getValue(childDetails.getColumnmaps(), KipConstants.KEY.DOB, false);
             if (!TextUtils.isEmpty(dobString)) {
                 DateTime dateTime = new DateTime(dobString);
-                VaccineSchedule.updateOfflineAlerts(childDetails.entityId(), dateTime, "child");
+                VaccineSchedule.updateOfflineAlerts(childDetails.entityId(), dateTime, KipConstants.KEY.CHILD);
             }
 
             List<Vaccine> vaccineList = new ArrayList<>();
@@ -1331,7 +1334,7 @@ public class ChildImmunizationActivity extends BaseActivity
 
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();
+            showProgressDialog(getString(R.string.updating_dialog_title), null);
         }
 
         @Override
@@ -1364,6 +1367,7 @@ public class ChildImmunizationActivity extends BaseActivity
         @Override
         protected void onPostExecute(Void params) {
             super.onPostExecute(params);
+            hideProgressDialog();
 
             tag.setUpdatedVaccineDate(null, false);
             tag.setDbKey(null);
@@ -1384,11 +1388,11 @@ public class ChildImmunizationActivity extends BaseActivity
             WeightRepository weightRepository = KipApplication.getInstance().weightRepository();
             List<Weight> allWeights = weightRepository.findByEntityId(childDetails.entityId());
             try {
-                String dobString = Utils.getValue(childDetails.getColumnmaps(), "dob", false);
-                if (!TextUtils.isEmpty(Utils.getValue(childDetails.getColumnmaps(), "Birth_Weight", false))
+                String dobString = Utils.getValue(childDetails.getColumnmaps(), KipConstants.KEY.DOB, false);
+                if (!TextUtils.isEmpty(Utils.getValue(childDetails.getColumnmaps(), KipConstants.KEY.BIRTH_WEIGHT, false))
                         && !TextUtils.isEmpty(dobString)) {
                     DateTime dateTime = new DateTime(dobString);
-                    Double birthWeight = Double.valueOf(Utils.getValue(childDetails.getColumnmaps(), "Birth_Weight", false));
+                    Double birthWeight = Double.valueOf(Utils.getValue(childDetails.getColumnmaps(), KipConstants.KEY.BIRTH_WEIGHT, false));
 
                     Weight weight = new Weight(-1l, null, (float) birthWeight.doubleValue(), dateTime.toDate(), null, null, null, Calendar.getInstance().getTimeInMillis(), null, null, 0);
                     allWeights.add(weight);
@@ -1441,6 +1445,7 @@ public class ChildImmunizationActivity extends BaseActivity
         private List<String> affectedVaccines;
         private List<Vaccine> vaccineList;
         private List<Alert> alertList;
+        private List<VaccineWrapper> vaccines;
 
         public void setView(View view) {
             this.view = view;
@@ -1450,6 +1455,7 @@ public class ChildImmunizationActivity extends BaseActivity
             this.vaccineRepository = vaccineRepository;
             alertService = getOpenSRPContext().alertService();
             affectedVaccines = new ArrayList<>();
+            vaccines = new ArrayList<>();
         }
 
         @Override
@@ -1468,7 +1474,17 @@ public class ChildImmunizationActivity extends BaseActivity
             }
 
             updateVaccineGroupsUsingAlerts(affectedVaccines, vaccineList, alertList);
-            showVaccineNotifications(vaccineList, alertList);
+
+            for(VaccineWrapper vw : vaccines){
+                // Check if vaccine is a 6 week vaccine, show check BCG notification
+                if (vw.getName().equalsIgnoreCase(VaccineRepo.Vaccine.opv1.display())
+                        || vw.getName().equalsIgnoreCase(VaccineRepo.Vaccine.penta1.display())
+                        || vw.getName().equalsIgnoreCase(VaccineRepo.Vaccine.pcv1.display())
+                        || vw.getName().equalsIgnoreCase(VaccineRepo.Vaccine.rota1.display())){
+                    showVaccineNotifications(vaccineList, alertList);
+                    break;
+                }
+            }
         }
 
         @Override
@@ -1479,18 +1495,19 @@ public class ChildImmunizationActivity extends BaseActivity
                 for (VaccineWrapper tag : vaccineWrappers) {
                     saveVaccine(vaccineRepository, tag);
                     list.add(tag);
+                    vaccines.add(tag);
                 }
             }
 
             Pair<ArrayList<VaccineWrapper>, List<Vaccine>> pair = new Pair<>(list, vaccineList);
-            String dobString = Utils.getValue(childDetails.getColumnmaps(), "dob", false);
+            String dobString = Utils.getValue(childDetails.getColumnmaps(), KipConstants.KEY.DOB, false);
             if (!TextUtils.isEmpty(dobString)) {
                 DateTime dateTime = new DateTime(dobString);
-                affectedVaccines = VaccineSchedule.updateOfflineAlerts(childDetails.entityId(), dateTime, "child");
+                affectedVaccines = VaccineSchedule.updateOfflineAlerts(childDetails.entityId(), dateTime, KipConstants.KEY.CHILD);
             }
             vaccineList = vaccineRepository.findByEntityId(childDetails.entityId());
             alertList = alertService.findByEntityIdAndAlertNames(childDetails.entityId(),
-                    VaccinateActionUtils.allAlertNames("child"));
+                    VaccinateActionUtils.allAlertNames(KipConstants.KEY.CHILD));
 
             return pair;
         }
@@ -1516,7 +1533,7 @@ public class ChildImmunizationActivity extends BaseActivity
 
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();
+            showProgressDialog(getString(R.string.updating_dialog_title), null);
         }
 
         @Override
@@ -1526,13 +1543,13 @@ public class ChildImmunizationActivity extends BaseActivity
                 if (tag.getDbKey() != null) {
                     Long dbKey = tag.getDbKey();
                     vaccineRepository.deleteVaccine(dbKey);
-                    String dobString = Utils.getValue(childDetails.getColumnmaps(), "dob", false);
+                    String dobString = Utils.getValue(childDetails.getColumnmaps(), KipConstants.KEY.DOB, false);
                     if (!TextUtils.isEmpty(dobString)) {
                         DateTime dateTime = new DateTime(dobString);
-                        affectedVaccines = VaccineSchedule.updateOfflineAlerts(childDetails.entityId(), dateTime, "child");
+                        affectedVaccines = VaccineSchedule.updateOfflineAlerts(childDetails.entityId(), dateTime, KipConstants.KEY.CHILD);
                         vaccineList = vaccineRepository.findByEntityId(childDetails.entityId());
                         alertList = alertService.findByEntityIdAndAlertNames(childDetails.entityId(),
-                                VaccinateActionUtils.allAlertNames("child"));
+                                VaccinateActionUtils.allAlertNames(KipConstants.KEY.CHILD));
                     }
                 }
             }
@@ -1541,6 +1558,7 @@ public class ChildImmunizationActivity extends BaseActivity
 
         @Override
         protected void onPostExecute(Void params) {
+            hideProgressDialog();
             super.onPostExecute(params);
 
             // Refresh the vaccine group with the updated vaccine
@@ -1553,7 +1571,7 @@ public class ChildImmunizationActivity extends BaseActivity
             wrappers.add(tag);
             updateVaccineGroupViews(view, wrappers, vaccineList, true);
             updateVaccineGroupsUsingAlerts(affectedVaccines, vaccineList, alertList);
-            showVaccineNotifications(vaccineList, alertList);
+            //showVaccineNotifications(vaccineList, alertList);
         }
     }
 
@@ -1561,8 +1579,8 @@ public class ChildImmunizationActivity extends BaseActivity
 
         @Override
         protected ArrayList<String> doInBackground(Void... params) {
-            String baseEntityId = Utils.getValue(childDetails.getColumnmaps(), "base_entity_id", false);
-            String motherBaseEntityId = Utils.getValue(childDetails.getColumnmaps(), "relational_id", false);
+            String baseEntityId = childDetails.entityId();
+            String motherBaseEntityId = Utils.getValue(childDetails.getColumnmaps(), KipConstants.KEY.RELATIONAL_ID, false);
             if (!TextUtils.isEmpty(motherBaseEntityId) && !TextUtils.isEmpty(baseEntityId)) {
                 List<CommonPersonObject> children = getOpenSRPContext().commonrepository(KipConstants.CHILD_TABLE_NAME)
                         .findByRelational_IDs(motherBaseEntityId);

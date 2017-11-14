@@ -104,6 +104,7 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
     private static final String MOTHER_GUARDIAN_LAST_NAME = "mother_last_name";
     private static final String MOTHER_GUARDIAN_NRC_NUMBER = "mother_nrc_number";
     private static final String MOTHER_GUARDIAN_PHONE_NUMBER = "mother_contact_phone_number";
+
     private static final String START_DATE = "start_date";
     private static final String END_DATE = "end_date";
 
@@ -141,7 +142,7 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
         advancedSearchForm = view.findViewById(R.id.advanced_search_form);
 
         ImageButton imageButton = (ImageButton) view.findViewById(R.id.global_search);
-        imageButton.setBackgroundColor(getResources().getColor(R.color.transparent_dark_blue));
+        imageButton.setBackgroundColor(getResources().getColor(R.color.dark_green));
         imageButton.setOnClickListener(clientActionHandler);
 
 
@@ -172,7 +173,7 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
 
     @Override
     protected void startRegistration() {
-        ((ChildSmartRegisterActivity) getActivity()).startFormActivity("child_enrollment", null, null);
+        ((ChildSmartRegisterActivity) getActivity()).startFormActivity("kip_child_enrollment", null, null);
     }
 
     private void populateFormViews(View view) {
@@ -304,7 +305,8 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
         }
 
         String tableName = KipConstants.CHILD_TABLE_NAME;
-        String parentTableName = KipConstants.MOTHER_TABLE_NAME;
+        //String parentTableName = KipConstants.MOTHER_TABLE_NAME;
+        String motherTableAlias = KipConstants.MOTHER_TABLE_ALIAS;
 
         editMap.clear();
 
@@ -400,10 +402,8 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
         }
 
         String zeirIdString = zeirId.getText().toString();
-        if (StringUtils.isNotBlank(zeirIdString))
-
-        {
-            searchCriteriaString += " ZEIR ID: \"" + bold(zeirIdString) + "\",";
+        if (StringUtils.isNotBlank(zeirIdString)) {
+            searchCriteriaString += " KIP ID: \"" + bold(zeirIdString) + "\",";
             String key = ZEIR_ID;
             if (!outOfArea) {
                 key = tableName + "." + ZEIR_ID;
@@ -412,9 +412,7 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
         }
 
         String firstNameString = firstName.getText().toString();
-        if (StringUtils.isNotBlank(firstNameString))
-
-        {
+        if (StringUtils.isNotBlank(firstNameString)) {
             searchCriteriaString += " First name: \"" + bold(firstNameString) + "\",";
             String key = FIRST_NAME;
             if (!outOfArea) {
@@ -424,9 +422,7 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
         }
 
         String lastNameString = lastName.getText().toString();
-        if (StringUtils.isNotBlank(lastNameString))
-
-        {
+        if (StringUtils.isNotBlank(lastNameString)) {
             searchCriteriaString += " Last name: \"" + bold(lastNameString) + "\",";
             String key = LAST_NAME;
             if (!outOfArea) {
@@ -436,66 +432,75 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
         }
 
         String motherGuardianNameString = motherGuardianName.getText().toString();
-        if (StringUtils.isNotBlank(motherGuardianNameString))
-
-        {
+        if (StringUtils.isNotBlank(motherGuardianNameString)) {
             searchCriteriaString += " Mother/Guardian name: \"" + bold(motherGuardianNameString) + "\",";
+            String[] tokens = {};
+            if(motherGuardianNameString.length() > 0){
+                tokens = motherGuardianNameString.trim().split("\\s+");
+            }
+
             String key = MOTHER_GUARDIAN_FIRST_NAME;
             if (!outOfArea) {
-                key = parentTableName + "." + FIRST_NAME;
+                key = motherTableAlias + "." + FIRST_NAME;
             }
-            editMap.put(key, motherGuardianNameString.trim());
+            if(tokens.length > 0) {
+                editMap.put(key, tokens[0]);
+            }
 
             key = MOTHER_GUARDIAN_LAST_NAME;
             if (!outOfArea) {
-                key = parentTableName + "." + LAST_NAME;
+                key = motherTableAlias + "." + LAST_NAME;
             }
-            editMap.put(key, motherGuardianNameString.trim());
+            if(tokens.length > 1) {
+                editMap.put(key, tokens[1]);
+            }
         }
 
         String motherGuardianNrcString = motherGuardianNrc.getText().toString();
-        if (StringUtils.isNotBlank(motherGuardianNrcString))
-
-        {
-            searchCriteriaString += " Mother/Guardian nrc: \"" + bold(motherGuardianNrcString) + "\",";
+        if (StringUtils.isNotBlank(motherGuardianNrcString)) {
+            searchCriteriaString += " Mother/Guardian ID: \"" + bold(motherGuardianNrcString) + "\",";
             String key = MOTHER_GUARDIAN_NRC_NUMBER;
             if (!outOfArea) {
-                key = parentTableName + "." + NRC_NUMBER;
+                key = motherTableAlias + "." + NRC_NUMBER;
             }
             editMap.put(key, motherGuardianNrcString.trim());
         }
 
         String motherGuardianPhoneNumberString = motherGuardianPhoneNumber.getText().toString();
-        if (StringUtils.isNotBlank(motherGuardianPhoneNumberString))
-
-        {
+        if (StringUtils.isNotBlank(motherGuardianPhoneNumberString)) {
             searchCriteriaString += " Mother/Guardian phone number: \"" + bold(motherGuardianPhoneNumberString) + "\",";
             String key = MOTHER_GUARDIAN_PHONE_NUMBER;
             if (!outOfArea) {
-                key = parentTableName + "." + CONTACT_PHONE_NUMBER;
+                key = tableName + "." + CONTACT_PHONE_NUMBER;
             }
             editMap.put(key, motherGuardianPhoneNumberString.trim());
         }
 
         String startDateString = startDate.getText().toString();
-        if (StringUtils.isNotBlank(startDateString))
-
-        {
+        if (StringUtils.isNotBlank(startDateString)) {
             searchCriteriaString += " Start date: \"" + bold(startDateString) + "\",";
             editMap.put(START_DATE, startDateString.trim());
         }
 
         String endDateString = endDate.getText().toString();
-        if (StringUtils.isNotBlank(endDateString))
-
-        {
+        if (StringUtils.isNotBlank(endDateString)) {
             searchCriteriaString += " End date: \"" + bold(endDateString) + "\",";
             editMap.put(END_DATE, endDateString.trim());
         }
 
-        if (searchCriteria != null)
+        if (StringUtils.isNotBlank(startDateString) && StringUtils.isNotBlank(endDateString)) {
+            String dateFormat = "yyyy-MM-dd";
+            Date startDate = util.Utils.getDateFromString(startDateString, dateFormat);
+            Date endDate = util.Utils.getDateFromString(endDateString, dateFormat);
 
-        {
+            if (startDate.compareTo(endDate) > 0) {
+                showMessageDialog("For birth range please select an End Date which IS NOT earlier than the Start Date");
+                view.setClickable(true);
+                return;
+            }
+        }
+
+        if (searchCriteria != null) {
             searchCriteria.setText(Html.fromHtml(removeLastComma(searchCriteriaString)));
             searchCriteria.setVisibility(View.VISIBLE);
         }
@@ -515,6 +520,10 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
 
         String tableName = KipConstants.CHILD_TABLE_NAME;
         setTablename(tableName);
+        String parentTableName = KipConstants.MOTHER_TABLE_NAME;
+        String motherTableAlias = KipConstants.MOTHER_TABLE_ALIAS;
+        String guardianTableAlias = KipConstants.GUARDIAN_TABLE_ALIAS;
+
         AdvancedSearchClientsProvider hhscp = new AdvancedSearchClientsProvider(getActivity(),
                 clientActionHandler, context().alertService(), KipApplication.getInstance().vaccineRepository(), KipApplication.getInstance().weightRepository(), commonRepository());
         clientAdapter = new AdvancedSearchPaginatedCursorAdapter(getActivity(), null, hhscp, context().commonrepository(tableName));
@@ -522,8 +531,9 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
 
         SmartRegisterQueryBuilder countqueryBUilder = new SmartRegisterQueryBuilder();
         countqueryBUilder.SelectInitiateMainTableCounts(getTablename());
+        countqueryBUilder.customJoin("LEFT JOIN " + parentTableName + " " + motherTableAlias + " ON  " + getTablename() + ".relational_id =  " + motherTableAlias + ".id");
+        countqueryBUilder.customJoin("LEFT JOIN " + parentTableName + " " + guardianTableAlias + " ON  " + getTablename() + ".g_relational_id =  " + guardianTableAlias + ".id");
         countSelect = countqueryBUilder.mainCondition("");
-
     }
 
     private void localSearch() {
@@ -597,35 +607,43 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
 
     private String filterandSortQuery() {
         String tableName = getTablename();
-        String parentTableName = "ec_mother";
+        String parentTableName = KipConstants.MOTHER_TABLE_NAME;
+        String motherAlias = KipConstants.MOTHER_TABLE_ALIAS;
+        String guardianAlias = KipConstants.GUARDIAN_TABLE_ALIAS;
 
         SmartRegisterQueryBuilder queryBUilder = new SmartRegisterQueryBuilder();
         queryBUilder.SelectInitiateMainTable(tableName, new String[]{
-                        tableName + ".relationalid",
-                        tableName + ".details",
-                        tableName + ".zeir_id",
-                        tableName + ".relational_id",
-                        tableName + ".first_name",
-                        tableName + ".last_name",
-                        tableName + ".gender",
-                        parentTableName + ".first_name as mother_first_name",
-                        parentTableName + ".last_name as mother_last_name",
-                        tableName + ".father_name",
-                        tableName + ".dob",
-                        tableName + ".epi_card_number",
-                        tableName + ".contact_phone_number",
-                        tableName + ".pmtct_status",
-                        tableName + ".provider_uc",
-                        tableName + ".provider_town",
-                        tableName + ".provider_id",
-                        tableName + ".provider_location_id",
-                        tableName + ".client_reg_date",
-                        tableName + ".last_interacted_with",
-                        tableName + ".inactive",
-                        tableName + ".lost_to_follow_up"}
-
-        );
-        queryBUilder.customJoin("LEFT JOIN " + parentTableName + " ON  " + tableName + ".relational_id =  " + parentTableName + ".id");
+                tableName + ".relationalid",
+                tableName + ".details",
+                tableName + ".zeir_id",
+                tableName + ".relational_id",
+                tableName + ".first_name",
+                tableName + ".last_name",
+                tableName + ".gender",
+                motherAlias + ".first_name as mother_first_name",
+                motherAlias + ".last_name as mother_last_name",
+                motherAlias + ".dob as mother_dob",
+                motherAlias + ".nrc_number as mother_id_number",
+                motherAlias + ".gender as mother_gender",
+                guardianAlias + ".first_name || ' ' || " + guardianAlias + ".last_name as guardian_name",
+                guardianAlias + ".dob as guardian_dob",
+                guardianAlias + ".nrc_number as guardian_id_number",
+                guardianAlias + ".gender as guardian_gender",
+                tableName + ".dob",
+                tableName + ".epi_card_number",
+                tableName + ".contact_phone_number",
+                tableName + ".pmtct_status",
+                tableName + ".provider_uc",
+                tableName + ".provider_town",
+                tableName + ".provider_id",
+                tableName + ".provider_location_id",
+                tableName + ".client_reg_date",
+                tableName + ".last_interacted_with",
+                tableName + ".inactive",
+                tableName + ".lost_to_follow_up"
+        });
+        queryBUilder.customJoin("LEFT JOIN " + parentTableName + " " + motherAlias + " ON  " + tableName + ".relational_id =  " + motherAlias + ".id");
+        queryBUilder.customJoin("LEFT JOIN " + parentTableName + " " + guardianAlias + " ON  " + tableName + ".g_relational_id =  " + guardianAlias + ".id");
         queryBUilder.mainCondition(getMainConditionString(tableName));
         String query = queryBUilder.orderbyCondition(sortByStatus());
         return queryBUilder.Endquery(queryBUilder.addlimitandOffset(query, currentlimit, currentoffset));
@@ -657,14 +675,29 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
 
     private String getMainConditionString(String tableName) {
 
-        String startDateKey = START_DATE;
-        String endDateKey = END_DATE;
+        final String motherTableAlias = KipConstants.MOTHER_TABLE_ALIAS;
+        final String guardianTableAlias = KipConstants.GUARDIAN_TABLE_ALIAS;
+
+        final String startDateKey = START_DATE;
+        final String endDateKey = END_DATE;
+
+        final String motherFirstNameKey = motherTableAlias + "." + FIRST_NAME;
+        final String motherLastNameKey = motherTableAlias + "." + LAST_NAME;
+        final String guardianFirstNameKey = guardianTableAlias + "." + FIRST_NAME;
+        final String guardianLastNameKey = guardianTableAlias + "." + LAST_NAME;
+        final String motherNrcNumberKey = motherTableAlias + "." + NRC_NUMBER;
+        final String guardianNrcNumberKey = guardianTableAlias + "." + NRC_NUMBER;
+        final String motherPhoneNumberKey = motherTableAlias + "." + CONTACT_PHONE_NUMBER;
+        final String guardianPhoneNumberKey = guardianTableAlias + "." + CONTACT_PHONE_NUMBER;
 
         String mainConditionString = "";
         for (Map.Entry<String, String> entry : editMap.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
-            if (!key.equals(startDateKey) && !key.equals(endDateKey) && !key.contains(ACTIVE) && !key.contains(INACTIVE) && !key.contains(LOST_TO_FOLLOW_UP)) {
+            if (!key.equals(startDateKey) && !key.equals(endDateKey) && !key.contains(ACTIVE)
+                    && !key.contains(INACTIVE) && !key.contains(LOST_TO_FOLLOW_UP)
+                    && !key.contains(motherFirstNameKey) && !key.contains(motherLastNameKey)
+                    && !key.contains(motherNrcNumberKey) && !key.contains(motherPhoneNumberKey)) {
                 if (StringUtils.isBlank(mainConditionString)) {
                     mainConditionString += " " + key + " Like '%" + value + "%'";
                 } else {
@@ -694,6 +727,56 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
             }
         }
 
+        if (editMap.containsKey(motherFirstNameKey) && !editMap.containsKey(motherLastNameKey)) {
+            String firstName = editMap.get(motherFirstNameKey);
+            boolean isNotBlankMainConditionString = StringUtils.isNotBlank(mainConditionString);
+
+            mainConditionString += " (" + motherFirstNameKey + " Like '%" + firstName + "%' OR "
+                    + motherLastNameKey + " Like '%" + firstName + "%' OR "
+                    + guardianFirstNameKey + " Like '%" + firstName + "%' OR "
+                    + guardianLastNameKey + " Like '%" + firstName + "%')";
+
+            if(isNotBlankMainConditionString){
+                mainConditionString = " AND " + mainConditionString;
+            }
+        } else if (editMap.containsKey(motherFirstNameKey) && editMap.containsKey(motherLastNameKey)) {
+            String firstName = editMap.get(motherFirstNameKey);
+            String lastName = editMap.get(motherLastNameKey);
+            boolean isNotBlankMainConditionString = StringUtils.isNotBlank(mainConditionString);
+
+            mainConditionString += " ((" + motherFirstNameKey + " Like '%" + firstName + "%' AND "
+                    + motherLastNameKey + " Like '%" + lastName + "%') OR ("
+                    + guardianFirstNameKey + " Like '%" + firstName + "%' AND "
+                    + guardianLastNameKey + " Like '%" + lastName + "%'))";
+
+            if(isNotBlankMainConditionString){
+                mainConditionString = " AND " + mainConditionString;
+            }
+        }
+
+        if (editMap.containsKey(motherNrcNumberKey)) {
+            String nrcNumber = editMap.get(motherNrcNumberKey);
+            boolean isNotBlankMainConditionString = StringUtils.isNotBlank(mainConditionString);
+
+            mainConditionString += " (" + motherNrcNumberKey + " Like '%" + nrcNumber + "%' OR "
+                    + guardianNrcNumberKey + " Like '%" + nrcNumber + "%')";
+
+            if(isNotBlankMainConditionString){
+                mainConditionString = " AND " + mainConditionString;
+            }
+        }
+
+        if (editMap.containsKey(motherPhoneNumberKey)) {
+            String phoneNumber = editMap.get(motherPhoneNumberKey);
+            boolean isNotBlankMainConditionString = StringUtils.isNotBlank(mainConditionString);
+
+            mainConditionString += " (" + motherPhoneNumberKey + " Like '%" + phoneNumber + "%' OR "
+                    + guardianPhoneNumberKey + " Like '%" + phoneNumber + "%')";
+
+            if(isNotBlankMainConditionString){
+                mainConditionString = " AND " + mainConditionString;
+            }
+        }
 
         String statusConditionString = "";
         for (Map.Entry<String, String> entry : editMap.entrySet()) {
@@ -913,7 +996,10 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
         public void onEvent(final JSONArray jsonArray) {
 
 
-            String[] columns = new String[]{"_id", "relationalid", FIRST_NAME, "middle_name", LAST_NAME, "gender", "dob", ZEIR_ID, "epi_card_number", MOTHER_BASE_ENTITY_ID, MOTHER_GUARDIAN_FIRST_NAME, MOTHER_GUARDIAN_LAST_NAME, "inactive", "lost_to_follow_up"};
+            String[] columns = new String[]{"_id", "relationalid", FIRST_NAME, "middle_name",
+                    LAST_NAME, "gender", "dob", ZEIR_ID, "epi_card_number", MOTHER_BASE_ENTITY_ID,
+                    MOTHER_GUARDIAN_FIRST_NAME, MOTHER_GUARDIAN_LAST_NAME, "guardian_base_entity_id",
+                    "guardian_name", "inactive", "lost_to_follow_up"};
             matrixCursor = new AdvancedMatrixCursor(columns);
 
             if (jsonArray != null) {
@@ -968,7 +1054,7 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
                     String lastName = "";
                     String gender = "";
                     String dob = "";
-                    String zeirId = "";
+                    String openmrsId = "";
                     String epiCardNumber = "";
                     String inactive = "";
                     String lostToFollowUp = "";
@@ -979,6 +1065,7 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
 
                     if (client.has("child")) {
                         JSONObject child = getJsonObject(client, "child");
+                        Log.i("onEvent", "Child: " + child.toString());
                         entityId = getJsonString(child, "baseEntityId");
                         firstName = getJsonString(child, "firstName");
                         middleName = getJsonString(child, "middleName");
@@ -995,9 +1082,9 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
                                 Log.e(getClass().getName(), e.toString(), e);
                             }
                         }
-                        zeirId = getJsonString(getJsonObject(child, "identifiers"), JsonFormUtils.ZEIR_ID);
-                        if (StringUtils.isNotBlank(zeirId)) {
-                            zeirId = zeirId.replace("-", "");
+                        openmrsId = getJsonString(getJsonObject(child, "identifiers"), JsonFormUtils.OPENMRS_ID);
+                        if (StringUtils.isNotBlank(openmrsId)) {
+                            openmrsId = openmrsId.replace("-", "");
                         }
 
                         epiCardNumber = getJsonString(getJsonObject(child, "attributes"), "Child_Register_Card_Number");
@@ -1019,7 +1106,21 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
                         motherBaseEntityId = getJsonString(mother, "baseEntityId");
                     }
 
-                    matrixCursor.addRow(new Object[]{entityId, null, firstName, middleName, lastName, gender, dob, zeirId, epiCardNumber, motherBaseEntityId, motherFirstName, motherLastName, inactive, lostToFollowUp});
+                    String guardianBaseEntityId = "";
+                    String guardianName = "";
+
+                    if (client.has("guardian")) {
+                        JSONObject guardian = getJsonObject(client, "guardian");
+                        String guardianFirstName = getJsonString(guardian, "firstName");
+                        String guardianLastName = getJsonString(guardian, "lastName");
+                        guardianName = guardianFirstName + " " + guardianLastName;
+                        guardianBaseEntityId = getJsonString(guardian, "baseEntityId");
+                    }
+
+                    matrixCursor.addRow(new Object[]{entityId, null, firstName, middleName, lastName,
+                            gender, dob, openmrsId, epiCardNumber, motherBaseEntityId, motherFirstName,
+                            motherLastName, guardianBaseEntityId, guardianName,
+                            inactive, lostToFollowUp});
                 }
             }
 
@@ -1072,6 +1173,18 @@ public class AdvancedSearchFragment extends BaseSmartRegisterFragment {
         progressDialog.hide();
     }
 
+    private void showMessageDialog(String message) {
+        android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(getActivity())
+                .setTitle(getString(R.string.validation_error))
+                .setMessage(message)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                })
+                .create();
+        dialog.show();
+    }
 
     ////////////////////////////////////////////////////////////////
     // Inner classes

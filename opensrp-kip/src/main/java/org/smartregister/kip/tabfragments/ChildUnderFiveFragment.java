@@ -1,6 +1,7 @@
 package org.smartregister.kip.tabfragments;
 
 import android.app.FragmentTransaction;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -71,6 +72,9 @@ public class ChildUnderFiveFragment extends Fragment {
     private Map<String, String> Detailsmap;
     private AlertService alertService;
     private LinearLayout fragmentContainer;
+    private Boolean curVaccineMode = null;
+    private Boolean curServiceMode = null;
+    private Boolean curWeightMode = null;
 
     public ChildUnderFiveFragment() {
         // Required empty public constructor
@@ -107,14 +111,26 @@ public class ChildUnderFiveFragment extends Fragment {
     public void loadView(boolean editVaccineMode, boolean editServiceMode, boolean editWeightMode) {
         try {
             if (fragmentContainer != null) {
-                createPTCMTVIEW(fragmentContainer, "PMTCT: ", Utils.getValue(childDetails.getColumnmaps(), "pmtct_status", true));
-                createWeightLayout(fragmentContainer, editWeightMode);
+                if (curWeightMode == null ||
+                        !curWeightMode.equals(Boolean.valueOf(editWeightMode))) {
+                    loadWeightView(editWeightMode);
 
-                updateVaccinationViews(fragmentContainer, editVaccineMode);
-                updateServiceViews(fragmentContainer, editServiceMode);
+                    curWeightMode = editWeightMode;
+                }
+
+                AddVaccinationServiceViewsAsyncTask addVaccinationServiceViewsAsyncTask = new
+                        AddVaccinationServiceViewsAsyncTask(editVaccineMode, editServiceMode);
+                Utils.startAsyncTask(addVaccinationServiceViewsAsyncTask, null);
             }
         } catch (Exception e) {
             Log.e(getClass().getName(), Log.getStackTraceString(e));
+        }
+    }
+
+    public void loadWeightView(boolean editWeightMode) {
+        if (fragmentContainer != null) {
+            createPTCMTVIEW(fragmentContainer, "PMTCT: ", Utils.getValue(childDetails.getColumnmaps(), "pmtct_status", true));
+            createWeightLayout(fragmentContainer, editWeightMode);
         }
     }
 
@@ -342,7 +358,7 @@ public class ChildUnderFiveFragment extends Fragment {
                 .findByEntityId(childDetails.entityId());
         if (vaccineList == null) vaccineList = new ArrayList<>();
 
-        VaccinationEditDialogFragment vaccinationDialogFragment = VaccinationEditDialogFragment.newInstance(getActivity(), dob, vaccineList, vaccineWrappers, vaccineGroup);
+        VaccinationEditDialogFragment vaccinationDialogFragment = VaccinationEditDialogFragment.newInstance(getActivity(), dob, vaccineList, vaccineWrappers, vaccineGroup, true);
         vaccinationDialogFragment.show(ft, DIALOG_TAG);
     }
 
@@ -353,16 +369,56 @@ public class ChildUnderFiveFragment extends Fragment {
             ft.remove(prev);
         }
         ft.addToBackStack(null);
+        String dobString = Utils.getValue(childDetails.getColumnmaps(), "dob", false);
+        DateTime dob = DateTime.now();
+        if (!TextUtils.isEmpty(dobString)) {
+            dob = new DateTime(dobString);
+        }
 
         List<ServiceRecord> serviceRecordList = KipApplication.getInstance().recurringServiceRecordRepository()
                 .findByEntityId(childDetails.entityId());
 
-        ServiceEditDialogFragment serviceEditDialogFragment = ServiceEditDialogFragment.newInstance(serviceRecordList, serviceWrapper, serviceRowGroup);
+        ServiceEditDialogFragment serviceEditDialogFragment = ServiceEditDialogFragment.newInstance(dob, serviceRecordList, serviceWrapper, serviceRowGroup, true);
         serviceEditDialogFragment.show(ft, DIALOG_TAG);
     }
 
     public void setAlertService(AlertService alertService) {
         this.alertService = alertService;
+    }
+
+
+    private class AddVaccinationServiceViewsAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        private boolean editVaccineMode;
+        private boolean editServiceMode;
+
+        public AddVaccinationServiceViewsAsyncTask(boolean editVaccineMode, boolean editServiceMode) {
+            this.editVaccineMode = editVaccineMode;
+            this.editServiceMode = editServiceMode;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if (curVaccineMode == null || !curVaccineMode.equals(Boolean.valueOf(editVaccineMode))) {
+                updateVaccinationViews(fragmentContainer, editVaccineMode);
+                curVaccineMode = editVaccineMode;
+            }
+
+            if (curServiceMode == null || !curServiceMode.equals(Boolean.valueOf(editServiceMode))) {
+                updateServiceViews(fragmentContainer, editServiceMode);
+                curServiceMode = editServiceMode;
+            }
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            return null;
+        }
     }
 
 }

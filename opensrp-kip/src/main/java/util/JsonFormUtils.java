@@ -99,6 +99,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
     public static final String KEY = "key";
     public static final String ENTITY_ID = "entity_id";
     public static final String RELATIONAL_ID = "relational_id";
+    public static final String G_RELATIONAL_ID = "g_relational_id";
     private static final String ENCOUNTER_TYPE = "encounter_type";
     public static final String CURRENT_ZEIR_ID = "current_zeir_id";
     public static final String STEP1 = "step1";
@@ -111,6 +112,8 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
     public static final String encounterType = "Update Birth Registration";
     private static final SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     public static final String OPENMRS_ID = "OPENMRS_ID";
+    public static final String MOTHER = "mother";
+    public static final String GUARDIAN = "guardian";
     /*
     There are some UUIDs shared across all OpenMRS implementations for metadata that are common across all implementations.
     This @UNIVERSAL_OPENMRS_RELATIONSHIP_TYPE_UUID is the UUID for relationship type "Parent/Child"
@@ -138,7 +141,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
             JSONObject form = new JSONObject(jsonString);
             if (form.getString("encounter_type").equals("Out of Catchment Service")) {
                 saveOutOfAreaService(context, openSrpContext, jsonString);
-            } else if (form.getString("encounter_type").equals("Child Enrollment")) {
+            } else if (form.getString("encounter_type").equals(KipConstants.CHILD_ENROLLMENT)) {
                 saveChildEnrollment(context, openSrpContext, jsonString, providerId, "Child_Photo", "child");
             }
         } catch (JSONException e) {
@@ -275,7 +278,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
         }
     }
 
-    public static void editsave(Context context, org.smartregister.kip.context.Context openSrpContext, String jsonString, String providerId, String imageKey, String bindType, String subBindType) {
+    public static void editsave(Context context, org.smartregister.kip.context.Context openSrpContext, String jsonString, String providerId, String imageKey, String bindType) {
         if (context == null || StringUtils.isBlank(providerId) || StringUtils.isBlank(jsonString)) {
             return;
         }
@@ -287,6 +290,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
 
             String entityId = getString(jsonForm, ENTITY_ID);
             String relationalId = getString(jsonForm, RELATIONAL_ID);
+            String gRelationalId = getString(jsonForm, G_RELATIONAL_ID);
 
             if (StringUtils.isBlank(entityId)) {
                 entityId = generateRandomUUIDString();
@@ -339,7 +343,11 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
                 } else {
 
                     if (StringUtils.isNotBlank(_subBindType)) {
-                        s = JsonFormUtils.createSubformClient(context, openSrpContext, fields, baseClient, _subBindType, relationalId);
+                        if (_subBindType.equalsIgnoreCase(MOTHER)) {
+                            s = JsonFormUtils.createSubformClient(context, openSrpContext, fields, baseClient, _subBindType, relationalId);
+                        } else if (_subBindType.equalsIgnoreCase(GUARDIAN)) {
+                            s = JsonFormUtils.createSubformClient(context, openSrpContext, fields, baseClient, _subBindType, gRelationalId);
+                        }
                     }
 
                     if (s != null && e != null) {
@@ -385,7 +393,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
 
             // Unassign current id
             if (baseClient != null) {
-                String newZeirId = baseClient.getIdentifier(KIP_ID).replace("-", "");
+                String newZeirId = baseClient.getIdentifier(OPENMRS_ID).replace("-", "");
                 String currentZeirId = getString(jsonForm, "current_zeir_id").replace("-", "");
                 if (!newZeirId.equals(currentZeirId)) {
                     //ZEIR_ID was changed
@@ -460,7 +468,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
                 serviceDate = curField.getString("value");
             } else if (curField.getString("key").equals("KIP_ID")) {
                 foundFields++;
-                zeirId = formatChildUniqueId(curField.getString("value"));
+                zeirId = curField.getString("value");
             }
 
             if (foundFields == 3) {
@@ -520,7 +528,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
             } else if (curField.getString("key").equals("OA_Service_Date")) {
                 serviceDate = curField.getString("value");
             } else if (curField.getString("key").equals("KIP_ID")) {
-                zeirId = formatChildUniqueId(curField.getString("value"));
+                zeirId = curField.getString("value");
             }
         }
 
@@ -736,30 +744,10 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
         if (entityVal != null && entityVal.equals(entity)) {
             String entityIdVal = getString(jsonObject, OPENMRS_ENTITY_ID);
 
-            if (entityIdVal.equals(KIP_ID)) {
-                value = formatChildUniqueId(value);
-            }
-
             pids.put(entityIdVal, value);
         }
 
 
-    }
-
-    /**
-     * This method formats the child unique id obtained from a JSON Form to something that is useable
-     *
-     * @param unformattedId The unformatted unique identifier
-     * @return A formatted ID or the original id if method is unable to format
-     */
-    private static String formatChildUniqueId(String unformattedId) {
-        if (StringUtils.isNotBlank(unformattedId) && !unformattedId.contains("-")) {
-            StringBuilder stringBuilder = new StringBuilder(unformattedId);
-            stringBuilder.insert(unformattedId.length() - 1, '-');
-            unformattedId = stringBuilder.toString();
-        }
-
-        return unformattedId;
     }
 
     // Helper functions
@@ -936,8 +924,29 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
             return null;
         }
 
+        String firstName = "";
+        String middleName = "";
+        String lastName = "";
+
+        if (bindType.equalsIgnoreCase(MOTHER)) {
+            firstName = getSubFormFieldValue(fields, FormEntityConstants.Person.first_name, bindType);
+            middleName = getSubFormFieldValue(fields, FormEntityConstants.Person.middle_name, bindType);
+            lastName = getSubFormFieldValue(fields, FormEntityConstants.Person.last_name, bindType);
+        } else if (bindType.equalsIgnoreCase(GUARDIAN)) {
+            String fullName = getSubFormFieldValue(fields, FormEntityConstants.Person.full_name, bindType);
+            if (StringUtils.isNotBlank(fullName)) {
+                String[] tokens = fullName.split("\\s+");
+                firstName = StringUtils.isBlank(tokens[0]) ? firstName : tokens[0];
+                lastName = StringUtils.isBlank(tokens[1]) ? lastName : tokens[1];
+            }
+        }
+
+        if (StringUtils.isBlank(firstName)
+                && StringUtils.isBlank(middleName) && StringUtils.isBlank(lastName))
+            return null;
+
         String entityId = relationalId == null ? generateRandomUUIDString() : relationalId;
-        String firstName = getSubFormFieldValue(fields, FormEntityConstants.Person.first_name, bindType);
+
         String gender = getSubFormFieldValue(fields, FormEntityConstants.Person.gender, bindType);
         String bb = getSubFormFieldValue(fields, FormEntityConstants.Person.birthdate, bindType);
 
@@ -947,21 +956,6 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
             String identifier = parentIdentifier.concat("_").concat(bindType);
             idents.put(M_KIP_ID, identifier);
         }
-
-        String middleName = getSubFormFieldValue(fields, FormEntityConstants.Person.middle_name, bindType);
-        String lastName = getSubFormFieldValue(fields, FormEntityConstants.Person.last_name, bindType);
-        // Get full name of father/guardian and set first and last names
-        String fullName = getSubFormFieldValue(fields, FormEntityConstants.Person.full_name, bindType);
-        if (StringUtils.isNotBlank(fullName) && StringUtils.isBlank(firstName)
-                && StringUtils.isBlank(lastName) && StringUtils.isBlank(middleName)) {
-            String[] tokens = fullName.split("\\s+");
-            firstName = StringUtils.isBlank(tokens[0]) ? firstName : tokens[0];
-            lastName = StringUtils.isBlank(tokens[1]) ? lastName : tokens[1];
-        }
-
-        if (StringUtils.isBlank(fullName) && StringUtils.isBlank(firstName)
-                && StringUtils.isBlank(lastName) && StringUtils.isBlank(middleName))
-            return null;
 
         Date birthdate = formatDate(bb, true);
         String dd = getSubFormFieldValue(fields, FormEntityConstants.Person.deathdate, bindType);
@@ -1356,12 +1350,20 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
             allLevels.add("Ward");
             allLevels.add("Health Facility");
 
+            JSONArray upToFacilities = generateLocationHierarchyTree(context, false, new ArrayList<>(allLevels.subList(4, 5)));
             JSONArray counties = generateLocationArray("County", context, true, new ArrayList<>(allLevels.subList(1, 2)));
             JSONArray subCounties = generateLocationArray("Sub County", context, true, new ArrayList<>(allLevels.subList(2, 3)));
             JSONArray wards = generateLocationArray("Ward", context, true, new ArrayList<>(allLevels.subList(3, 4)));
 
             for (int i = 0; i < questions.length(); i++) {
-                if (questions.getJSONObject(i).getString("key").equals("Ce_County")) {
+                if (questions.getJSONObject(i).getString("key").equals("Home_Facility")) {
+                    if (upToFacilities.length() > 0) {
+                        JSONObject facility = upToFacilities.getJSONObject(0);
+                        if (facility != null && facility.has("name")) {
+                            questions.getJSONObject(i).put("value", facility.getString("name"));
+                        }
+                    }
+                } else if (questions.getJSONObject(i).getString("key").equals("Ce_County")) {
                     questions.getJSONObject(i).remove(JsonFormUtils.VALUES);
                     questions.getJSONObject(i).put("values", counties);
 
@@ -1407,7 +1409,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
         return jsonArray;
     }
 
-    public static void addAddAvailableVaccines(Context context, JSONObject form) {
+    public static void addAvailableVaccines(Context context, JSONObject form) {
         String supportedVaccinesString = VaccinatorUtils.getSupportedVaccines(context);
         if (StringUtils.isNotEmpty(supportedVaccinesString) && form != null) {
             // For each of the vaccine groups, create a checkbox question
@@ -1844,8 +1846,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
                     UniqueIdRepository uniqueIdRepo = KipApplication.getInstance().uniqueIdRepository();
                     entityId = uniqueIdRepo.getNextUniqueId() != null ? uniqueIdRepo.getNextUniqueId().getOpenmrsId() : "";
 
-                    if (entityId.isEmpty() || uniqueIdRepo.countUnUsedIds() < 3) {
-                        // If entityId is empty or if unused < 3, to cater for child, mother & guardian
+                    if (entityId.isEmpty()) {
                         Toast.makeText(context, context.getString(R.string.no_openmrs_id), Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -1869,32 +1870,22 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
                     }
                 }
             } else if (formName.equals("out_of_catchment_service")) {
-                if (StringUtils.isNotBlank(entityId)) {
-                    entityId = entityId.replace("-", "");
-                } else {
-                    JSONArray fields = form.getJSONObject("step1").getJSONArray("fields");
-                    for (int i = 0; i < fields.length(); i++) {
-                        if (fields.getJSONObject(i).getString("key").equals("KIP_ID")) {
-                            fields.getJSONObject(i).put(READ_ONLY, false);
-                            break;
-                        }
-                    }
-                }
-
                 JSONObject stepOne = form.getJSONObject(JsonFormUtils.STEP1);
-                JSONArray jsonArray = stepOne.getJSONArray(JsonFormUtils.FIELDS);
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                JSONArray fields = stepOne.getJSONArray(JsonFormUtils.FIELDS);
+
+                for (int i = 0; i < fields.length(); i++) {
+                    JSONObject jsonObject = fields.getJSONObject(i);
                     switch (jsonObject.getString(JsonFormUtils.KEY)) {
                         case JsonFormUtils.KIP_ID:
                             jsonObject.remove(JsonFormUtils.VALUE);
                             jsonObject.put(JsonFormUtils.VALUE, entityId);
+                            jsonObject.put(READ_ONLY, StringUtils.isNotBlank(entityId) ? true : false);
                             continue;
                         default:
                     }
                 }
 
-                JsonFormUtils.addAddAvailableVaccines(context, form);
+                JsonFormUtils.addAvailableVaccines(context, form);
             } else {
                 Log.w(TAG, "Unsupported form requested for launch " + formName);
             }
@@ -2060,7 +2051,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
             return null;
         }
     }
-    
+
     /**
      * Amos L.
      * Check if a vaccine within a vaccine group has a condition based on the child's attribute.

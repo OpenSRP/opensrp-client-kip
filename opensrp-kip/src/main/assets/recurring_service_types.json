@@ -20,13 +20,7 @@
         "dose": "100,000",
         "schedule": {
           "due": {
-            "reference": "multiple",
-            "multiple": {
-              "condition": "OR",
-              "prerequisites": [
-                "dob"
-              ]
-            },
+            "reference": "dob",
             "offset": "+6m"
           },
           "expiry": {

@@ -9,6 +9,7 @@
   },
   "entity_id": "",
   "relational_id": "",
+  "g_relational_id": "",
   "metadata": {
     "start": {
       "openmrs_entity_parent": "",
@@ -67,6 +68,18 @@
         "openmrs_entity_id": "",
         "type": "choose_image",
         "uploadButtonText": "Take a photo of the child"
+      },
+      {
+        "key": "Home_Facility",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "openmrs_data_type": "text",
+        "type": "edit_text",
+        "edit_type": "name",
+        "read_only": true,
+        "hidden": true,
+        "hint": "Child Registration Facility *"
       },
       {
         "key": "First_Name",
@@ -184,7 +197,7 @@
         "key": "Child_Birth_Notification",
         "openmrs_entity_parent": "",
         "openmrs_entity": "concept",
-        "openmrs_entity_id": "162051AAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "openmrs_entity_id": "162051AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
         "type": "edit_text",
         "hint": "Child's birth notification number"
       },
@@ -296,9 +309,8 @@
       {
         "key": "Mother_Guardian_ID",
         "openmrs_entity_parent": "",
-        "openmrs_entity": "person_identifier",
-        "openmrs_entity_id": "ID_NUMBER",
-        "entity_id": "mother",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "163084AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
         "type": "edit_text",
         "hint": "Mother/guardian ID number",
         "v_regex": {
@@ -400,9 +412,8 @@
       {
         "key": "Father_Guardian_ID",
         "openmrs_entity_parent": "",
-        "openmrs_entity": "person_identifier",
-        "openmrs_entity_id": "ID_NUMBER",
-        "entity_id": "guardian",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "163084AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
         "type": "edit_text",
         "hint": "Father/guardian ID number",
         "v_regex": {
@@ -428,7 +439,8 @@
         "v_required": {
           "value": true,
           "err": "Please enter the child's county"
-        }
+        },
+        "look_up": "true"
       },
       {
         "key": "Ce_Sub_County",
@@ -442,7 +454,8 @@
         "v_required": {
           "value": true,
           "err": "Please enter the child's sub county"
-        }
+        },
+        "look_up": "true"
       },
       {
         "key": "Ce_Ward",
@@ -456,7 +469,8 @@
         "v_required": {
           "value": true,
           "err": "Please enter the child's ward"
-        }
+        },
+        "look_up": "true"
       },
       {
         "key": "Ce_Sub_Location",
@@ -547,9 +561,9 @@
           "Not Exposed (CNE)"
         ],
         "openmrs_choice_ids": {
-          "Exposed (CE)": "",
-          "Unkown (MSU)": "",
-          "Not Exposed (CNE)": ""
+          "Exposed (CE)": "703AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "Unkown (MSU)": "1067AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "Not Exposed (CNE)": "664AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
         }
       }
     ]

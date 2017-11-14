@@ -38,29 +38,39 @@ public class KipEventClientRepository extends EventClientRepository {
     }
 
     @Override
-    public long batchInsertClients(JSONArray array) throws Exception {
+    public long batchInsertClients(JSONArray array) {
         if (array == null || array.length() == 0) {
             return 0l;
         }
 
-        long lastServerVersion = 0l;
+        try {
+            long lastServerVersion = 0l;
 
-        getWritableDatabase().beginTransaction();
+            getWritableDatabase().beginTransaction();
 
-        for (int i = 0; i < array.length(); i++) {
-            Object o = array.get(i);
-            if (o instanceof JSONObject) {
-                JSONObject jo = (JSONObject) o;
-                Client c = convert(jo, Client.class);
-                if (c != null) {
-                    insert(getWritableDatabase(), c, jo);
+            for (int i = 0; i < array.length(); i++) {
+                Object o = array.get(i);
+                if (o instanceof JSONObject) {
+                    JSONObject jo = (JSONObject) o;
+                    Client c = convert(jo, Client.class);
+                    if (c != null) {
+                        insert(getWritableDatabase(), c, jo);
+                        /*
+                        if (c.getServerVersion() > 0l) {
+                            lastServerVersion = c.getServerVersion();
+                        }
+                        */
+                    }
                 }
             }
-        }
 
-        getWritableDatabase().setTransactionSuccessful();
-        getWritableDatabase().endTransaction();
-        return lastServerVersion;
+            getWritableDatabase().setTransactionSuccessful();
+            getWritableDatabase().endTransaction();
+            return lastServerVersion;
+        } catch (Exception e) {
+            Log.e(TAG, "", e);
+            return 0l;
+        }
     }
 
     public void insert(SQLiteDatabase db, Client client, JSONObject serverJsonObject) {

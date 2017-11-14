@@ -35,7 +35,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -213,6 +216,16 @@ public class Utils {
             Log.e(TAG, "populateMohIndicatorsTableFromCSV " + Log.getStackTraceString(e));
         }
         return result;
+    }
+
+    public static Date getDateFromString(String date, String dateFormatPattern) {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat(dateFormatPattern);
+            return dateFormat.parse(date);
+        } catch (ParseException e) {
+            Log.e(TAG, e.getMessage());
+            return null;
+        }
     }
 
 

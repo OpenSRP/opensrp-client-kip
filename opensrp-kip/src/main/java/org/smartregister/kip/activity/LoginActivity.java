@@ -30,7 +30,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import org.joda.time.DateTime;
-import org.json.JSONObject;
 import org.smartregister.domain.LoginResponse;
 import org.smartregister.domain.Response;
 import org.smartregister.domain.ResponseStatus;
@@ -43,7 +42,7 @@ import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.context.Context;
 import org.smartregister.kip.service.intent.LocationsIntentService;
 import org.smartregister.kip.service.intent.PullUniqueIdsIntentService;
-import org.smartregister.kip.sync.SaveRelationshipTypesTask;
+import org.smartregister.kip.service.intent.RelationshipTypesIntentService;
 import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.sync.DrishtiSyncScheduler;
 import org.smartregister.util.Log;
@@ -79,7 +78,6 @@ public class LoginActivity extends AppCompatActivity {
     private static final String URDU_LANGUAGE = "Urdu";
     private android.content.Context appContext;
     private RemoteLoginTask remoteLoginTask;
-    private SaveRelationshipTypesTask saveRelationshipTypesTask;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -227,9 +225,12 @@ public class LoginActivity extends AppCompatActivity {
                             remoteLoginWith(userName, password, loginResponse.payload());
                             Intent intent = new Intent(appContext, PullUniqueIdsIntentService.class);
                             Intent lIntent = new Intent(appContext, LocationsIntentService.class);
+                            Intent rIntent = new Intent(appContext, RelationshipTypesIntentService.class);
                             lIntent.putExtra("userInfo", loginResponse.payload());
+                            rIntent.putExtra("userInfo", loginResponse.payload());
                             appContext.startService(intent);
                             appContext.startService(lIntent);
+                            appContext.startService(rIntent);
                         } else {
                             if (timeStatus.equals(TimeStatus.TIMEZONE_MISMATCH)) {
                                 TimeZone serverTimeZone = getOpenSRPContext().userService()
@@ -363,24 +364,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void remoteLoginWith(String userName, String password, String userInfo) {
         getOpenSRPContext().userService().remoteLogin(userName, password, userInfo);
-        saveRelationshipTypes(userInfo);
         goToHome(true);
         DrishtiSyncScheduler.startOnlyIfConnectedToNetwork(getApplicationContext());
-    }
-
-    private void saveRelationshipTypes(String userInfo) {
-        if(saveRelationshipTypesTask == null)
-            saveRelationshipTypesTask = new SaveRelationshipTypesTask(getOpenSRPContext().allSettings());
-
-        try{
-            JSONObject userInfoObject = new JSONObject(userInfo);
-            if (userInfoObject.has("relationshipTypes")) {
-                String relationshipTypes = userInfoObject.getString("relationshipTypes");
-                saveRelationshipTypesTask.save(relationshipTypes);
-            }
-        }catch(Exception e){
-            logError(e.getMessage());
-        }
     }
 
     private void goToHome(boolean remote) {

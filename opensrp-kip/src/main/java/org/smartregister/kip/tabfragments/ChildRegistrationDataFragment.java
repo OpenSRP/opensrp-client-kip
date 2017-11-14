@@ -93,7 +93,7 @@ public class ChildRegistrationDataFragment extends Fragment {
 
             WidgetFactory wd = new WidgetFactory();
 
-            //layout.addView(wd.createTableRow(inflater, container, "Child's home health facility", JsonFormUtils.getOpenMrsReadableName(JsonFormUtils.getOpenMrsLocationName(Context.getInstance(), Utils.getValue(detailsMap, "Home_Facility", false)))));
+            layout.addView(wd.createTableRow(inflater, container, "Child's registration facility", Utils.getValue(detailsMap, "Home_Facility", false)));
             layout.addView(wd.createTableRow(inflater, container, "First name", Utils.getValue(childDetails.getColumnmaps(), "first_name", true)));
             layout.addView(wd.createTableRow(inflater, container, "Last name", Utils.getValue(childDetails.getColumnmaps(), "last_name", true)));
 
