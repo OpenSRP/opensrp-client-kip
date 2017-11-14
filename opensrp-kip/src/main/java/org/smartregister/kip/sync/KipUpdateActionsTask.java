@@ -226,10 +226,6 @@ public class KipUpdateActionsTask {
             }
         } catch (JSONException e) {
             Log.e(getClass().getName(), e.getMessage());
-        } catch (ParseException e) {
-            Log.e(getClass().getName(), e.getMessage());
-        } catch (UnsupportedEncodingException e) {
-            Log.e(getClass().getName(), e.getMessage());
         }
 
     }
@@ -427,10 +423,6 @@ public class KipUpdateActionsTask {
                 Log.i(getClass().getName(), "Reports synced successfully.");
             }
         } catch (JSONException e) {
-            Log.e(getClass().getName(), e.getMessage());
-        } catch (ParseException e) {
-            Log.e(getClass().getName(), e.getMessage());
-        } catch (UnsupportedEncodingException e) {
             Log.e(getClass().getName(), e.getMessage());
         }
     }

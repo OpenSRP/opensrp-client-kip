@@ -9,6 +9,7 @@
   },
   "entity_id": "",
   "relational_id": "",
+  "g_relational_id": "",
   "metadata": {
     "start": {
       "openmrs_entity_parent": "",

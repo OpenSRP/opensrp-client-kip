@@ -99,6 +99,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
     public static final String KEY = "key";
     public static final String ENTITY_ID = "entity_id";
     public static final String RELATIONAL_ID = "relational_id";
+    public static final String G_RELATIONAL_ID = "g_relational_id";
     private static final String ENCOUNTER_TYPE = "encounter_type";
     public static final String CURRENT_ZEIR_ID = "current_zeir_id";
     public static final String STEP1 = "step1";
@@ -111,6 +112,8 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
     public static final String encounterType = "Update Birth Registration";
     private static final SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     public static final String OPENMRS_ID = "OPENMRS_ID";
+    public static final String MOTHER = "mother";
+    public static final String GUARDIAN = "guardian";
     /*
     There are some UUIDs shared across all OpenMRS implementations for metadata that are common across all implementations.
     This @UNIVERSAL_OPENMRS_RELATIONSHIP_TYPE_UUID is the UUID for relationship type "Parent/Child"
@@ -287,6 +290,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
 
             String entityId = getString(jsonForm, ENTITY_ID);
             String relationalId = getString(jsonForm, RELATIONAL_ID);
+            String gRelationalId = getString(jsonForm, G_RELATIONAL_ID);
 
             if (StringUtils.isBlank(entityId)) {
                 entityId = generateRandomUUIDString();
@@ -339,7 +343,11 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
                 } else {
 
                     if (StringUtils.isNotBlank(_subBindType)) {
-                        s = JsonFormUtils.createSubformClient(context, openSrpContext, fields, baseClient, _subBindType, relationalId);
+                        if (_subBindType.equalsIgnoreCase(MOTHER)) {
+                            s = JsonFormUtils.createSubformClient(context, openSrpContext, fields, baseClient, _subBindType, relationalId);
+                        } else if (_subBindType.equalsIgnoreCase(GUARDIAN)) {
+                            s = JsonFormUtils.createSubformClient(context, openSrpContext, fields, baseClient, _subBindType, gRelationalId);
+                        }
                     }
 
                     if (s != null && e != null) {
@@ -916,8 +924,29 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
             return null;
         }
 
+        String firstName = "";
+        String middleName = "";
+        String lastName = "";
+
+        if (bindType.equalsIgnoreCase(MOTHER)) {
+            firstName = getSubFormFieldValue(fields, FormEntityConstants.Person.first_name, bindType);
+            middleName = getSubFormFieldValue(fields, FormEntityConstants.Person.middle_name, bindType);
+            lastName = getSubFormFieldValue(fields, FormEntityConstants.Person.last_name, bindType);
+        } else if (bindType.equalsIgnoreCase(GUARDIAN)) {
+            String fullName = getSubFormFieldValue(fields, FormEntityConstants.Person.full_name, bindType);
+            if (StringUtils.isNotBlank(fullName)) {
+                String[] tokens = fullName.split("\\s+");
+                firstName = StringUtils.isBlank(tokens[0]) ? firstName : tokens[0];
+                lastName = StringUtils.isBlank(tokens[1]) ? lastName : tokens[1];
+            }
+        }
+
+        if (StringUtils.isBlank(firstName)
+                && StringUtils.isBlank(middleName) && StringUtils.isBlank(lastName))
+            return null;
+
         String entityId = relationalId == null ? generateRandomUUIDString() : relationalId;
-        String firstName = getSubFormFieldValue(fields, FormEntityConstants.Person.first_name, bindType);
+
         String gender = getSubFormFieldValue(fields, FormEntityConstants.Person.gender, bindType);
         String bb = getSubFormFieldValue(fields, FormEntityConstants.Person.birthdate, bindType);
 
@@ -927,21 +956,6 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
             String identifier = parentIdentifier.concat("_").concat(bindType);
             idents.put(M_KIP_ID, identifier);
         }
-
-        String middleName = getSubFormFieldValue(fields, FormEntityConstants.Person.middle_name, bindType);
-        String lastName = getSubFormFieldValue(fields, FormEntityConstants.Person.last_name, bindType);
-        // Get full name of father/guardian and set first and last names
-        String fullName = getSubFormFieldValue(fields, FormEntityConstants.Person.full_name, bindType);
-        if (StringUtils.isNotBlank(fullName) && StringUtils.isBlank(firstName)
-                && StringUtils.isBlank(lastName) && StringUtils.isBlank(middleName)) {
-            String[] tokens = fullName.split("\\s+");
-            firstName = StringUtils.isBlank(tokens[0]) ? firstName : tokens[0];
-            lastName = StringUtils.isBlank(tokens[1]) ? lastName : tokens[1];
-        }
-
-        if (StringUtils.isBlank(fullName) && StringUtils.isBlank(firstName)
-                && StringUtils.isBlank(lastName) && StringUtils.isBlank(middleName))
-            return null;
 
         Date birthdate = formatDate(bb, true);
         String dd = getSubFormFieldValue(fields, FormEntityConstants.Person.deathdate, bindType);

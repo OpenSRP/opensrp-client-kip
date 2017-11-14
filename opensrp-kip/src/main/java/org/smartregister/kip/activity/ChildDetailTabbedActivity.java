@@ -434,6 +434,7 @@ public class ChildDetailTabbedActivity extends BaseActivity implements Vaccinati
             if (form != null) {
                 form.put(JsonFormUtils.ENTITY_ID, childDetails.entityId());
                 form.put(JsonFormUtils.RELATIONAL_ID, childDetails.getColumnmaps().get("relational_id"));
+                form.put(JsonFormUtils.G_RELATIONAL_ID, childDetails.getColumnmaps().get("g_relational_id"));
                 form.put(JsonFormUtils.CURRENT_ZEIR_ID, Utils.getValue(childDetails.getColumnmaps(), "zeir_id", true).replace("-", ""));
 
 
@@ -995,7 +996,7 @@ public class ChildDetailTabbedActivity extends BaseActivity implements Vaccinati
             }
 
             tag.setDbKey(weight.getId());
-            childUnderFiveFragment.loadView(false, false, true);
+            childUnderFiveFragment.loadWeightView(true);
 //            updateRecordWeightView(tag);
 //            setLastModified(true);
         } else {
