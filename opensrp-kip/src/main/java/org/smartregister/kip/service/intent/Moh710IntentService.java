@@ -179,7 +179,7 @@ public class Moh710IntentService extends IntentService {
                 reportDates = kipEventClientRepository.rawQuery(db, PREVIOUS_AEFI_REPORT_DATES_QUERY.concat(orderByUpdatedAtColumn));
 
             } else {
-                reportDates = kipEventClientRepository.rawQuery(db, PREVIOUS_AEFI_REPORT_DATES_QUERY.concat(" where " + updatedAtColumn + " > " + lastProcessedDate + orderByUpdatedAtColumn));
+                reportDates = kipEventClientRepository.rawQuery(db, PREVIOUS_AEFI_REPORT_DATES_QUERY.concat(" and " + updatedAtColumn + " > '" + lastProcessedDate + "' " + orderByUpdatedAtColumn));
             }
 
             if (reportDates == null || reportDates.isEmpty()) {
