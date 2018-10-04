@@ -517,6 +517,9 @@ public class DefaulterListRegisterFragment extends BaseSmartRegisterFragment {
                 case R.id.scan_qr_code:
                     ((ChildSmartRegisterActivity) getActivity()).startQrCodeScanner();
                     break;
+                case R.id.scan_psmart:
+                    ((ChildSmartRegisterActivity) getActivity()).startPsmartScanner();
+                    break;
                 default:
                     break;
             }

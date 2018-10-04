@@ -18,26 +18,42 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.adapter.SmartRegisterPaginatedAdapter;
 import org.smartregister.domain.FetchStatus;
+import org.smartregister.domain.Response;
 import org.smartregister.domain.form.FormSubmission;
 import org.smartregister.event.Event;
 import org.smartregister.event.Listener;
 import org.smartregister.kip.R;
 import org.smartregister.kip.adapter.KipRegisterActivityPagerAdapter;
+import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.fragment.AdvancedSearchFragment;
 import org.smartregister.kip.fragment.BaseSmartRegisterFragment;
 import org.smartregister.kip.fragment.ChildSmartRegisterFragment;
 import org.smartregister.kip.fragment.DefaulterListRegisterFragment;
+import org.smartregister.kip.sync.ECSyncUpdater;
 import org.smartregister.kip.view.LocationPickerView;
 import org.smartregister.provider.SmartRegisterClientsProvider;
 import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.service.FormSubmissionService;
+import org.smartregister.service.HTTPAgent;
 import org.smartregister.service.ZiggyService;
 import org.smartregister.util.FormUtils;
 import org.smartregister.view.dialog.DialogOptionModel;
 import org.smartregister.view.viewpager.OpenSRPViewPager;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -47,6 +63,8 @@ import util.barcode.BarcodeIntentIntegrator;
 import util.barcode.BarcodeIntentResult;
 
 import static android.view.inputmethod.InputMethodManager.HIDE_NOT_ALWAYS;
+import static java.text.MessageFormat.format;
+import static org.smartregister.util.Log.logError;
 
 /**
  * Created by Ahmed on 13-Oct-15.
@@ -186,8 +204,27 @@ public class ChildSmartRegisterActivity extends BaseRegisterActivity {
         if (requestCode == REQUEST_CODE_GET_JSON) {
             if (resultCode == RESULT_OK) {
 
+
+
                 String jsonString = data.getStringExtra("json");
-                Log.d("JSONResult", jsonString);
+                try {
+                    JSONObject jsonObject = new JSONObject(data.getStringExtra("json"));
+                    Log.i("JSONResult----", jsonObject.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+//                String one = "JSONResult len " +jsonString.length();
+
+                // The big works ;)
+                StringBuffer buffer = new StringBuffer(data.getStringExtra("json"));
+                buffer.reverse();
+                String your_result_string = data.getStringExtra("json").replaceAll("[ ]*[\r\n\t]+[ ]*", "");
+
+
+// Test it out
+//                System.out.println("JSONResult----" +buffer); // .toString());
+
+
 
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
                 AllSharedPreferences allSharedPreferences = new AllSharedPreferences(preferences);
@@ -285,6 +322,16 @@ public class ChildSmartRegisterActivity extends BaseRegisterActivity {
         integ.addExtra(Barcode.SCAN_MODE, Barcode.QR_MODE);
         integ.initiateScan();
     }
+
+    public void startPsmartScanner() {
+        ECSyncUpdater ecSyncUpdater = new ECSyncUpdater(this);
+        try {
+            ecSyncUpdater.fetchPsmart();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void onQRCodeSucessfullyScanned(String qrCode) {
         Log.i(getClass().getName(), "QR code: " + qrCode);

@@ -86,6 +86,8 @@ public class KipApplication extends DrishtiApplication
         context.updateApplicationContext(getApplicationContext());
         context.updateCommonFtsObject(createCommonFtsObject());
 
+        CoreLibrary.init(context);
+
         if (!BuildConfig.DEBUG) {
             Fabric.with(this, new Crashlytics());
         }
@@ -103,7 +105,6 @@ public class KipApplication extends DrishtiApplication
         KipUpdateActionsTask.setAlarms(this);
 
         //Initialize Modules
-        CoreLibrary.init(context());
         GrowthMonitoringLibrary.init(context(), getRepository());
         ImmunizationLibrary.init(context(), getRepository(), createCommonFtsObject());
 

@@ -103,8 +103,6 @@ public class MoveToMyCatchmentUtils {
 
             ecUpdater.batchSave(events, clients);
 
-            final String BIRTH_REGISTRATION_EVENT = "Birth Registration";
-            final String NEW_WOMAN_REGISTRATION_EVENT = "New Woman Registration";
             final String HOME_FACILITY = "Home_Facility";
 
             String toProviderId = allSharedPreferences.fetchRegisteredANM();
@@ -120,7 +118,7 @@ public class MoveToMyCatchmentUtils {
                 }
 
                 String fromLocationId = null;
-                if (event.getEventType().equals(BIRTH_REGISTRATION_EVENT)) {
+                if (event.getEventType().equals(KipConstants.CHILD_ENROLLMENT)) {
                     // Update home facility
                     for (Obs obs : event.getObs()) {
                         if (obs.getFormSubmissionField().equals(HOME_FACILITY)) {
@@ -132,7 +130,9 @@ public class MoveToMyCatchmentUtils {
                     }
                 }
 
-                if (event.getEventType().equals(BIRTH_REGISTRATION_EVENT) || event.getEventType().equals(NEW_WOMAN_REGISTRATION_EVENT)) {
+                if (event.getEventType().equals(KipConstants.CHILD_ENROLLMENT)
+                        || event.getEventType().equals(KipConstants.NEW_WOMAN_REGISTRATION)
+                        || event.getEventType().equals(KipConstants.NEW_GUARDIAN_REGISTRATION)) {
                     //Create move to catchment event;
                     org.smartregister.clientandeventmodel.Event moveToCatchmentEvent = JsonFormUtils.createMoveToCatchmentEvent(context, event, fromLocationId, toProviderId, toLocationId);
                     JSONObject moveToCatchmentJsonEvent = ecUpdater.convertToJson(moveToCatchmentEvent);

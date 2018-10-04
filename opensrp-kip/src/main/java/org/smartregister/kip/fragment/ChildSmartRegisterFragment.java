@@ -199,6 +199,9 @@ public class ChildSmartRegisterFragment extends BaseSmartRegisterFragment implem
         View qrCode = view.findViewById(R.id.scan_qr_code);
         qrCode.setOnClickListener(clientActionHandler);
 
+        View scan_psmart = view.findViewById(R.id.scan_psmart);
+        scan_psmart.setOnClickListener(clientActionHandler);
+
         nameInitials = (TextView) view.findViewById(R.id.name_inits);
         btnBackToHome = (LinearLayout) view.findViewById(R.id.btn_back_to_home);
         syncProgressBar = (ProgressBar) view.findViewById(R.id.sync_progress_bar);
@@ -375,6 +378,10 @@ public class ChildSmartRegisterFragment extends BaseSmartRegisterFragment implem
 
                 case R.id.scan_qr_code:
                     ((ChildSmartRegisterActivity) getActivity()).startQrCodeScanner();
+                    break;
+
+                case R.id.scan_psmart:
+                    ((ChildSmartRegisterActivity) getActivity()).startPsmartScanner();
                     break;
                 default:
                     break;

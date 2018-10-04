@@ -34,6 +34,7 @@
     <string name="label_immunization_records">IMMUNISATION &amp; SERVICES</string>
     <string name="str_search_hint">Search name or ID</string>
     <string name="scan_qr_code">Scan QR code</string>
+    <string name="scan_psmart_code">Scan Psmart</string>
     <string name="kip">KIP</string>
     <string name="no_openmrs_id">No unique ids found. Click on the sync button to get more and if this error persists contact the system admin.</string>
     <string name="edit_registration_data">Edit registration data</string>
@@ -141,4 +142,5 @@
     </string-array>
     <string name="validation_error">Validation Error</string>
 
+    <string name="show_vaccine_card_disabled">Showing the vaccine card has been disabled for an out of area child.</string>
 </resources>

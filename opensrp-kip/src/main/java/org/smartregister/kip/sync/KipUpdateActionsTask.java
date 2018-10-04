@@ -15,6 +15,7 @@ import org.smartregister.domain.FetchStatus;
 import org.smartregister.domain.Response;
 import org.smartregister.growthmonitoring.service.intent.ZScoreRefreshIntentService;
 import org.smartregister.kip.application.KipApplication;
+import org.smartregister.kip.domain.Client;
 import org.smartregister.kip.domain.Stock;
 import org.smartregister.kip.receiver.SyncStatusBroadcastReceiver;
 import org.smartregister.kip.receiver.VaccinatorAlarmReceiver;
@@ -35,11 +36,15 @@ import org.smartregister.view.ProgressIndicator;
 import java.io.UnsupportedEncodingException;
 import java.text.MessageFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import util.JsonFormUtils;
 import util.KipConstants;
 import util.NetworkUtils;
 
@@ -54,6 +59,8 @@ public class KipUpdateActionsTask {
     private static final String EVENTS_SYNC_PATH = "/rest/event/add";
     private static final String REPORTS_SYNC_PATH = "/rest/report/add";
     private static final String STOCK_Add_PATH = "/rest/stockresource/add/";
+
+
     private static final String STOCK_SYNC_PATH = "rest/stockresource/sync/";
     private final LockingBackgroundTask task;
     private final ActionService actionService;
@@ -149,7 +156,11 @@ public class KipUpdateActionsTask {
             while (true) {
                 long startSyncTimeStamp = ecUpdater.getLastSyncTimeStamp();
 
-                int eCount = ecUpdater.fetchAllClientsAndEvents(AllConstants.SyncFilters.FILTER_PROVIDER, allSharedPreferences.fetchRegisteredANM());
+                Map<String, String> params = new HashMap<>();
+                params.put(AllConstants.SyncFilters.FILTER_PROVIDER, allSharedPreferences.fetchRegisteredANM());
+                params.put(AllConstants.SyncFilters.FILTER_LOCATION_ID, allSharedPreferences.fetchCurrentLocality());
+
+                int eCount = ecUpdater.fetchAllClientsAndEvents(params);
                 totalCount += eCount;
 
                 if (eCount <= 0) {
@@ -182,6 +193,161 @@ public class KipUpdateActionsTask {
         pushECToServer();
         pushReportsToServer();
         pushStockToServer();
+    }
+
+    public Date syncDate(String stringDate) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        try {
+            Date date = format.parse(stringDate);
+            System.out.println(date);
+            return date;
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private String formatVaccines(String vaccine) {
+        return vaccine.replaceAll("[^\\dA-Za-z ]", "").replaceAll("\\s+", "+").toUpperCase();
+
+
+    }
+
+    public void readFromPsmart(){
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+//        JsonFormUtils.savePsmartData(this, KipApplication.getInstance().context(), jsonString, new AllSharedPreferences(preferences).fetchRegisteredANM());
+
+    }
+
+    public void pushToPsmart() {
+
+        KipEventClientRepository db = KipApplication.getInstance().eventClientRepository();
+        JSONObject clientObject = new JSONObject();
+        JSONObject internalIDSObject = new JSONObject();
+        JSONObject idObject = new JSONObject();
+        JSONArray idObjectArray = new JSONArray();
+        JSONObject ids = new JSONObject();
+        JSONArray jArray = null;
+        JSONObject obsObject = null;
+        JSONObject vaccineObject = null;
+        JSONObject nameObject = new JSONObject();
+        JSONObject patientNameObject = new JSONObject();
+        JSONObject birthdateObject = new JSONObject();
+        JSONArray jsonImmunizationArray = new JSONArray();
+        JSONArray addressArray = new JSONArray();
+        JSONObject immunizationObj = new JSONObject();
+        JSONObject birthdateApproxObject = new JSONObject();
+        JSONObject deathObject = new JSONObject();
+        JSONObject deathIndicatorObject = new JSONObject();
+        JSONObject patientAddressObject = new JSONObject();
+        JSONObject addressObject = new JSONObject();
+        JSONObject psmartaddressObject = new JSONObject();
+        JSONObject general = new JSONObject();
+        List<JSONObject> clients = db.getEvents(syncDate("2010-10-15T09:27:37Z"));
+        String baseID = null;
+        for (JSONObject clientsObject : clients) {
+            try {
+                if (clientsObject.getString("eventType").equalsIgnoreCase("Child Enrollment")) {
+                    baseID = clientsObject.getString("baseEntityId");
+
+                    clientObject = new JSONObject(db.getClientByBaseEntityId(baseID).toString());
+
+                    internalIDSObject = new JSONObject(clientObject.getString("identifiers"));
+                    idObject = new JSONObject();
+                    if (internalIDSObject.has("OPENMRS_ID")) {
+                        idObject.put("IDENTIFIER_TYPE", "OPENMRS_ID");
+                        idObject.put("ID", internalIDSObject.getString("OPENMRS_ID"));
+                        idObject.put("ASSIGNING_AUTHORITY", "OPENMRS");
+                        idObjectArray.put(idObject);
+                    }
+                    idObject = new JSONObject();
+                    if (internalIDSObject.has("OPENMRS_UUID")) {
+                        idObject.put("IDENTIFIER_TYPE", "OPENMRS_UUID");
+                        idObject.put("ID", internalIDSObject.getString("OPENMRS_UUID"));
+                        idObject.put("ASSIGNING_AUTHORITY", "OPENMRS");
+                        idObjectArray.put(idObject);
+                    }
+
+                    ids.put("INTERNAL_PATIENT_ID", idObjectArray);
+                    List<JSONObject> pendingEvents = db.getEventsByBaseEntityId(baseID);
+                    for (JSONObject jsonObject : pendingEvents) {
+                        try {
+                            if (jsonObject.getString("eventType").equalsIgnoreCase("Vaccination")) {
+                                jArray = new JSONArray(jsonObject.getString("obs"));
+                                for (int i = 0; i < jArray.length(); i++) {
+                                    obsObject = new JSONObject(jArray.get(i).toString());
+                                    if (obsObject.getString("fieldDataType").equalsIgnoreCase("date")) {
+                                        vaccineObject = new JSONObject();
+                                        vaccineObject.put("NAME", formatVaccines(obsObject.getString("formSubmissionField")));
+                                        vaccineObject.put("DATE_ADMINISTERED", formatVaccines(new JSONArray(obsObject.getString("values")).get(0).toString()));
+                                        jsonImmunizationArray.put(vaccineObject);
+                                    }
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    if (clientObject.has("firstName")) {
+                        nameObject.put("FIRST_NAME", clientObject.getString("firstName"));
+                    }
+                    if (clientObject.has("middleName")) {
+                        nameObject.put("MIDDLE_NAME", clientObject.getString("middleName"));
+                    }
+                    if (clientObject.has("lastName")) {
+                        nameObject.put("LAST_NAME", clientObject.getString("lastName"));
+                    }
+                    patientNameObject.put("PATIENT_NAME", nameObject);
+                    birthdateObject.put("DATE_OF_BIRTH", clientObject.getString("birthdate"));
+                    if (clientObject.getString("birthdateApprox").equalsIgnoreCase("false")) {
+                        birthdateApproxObject.put("DATE_OF_BIRTH", "EXACT");
+                    } else {
+                        birthdateApproxObject.put("DATE_OF_BIRTH_PRECISION", "APPROX");
+
+                    }
+
+                    addressArray = new JSONArray(clientObject.getString("addresses"));
+                    if (addressArray.length() > 0) {
+                        patientAddressObject = new JSONObject(addressArray.get(0).toString());
+                        if (patientAddressObject.has("stateProvince"))
+                            addressObject.put("PROVINCE", patientAddressObject.getString("stateProvince"));
+                        if (patientAddressObject.has("cityVillage"))
+                            addressObject.put("VILLAGE", patientAddressObject.getString("cityVillage"));
+                        if (patientAddressObject.has("countyDistrict"))
+                            addressObject.put("DISTRICT", patientAddressObject.getString("countyDistrict"));
+                    }
+
+
+                    deathObject.put("DEATH_DATE", "");
+                    deathIndicatorObject.put("DEATH_INDICATOR", "N");
+                    psmartaddressObject.put("PATIENT_ADDRESS", addressObject);
+                    birthdateObject.put("DATE_OF_BIRTH", clientObject.getString("birthdate"));
+                    immunizationObj.put("IMMUNIZATION", jsonImmunizationArray);
+
+
+
+
+//                    Log.i("PHASE-IMMUNIZATION", immunizationObj.toString());
+//                    Log.i("PHASE-ids", ids.toString());
+//                    Log.i("PHASE-patientAddress", patientAddressObject.toString());
+                    general = new JSONObject(ids.toString() + birthdateObject.toString()
+                    +birthdateApproxObject.toString());
+                    Log.i("PHASE-patientAddress", ids.toString() + patientNameObject + birthdateObject+ birthdateApproxObject+ patientAddressObject.toString() + immunizationObj.toString());
+
+
+
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+
     }
 
     private void pushECToServer() {
@@ -218,7 +384,10 @@ public class KipUpdateActionsTask {
                                 EVENTS_SYNC_PATH),
                         jsonPayload);
                 if (response.isFailure()) {
+                    Log.e(getClass().getName(), baseUrl + " " + EVENTS_SYNC_PATH + " " + jsonPayload);
                     Log.e(getClass().getName(), "Events sync failed.");
+
+                    Log.e(getClass().getName(), response.toString());
                     return;
                 }
                 db.markEventsAsSynced(pendingEvents);

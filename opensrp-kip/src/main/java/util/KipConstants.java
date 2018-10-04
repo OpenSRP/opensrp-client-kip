@@ -27,6 +27,8 @@ public class KipConstants extends AllConstants {
     public static final String DEFAULT_DATE_STRING = "1970-1-1";
 
     public static final String CHILD_ENROLLMENT = "Child Enrollment";
+    public static final String NEW_WOMAN_REGISTRATION = "New Woman Registration";
+    public static final String NEW_GUARDIAN_REGISTRATION = "New Guardian Registration";
 
     public static String openmrsUrl() {
         String baseUrl = KipApplication.getInstance().context().allSharedPreferences().fetchBaseURL("");

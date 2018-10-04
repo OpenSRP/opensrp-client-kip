@@ -141,6 +141,7 @@ public class PullUniqueIdsIntentService extends IntentService {
 
     private void parseResponse(HttpURLConnection connection) throws Exception {
         String response = readInputStreamToString(connection);
+        Log.i(TAG, response);
         JSONObject responseJson = new JSONObject(response);
         JSONArray jsonArray = responseJson.getJSONArray("identifiers");
         if (jsonArray != null && jsonArray.length() > 0) {

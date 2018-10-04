@@ -190,11 +190,21 @@ public abstract class BaseRegisterActivity extends SecuredNativeSmartRegisterAct
             startFormActivity("out_of_catchment_service", null, null);
         } else if (id == R.id.nav_sync) {
             startSync();
+        }else if (id == R.id.nav_psmart) {
+            psmartSync();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+    private void psmartSync() {
+        KipUpdateActionsTask kipUpdateActionsTask = new KipUpdateActionsTask(
+                this, context().actionService(),
+                new SyncProgressIndicator(), context().allFormVersionSyncService());
+        kipUpdateActionsTask.pushToPsmart();
     }
 
     private void startSync() {
@@ -248,6 +258,7 @@ public abstract class BaseRegisterActivity extends SecuredNativeSmartRegisterAct
 
     /////////////////////////for custom navigation //////////////////////////////////////////////////////
     private void refreshSyncStatusViews(FetchStatus fetchStatus) {
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (navigationView != null && navigationView.getMenu() != null) {
             LinearLayout syncMenuItem = (LinearLayout) navigationView.findViewById(R.id.nav_sync);
@@ -300,6 +311,14 @@ public abstract class BaseRegisterActivity extends SecuredNativeSmartRegisterAct
             @Override
             public void onClick(View v) {
                 startSync();
+                drawer.closeDrawer(GravityCompat.START);
+            }
+        });
+        LinearLayout psmartMenuItem = (LinearLayout) drawer.findViewById(R.id.nav_psmart);
+        psmartMenuItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                psmartSync();
                 drawer.closeDrawer(GravityCompat.START);
             }
         });
