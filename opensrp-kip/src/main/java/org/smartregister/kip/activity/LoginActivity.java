@@ -217,7 +217,7 @@ public class LoginActivity extends AppCompatActivity {
         tryRemoteLogin(userName, password, new Listener<LoginResponse>() {
             public void onEvent(LoginResponse loginResponse) {
                 view.setClickable(true);
-                if (loginResponse == NO_INTERNET_CONNECTIVITY) {
+                if (loginResponse == SUCCESS) {
                     if (getOpenSRPContext().userService().isUserInPioneerGroup(userName)) {
                         TimeStatus timeStatus = getOpenSRPContext().userService().validateDeviceTime(
                                 loginResponse.payload(), KipConstants.MAX_SERVER_TIME_DIFFERENCE);
@@ -244,19 +244,19 @@ public class LoginActivity extends AppCompatActivity {
                     } else { // Valid user from wrong group trying to log in
                         showErrorDialog(getResources().getString(R.string.unauthorized_group));
                     }
-//                } else {
-//                    if (loginResponse == null) {
-//                        showErrorDialog("Login failed. Unknown reason. Try Again");
-//                    } else {
-//                        if (loginResponse == NO_INTERNET_CONNECTIVITY) {
-//                            showErrorDialog(getResources().getString(R.string.no_internet_connectivity));
-//                        } else if (loginResponse == UNKNOWN_RESPONSE) {
-//                            showErrorDialog(getResources().getString(R.string.unknown_response));
-//                        } else if (loginResponse == UNAUTHORIZED) {
-//                            showErrorDialog(getResources().getString(R.string.unauthorized));
-//                        }
-////                        showErrorDialog(loginResponse.message());
-//                    }
+                } else {
+                    if (loginResponse == null) {
+                        showErrorDialog("Login failed. Unknown reason. Try Again");
+                    } else {
+                        if (loginResponse == NO_INTERNET_CONNECTIVITY) {
+                            showErrorDialog(getResources().getString(R.string.no_internet_connectivity));
+                        } else if (loginResponse == UNKNOWN_RESPONSE) {
+                            showErrorDialog(getResources().getString(R.string.unknown_response));
+                        } else if (loginResponse == UNAUTHORIZED) {
+                            showErrorDialog(getResources().getString(R.string.unauthorized));
+                        }
+//                        showErrorDialog(loginResponse.message());
+                    }
                 }
             }
         });

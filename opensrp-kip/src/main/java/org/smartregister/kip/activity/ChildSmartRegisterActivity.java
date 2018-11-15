@@ -1,32 +1,34 @@
 package org.smartregister.kip.activity;
 
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.adapter.SmartRegisterPaginatedAdapter;
 import org.smartregister.domain.FetchStatus;
-import org.smartregister.domain.Response;
 import org.smartregister.domain.form.FormSubmission;
 import org.smartregister.event.Event;
 import org.smartregister.event.Listener;
@@ -37,23 +39,21 @@ import org.smartregister.kip.fragment.AdvancedSearchFragment;
 import org.smartregister.kip.fragment.BaseSmartRegisterFragment;
 import org.smartregister.kip.fragment.ChildSmartRegisterFragment;
 import org.smartregister.kip.fragment.DefaulterListRegisterFragment;
+import org.smartregister.kip.psmart.SmartCardIntentIntegrator;
+import org.smartregister.kip.psmart.SmartCardIntentResult;
 import org.smartregister.kip.sync.ECSyncUpdater;
+import org.smartregister.kip.sync.KipClientProcessor;
 import org.smartregister.kip.view.LocationPickerView;
 import org.smartregister.provider.SmartRegisterClientsProvider;
 import org.smartregister.repository.AllSharedPreferences;
+import org.smartregister.repository.BaseRepository;
 import org.smartregister.service.FormSubmissionService;
-import org.smartregister.service.HTTPAgent;
 import org.smartregister.service.ZiggyService;
 import org.smartregister.util.FormUtils;
 import org.smartregister.view.dialog.DialogOptionModel;
 import org.smartregister.view.viewpager.OpenSRPViewPager;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
+import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -63,7 +63,6 @@ import util.barcode.BarcodeIntentIntegrator;
 import util.barcode.BarcodeIntentResult;
 
 import static android.view.inputmethod.InputMethodManager.HIDE_NOT_ALWAYS;
-import static java.text.MessageFormat.format;
 import static org.smartregister.util.Log.logError;
 
 /**
@@ -82,6 +81,7 @@ public class ChildSmartRegisterActivity extends BaseRegisterActivity {
 
 
     private android.support.v4.app.Fragment mBaseFragment = null;
+
 
 
     @Override
@@ -236,7 +236,32 @@ public class ChildSmartRegisterActivity extends BaseRegisterActivity {
             if (StringUtils.isNotBlank(res.getContents())) {
                 onQRCodeSucessfullyScanned(res.getContents());
             } else Log.i("", "NO RESULT FOR QR CODE");
+        }else if (requestCode == SmartCardIntentIntegrator.SMARTCARD_READ_REQUEST_CODE && resultCode == RESULT_OK) {
+//            BarcodeIntentResult res = BarcodeIntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+            processSmartCardReadResult(requestCode, resultCode, data);
+
         }
+    }
+
+    private void processSmartCardReadResult(int requestCode, int resultCode, Intent dataIntent) {
+        SmartCardIntentResult cardReadIntentResult = null;
+        Patient SHRPatient;
+
+        try {
+            cardReadIntentResult = SmartCardIntentIntegrator.parseActivityResult(requestCode, resultCode, dataIntent);
+        } catch (Exception e) {
+            Log.e(getClass().getSimpleName(), "Could not get result", e);
+        }
+        if (cardReadIntentResult == null) {
+            Toast.makeText(getApplicationContext(), "Card Read Failed", Toast.LENGTH_LONG).show();
+            return;
+        }else{
+            Toast.makeText(getApplicationContext(), cardReadIntentResult.getSmartCardRecord().getPlainPayload(), Toast.LENGTH_LONG).show();
+            cardReadIntentResult.getSmartCardRecord().get
+
+        }
+
+
     }
 
     @Override
@@ -323,13 +348,53 @@ public class ChildSmartRegisterActivity extends BaseRegisterActivity {
         integ.initiateScan();
     }
 
-    public void startPsmartScanner() {
-        ECSyncUpdater ecSyncUpdater = new ECSyncUpdater(this);
+    private void readSmartCard() {
+        SmartCardIntentIntegrator SHRIntegrator = new SmartCardIntentIntegrator(this);
+        SHRIntegrator.initiateCardRead();
+        Toast.makeText(getApplicationContext(), "Opening Card Reader", Toast.LENGTH_LONG).show();
+    }
+
+//    private void readSmartCard() {
+//            Intent intent = new Intent();
+//            intent.setAction("org.kenyahmis.psmart.ACTION_READ_DATA");
+//            intent.setType("text/plain");
+//            intent.putExtra("AUTH_TOKEN","123");
+//            startIntentActivityForResult(intent,98);
+//
+//
+//
+//
+////        SmartCardIntentIntegrator SHRIntegrator = new SmartCardIntentIntegrator(this);
+////        SHRIntegrator.initiateCardRead();
+////        Toast.makeText(getApplicationContext(), "Opening Card Reader", Toast.LENGTH_LONG).show();
+//    }
+    private void startIntentActivityForResult(Intent intent, int requestCode){
+            startActivityForResult(intent, requestCode);
+    }
+
+    public void startPsmartScanner(){
+        readSmartCard();
+    }
+
+    public void startPsmartScanner2() {
+//        ECSyncUpdater ecSyncUpdater = new ECSyncUpdater(this);
+        ECSyncUpdater ecUpdater = ECSyncUpdater.getInstance(KipApplication.getInstance().getApplicationContext());
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(KipApplication.getInstance().getApplicationContext());
         try {
-            ecSyncUpdater.fetchPsmart();
+
+            JsonFormUtils.savePsmartEnrollment(KipApplication.getInstance().getApplicationContext());
+
+            AllSharedPreferences allSharedPreferences = new AllSharedPreferences(preferences);
+
+            long lastSyncTimeStamp = allSharedPreferences.fetchLastUpdatedAtDate(0);
+            Date lastSyncDate = new Date(lastSyncTimeStamp);
+            KipClientProcessor.getInstance(KipApplication.getInstance().getApplicationContext()).processClient(ecUpdater.getEvents(lastSyncDate, BaseRepository.TYPE_Unsynced));
+            allSharedPreferences.saveLastUpdatedAtDate(lastSyncDate.getTime());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
 

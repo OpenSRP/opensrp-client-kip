@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
@@ -33,7 +34,6 @@ import org.smartregister.clientandeventmodel.Obs;
 import org.smartregister.commonregistry.AllCommonsRepository;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.domain.ProfileImage;
-import org.smartregister.domain.Response;
 import org.smartregister.growthmonitoring.domain.Weight;
 import org.smartregister.growthmonitoring.repository.WeightRepository;
 import org.smartregister.immunization.domain.Vaccine;
@@ -52,7 +52,6 @@ import org.smartregister.kip.sync.KipClientProcessor;
 import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.repository.BaseRepository;
 import org.smartregister.repository.ImageRepository;
-import org.smartregister.service.HTTPAgent;
 import org.smartregister.sync.ClientProcessor;
 import org.smartregister.util.AssetHandler;
 import org.smartregister.util.FormUtils;
@@ -82,7 +81,6 @@ import java.util.regex.Pattern;
 
 import id.zelory.compressor.Compressor;
 
-import static java.text.MessageFormat.format;
 import static org.smartregister.util.Log.logError;
 
 /**
@@ -139,7 +137,6 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
     private static final String LOCATION_HIERARCHY = "locationsHierarchy";
     private static final String MAP = "map";
 
-
     public static final SimpleDateFormat dd_MM_yyyy = new SimpleDateFormat("dd-MM-yyyy");
     //public static Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").create();
     //2007-03-31T04:00:00.000Z
@@ -155,6 +152,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
                 saveOutOfAreaService(context, openSrpContext, jsonString);
             } else if (form.getString("encounter_type").equals(KipConstants.CHILD_ENROLLMENT)) {
                 saveChildEnrollment(context, openSrpContext, jsonString, providerId, "Child_Photo", "child");
+                Log.i("Waiter",jsonString);
             }
         } catch (JSONException e) {
             Log.e(TAG, Log.getStackTraceString(e));
@@ -195,19 +193,57 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
     }
 
 
-    public static void savePsmartData(Context context, org.smartregister.kip.context.Context openSrpContext,
-                                      String jsonString, String providerId) {
+
+
+    public static void savePsmartEnrollment(Context context) {
+
+
+
+
         try {
-            JSONObject form = new JSONObject(jsonString);
-            if (form.getString("encounter_type").equals("Out of Catchment Service")) {
-                saveOutOfAreaService(context, openSrpContext, jsonString);
-            } else if (form.getString("encounter_type").equals(KipConstants.CHILD_ENROLLMENT)) {
-                saveChildEnrollment(context, openSrpContext, jsonString, providerId, "Child_Photo", "child");
-            }
-        } catch (JSONException e) {
-            Log.e(TAG, Log.getStackTraceString(e));
+            ECSyncUpdater ecUpdater = ECSyncUpdater.getInstance(context);
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+            AllSharedPreferences allSharedPreferences = new AllSharedPreferences(preferences);
+
+//            String baseID = UUID.randomUUID().toString();
+            JSONObject clientJson_t = ecUpdater.fetchPsmartClient();
+            Log.i("ALL_TIME",clientJson_t.toString());
+            ecUpdater.addClient(clientJson_t.getString("baseEntityId"), clientJson_t);
+
+            Date encounterDate = new Date();
+            Event e2 = (Event) new Event()
+                    .withBaseEntityId(clientJson_t.getString("baseEntityId"))
+                    .withEventDate(encounterDate)
+                    .withEventType("Child Enrollment")
+                    .withLocationId("2f25ba3d-2a4d-46bb-84ef-0a88832bb67f")
+                    .withProviderId("admin")
+                    .withEntityType("child")
+                    .withFormSubmissionId(generateRandomUUIDString())
+                    .withDateCreated(new Date());
+
+            List<Obs> obses = new ArrayList<>();
+            Obs obs = new Obs();
+            obs.setFieldCode("Home_Facility");
+            obs.setFieldDataType("text");
+            obs.setValue("2f25ba3d-2a4d-46bb-84ef-0a88832bb67f");
+            obs.setFormSubmissionField("Home_Facility");
+
+            obses.add(obs);
+            e2.setObs(obses);
+            JSONObject eventJson = new JSONObject(gson.toJson(e2));
+            ecUpdater.addEvent(clientJson_t.getString("baseEntityId"), eventJson);
+
+//
+            long lastSyncTimeStamp = allSharedPreferences.fetchLastUpdatedAtDate(0);
+            Date lastSyncDate = new Date(lastSyncTimeStamp);
+            KipClientProcessor.getInstance(context).processClient(ecUpdater.getEvents(lastSyncDate, BaseRepository.TYPE_Unsynced));
+            allSharedPreferences.saveLastUpdatedAtDate(lastSyncDate.getTime());
+
+        } catch (Exception e) {
+            Log.e(TAG, "", e);
         }
     }
+
 
     private static void saveChildEnrollment(Context context, org.smartregister.kip.context.Context openSrpContext,
                                             String jsonString, String providerId, String imageKey, String bindType) {
@@ -298,9 +334,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
 
                     if (s != null) {
                         JSONObject clientJson = new JSONObject(gson.toJson(s));
-                        Log.i("client_JSON ", clientJson.toString());
                         ecUpdater.addClient(s.getBaseEntityId(), clientJson);
-
                     }
 
                     if (se != null) {
@@ -310,13 +344,11 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
                 }
             }
 
+            String baseID = UUID.randomUUID().toString();
             if (c != null) {
                 JSONObject clientJson = new JSONObject(gson.toJson(c));
-                Log.i("client_JSON ", clientJson.toString());
                 ecUpdater.addClient(c.getBaseEntityId(), clientJson);
-
             }
-
             if (e != null) {
                 JSONObject eventJson = new JSONObject(gson.toJson(e));
                 ecUpdater.addEvent(e.getBaseEntityId(), eventJson);
@@ -324,14 +356,15 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
 
             UniqueIdRepository uniqueIdRepo = KipApplication.getInstance().uniqueIdRepository();
             uniqueIdRepo.close(c.getIdentifier(OPENMRS_ID));
-
+//
             String imageLocation = getFieldValue(fields, imageKey);
             saveImage(context, providerId, entityId, imageLocation);
-
+//
             long lastSyncTimeStamp = allSharedPreferences.fetchLastUpdatedAtDate(0);
             Date lastSyncDate = new Date(lastSyncTimeStamp);
             KipClientProcessor.getInstance(context).processClient(ecUpdater.getEvents(lastSyncDate, BaseRepository.TYPE_Unsynced));
             allSharedPreferences.saveLastUpdatedAtDate(lastSyncDate.getTime());
+
         } catch (Exception e) {
             Log.e(TAG, "", e);
         }
@@ -494,246 +527,6 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
 
 
 
-
-
-
-
-    private static void psmartChildEnrollment(Context context, org.smartregister.kip.context.Context openSrpContext,
-                                            String jsonString, String providerId, String imageKey, String bindType) {
-        if (context == null || openSrpContext == null || StringUtils.isBlank(providerId)
-                || StringUtils.isBlank(jsonString)) {
-            return;
-        }
-
-        try {
-            ECSyncUpdater ecUpdater = ECSyncUpdater.getInstance(context);
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-            AllSharedPreferences allSharedPreferences = new AllSharedPreferences(preferences);
-
-            JSONObject jsonForm = new JSONObject(jsonString);
-
-            String entityId = getString(jsonForm, ENTITY_ID);
-            if (StringUtils.isBlank(entityId)) {
-                entityId = generateRandomUUIDString();
-            }
-
-            JSONArray fields = fields(jsonForm);
-            if (fields == null) {
-                return;
-            }
-
-            String encounterType = getString(jsonForm, ENCOUNTER_TYPE);
-
-            JSONObject metadata = getJSONObject(jsonForm, METADATA);
-
-            // Replace values for location questions with their corresponding location IDs
-            for (int i = 0; i < fields.length(); i++) {
-                String key = fields.getJSONObject(i).getString("key");
-                if ("Home_Facility".equals(key)) {
-                    String locationName = fields.getJSONObject(i).getString("value");
-                    String locationId = getOpenMrsLocationId(openSrpContext, locationName);
-                    fields.getJSONObject(i).put("value", locationId);
-                } else if ("Mother_Guardian_Date_Birth".equals(key)) {
-                    if (TextUtils.isEmpty(fields.getJSONObject(i).optString("value"))) {
-                        fields.getJSONObject(i).put("value", MOTHER_DEFAULT_DOB);
-                    }
-                } else if ("Father_Guardian_Date_Birth".equals(key)) {
-                    if (TextUtils.isEmpty(fields.getJSONObject(i).optString("value"))) {
-                        fields.getJSONObject(i).put("value", FATHER_DEFAULT_DOB);
-                    }
-                }
-            }
-
-            JSONObject lookUpJSONObject = getJSONObject(metadata, "look_up");
-            String lookUpEntityId = "";
-            String lookUpBaseEntityId = "";
-            if (lookUpJSONObject != null) {
-                lookUpEntityId = getString(lookUpJSONObject, "entity_id");
-                lookUpBaseEntityId = getString(lookUpJSONObject, "value");
-            }
-
-            Log.i("RGK ",fields.toString());
-
-            Client c = JsonFormUtils.createBaseClient(fields, entityId);
-            Event e = JsonFormUtils.createEvent(openSrpContext, fields, metadata, entityId, encounterType, providerId, bindType);
-
-            String relationships = AssetHandler.readFileFromAssetsFolder(FormUtils.ecClientRelationships, context);
-            JSONArray relationshipsArray = new JSONArray(relationships);
-
-            for (int i = 0; i < relationshipsArray.length(); i++) {
-                Client s = null;
-                Event se = null;
-
-                JSONObject rObject = relationshipsArray.getJSONObject(i);
-                String subBindType = rObject.getString("client_relationship");
-
-                if (lookUpEntityId.equals(subBindType) && StringUtils.isNotBlank(lookUpBaseEntityId)) {
-                    s = new Client(lookUpBaseEntityId);
-                    addRelationship(s, c, subBindType, getRelationshipTypeId(openSrpContext, fields, bindType));
-                } else {
-
-                    if (StringUtils.isNotBlank(subBindType)) {
-                        s = JsonFormUtils.createSubformClient(context, openSrpContext, fields, c, subBindType, null);
-                    }
-
-                    if (s != null && e != null) {
-                        JSONObject subBindTypeJson = getJSONObject(jsonForm, subBindType);
-                        if (subBindTypeJson != null) {
-                            String subBindTypeEncounter = getString(subBindTypeJson, ENCOUNTER_TYPE);
-                            if (StringUtils.isNotBlank(subBindTypeEncounter)) {
-                                se = JsonFormUtils.createSubFormEvent(null, metadata, e, s.getBaseEntityId(), subBindTypeEncounter, providerId, subBindType);
-                            }
-                        }
-                    }
-
-                    if (s != null) {
-                        JSONObject clientJson = new JSONObject(gson.toJson(s));
-                        Log.i("client_JSON ", clientJson.toString());
-                        ecUpdater.addClient(s.getBaseEntityId(), clientJson);
-
-                    }
-
-                    if (se != null) {
-                        JSONObject eventJson = new JSONObject(gson.toJson(se));
-                        ecUpdater.addEvent(se.getBaseEntityId(), eventJson);
-                    }
-                }
-            }
-
-            if (c != null) {
-                JSONObject clientJson = new JSONObject(gson.toJson(c));
-                Log.i("client_JSON ", clientJson.toString());
-                ecUpdater.addClient(c.getBaseEntityId(), clientJson);
-
-            }
-
-            if (e != null) {
-                JSONObject eventJson = new JSONObject(gson.toJson(e));
-                ecUpdater.addEvent(e.getBaseEntityId(), eventJson);
-            }
-
-            UniqueIdRepository uniqueIdRepo = KipApplication.getInstance().uniqueIdRepository();
-            uniqueIdRepo.close(c.getIdentifier(OPENMRS_ID));
-
-            String imageLocation = getFieldValue(fields, imageKey);
-            saveImage(context, providerId, entityId, imageLocation);
-
-            long lastSyncTimeStamp = allSharedPreferences.fetchLastUpdatedAtDate(0);
-            Date lastSyncDate = new Date(lastSyncTimeStamp);
-            KipClientProcessor.getInstance(context).processClient(ecUpdater.getEvents(lastSyncDate, BaseRepository.TYPE_Unsynced));
-            allSharedPreferences.saveLastUpdatedAtDate(lastSyncDate.getTime());
-        } catch (Exception e) {
-            Log.e(TAG, "", e);
-        }
-    }
-
-
-
-
-
-
-    public static void psmartClient(final Context context) throws Exception {
-
-
-        final HTTPAgent httpAgent = KipApplication.getInstance().context().getHttpAgent();
-        Thread thread = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-
-                String motherBaseID = UUID.randomUUID().toString();
-                JSONObject clientObject = new JSONObject();
-                JSONObject motherObject = new JSONObject();
-                JSONObject addressFields = new JSONObject();
-                JSONObject relationships = new JSONObject();
-                JSONObject addresses = new JSONObject();
-                JSONObject addressesOut = new JSONObject();
-                JSONArray addressesFieldsArray = new JSONArray();
-                JSONObject physicalAddresses = new JSONObject();
-                JSONObject openmrs_id_client = new JSONObject();
-                JSONObject openmrs_id_mum = new JSONObject();
-                try {
-
-                    SimpleDateFormat spf=new SimpleDateFormat("yyyyMMdd");
-                    Response resp = httpAgent.fetch("http://192.168.0.26/shr.json");
-                    if (resp.isFailure()) {
-                        throw new Exception(" not returned data");
-                    }
-                    JSONObject responseObj = new JSONObject((String) resp.payload());
-                    JSONObject clientDetails = responseObj.getJSONObject("PATIENT_IDENTIFICATION");
-                    JSONObject clientDetailsNames = clientDetails.getJSONObject("PATIENT_NAME");
-                    JSONObject clientDetailsIds = clientDetails.getJSONObject("EXTERNAL_PATIENT_ID");
-                    JSONObject clientDetailsAddresses = clientDetails.getJSONObject("PATIENT_ADDRESS");
-
-                    relationships.put("relationshipType", "8d91a210-c2cc-11de-8d13-0010c6dffd0f");
-                    relationships.put("relativeEntityId", "dd32df6c-32c9-4d08-a116-e1386e8c93c5");
-//                    relationships.put("relativeEntityId", motherBaseID);
-
-                    motherObject.put("mother", relationships);
-                    clientObject.put("relationships", motherObject);
-                    Date birthdate =spf.parse(clientDetails.getString("DATE_OF_BIRTH"));
-                    spf= new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-                    clientObject.put("birthdate", spf.format(birthdate));
-                    clientObject.put("birthdateApprox",false);
-                    clientObject.put("deathdateApprox",false);
-                    if(clientDetailsNames.has("FIRST_NAME")){
-                        clientObject.put("firstName",clientDetailsNames.getString("FIRST_NAME"));
-                    }
-                    if(clientDetailsNames.has("LAST_NAME")){
-                        clientObject.put("lastName",clientDetailsNames.getString("LAST_NAME"));
-                    }
-                    if(clientDetails.getString("DATE_OF_BIRTH").startsWith("f")){
-                        clientObject.put("gender","Female");
-                    }else {
-                        clientObject.put("gender","Male");
-                    }
-
-                    physicalAddresses = clientDetailsAddresses.getJSONObject("PHYSICAL_ADDRESS");
-//                    addresses.put("address3",physicalAddresses.getString("VILLAGE"));
-//                    addresses.put("address2",physicalAddresses.getString("NEAREST_LANDMARK"));
-//                    addresses.put("address1",clientDetailsAddresses.getString("POSTAL_ADDRESS"));
-                    addresses.put("address3","za");
-                    addresses.put("address4","Za");
-                    addressFields.put("addressFields", addresses);
-
-                    addressesOut.put("addressType","usual_residence");
-//                    addressesOut.put("cityVillage",physicalAddresses.getString("WARD"));
-                    addressesOut.put("cityVillage","CENTRAL SAKWA");
-//                    addressesOut.put("countyDistrict",physicalAddresses.getString("COUNTY"));
-                    addressesOut.put("countyDistrict","BONDO");
-                    addressesOut.put("stateProvince","SIAYA");
-
-                    addressesFieldsArray.put(addressFields);
-                    addressesFieldsArray.put(addressesOut);
-                    clientObject.put("addresses",addressesFieldsArray);
-                    clientObject.put("baseEntityId","dd32df6c-32c9-4d08-a116-e1386e8c93d1");
-//                    clientObject.put("baseEntityId",clientDetailsIds.getString("ID"));
-                    openmrs_id_client.put("OPENMRS_ID","MEKXJV");
-                    clientObject.put("identifiers",openmrs_id_client);
-
-                    clientObject.put("dateCreated", spf.format(new Date()));
-                    clientObject.put("type", "Client");
-                    ECSyncUpdater ecUpdater = ECSyncUpdater.getInstance(context);
-                    ecUpdater.addClient("dd32df6c-32c9-4d08-a116-e1386e8c93d1", clientObject);
-
-
-
-
-
-                    Log.i("ONBLEEE ", clientObject.toString());
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        thread.start();
-
-
-
-
-    }
 
     private static void saveOutOfAreaService(Context context, org.smartregister.Context openSrpContext,
                                              String jsonString) {
@@ -995,6 +788,8 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
                 .withEntityType(bindType)
                 .withFormSubmissionId(generateRandomUUIDString())
                 .withDateCreated(new Date());
+
+
 
         for (int i = 0; i < fields.length(); i++) {
             JSONObject jsonObject = getJSONObject(fields, i);

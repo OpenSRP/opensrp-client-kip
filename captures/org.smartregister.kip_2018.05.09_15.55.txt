@@ -1,0 +1,450 @@
+TASK org.smartregister.kip id=21
+  ACTIVITY org.smartregister.kip/.activity.ChildSmartRegisterActivity 2a53d2d pid=1600
+    Local FragmentActivity 41880f2 State:
+      mCreated=truemResumed=true mStopped=false mReallyStopped=false
+      mLoadersStarted=true
+    Active Fragments in 36f488f:
+      #0: ChildSmartRegisterFragment{c17a71c #0 id=0x7f1200d2 android:switcher:2131886290:0}
+        mFragmentId=#7f1200d2 mContainerId=#7f1200d2 mTag=android:switcher:2131886290:0
+        mState=5 mIndex=0 mWho=android:fragment:0 mBackStackNesting=0
+        mAdded=true mRemoving=false mResumed=true mFromLayout=false mInLayout=false
+        mHidden=false mDetached=false mMenuVisible=true mHasMenu=false
+        mRetainInstance=false mRetaining=false mUserVisibleHint=true
+        mFragmentManager=FragmentManager{36f488f in ChildSmartRegisterActivity{41880f2}}
+        mActivity=org.smartregister.kip.activity.ChildSmartRegisterActivity@41880f2
+        mArguments=Bundle[{page=0}]
+        mContainer=org.smartregister.view.viewpager.OpenSRPViewPager{130db7d VFED..... ........ 0,0-768,1136 #7f1200d2 app:id/view_pager}
+        mView=android.widget.LinearLayout{274b279 V.E...... ........ 0,0-768,1136}
+        mInnerView=android.widget.LinearLayout{274b279 V.E...... ........ 0,0-768,1136}
+        Loader Manager:
+          Active Loaders:
+            #0: LoaderInfo{6a4df25 #0 : SecuredNativeSmartRegisterCursorAdapterFragment$2{bce78fa}}
+              mId=0 mArgs=null
+              mCallbacks=ChildSmartRegisterFragment{c17a71c #0 id=0x7f1200d2 android:switcher:2131886290:0}
+              mLoader=SecuredNativeSmartRegisterCursorAdapterFragment$2{bce78fa id=0}
+                mId=0 mListener=LoaderInfo{6a4df25 #0 : SecuredNativeSmartRegisterCursorAdapterFragment$2{bce78fa}}
+                mStarted=true mContentChanged=false mProcessingChange=false
+                mUri=null
+                mProjection=null
+                mSelection=null
+                mSelectionArgs=null
+                mSortOrder=null
+                mCursor=net.sqlcipher.CrossProcessCursorWrapper@b21deab
+                mContentChanged=false
+              mHaveData=true  mDeliveredData=true
+              mData=net.sqlcipher.CrossProcessCursorWrapper@b21deab
+              mStarted=true mReportNextStart=false mDestroyed=false
+              mRetaining=false mRetainingStarted=false mListenerRegistered=true
+        Child FragmentManager{2861908 in ChildSmartRegisterFragment{c17a71c}}:
+          FragmentManager misc state:
+            mActivity=org.smartregister.kip.activity.ChildSmartRegisterActivity@41880f2
+            mContainer=android.support.v4.app.Fragment$1@2e948a1
+            mParent=ChildSmartRegisterFragment{c17a71c #0 id=0x7f1200d2 android:switcher:2131886290:0}
+            mCurState=5 mStateSaved=false mDestroyed=false
+      #1: DefaulterListRegisterFragment{efb2ac6 #1 id=0x7f1200d2 android:switcher:2131886290:1}
+        mFragmentId=#7f1200d2 mContainerId=#7f1200d2 mTag=android:switcher:2131886290:1
+        mState=5 mIndex=1 mWho=android:fragment:1 mBackStackNesting=0
+        mAdded=true mRemoving=false mResumed=true mFromLayout=false mInLayout=false
+        mHidden=false mDetached=false mMenuVisible=false mHasMenu=false
+        mRetainInstance=false mRetaining=false mUserVisibleHint=false
+        mFragmentManager=FragmentManager{36f488f in ChildSmartRegisterActivity{41880f2}}
+        mActivity=org.smartregister.kip.activity.ChildSmartRegisterActivity@41880f2
+        mArguments=Bundle[{page=1}]
+        mContainer=org.smartregister.view.viewpager.OpenSRPViewPager{130db7d VFED..... ........ 0,0-768,1136 #7f1200d2 app:id/view_pager}
+        mView=android.widget.LinearLayout{8c27934 V.E...... ........ 768,0-1536,1136}
+        mInnerView=android.widget.LinearLayout{8c27934 V.E...... ........ 768,0-1536,1136}
+        Child FragmentManager{31dba87 in DefaulterListRegisterFragment{efb2ac6}}:
+          FragmentManager misc state:
+            mActivity=org.smartregister.kip.activity.ChildSmartRegisterActivity@41880f2
+            mContainer=android.support.v4.app.Fragment$1@de7bdb4
+            mParent=DefaulterListRegisterFragment{efb2ac6 #1 id=0x7f1200d2 android:switcher:2131886290:1}
+            mCurState=5 mStateSaved=false mDestroyed=false
+      #2: AdvancedSearchFragment{4b0cddd #2 id=0x7f1200d2 android:switcher:2131886290:2}
+        mFragmentId=#7f1200d2 mContainerId=#7f1200d2 mTag=android:switcher:2131886290:2
+        mState=5 mIndex=2 mWho=android:fragment:2 mBackStackNesting=0
+        mAdded=true mRemoving=false mResumed=true mFromLayout=false mInLayout=false
+        mHidden=false mDetached=false mMenuVisible=false mHasMenu=false
+        mRetainInstance=false mRetaining=false mUserVisibleHint=false
+        mFragmentManager=FragmentManager{36f488f in ChildSmartRegisterActivity{41880f2}}
+        mActivity=org.smartregister.kip.activity.ChildSmartRegisterActivity@41880f2
+        mArguments=Bundle[{page=2}]
+        mContainer=org.smartregister.view.viewpager.OpenSRPViewPager{130db7d VFED..... ........ 0,0-768,1136 #7f1200d2 app:id/view_pager}
+        mView=android.widget.LinearLayout{1139163 V.E...... ........ 1536,0-2304,1136}
+        mInnerView=android.widget.LinearLayout{1139163 V.E...... ........ 1536,0-2304,1136}
+        Child FragmentManager{3ef2d52 in AdvancedSearchFragment{4b0cddd}}:
+          FragmentManager misc state:
+            mActivity=org.smartregister.kip.activity.ChildSmartRegisterActivity@41880f2
+            mContainer=android.support.v4.app.Fragment$1@c117823
+            mParent=AdvancedSearchFragment{4b0cddd #2 id=0x7f1200d2 android:switcher:2131886290:2}
+            mCurState=5 mStateSaved=false mDestroyed=false
+    Added Fragments:
+      #0: ChildSmartRegisterFragment{c17a71c #0 id=0x7f1200d2 android:switcher:2131886290:0}
+      #1: DefaulterListRegisterFragment{efb2ac6 #1 id=0x7f1200d2 android:switcher:2131886290:1}
+      #2: AdvancedSearchFragment{4b0cddd #2 id=0x7f1200d2 android:switcher:2131886290:2}
+    FragmentManager misc state:
+      mActivity=org.smartregister.kip.activity.ChildSmartRegisterActivity@41880f2
+      mContainer=android.support.v4.app.FragmentActivity$2@41d0120
+      mCurState=5 mStateSaved=false mDestroyed=false
+    View Hierarchy:
+      com.android.internal.policy.DecorView{88c562 V.E..... ... 0,0-768,1280}
+        android.widget.LinearLayout{ef4b055 V.E..... ... 0,0-768,1184}
+          android.view.ViewStub{77b1610 G.E..... ... 0,0-0,0 #10203ef android:id/action_mode_bar_stub}
+          android.widget.FrameLayout{b0e812f V.E..... ... 0,48-768,1184}
+            android.support.v7.internal.widget.FitWindowsLinearLayout{44358c5 V.E..... ... 0,0-768,1136 #7f1200b9 app:id/action_bar_root}
+              android.support.v7.internal.widget.ViewStubCompat{d8c014b G.E..... ... 0,0-0,0 #7f1200ba app:id/action_mode_bar_stub}
+              android.support.v7.internal.widget.ContentFrameLayout{285bc41 V.E..... ... 0,0-768,1136 #1020002 android:id/content}
+                android.support.v4.widget.DrawerLayout{3176727 VFE..... ... 0,0-768,1136 #7f1200ce app:id/drawer_layout}
+                  org.smartregister.view.viewpager.OpenSRPViewPager{130db7d VFED.... ... 0,0-768,1136 #7f1200d2 app:id/view_pager}
+                    android.widget.LinearLayout{274b279 V.E..... ... 0,0-768,1136}
+                      android.widget.RelativeLayout{ba8141f VFE..... F.. 0,0-768,112 #7f120368 app:id/register_nav_bar_container}
+                        android.support.design.widget.AppBarLayout{184fd35 V.E..... ... 0,0-768,112}
+                          android.support.v7.widget.Toolbar{6df1a58 V.E..... ... -19,0-768,112 #7f1200d5 app:id/toolbar}
+                            android.widget.RelativeLayout{7126817 VFE..... ... 32,0-787,112 #7f120368 app:id/register_nav_bar_container}
+                              android.widget.RelativeLayout{eb3a422 V.E..... ... 0,6-100,106 #7f1203aa app:id/back_btn_layout}
+                                android.widget.LinearLayout{2cb6eb3 G.E...C. ... 1,0-99,100 #7f1201eb app:id/btn_back_to_home}
+                                  android.support.v7.widget.AppCompatTextView{dcadc70 V.ED.... ... 2,2-96,96 #7f1200d6 app:id/name_inits}
+                                  android.widget.ImageView{404430f G.ED.... ... 0,0-0,0 #7f1203ab app:id/back_button}
+                                android.widget.ProgressBar{7709da5 V.ED.... ... 5,5-95,95 #7f1203ac app:id/sync_progress_bar}
+                              android.widget.LinearLayout{c4c012b V.E...C. ... 100,0-520,112 #7f1201ed app:id/title_layout}
+                                org.smartregister.view.customcontrols.CustomFontTextView{6f9c988 V.ED.... ... 5,0-102,112 #7f120369 app:id/txt_title_label}
+                                org.smartregister.view.customcontrols.CustomFontTextView{b9b8f46 I.ED.... ... 102,0-420,112 #7f12036a app:id/btn_report_month}
+                              android.widget.ImageButton{d078507 VFED..C. ... 603,0-755,112 #7f12036e app:id/global_search}
+                              android.widget.ImageButton{f0d6aa3 VFED..C. ... 451,0-603,112 #7f120370 app:id/filter_selection}
+                              android.support.v7.widget.AppCompatTextView{c4641a0 G.ED.... ... 0,0-0,0 #7f1203ad app:id/filter_count}
+                              android.widget.ImageView{767411e V.ED.... ... 603,0-609,112}
+                              android.widget.ImageButton{8020dff VFED..C. ... 299,0-451,112 #7f12036f app:id/register_client}
+                              android.widget.ImageView{b5dd7cc V.ED.... ... 451,0-457,112}
+                              android.widget.ImageButton{27d3a15 GFED..C. ... 0,0-0,0 #7f120371 app:id/sort_selection}
+                              android.widget.ImageView{842512a G.ED.... ... 0,0-0,0}
+                              org.smartregister.kip.view.LocationPickerView{9738b1b V.ED..C. ... 0,0-299,112 #7f1203ae app:id/clinic_selection}
+                              android.widget.ImageView{3046291 V.ED.... ... 299,0-305,112}
+                              android.widget.ImageView{c0c55f6 V.ED.... ... 0,0-0,112}
+                              org.smartregister.view.customcontrols.CustomFontTextView{5b5bdf7 I.ED..C. ... 0,0-0,112 #7f120372 app:id/service_mode_selection}
+                              android.widget.ImageView{24d5464 G.ED.... ... 0,0-0,0}
+                              android.widget.ImageView{3fb96cd G.ED.... ... 0,0-0,0}
+                      android.widget.LinearLayout{99fdb82 V.E..... ... 0,112-768,272}
+                        android.widget.RelativeLayout{67e4293 V.E..... ... 30,30-370,130}
+                          android.support.v7.widget.AppCompatEditText{cbd52d0 VFED..CL ... 30,0-330,100 #7f12036c app:id/edt_search}
+                          android.widget.ImageButton{beccbfc VFED..C. ... 240,0-340,100 #7f12036d app:id/btn_search_cancel}
+                        android.widget.FrameLayout{ae1d285 VFE...C. ... 398,32-738,128 #7f120383 app:id/scan_qr_code}
+                          android.support.v7.widget.AppCompatTextView{82958da V.ED.... ... 23,16-316,80}
+                      android.widget.LinearLayout{549710b G.E..... ... 0,0-0,0}
+                        org.smartregister.view.customcontrols.CustomFontTextView{a38abe8 V.ED.... ... 0,0-0,0 #7f120380 app:id/label_sorted_by}
+                        org.smartregister.view.customcontrols.CustomFontTextView{bf21201 V.ED.... ... 0,0-0,0 #7f120381 app:id/sorted_by}
+                        org.smartregister.view.customcontrols.CustomFontTextView{55428a6 V.ED.... ... 0,0-0,0}
+                        org.smartregister.view.customcontrols.CustomFontTextView{f9c12e7 V.ED.... ... 0,0-0,0 #7f120382 app:id/village}
+                      android.widget.LinearLayout{8e09e94 G.E..... ... 0,0-0,0 #7f120304 app:id/clients_upper_header_layout}
+                      android.widget.LinearLayout{26ccd3d G.E..... ... 0,0-0,0 #7f120305 app:id/clients_header_layout}
+                        org.smartregister.view.customcontrols.CustomFontTextView{90a2932 V.ED.... ... 0,0-0,0}
+                        org.smartregister.view.customcontrols.CustomFontTextView{8cf683 V.ED.... ... 0,0-0,0}
+                        org.smartregister.view.customcontrols.CustomFontTextView{b731000 V.ED.... ... 0,0-0,0}
+                        org.smartregister.view.customcontrols.CustomFontTextView{ede0039 V.ED.... ... 0,0-0,0}
+                        org.smartregister.view.customcontrols.CustomFontTextView{dada67e V.ED.... ... 0,0-0,0}
+                      android.widget.LinearLayout{f1e77df G.E..... ... 0,0-0,0 #7f120306 app:id/clients_lower_header_layout}
+                      android.widget.ImageView{df92c2c V.ED.... ... 0,272-768,274}
+                      android.widget.FrameLayout{49566f5 V.E..... ... 0,274-768,1136}
+                        android.widget.ListView{f79ac8a VFED.VC. ... 0,0-768,862 #7f1200ff app:id/list}
+                          android.widget.LinearLayout{14e0756 V.E..... ... 0,0-768,43}
+                            android.widget.RelativeLayout{db2d4c4 V.E..... ... 0,0-335,43}
+                              org.smartregister.view.customcontrols.CustomFontTextView{5907fad V.ED.... ... 0,0-113,43 #7f12031d app:id/child_header}
+                              org.smartregister.view.customcontrols.CustomFontTextView{23b42e2 V.ED.... ... 239,0-321,43 #7f120321 app:id/child_age_header}
+                            android.widget.LinearLayout{e688673 V.E..... ... 337,0-474,43}
+                              org.smartregister.view.customcontrols.CustomFontTextView{b0f14c6 V.ED.... ... 0,0-51,43 #7f12031e app:id/child_zeir_id_header}
+                            android.widget.RelativeLayout{e57b752 V.E..... ... 476,0-605,43}
+                              org.smartregister.view.customcontrols.CustomFontTextView{a03a23 V.ED.... ... 0,0-129,43 #7f12031f app:id/child_weight_header}
+                            android.widget.RelativeLayout{19b20 V.E..... ... 607,0-760,43}
+                              org.smartregister.view.customcontrols.CustomFontTextView{8b2fcd9 V.ED.... ... 0,0-153,43 #7f120320 app:id/child_due_header}
+                          android.widget.LinearLayout{615f69e V.E..... ... 0,45-768,189}
+                            android.widget.LinearLayout{4b2557f V.E...C. ... 0,0-335,144 #7f1200d8 app:id/child_profile_info_layout}
+                              android.widget.ImageView{cd8d95 V.ED.... ... 0,7-130,137 #7f1200d9 app:id/child_profilepic}
+                              android.widget.LinearLayout{ee6deaa V.E..... ... 140,2-335,142}
+                                org.smartregister.view.customcontrols.CustomFontTextView{1a0ca9b V.ED.... ... 0,27-195,75 #7f1200da app:id/child_name}
+                                android.widget.RelativeLayout{e13ae38 V.E..... ... 0,75-195,113}
+                                  org.smartregister.view.customcontrols.CustomFontTextView{4c66e11 V.ED.... ... 0,0-158,38 #7f1200db app:id/child_mothername}
+                                  org.smartregister.view.customcontrols.CustomFontTextView{2c3b76 V.ED.... ... 80,0-185,38 #7f1200dc app:id/child_age}
+                            android.widget.LinearLayout{377577 V.E..... ... 337,0-474,144}
+                              org.smartregister.view.customcontrols.CustomFontTextView{e7175e4 V.ED.... ... 0,29-137,77 #7f1200dd app:id/child_zeir_id}
+                              org.smartregister.view.customcontrols.CustomFontTextView{a92da4d V.ED.... ... 0,77-20,115 #7f1200de app:id/child_card_number}
+                            android.widget.LinearLayout{3989902 V.E..... ... 476,0-605,144}
+                              android.widget.LinearLayout{23f213 I.E...C. ... 10,10-119,134 #7f1200df app:id/record_weight}
+                                android.widget.ImageView{c20c50 G.ED.... ... 0,38-54,86 #7f1200e0 app:id/record_weight_check}
+                                android.support.v7.widget.AppCompatTextView{83fce49 V.ED.... ... 0,21-109,102 #7f1200e1 app:id/record_weight_text}
+                            android.widget.LinearLayout{97b434e V.E..... ... 607,0-760,144}
+                              android.widget.LinearLayout{4519c6f V.....C. ... 10,10-143,134 #7f1200e2 app:id/record_vaccination}
+                                android.widget.ImageView{1439d7c V.ED.... ... 0,30-74,94 #7f1200e3 app:id/record_vaccination_check}
+                                android.support.v7.widget.AppCompatTextView{dae0605 V.ED.... ... 74,2-133,121 #7f1200e4 app:id/record_vaccination_text}
+                          android.widget.LinearLayout{5cc465a V.E..... ... 0,191-768,335}
+                            android.widget.LinearLayout{905908b V.E...C. ... 0,0-335,144 #7f1200d8 app:id/child_profile_info_layout}
+                              android.widget.ImageView{e0dfd81 V.ED.... ... 0,7-130,137 #7f1200d9 app:id/child_profilepic}
+                              android.widget.LinearLayout{1f86e26 V.E..... ... 140,2-335,142}
+                                org.smartregister.view.customcontrols.CustomFontTextView{fbaaa67 V.ED.... ... 0,27-195,75 #7f1200da app:id/child_name}
+                                android.widget.RelativeLayout{5102014 V.E..... ... 0,75-195,113}
+                                  org.smartregister.view.customcontrols.CustomFontTextView{51bf0bd V.ED.... ... 0,0-195,38 #7f1200db app:id/child_mothername}
+                                  org.smartregister.view.customcontrols.CustomFontTextView{f6d46b2 V.ED.... ... 124,0-185,38 #7f1200dc app:id/child_age}
+                            android.widget.LinearLayout{cbd8603 V.E..... ... 337,0-474,144}
+                              org.smartregister.view.customcontrols.CustomFontTextView{4d92980 V.ED.... ... 0,29-137,77 #7f1200dd app:id/child_zeir_id}
+                              org.smartregister.view.customcontrols.CustomFontTextView{41bdbb9 V.ED.... ... 0,77-84,115 #7f1200de app:id/child_card_number}
+                            android.widget.LinearLayout{6e51bfe V.E..... ... 476,0-605,144}
+                              android.widget.LinearLayout{2887f5f V.E...C. ... 10,10-119,134 #7f1200df app:id/record_weight}
+                                android.widget.ImageView{d675dac G.ED.... ... 0,38-54,86 #7f1200e0 app:id/record_weight_check}
+                                android.support.v7.widget.AppCompatTextView{2957a75 V.ED.... ... 0,21-109,102 #7f1200e1 app:id/record_weight_text}
+                            android.widget.LinearLayout{72fa0a V.E..... ... 607,0-760,144}
+                              android.widget.LinearLayout{6dfb27b V.E...C. ... 10,10-143,134 #7f1200e2 app:id/record_vaccination}
+                                android.widget.ImageView{bc2a898 G.ED.... ... 0,0-0,0 #7f1200e3 app:id/record_vaccination_check}
+                                android.support.v7.widget.AppCompatTextView{ed048f1 V.ED.... ... 8,21-125,102 #7f1200e4 app:id/record_vaccination_text}
+                          android.widget.LinearLayout{4eacd6 V.E..... ... 0,337-768,481}
+                            android.widget.LinearLayout{dacfb57 V.E...C. ... 0,0-335,144 #7f1200d8 app:id/child_profile_info_layout}
+                              android.widget.ImageView{a0f832d V.ED.... ... 0,7-130,137 #7f1200d9 app:id/child_profilepic}
+                              android.widget.LinearLayout{460c062 V.E..... ... 140,2-335,142}
+                                org.smartregister.view.customcontrols.CustomFontTextView{59bf5f3 V.ED.... ... 0,27-195,75 #7f1200da app:id/child_name}
+                                android.widget.RelativeLayout{549f2b0 V.E..... ... 0,75-195,113}
+                                  org.smartregister.view.customcontrols.CustomFontTextView{c8e2529 V.ED.... ... 0,0-195,38 #7f1200db app:id/child_mothername}
+                                  org.smartregister.view.customcontrols.CustomFontTextView{e8e80ae V.ED.... ... 124,0-185,38 #7f1200dc app:id/child_age}
+                            android.widget.LinearLayout{275fe4f V.E..... ... 337,0-474,144}
+                              org.smartregister.view.customcontrols.CustomFontTextView{fd389dc V.ED.... ... 0,29-137,77 #7f1200dd app:id/child_zeir_id}
+                              org.smartregister.view.customcontrols.CustomFontTextView{d3aeae5 V.ED.... ... 0,77-84,115 #7f1200de app:id/child_card_number}
+                            android.widget.LinearLayout{7c5f9ba V.E..... ... 476,0-605,144}
+                              android.widget.LinearLayout{13e306b V.E...C. ... 10,10-119,134 #7f1200df app:id/record_weight}
+                                android.widget.ImageView{7fd67c8 G.ED.... ... 0,38-54,86 #7f1200e0 app:id/record_weight_check}
+                                android.support.v7.widget.AppCompatTextView{9345061 V.ED.... ... 0,21-109,102 #7f1200e1 app:id/record_weight_text}
+                            android.widget.LinearLayout{7c9f786 V.E..... ... 607,0-760,144}
+                              android.widget.LinearLayout{20d6847 V.E...C. ... 10,10-143,134 #7f1200e2 app:id/record_vaccination}
+                                android.widget.ImageView{3653874 G.ED.... ... 0,0-0,0 #7f1200e3 app:id/record_vaccination_check}
+                                android.support.v7.widget.AppCompatTextView{704919d V.ED.... ... 8,21-125,102 #7f1200e4 app:id/record_vaccination_text}
+                          android.widget.LinearLayout{dbe0612 V.E..... ... 0,483-768,627}
+                            android.widget.LinearLayout{3ae41e3 V.E...C. ... 0,0-335,144 #7f1200d8 app:id/child_profile_info_layout}
+                              android.widget.ImageView{19daa99 V.ED.... ... 0,7-130,137 #7f1200d9 app:id/child_profilepic}
+                              android.widget.LinearLayout{572715e V.E..... ... 140,2-335,142}
+                                org.smartregister.view.customcontrols.CustomFontTextView{cf9193f V.ED.... ... 0,27-195,75 #7f1200da app:id/child_name}
+                                android.widget.RelativeLayout{17b220c V.E..... ... 0,75-195,113}
+                                  org.smartregister.view.customcontrols.CustomFontTextView{7155755 V.ED.... ... 0,0-195,38 #7f1200db app:id/child_mothername}
+                                  org.smartregister.view.customcontrols.CustomFontTextView{570456a V.ED.... ... 124,0-185,38 #7f1200dc app:id/child_age}
+                            android.widget.LinearLayout{ff00a5b V.E..... ... 337,0-474,144}
+                              org.smartregister.view.customcontrols.CustomFontTextView{9be52f8 V.ED.... ... 0,29-137,77 #7f1200dd app:id/child_zeir_id}
+                              org.smartregister.view.customcontrols.CustomFontTextView{72113d1 V.ED.... ... 0,77-84,115 #7f1200de app:id/child_card_number}
+                            android.widget.LinearLayout{1c54e36 V.E..... ... 476,0-605,144}
+                              android.widget.LinearLayout{29af137 V.E...C. ... 10,10-119,134 #7f1200df app:id/record_weight}
+                                android.widget.ImageView{901a6a4 G.ED.... ... 0,38-54,86 #7f1200e0 app:id/record_weight_check}
+                                android.support.v7.widget.AppCompatTextView{d521c0d V.ED.... ... 0,21-109,102 #7f1200e1 app:id/record_weight_text}
+                            android.widget.LinearLayout{f9017c2 V.E..... ... 607,0-760,144}
+                              android.widget.LinearLayout{9a369d3 V.E...C. ... 10,10-143,134 #7f1200e2 app:id/record_vaccination}
+                                android.widget.ImageView{1048910 G.ED.... ... 0,0-0,0 #7f1200e3 app:id/record_vaccination_check}
+                                android.support.v7.widget.AppCompatTextView{3116c09 V.ED.... ... 8,21-125,102 #7f1200e4 app:id/record_vaccination_text}
+                          android.widget.LinearLayout{54bee0e V.E..... ... 0,629-768,773}
+                            android.widget.LinearLayout{b0d02f V.E...C. ... 0,0-335,144 #7f1200d8 app:id/child_profile_info_layout}
+                              android.widget.ImageView{55bbfc5 V.ED.... ... 0,7-130,137 #7f1200d9 app:id/child_profilepic}
+                              android.widget.LinearLayout{3dcdd1a V.E..... ... 140,2-335,142}
+                                org.smartregister.view.customcontrols.CustomFontTextView{c84404b V.ED.... ... 0,27-195,75 #7f1200da app:id/child_name}
+                                android.widget.RelativeLayout{4e86a28 V.E..... ... 0,75-195,113}
+                                  org.smartregister.view.customcontrols.CustomFontTextView{a3d9341 V.ED.... ... 0,0-177,38 #7f1200db app:id/child_mothername}
+                                  org.smartregister.view.customcontrols.CustomFontTextView{45bb0e6 V.ED.... ... 124,0-185,38 #7f1200dc app:id/child_age}
+                            android.widget.LinearLayout{2d49627 V.E..... ... 337,0-474,144}
+                              org.smartregister.view.customcontrols.CustomFontTextView{36e00d4 V.ED.... ... 0,29-137,77 #7f1200dd app:id/child_zeir_id}
+                              org.smartregister.view.customcontrols.CustomFontTextView{20f227d V.ED.... ... 0,77-68,115 #7f1200de app:id/child_card_number}
+                            android.widget.LinearLayout{6a1f572 V.E..... ... 476,0-605,144}
+                              android.widget.LinearLayout{3ea6dc3 V.E...C. ... 10,10-119,134 #7f1200df app:id/record_weight}
+                                android.widget.ImageView{145640 G.ED.... ... 0,38-54,86 #7f1200e0 app:id/record_weight_check}
+                                android.support.v7.widget.AppCompatTextView{706979 V.ED.... ... 0,21-109,102 #7f1200e1 app:id/record_weight_text}
+                            android.widget.LinearLayout{c95f6be V.E..... ... 607,0-760,144}
+                              android.widget.LinearLayout{1fc231f V.E...C. ... 10,10-143,134 #7f1200e2 app:id/record_vaccination}
+                                android.widget.ImageView{408966c G.ED.... ... 0,38-58,86 #7f1200e3 app:id/record_vaccination_check}
+                                android.support.v7.widget.AppCompatTextView{9052435 V.ED.... ... 8,21-125,102 #7f1200e4 app:id/record_vaccination_text}
+                          android.widget.LinearLayout{e36c0ca V.E..... ... 0,775-768,919}
+                            android.widget.LinearLayout{249d23b V.E...C. ... 0,0-335,144 #7f1200d8 app:id/child_profile_info_layout}
+                              android.widget.ImageView{bf0ceb1 V.ED.... ... 0,7-130,137 #7f1200d9 app:id/child_profilepic}
+                              android.widget.LinearLayout{2681f96 V.E..... ... 140,2-335,142}
+                                org.smartregister.view.customcontrols.CustomFontTextView{3f95717 V.ED.... ... 0,27-187,75 #7f1200da app:id/child_name}
+                                android.widget.RelativeLayout{c7d4704 V.E..... ... 0,75-195,113}
+                                  org.smartregister.view.customcontrols.CustomFontTextView{e12a4ed V.ED.... ... 0,0-174,38 #7f1200db app:id/child_mothername}
+                                  org.smartregister.view.customcontrols.CustomFontTextView{87e9f22 V.ED.... ... 124,0-185,38 #7f1200dc app:id/child_age}
+                            android.widget.LinearLayout{8b24db3 V.E..... ... 337,0-474,144}
+                              org.smartregister.view.customcontrols.CustomFontTextView{309cf70 V.ED.... ... 0,29-137,77 #7f1200dd app:id/child_zeir_id}
+                              org.smartregister.view.customcontrols.CustomFontTextView{901a2e9 V.ED.... ... 0,77-84,115 #7f1200de app:id/child_card_number}
+                            android.widget.LinearLayout{e8b8b6e V.E..... ... 476,0-605,144}
+                              android.widget.LinearLayout{afa120f V.E...C. ... 10,10-119,134 #7f1200df app:id/record_weight}
+                                android.widget.ImageView{494729c G.ED.... ... 0,38-54,86 #7f1200e0 app:id/record_weight_check}
+                                android.support.v7.widget.AppCompatTextView{ec884a5 V.ED.... ... 0,21-109,102 #7f1200e1 app:id/record_weight_text}
+                            android.widget.LinearLayout{68f07a V.E..... ... 607,0-760,144}
+                              android.widget.LinearLayout{e4fc02b V.E...C. ... 10,10-143,134 #7f1200e2 app:id/record_vaccination}
+                                android.widget.ImageView{c41c88 G.ED.... ... 0,38-58,86 #7f1200e3 app:id/record_vaccination_check}
+                                android.support.v7.widget.AppCompatTextView{d61c621 V.ED.... ... 8,21-125,102 #7f1200e4 app:id/record_vaccination_text}
+                        android.widget.ProgressBar{b859a46 I.ED.... ... 308,355-460,507 #7f120100 app:id/client_list_progress}
+                        android.support.v7.widget.AppCompatTextView{5083407 G.ED.... ... 0,0-0,0 #7f120101 app:id/empty_view}
+                    android.widget.LinearLayout{8c27934 V.E..... ... 768,0-1536,1136}
+                      android.widget.RelativeLayout{df3a35d VFE..... ... 0,0-768,112 #7f120368 app:id/register_nav_bar_container}
+                        android.support.design.widget.AppBarLayout{37114d2 V.E..... ... 0,0-768,112}
+                          android.support.v7.widget.Toolbar{7ea09a3 V.E..... ... -19,0-768,112 #7f1200d5 app:id/toolbar}
+                            android.widget.RelativeLayout{4a7f4a0 VFE..... ... 32,0-787,112 #7f120368 app:id/register_nav_bar_container}
+                              android.widget.RelativeLayout{bcc1859 V.E..... ... 0,6-100,106 #7f1203aa app:id/back_btn_layout}
+                                android.widget.LinearLayout{327ac1e V.E...C. ... 26,0-74,100 #7f1201eb app:id/btn_back_to_home}
+                                  android.support.v7.widget.AppCompatTextView{b899cff G.ED.... ... 0,0-0,0 #7f1200d6 app:id/name_inits}
+                                  android.widget.ImageView{3a7bacc V.ED.... ... 0,0-48,100 #7f1203ab app:id/back_button}
+                                android.widget.ProgressBar{f1ce115 G.ED.... ... 0,0-0,0 #7f1203ac app:id/sync_progress_bar}
+                              android.widget.LinearLayout{71e6c2a V.E...C. ... 100,0-623,112 #7f1201ed app:id/title_layout}
+                                org.smartregister.view.customcontrols.CustomFontTextView{f650a1b V.ED.... ... 5,0-205,112 #7f120369 app:id/txt_title_label}
+                                org.smartregister.view.customcontrols.CustomFontTextView{2fbb7b8 I.ED.... ... 205,0-523,112 #7f12036a app:id/btn_report_month}
+                              android.widget.ImageButton{7777991 VFED..C. ... 603,0-755,112 #7f12036e app:id/global_search}
+                              android.widget.ImageButton{c0f20f6 VFED..C. ... 451,0-603,112 #7f120370 app:id/filter_selection}
+                              android.support.v7.widget.AppCompatTextView{2c02cf7 G.ED.... ... 0,0-0,0 #7f1203ad app:id/filter_count}
+                              android.widget.ImageView{7909764 V.ED.... ... 603,0-609,112}
+                              android.widget.ImageButton{2091dcd VFED..C. ... 299,0-451,112 #7f12036f app:id/register_client}
+                              android.widget.ImageView{e845682 V.ED.... ... 451,0-457,112}
+                              android.widget.ImageButton{b40a193 GFED..C. ... 0,0-0,0 #7f120371 app:id/sort_selection}
+                              android.widget.ImageView{671c5d0 G.ED.... ... 0,0-0,0}
+                              org.smartregister.kip.view.LocationPickerView{796c9c9 V.ED..C. ... 0,0-299,112 #7f1203ae app:id/clinic_selection}
+                              android.widget.ImageView{72558ce V.ED.... ... 299,0-305,112}
+                              android.widget.ImageView{949c3ef V.ED.... ... 0,0-0,112}
+                              org.smartregister.view.customcontrols.CustomFontTextView{7f56efc I.ED..C. ... 0,0-0,112 #7f120372 app:id/service_mode_selection}
+                              android.widget.ImageView{e393985 G.ED.... ... 0,0-0,0}
+                              android.widget.ImageView{fc233da G.ED.... ... 0,0-0,0}
+                      android.widget.LinearLayout{618b00b V.E..... ... 0,112-768,419}
+                        android.widget.LinearLayout{1a87ee8 V.E..... ... 40,20-728,174}
+                          org.smartregister.view.customcontrols.CustomFontTextView{ad8e901 V.ED.... ... 0,0-364,73}
+                          android.widget.RelativeLayout{d1fb3a6 V.E..... ... 0,73-688,154}
+                            org.smartregister.view.customcontrols.CustomFontTextView{7a041e7 V.ED.... ... 0,15-112,66 #7f120384 app:id/male_stats}
+                            org.smartregister.view.customcontrols.CustomFontTextView{2faa194 V.ED.... ... 269,16-418,64 #7f120385 app:id/female_stats}
+                            org.smartregister.view.customcontrols.CustomFontTextView{e6a143d V.ED.... ... 574,15-688,66 #7f120386 app:id/total_stats}
+                        android.view.View{9836432 V.ED.... ... 0,194-768,195}
+                        android.widget.RelativeLayout{6251583 V.E..... ... 40,195-728,307}
+                          android.widget.LinearLayout{aa4300 V.E..... ... 0,0-536,112 #7f120387 app:id/due_period_layout}
+                            org.smartregister.view.customcontrols.CustomFontTextView{ae8b739 V.ED.... ... 20,30-216,81}
+                            android.support.v7.widget.AppCompatSpinner{bff917e V.ED..CL ... 216,20-516,92 #7f120388 app:id/due_period_spinner}
+                          android.widget.LinearLayout{4b9b1fb V.E..... ... 253,0-688,112 #7f120389 app:id/only_overdue_layout}
+                            android.support.v7.widget.AppCompatCheckBox{a6d7218 VFED..C. ... 20,24-84,88 #7f12038a app:id/select_only_overdue}
+                            org.smartregister.view.customcontrols.CustomFontTextView{aed86ad V.ED.... ... 90,30-415,81 #7f12038b app:id/only_overdue_text}
+                      android.widget.LinearLayout{cf93de2 G.E..... ... 0,0-0,0}
+                        org.smartregister.view.customcontrols.CustomFontTextView{5c66573 V.ED.... ... 0,0-0,0 #7f120380 app:id/label_sorted_by}
+                        org.smartregister.view.customcontrols.CustomFontTextView{2546c30 V.ED.... ... 0,0-0,0 #7f120381 app:id/sorted_by}
+                        org.smartregister.view.customcontrols.CustomFontTextView{408e0a9 V.ED.... ... 0,0-0,0}
+                        org.smartregister.view.customcontrols.CustomFontTextView{7f1562e V.ED.... ... 0,0-0,0 #7f120382 app:id/village}
+                      android.widget.LinearLayout{f97e5cf G.E..... ... 0,0-0,0 #7f120304 app:id/clients_upper_header_layout}
+                      android.widget.LinearLayout{8cc1b5c G.E..... ... 0,0-0,0 #7f120305 app:id/clients_header_layout}
+                        org.smartregister.view.customcontrols.CustomFontTextView{465de65 V.ED.... ... 0,0-0,0}
+                        org.smartregister.view.customcontrols.CustomFontTextView{40a73a V.ED.... ... 0,0-0,0}
+                        org.smartregister.view.customcontrols.CustomFontTextView{f570feb V.ED.... ... 0,0-0,0}
+                        org.smartregister.view.customcontrols.CustomFontTextView{9ad9148 V.ED.... ... 0,0-0,0}
+                      android.widget.LinearLayout{6dafbe1 G.E..... ... 0,0-0,0 #7f120306 app:id/clients_lower_header_layout}
+                      android.widget.ImageView{501fd06 V.ED.... ... 0,419-768,421}
+                      android.widget.FrameLayout{594bfc7 V.E..... ... 0,421-768,1136}
+                        android.widget.ListView{dae79f4 V.ED.VC. ... 0,0-768,715 #7f1200ff app:id/list}
+                        android.widget.ProgressBar{32a751d I.ED.... ... 308,281-460,433 #7f120100 app:id/client_list_progress}
+                        android.support.v7.widget.AppCompatTextView{a30e392 G.ED.... ... 0,0-0,0 #7f120101 app:id/empty_view}
+                    android.widget.LinearLayout{1139163 V.E..... ... 1536,0-2304,1136}
+                      android.widget.RelativeLayout{1334160 VFE..... ... 0,0-768,112 #7f120368 app:id/register_nav_bar_container}
+                        android.support.design.widget.AppBarLayout{fe4619 V.E..... ... 0,0-768,112}
+                          android.support.v7.widget.Toolbar{5f5a6de V.E..... ... -19,0-768,112 #7f1200d5 app:id/toolbar}
+                            android.widget.RelativeLayout{23e0bf VFE..... ... 32,0-787,112 #7f120368 app:id/register_nav_bar_container}
+                              android.widget.RelativeLayout{7b138c V.E..... ... 0,6-100,106 #7f1203aa app:id/back_btn_layout}
+                                android.widget.LinearLayout{ea42ad5 V.E...C. ... 26,0-74,100 #7f1201eb app:id/btn_back_to_home}
+                                  android.support.v7.widget.AppCompatTextView{6b152ea G.ED.... ... 0,0-0,0 #7f1200d6 app:id/name_inits}
+                                  android.widget.ImageView{bbfc9db V.ED.... ... 0,0-48,100 #7f1203ab app:id/back_button}
+                                android.widget.ProgressBar{a8bdc78 G.ED.... ... 0,0-0,0 #7f1203ac app:id/sync_progress_bar}
+                              android.widget.LinearLayout{7899f51 V.E...C. ... 100,0-305,112 #7f1201ed app:id/title_layout}
+                                org.smartregister.view.customcontrols.CustomFontTextView{dc9b3b6 V.ED.... ... 5,0-205,112 #7f120369 app:id/txt_title_label}
+                                org.smartregister.view.customcontrols.CustomFontTextView{86728b7 G.ED.... ... 0,0-0,0 #7f12036a app:id/btn_report_month}
+                              android.widget.ImageButton{6de4824 VFED..C. ... 603,0-755,112 #7f12036e app:id/global_search}
+                              android.widget.ImageButton{677df8d VFED..C. ... 451,0-603,112 #7f120370 app:id/filter_selection}
+                              android.support.v7.widget.AppCompatTextView{b355542 G.ED.... ... 0,0-0,0 #7f1203ad app:id/filter_count}
+                              android.widget.ImageView{8bb9953 V.ED.... ... 603,0-609,112}
+                              android.widget.ImageButton{9c9c290 VFED..C. ... 299,0-451,112 #7f12036f app:id/register_client}
+                              android.widget.ImageView{f8fe789 V.ED.... ... 451,0-457,112}
+                              android.widget.ImageButton{5c7838e GFED..C. ... 0,0-0,0 #7f120371 app:id/sort_selection}
+                              android.widget.ImageView{ddc77af G.ED.... ... 0,0-0,0}
+                              org.smartregister.kip.view.LocationPickerView{3b077bc V.ED..C. ... 0,0-299,112 #7f1203ae app:id/clinic_selection}
+                              android.widget.ImageView{e067345 V.ED.... ... 299,0-305,112}
+                              android.widget.ImageView{c3c4a9a V.ED.... ... 0,0-0,112}
+                              org.smartregister.view.customcontrols.CustomFontTextView{182dfcb G.ED..C. ... 0,0-0,0 #7f120372 app:id/service_mode_selection}
+                              android.widget.ImageView{6eb53a8 G.ED.... ... 0,0-0,0}
+                              android.widget.ImageView{19ffec1 G.ED.... ... 0,0-0,0}
+                      android.widget.LinearLayout{b047666 G.E..... ... 0,0-0,0}
+                        org.smartregister.view.customcontrols.CustomFontTextView{5ddada7 V.ED.... ... 0,0-0,0 #7f120380 app:id/label_sorted_by}
+                        org.smartregister.view.customcontrols.CustomFontTextView{760254 V.ED.... ... 0,0-0,0 #7f120381 app:id/sorted_by}
+                        org.smartregister.view.customcontrols.CustomFontTextView{7ecc5fd V.ED.... ... 0,0-0,0}
+                        org.smartregister.view.customcontrols.CustomFontTextView{2d192f2 V.ED.... ... 0,0-0,0 #7f120382 app:id/village}
+                      android.widget.LinearLayout{72d7d43 G.E..... ... 0,0-0,0 #7f120304 app:id/clients_upper_header_layout}
+                      android.widget.LinearLayout{f5aefc0 G.E..... ... 0,0-0,0 #7f120305 app:id/clients_header_layout}
+                      android.widget.LinearLayout{d44c4f9 G.E..... ... 0,0-0,0 #7f120306 app:id/clients_lower_header_layout}
+                      android.widget.ImageView{be1ec3e V.ED.... ... 0,112-768,114}
+                      android.widget.LinearLayout{b20aa9f V.E..... ... 0,114-768,1136}
+                        android.widget.LinearLayout{6df47ec G.E..... ... 0,0-0,0 #7f120307 app:id/advanced_search_list}
+                          android.widget.LinearLayout{183b7b5 V.E..... ... 0,0-0,0}
+                            org.smartregister.view.customcontrols.CustomFontTextView{20c8e4a GFED..CL ... 0,0-0,0 #7f1200fc app:id/search_criteria}
+                            org.smartregister.view.customcontrols.CustomFontTextView{9ef51bb VFED..CL ... 0,0-0,0 #7f1200fd app:id/matching_results}
+                          android.widget.ImageView{76ef6d8 V.ED.... ... 0,0-0,0}
+                          android.widget.FrameLayout{c851a31 V.E..... ... 0,0-0,0 #7f1200fe app:id/list_view_layout}
+                            android.widget.ListView{58d4516 I.ED.VC. ... 0,0-0,0 #7f1200ff app:id/list}
+                            android.widget.ProgressBar{d374e97 G.ED.... ... 0,0-0,0 #7f120100 app:id/client_list_progress}
+                            android.support.v7.widget.AppCompatTextView{a48a884 G.ED.... ... 0,0-0,0 #7f120101 app:id/empty_view}
+                        android.widget.LinearLayout{e60286d V.E..... ... 0,0-768,1022 #7f120308 app:id/advanced_search_form}
+                          android.support.v4.widget.NestedScrollView{c909ca2 VFED.V.. ... 0,0-768,844 #7f1200e7 app:id/nested_scroll_view}
+                            android.widget.LinearLayout{be9c8f0 V.E..... ... 60,40-708,2183}
+                              org.smartregister.view.customcontrols.CustomFontTextView{763de69 V.ED.... ... 0,20-648,73}
+                              android.widget.LinearLayout{17fe0ee V.E..... ... 0,83-648,226}
+                                android.widget.RelativeLayout{f798f V.E...C. ... 0,0-321,143 #7f1200e8 app:id/out_and_inside_layout}
+                                  com.vijay.jsonwizard.customviews.RadioButton{13a841c V.ED..C. ... 0,0-80,80 #7f1200e9 app:id/out_and_inside}
+                                  android.widget.LinearLayout{141fab V.E..... ... 80,0-321,143}
+                                    org.smartregister.view.customcontrols.CustomFontTextView{379c608 V.ED.... ... 0,0-241,100}
+                                    org.smartregister.view.customcontrols.CustomFontTextView{75ff1a1 V.ED.... ... 0,100-241,143}
+                                android.widget.RelativeLayout{2ff1fc6 V.E...C. ... 327,0-648,143 #7f1200ea app:id/my_catchment_layout}
+                                  com.vijay.jsonwizard.customviews.RadioButton{b730b87 V.ED..C. ... 0,0-80,80 #7f1200eb app:id/my_catchment}
+                                  org.smartregister.view.customcontrols.CustomFontTextView{ee93ab4 V.ED.... ... 80,0-321,100}
+                              org.smartregister.view.customcontrols.CustomFontTextView{46906dd V.ED.... ... 0,266-648,319}
+                              android.widget.LinearLayout{cbd7252 V.E..... ... 0,339-648,439}
+                                android.widget.RelativeLayout{2ead923 V.E...C. ... 0,0-183,100 #7f1200ec app:id/active_layout}
+                                  com.vijay.jsonwizard.customviews.CheckBox{394e20 V.ED..C. ... 0,10-80,90 #7f1200ed app:id/active}
+                                  org.smartregister.view.customcontrols.CustomFontTextView{49c619e V.ED.... ... 80,0-183,100}
+                                android.widget.RelativeLayout{a87e47f V.E...C. ... 183,0-366,100 #7f1200ee app:id/inactive_layout}
+                                  com.vijay.jsonwizard.customviews.CheckBox{cb52c4c V.ED..C. ... 0,10-80,90 #7f1200ef app:id/inactive}
+                                  org.smartregister.view.customcontrols.CustomFontTextView{b6b3495 V.ED.... ... 80,0-183,100}
+                                android.widget.RelativeLayout{6e8f9aa V.E...C. ... 366,0-647,100 #7f1200f0 app:id/lost_to_follow_up_layout}
+                                  com.vijay.jsonwizard.customviews.CheckBox{c0499b V.ED..C. ... 0,0-80,100 #7f1200f1 app:id/lost_to_follow_up}
+                                  org.smartregister.view.customcontrols.CustomFontTextView{12ec138 V.ED.... ... 80,0-281,100}
+                              android.widget.LinearLayout{9178511 V.E..... ... 0,439-648,684}
+                                com.rengwuxian.materialedittext.MaterialEditText{5b50676 VFED..CL ... 0,0-648,245 #7f1200f2 app:id/zeir_id}
+                              android.widget.LinearLayout{b4fe477 V.E..... ... 0,684-648,929}
+                                com.rengwuxian.materialedittext.MaterialEditText{3aab8e4 VFED..CL ... 0,0-648,245 #7f1200f3 app:id/first_name}
+                              android.widget.LinearLayout{85e614d V.E..... ... 0,929-648,1174}
+                                com.rengwuxian.materialedittext.MaterialEditText{631402 VFED..CL ... 0,0-648,245 #7f1200f4 app:id/last_name}
+                              android.widget.LinearLayout{5d45113 V.E..... ... 0,1174-648,1419}
+                                com.rengwuxian.materialedittext.MaterialEditText{3cc7f50 VFED..CL ... 0,0-648,245 #7f1200f5 app:id/mother_guardian_name}
+                              android.widget.LinearLayout{4bcc549 V.E..... ... 0,1419-648,1664}
+                                com.rengwuxian.materialedittext.MaterialEditText{7f26e4e VFED..CL ... 0,0-648,245 #7f1200f6 app:id/mother_guardian_nrc}
+                              android.widget.LinearLayout{e28eb6f V.E..... ... 0,1664-648,1909}
+                                com.rengwuxian.materialedittext.MaterialEditText{602407c VFED..CL ... 0,0-648,245 #7f1200f7 app:id/mother_guardian_phone_number}
+                              android.widget.LinearLayout{a836d05 V.E..... ... 0,1949-648,2143}
+                                android.support.v7.widget.AppCompatTextView{c0b215a V.ED.... ... 0,0-472,76}
+                                android.widget.LinearLayout{a82cf8b V.E..... ... 0,76-648,194}
+                                  android.support.v7.widget.AppCompatEditText{570e868 V.ED..CL ... 0,0-324,118 #7f1200f8 app:id/start_date}
+                                  android.support.v7.widget.AppCompatEditText{54cd967 V.ED..CL ... 324,0-648,118 #7f1200f9 app:id/end_date}
+                          android.widget.LinearLayout{8a02314 V.E..... ... 0,844-768,1022 #7f1200fa app:id/adv_search_layout}
+                            android.widget.ImageView{c5737bd V.ED.... ... 0,0-768,2}
+                            android.support.v7.widget.AppCompatButton{d4c81b2 VFED..C. ... 40,22-728,158 #7f1200fb app:id/search}
+                  android.support.design.widget.NavigationView{ac3a503 I.E..... ... -900,0-0,1136 #7f1201da app:id/nav_view}
+                    android.support.design.internal.NavigationMenuView{4518e5f VFED..C. ... 0,0-900,1136}
+                      android.widget.LinearLayout{f12a175 V.E..... ... 0,48-900,64}
+                    android.widget.LinearLayout{d9e950a V.E..... ... 0,0-900,1136}
+                      android.widget.LinearLayout{daab17b V.E..... ... 0,0-900,701}
+                        android.widget.ImageButton{3e33b98 VFED..C. ... 760,40-860,140 #7f1201fd app:id/cancel_b}
+                        android.widget.RelativeLayout{378dff1 V.E..... ... 330,140-570,440}
+                          android.support.v7.widget.AppCompatTextView{418f7d6 V.ED.... ... 0,30-240,270 #7f1202c9 app:id/initials_tv}
+                        android.support.v7.widget.AppCompatTextView{fa8ea57 V.ED.... ... 450,440-450,521 #7f1201ca app:id/name_tv}
+                        android.support.v7.widget.AppCompatButton{89c7944 VFED..C. ... 362,561-538,661 #7f1202ca app:id/logout_b}
+                      android.widget.ImageView{62a8a2d V.ED.... ... 0,701-900,703}
+                      android.widget.LinearLayout{204bb62 V.E...C. ... 0,723-900,813 #7f1201db app:id/nav_register}
+                        android.widget.ImageView{ce7d4f3 V.ED.... ... 30,10-100,80 #7f1201dc app:id/addchildImageview}
+                        org.smartregister.view.customcontrols.CustomFontTextView{889e5b0 V.ED.... ... 110,15-900,74 #7f1201dd app:id/addchildtextview}
+                      android.widget.LinearLayout{cd29c29 V.E...C. ... 0,853-900,943 #7f1201de app:id/nav_record_vaccination_out_catchment}
+                        android.widget.ImageView{1f72bae V.ED.... ... 30,10-100,80 #7f1201df app:id/outofareaImageview}
+                        org.smartregister.view.customcontrols.CustomFontTextView{c20cd4f V.ED.... ... 110,15-900,74 #7f1201e0 app:id/outofareatextview}
+                      android.widget.LinearLayout{29facdc V.E...C. ... 0,983-900,1073 #7f1201e1 app:id/nav_sync}
+                        android.widget.ImageView{2cfd1e5 V.ED.... ... 30,10-100,80 #7f1201e2 app:id/nav_syncImageview}
+                        org.smartregister.view.customcontrols.CustomFontTextView{8e54ba V.ED.... ... 110,15-900,74 #7f1201e3 app:id/nav_synctextview}
+                      android.widget.LinearLayout{c46ef6b V.E..... ... 0,1093-900,1136}
+                        android.widget.LinearLayout{ee8bac8 V.E...C. ... 0,10-900,43 #7f1201e4 app:id/child_register}
+                          android.widget.ImageView{b0a761 V.ED.... ... 10,10-180,180 #7f1201e5 app:id/child_registerImageview}
+                          org.smartregister.view.customcontrols.CustomFontTextView{43d0286 V.ED.... ... 190,0-900,33 #7f1201e6 app:id/child_registertextview}
+                        android.widget.LinearLayout{e631747 V.E...C. ... 0,53-900,53 #7f1201e7 app:id/moh710}
+                          android.widget.ImageView{932bb74 V.ED.... ... 10,10-180,180 #7f1201e8 app:id/moh710_Imageview}
+                          org.smartregister.view.customcontrols.CustomFontTextView{f6f589d V.ED.... ... 190,0-900,0 #7f1201e9 app:id/moh710_textview}
+        android.view.View{5d6c112 V.ED.... ... 0,1184-768,1280 #1020030 android:id/navigationBarBackground}
+        android.view.View{12fe0e3 V.ED.... ... 0,0-768,48 #102002f android:id/statusBarBackground}

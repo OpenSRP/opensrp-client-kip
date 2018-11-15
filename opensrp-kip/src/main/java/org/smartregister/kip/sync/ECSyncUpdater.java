@@ -10,6 +10,7 @@ import org.smartregister.domain.Response;
 import org.smartregister.immunization.repository.RecurringServiceRecordRepository;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.repository.KipEventClientRepository;
+import org.smartregister.kip.repository.UniqueIdRepository;
 import org.smartregister.service.HTTPAgent;
 import org.smartregister.util.Utils;
 
@@ -47,7 +48,13 @@ public class ECSyncUpdater {
         db = KipApplication.getInstance().eventClientRepository();
     }
 
-    public JSONObject fetchPsmart() throws Exception {
+
+
+    public JSONObject fetchPsmartClient() throws Exception {
+        UniqueIdRepository uniqueIdRepo = KipApplication.getInstance().uniqueIdRepository();
+        String openmrs_id = uniqueIdRepo.getNextUniqueId().getOpenmrsId();
+        uniqueIdRepo.close(openmrs_id);
+        String baseID = UUID.randomUUID().toString();
         final Response[] resp = new Response[1];
         String motherBaseID = UUID.randomUUID().toString();
         JSONObject clientObject = new JSONObject();
@@ -58,6 +65,7 @@ public class ECSyncUpdater {
         JSONObject addressesOut = new JSONObject();
         JSONArray addressesFieldsArray = new JSONArray();
         JSONObject physicalAddresses = new JSONObject();
+        JSONObject openmrs_attributes = new JSONObject();
         JSONObject openmrs_id_client = new JSONObject();
         JSONObject openmrs_id_mum = new JSONObject();
         SimpleDateFormat spf = new SimpleDateFormat("yyyyMMdd");
@@ -72,8 +80,8 @@ public class ECSyncUpdater {
                 try {
 
 
-                    resp[0] = httpAgent.fetch("http://192.168.1.207/shr.json");
-//                    resp[0] = httpAgent.fetch("http://10.20.25.219/shr.json");
+//                    resp[0] = httpAgent.fetch("http://192.168.1.236/shr.json");
+                    resp[0] = httpAgent.fetch("http://192.168.43.195/shr.json");
                     latch.countDown();
                     if (resp[0].isFailure()) {
                         throw new Exception(SEARCH_URL + " not returned data");
@@ -88,6 +96,7 @@ public class ECSyncUpdater {
         latch.await();
 
         JSONObject responseObj = new JSONObject((String) resp[0].payload());
+        Log.i("WHOLE STRING ",responseObj.toString());
         JSONObject clientDetails = responseObj.getJSONObject("PATIENT_IDENTIFICATION");
         JSONObject clientDetailsNames = clientDetails.getJSONObject("PATIENT_NAME");
         JSONObject clientDetailsIds = clientDetails.getJSONObject("EXTERNAL_PATIENT_ID");
@@ -124,20 +133,23 @@ public class ECSyncUpdater {
         addresses.put("address4", "Za");
         addressFields.put("addressFields", addresses);
 
-        addressesOut.put("addressType", "usual_residence");
-//                    addressesOut.put("cityVillage",physicalAddresses.getString("WARD"));
-        addressesOut.put("cityVillage", "CENTRAL SAKWA");
-//                    addressesOut.put("countyDistrict",physicalAddresses.getString("COUNTY"));
-        addressesOut.put("countyDistrict", "BONDO");
-        addressesOut.put("stateProvince", "SIAYA");
 
+
+
+        addressFields.put("addressType", "usual_residence");
+//                    addressesOut.put("cityVillage",physicalAddresses.getString("WARD"));
+        addressFields.put("cityVillage", "CENTRAL SAKWA");
+//                    addressesOut.put("countyDistrict",physicalAddresses.getString("COUNTY"));
+        addressFields.put("countyDistrict", "BONDO");
+        addressFields.put("stateProvince", "SIAYA");
         addressesFieldsArray.put(addressFields);
-        addressesFieldsArray.put(addressesOut);
+
         clientObject.put("addresses", addressesFieldsArray);
-        clientObject.put("baseEntityId", "dd32df6c-32c9-4d08-a116-e1386e8c93d1");
-//                    clientObject.put("baseEntityId",clientDetailsIds.getString("ID"));
-        openmrs_id_client.put("OPENMRS_ID", "MEKXJV");
+
+                    clientObject.put("baseEntityId",clientDetailsIds.getString("ID"));
+        openmrs_id_client.put("OPENMRS_ID", openmrs_id);
         clientObject.put("identifiers", openmrs_id_client);
+        clientObject.put("attributes", openmrs_attributes);
 
         clientObject.put("dateCreated", spf.format(new Date()));
         clientObject.put("type", "Client");
@@ -161,7 +173,7 @@ public class ECSyncUpdater {
 //                    addClient(motherBaseID, clientMotherObject);
 //                    Log.i("ONBLEEE ", clientMotherObject.toString());
 
-        addClient("dd32df6c-32c9-4d08-a116-e1386e8c93d1", clientObject);
+//        addClient("dd32df6c-32c9-4d08-a116-e1386e8c93d1", clientObject);
         Log.i("ONBLEEE ", clientObject.toString());
 
         return clientObject;
