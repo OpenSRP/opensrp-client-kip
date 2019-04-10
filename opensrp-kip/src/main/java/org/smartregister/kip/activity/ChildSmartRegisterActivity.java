@@ -50,6 +50,7 @@ import org.smartregister.repository.BaseRepository;
 import org.smartregister.service.FormSubmissionService;
 import org.smartregister.service.ZiggyService;
 import org.smartregister.util.FormUtils;
+import org.smartregister.util.Utils;
 import org.smartregister.view.dialog.DialogOptionModel;
 import org.smartregister.view.viewpager.OpenSRPViewPager;
 
@@ -81,7 +82,6 @@ public class ChildSmartRegisterActivity extends BaseRegisterActivity {
 
 
     private android.support.v4.app.Fragment mBaseFragment = null;
-
 
 
     @Override
@@ -205,7 +205,6 @@ public class ChildSmartRegisterActivity extends BaseRegisterActivity {
             if (resultCode == RESULT_OK) {
 
 
-
                 String jsonString = data.getStringExtra("json");
                 try {
                     JSONObject jsonObject = new JSONObject(data.getStringExtra("json"));
@@ -225,7 +224,6 @@ public class ChildSmartRegisterActivity extends BaseRegisterActivity {
 //                System.out.println("JSONResult----" +buffer); // .toString());
 
 
-
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
                 AllSharedPreferences allSharedPreferences = new AllSharedPreferences(preferences);
 
@@ -236,8 +234,7 @@ public class ChildSmartRegisterActivity extends BaseRegisterActivity {
             if (StringUtils.isNotBlank(res.getContents())) {
                 onQRCodeSucessfullyScanned(res.getContents());
             } else Log.i("", "NO RESULT FOR QR CODE");
-        }else if (requestCode == SmartCardIntentIntegrator.SMARTCARD_READ_REQUEST_CODE && resultCode == RESULT_OK) {
-//            BarcodeIntentResult res = BarcodeIntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        } else if (requestCode == SmartCardIntentIntegrator.SMARTCARD_READ_REQUEST_CODE && resultCode == RESULT_OK) {
             processSmartCardReadResult(requestCode, resultCode, data);
 
         }
@@ -245,24 +242,52 @@ public class ChildSmartRegisterActivity extends BaseRegisterActivity {
 
     private void processSmartCardReadResult(int requestCode, int resultCode, Intent dataIntent) {
         SmartCardIntentResult cardReadIntentResult = null;
-        Patient SHRPatient;
+//
+//        try {
+//            cardReadIntentResult = SmartCardIntentIntegrator.parseActivityResult(requestCode, resultCode, dataIntent);
+//        } catch (Exception e) {
+//            Log.e(getClass().getSimpleName(), "Could not get result", e);
+//        }
+//        if (cardReadIntentResult == null) {
+//            Toast.makeText(getApplicationContext(), "Card Read Failed", Toast.LENGTH_LONG).show();
+//            return;
+//        } else {
+//            Toast.makeText(getApplicationContext(), cardReadIntentResult.getSmartCardRecord().getPlainPayload(), Toast.LENGTH_LONG).show();
+////Log.i("FIND_BY_ME",cardReadIntentResult.getSmartCardRecord().getPlainPayload());
+//            final JSONObject jsonObject = util.Utils.smartClient(cardReadIntentResult.getSmartCardRecord().getPlainPayload());
+//            Log.i("FIND_BY_ME", jsonObject.toString());
+//
+//            try {
+//                new AlertDialog.Builder(this, R.style.KipAlertDialog)
+//                        .setMessage("Patient " + jsonObject.getString("firstName") + jsonObject.getString("lastName"))
+//                        .setTitle("psmart Registration")
+//                        .setCancelable(false)
+//                        .setPositiveButton(R.string.no_button_label,
+//                                new DialogInterface.OnClickListener() {
+//                                    public void onClick(DialogInterface dialog, int whichButton) {
+//
+//                                    }
+//                                })
+//                        .setNegativeButton(R.string.yes_button_label,
+//                                new DialogInterface.OnClickListener() {
+//                                    public void onClick(DialogInterface dialog, int whichButton) {
+//                                        JsonFormUtils.savePsmartEnrollment(getApplicationContext(), jsonObject);
+//                                        filterpsmart("");
+//                                    }
+//                                })
+//                        .show();
+//
+//
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//
 
-        try {
-            cardReadIntentResult = SmartCardIntentIntegrator.parseActivityResult(requestCode, resultCode, dataIntent);
-        } catch (Exception e) {
-            Log.e(getClass().getSimpleName(), "Could not get result", e);
-        }
-        if (cardReadIntentResult == null) {
-            Toast.makeText(getApplicationContext(), "Card Read Failed", Toast.LENGTH_LONG).show();
-            return;
-        }else{
-            Toast.makeText(getApplicationContext(), cardReadIntentResult.getSmartCardRecord().getPlainPayload(), Toast.LENGTH_LONG).show();
-            cardReadIntentResult.getSmartCardRecord().get
-
-        }
-
+//        }
+        filterpsmart("");
 
     }
+
 
     @Override
     public void saveFormSubmission(String formSubmission, String id, String formName, JSONObject fieldOverrides) {
@@ -351,51 +376,37 @@ public class ChildSmartRegisterActivity extends BaseRegisterActivity {
     private void readSmartCard() {
         SmartCardIntentIntegrator SHRIntegrator = new SmartCardIntentIntegrator(this);
         SHRIntegrator.initiateCardRead();
-        Toast.makeText(getApplicationContext(), "Opening Card Reader", Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "Accessing card Reader", Toast.LENGTH_LONG).show();
     }
 
-//    private void readSmartCard() {
-//            Intent intent = new Intent();
-//            intent.setAction("org.kenyahmis.psmart.ACTION_READ_DATA");
-//            intent.setType("text/plain");
-//            intent.putExtra("AUTH_TOKEN","123");
-//            startIntentActivityForResult(intent,98);
-//
-//
-//
-//
-////        SmartCardIntentIntegrator SHRIntegrator = new SmartCardIntentIntegrator(this);
-////        SHRIntegrator.initiateCardRead();
-////        Toast.makeText(getApplicationContext(), "Opening Card Reader", Toast.LENGTH_LONG).show();
-//    }
-    private void startIntentActivityForResult(Intent intent, int requestCode){
-            startActivityForResult(intent, requestCode);
+    private void startIntentActivityForResult(Intent intent, int requestCode) {
+        startActivityForResult(intent, requestCode);
     }
 
-    public void startPsmartScanner(){
+    public void startPsmartScanner() {
         readSmartCard();
     }
 
-    public void startPsmartScanner2() {
-//        ECSyncUpdater ecSyncUpdater = new ECSyncUpdater(this);
-        ECSyncUpdater ecUpdater = ECSyncUpdater.getInstance(KipApplication.getInstance().getApplicationContext());
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(KipApplication.getInstance().getApplicationContext());
-        try {
-
-            JsonFormUtils.savePsmartEnrollment(KipApplication.getInstance().getApplicationContext());
-
-            AllSharedPreferences allSharedPreferences = new AllSharedPreferences(preferences);
-
-            long lastSyncTimeStamp = allSharedPreferences.fetchLastUpdatedAtDate(0);
-            Date lastSyncDate = new Date(lastSyncTimeStamp);
-            KipClientProcessor.getInstance(KipApplication.getInstance().getApplicationContext()).processClient(ecUpdater.getEvents(lastSyncDate, BaseRepository.TYPE_Unsynced));
-            allSharedPreferences.saveLastUpdatedAtDate(lastSyncDate.getTime());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
+//    public void startPsmartScanner2() {
+////        ECSyncUpdater ecSyncUpdater = new ECSyncUpdater(this);
+//        ECSyncUpdater ecUpdater = ECSyncUpdater.getInstance(KipApplication.getInstance().getApplicationContext());
+//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(KipApplication.getInstance().getApplicationContext());
+//        try {
+//
+//            JsonFormUtils.savePsmartEnrollment(KipApplication.getInstance().getApplicationContext());
+//
+//            AllSharedPreferences allSharedPreferences = new AllSharedPreferences(preferences);
+//
+//            long lastSyncTimeStamp = allSharedPreferences.fetchLastUpdatedAtDate(0);
+//            Date lastSyncDate = new Date(lastSyncTimeStamp);
+//            KipClientProcessor.getInstance(KipApplication.getInstance().getApplicationContext()).processClient(ecUpdater.getEvents(lastSyncDate, BaseRepository.TYPE_Unsynced));
+//            allSharedPreferences.saveLastUpdatedAtDate(lastSyncDate.getTime());
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
 
 
     private void onQRCodeSucessfullyScanned(String qrCode) {
@@ -444,7 +455,14 @@ public class ChildSmartRegisterActivity extends BaseRegisterActivity {
     private void filterList(String filterString) {
         BaseSmartRegisterFragment registerFragment = (BaseSmartRegisterFragment) findFragmentByPosition(0);
         if (registerFragment != null) {
-            registerFragment.openVaccineCard(filterString);
+            registerFragment.openVaccineCard("c365a62b-59ce-428d-9175-38bb528a6b5f");
+        }
+    }
+
+    private void filterpsmart(String filterString) {
+        BaseSmartRegisterFragment registerFragment = (BaseSmartRegisterFragment) findFragmentByPosition(0);
+        if (registerFragment != null) {
+            registerFragment.openVaccineCard("c365a62b-59ce-428d-9175-38bb528a6b5f");
         }
     }
 
