@@ -3,6 +3,7 @@ package org.smartregister.kip.sync;
 import android.content.Context;
 import android.util.Log;
 
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -12,6 +13,7 @@ import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.repository.KipEventClientRepository;
 import org.smartregister.kip.repository.UniqueIdRepository;
 import org.smartregister.service.HTTPAgent;
+import org.smartregister.util.StringUtil;
 import org.smartregister.util.Utils;
 
 import java.text.ParseException;
@@ -49,7 +51,6 @@ public class ECSyncUpdater {
     }
 
 
-
     public JSONObject fetchPsmartClient() throws Exception {
         UniqueIdRepository uniqueIdRepo = KipApplication.getInstance().uniqueIdRepository();
         String openmrs_id = uniqueIdRepo.getNextUniqueId().getOpenmrsId();
@@ -73,8 +74,8 @@ public class ECSyncUpdater {
         Thread thread = new Thread(new Runnable() {
 
 
-
             HTTPAgent httpAgent = KipApplication.getInstance().context().getHttpAgent();
+
             @Override
             public void run() {
                 try {
@@ -96,7 +97,7 @@ public class ECSyncUpdater {
         latch.await();
 
         JSONObject responseObj = new JSONObject((String) resp[0].payload());
-        Log.i("WHOLE STRING ",responseObj.toString());
+        Log.i("WHOLE STRING ", responseObj.toString());
         JSONObject clientDetails = responseObj.getJSONObject("PATIENT_IDENTIFICATION");
         JSONObject clientDetailsNames = clientDetails.getJSONObject("PATIENT_NAME");
         JSONObject clientDetailsIds = clientDetails.getJSONObject("EXTERNAL_PATIENT_ID");
@@ -134,8 +135,6 @@ public class ECSyncUpdater {
         addressFields.put("addressFields", addresses);
 
 
-
-
         addressFields.put("addressType", "usual_residence");
 //                    addressesOut.put("cityVillage",physicalAddresses.getString("WARD"));
         addressFields.put("cityVillage", "CENTRAL SAKWA");
@@ -146,7 +145,7 @@ public class ECSyncUpdater {
 
         clientObject.put("addresses", addressesFieldsArray);
 
-                    clientObject.put("baseEntityId",clientDetailsIds.getString("ID"));
+
         openmrs_id_client.put("OPENMRS_ID", openmrs_id);
         clientObject.put("identifiers", openmrs_id_client);
         clientObject.put("attributes", openmrs_attributes);

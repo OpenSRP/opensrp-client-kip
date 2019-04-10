@@ -29,7 +29,14 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.smartregister.domain.Response;
+import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.domain.EditWrapper;
+import org.smartregister.kip.repository.UniqueIdRepository;
+import org.smartregister.service.HTTPAgent;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -42,6 +49,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.CountDownLatch;
 
 
 /**
@@ -226,6 +235,118 @@ public class Utils {
             Log.e(TAG, e.getMessage());
             return null;
         }
+    }
+
+    public static JSONObject smartClient(String payload) {
+        UniqueIdRepository uniqueIdRepo = KipApplication.getInstance().uniqueIdRepository();
+        String openmrs_id = uniqueIdRepo.getNextUniqueId().getOpenmrsId();
+        uniqueIdRepo.close(openmrs_id);
+        String baseID = UUID.randomUUID().toString();
+        final Response[] resp = new Response[1];
+        String motherBaseID = UUID.randomUUID().toString();
+        JSONObject clientObject = new JSONObject();
+        JSONObject motherObject = new JSONObject();
+        JSONObject addressFields = new JSONObject();
+        JSONObject relationships = new JSONObject();
+        JSONObject addresses = new JSONObject();
+        JSONObject addressesOut = new JSONObject();
+        JSONArray addressesFieldsArray = new JSONArray();
+        JSONObject physicalAddresses = new JSONObject();
+        JSONObject openmrs_attributes = new JSONObject();
+        JSONObject openmrs_id_client = new JSONObject();
+        JSONObject openmrs_id_mum = new JSONObject();
+        SimpleDateFormat spf = new SimpleDateFormat("yyyyMMdd");
+
+
+        JSONObject responseObj = null;
+        try {
+            responseObj = new JSONObject(payload);
+
+            Log.i("WHOLE STRING ", responseObj.toString());
+            JSONObject clientDetails = responseObj.getJSONObject("PATIENT_IDENTIFICATION");
+            JSONObject clientDetailsNames = clientDetails.getJSONObject("PATIENT_NAME");
+            JSONObject clientDetailsIds = clientDetails.getJSONObject("EXTERNAL_PATIENT_ID");
+            JSONObject clientDetailsAddresses = clientDetails.getJSONObject("PATIENT_ADDRESS");
+
+            relationships.put("relationshipType", "8d91a210-c2cc-11de-8d13-0010c6dffd0f");
+            relationships.put("relativeEntityId", "dd32df6c-32c9-4d08-a116-e1386e8c93c5");
+//                    relationships.put("relativeEntityId", motherBaseID);
+
+            motherObject.put("mother", relationships);
+            clientObject.put("relationships", motherObject);
+            Date birthdate = spf.parse(clientDetails.getString("DATE_OF_BIRTH"));
+            spf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            clientObject.put("birthdate", spf.format(birthdate));
+            clientObject.put("birthdateApprox", false);
+            clientObject.put("deathdateApprox", false);
+            if (clientDetailsNames.has("FIRST_NAME")) {
+                clientObject.put("firstName", clientDetailsNames.getString("FIRST_NAME"));
+            }
+            if (clientDetailsNames.has("LAST_NAME")) {
+                clientObject.put("lastName", clientDetailsNames.getString("LAST_NAME"));
+            }
+            if (clientDetails.getString("DATE_OF_BIRTH").startsWith("f")) {
+                clientObject.put("gender", "Female");
+            } else {
+                clientObject.put("gender", "Male");
+            }
+
+            physicalAddresses = clientDetailsAddresses.getJSONObject("PHYSICAL_ADDRESS");
+//                    addresses.put("address3",physicalAddresses.getString("VILLAGE"));
+//                    addresses.put("address2",physicalAddresses.getString("NEAREST_LANDMARK"));
+//                    addresses.put("address1",clientDetailsAddresses.getString("POSTAL_ADDRESS"));
+            addresses.put("address3", "za");
+            addresses.put("address4", "Za");
+            addressFields.put("addressFields", addresses);
+
+
+            addressFields.put("addressType", "usual_residence");
+//                    addressesOut.put("cityVillage",physicalAddresses.getString("WARD"));
+            addressFields.put("cityVillage", "CENTRAL SAKWA");
+//                    addressesOut.put("countyDistrict",physicalAddresses.getString("COUNTY"));
+            addressFields.put("countyDistrict", "BONDO");
+            addressFields.put("stateProvince", "SIAYA");
+            addressesFieldsArray.put(addressFields);
+
+            clientObject.put("addresses", addressesFieldsArray);
+
+            clientObject.put("baseEntityId", baseID);
+            openmrs_id_client.put("OPENMRS_ID", openmrs_id);
+            clientObject.put("identifiers", openmrs_id_client);
+            clientObject.put("attributes", openmrs_attributes);
+
+            clientObject.put("dateCreated", spf.format(new Date()));
+            clientObject.put("type", "Client");
+
+
+            JSONObject clientMotherObject = new JSONObject();
+
+            clientMotherObject.put("birthdate", "2010-01-01T00:00:00.000Z");
+            clientMotherObject.put("birthdateApprox", true);
+            JSONObject motherClientDetailsNames = clientDetails.getJSONObject("MOTHER_DETAILS").getJSONObject("MOTHER_NAME");
+            clientMotherObject.put("firstName", motherClientDetailsNames.getString("FIRST_NAME"));
+            clientMotherObject.put("lastName", motherClientDetailsNames.getString("LAST_NAME"));
+            clientMotherObject.put("gender", "Female");
+            clientMotherObject.put("addresses", addressesFieldsArray);
+            clientMotherObject.put("baseEntityId", motherBaseID);
+            openmrs_id_mum.put("M_KIP_ID", "MEKXJV_mother");
+            clientMotherObject.put("identifiers", openmrs_id_mum);
+            clientMotherObject.put("dateCreated", spf.format(new Date()));
+            clientMotherObject.put("type", "Client");
+
+//                    addClient(motherBaseID, clientMotherObject);
+//                    Log.i("ONBLEEE ", clientMotherObject.toString());
+
+//        addClient("dd32df6c-32c9-4d08-a116-e1386e8c93d1", clientObject);
+            Log.i("ONBLEEE ", clientObject.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return clientObject;
+
     }
 
 

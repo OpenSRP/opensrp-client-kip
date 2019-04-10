@@ -195,10 +195,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
 
 
 
-    public static void savePsmartEnrollment(Context context) {
-
-
-
+    public static void savePsmartEnrollment(Context context, JSONObject jsonObject) {
 
         try {
             ECSyncUpdater ecUpdater = ECSyncUpdater.getInstance(context);
@@ -206,7 +203,7 @@ public class JsonFormUtils extends org.smartregister.util.JsonFormUtils {
             AllSharedPreferences allSharedPreferences = new AllSharedPreferences(preferences);
 
 //            String baseID = UUID.randomUUID().toString();
-            JSONObject clientJson_t = ecUpdater.fetchPsmartClient();
+            JSONObject clientJson_t = jsonObject;
             Log.i("ALL_TIME",clientJson_t.toString());
             ecUpdater.addClient(clientJson_t.getString("baseEntityId"), clientJson_t);
 
