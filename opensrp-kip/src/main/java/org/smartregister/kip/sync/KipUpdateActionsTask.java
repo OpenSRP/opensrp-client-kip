@@ -158,7 +158,7 @@ public class KipUpdateActionsTask {
 
                 Map<String, String> params = new HashMap<>();
                 params.put(AllConstants.SyncFilters.FILTER_PROVIDER, allSharedPreferences.fetchRegisteredANM());
-                params.put(AllConstants.SyncFilters.FILTER_LOCATION_ID, allSharedPreferences.fetchCurrentLocality());
+//                params.put(AllConstants.SyncFilters.FILTER_LOCATION_ID, allSharedPreferences.fetchCurrentLocality());
 
                 int eCount = ecUpdater.fetchAllClientsAndEvents(params);
                 totalCount += eCount;
