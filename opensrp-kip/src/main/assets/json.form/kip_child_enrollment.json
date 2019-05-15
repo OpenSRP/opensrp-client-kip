@@ -324,7 +324,11 @@
         "openmrs_entity": "concept",
         "openmrs_entity_id": "159635AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
         "type": "edit_text",
-        "hint": "Mother/guardian phone number",
+        "hint": "Mother/guardian phone number *",
+        "v_required": {
+          "value":"true",
+          "err":"Please enter mother/guardian's phone number"
+        },
         "v_numeric": {
           "value": "true",
           "err": "Number must begin with 07 and must be a total of 10 digits in length"
