@@ -7,7 +7,7 @@ buildscript {
         classpath "com.android.tools.build:gradle:1.2.3"
         classpath 'org.apache.commons:commons-lang3:3.3.2'
         classpath 'org.robolectric:robolectric-gradle-plugin:1.1.0'
-        classpath 'io.fabric.tools:gradle:1.+'
+        classpath 'io.fabric.tools:gradle:1.27.1'
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.4.0'
     }
 }
@@ -52,8 +52,8 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            resValue "string", 'opensrp_url', '"https://kip.health.go.ke/opensrp"'
-            buildConfigField "String", 'OPENMRS_URL', '"https://kip.health.go.ke/openmrs"'
+            resValue "string", 'opensrp_url', '""'
+            buildConfigField "String", 'OPENMRS_URL', '""'
             buildConfigField "String", 'OPENMRS_IDGEN_URL', '"/module/idgen/exportIdentifiers.form"'
             buildConfigField "int", "OPENMRS_UNIQUE_ID_INITIAL_BATCH_SIZE", '250'
             buildConfigField "int", "OPENMRS_UNIQUE_ID_BATCH_SIZE", '100'
@@ -64,8 +64,8 @@ android {
         }
 
         debug {
-            resValue "string", 'opensrp_url', '"http://197.254.67.146:9417/opensrp"'
-            buildConfigField "String", 'OPENMRS_URL', '"http://197.254.67.146:9417/openmrs"'
+            resValue "string", 'opensrp_url', '"http://192.168.67.146:8080/opensrp"'
+            buildConfigField "String", 'OPENMRS_URL', '"http://192.168.67.146:8080/openmrs"'
             buildConfigField "String", 'OPENMRS_IDGEN_URL', '"/module/idgen/exportIdentifiers.form"'
             buildConfigField "int", "OPENMRS_UNIQUE_ID_INITIAL_BATCH_SIZE", '250'
             buildConfigField "int", "OPENMRS_UNIQUE_ID_BATCH_SIZE", '100'
