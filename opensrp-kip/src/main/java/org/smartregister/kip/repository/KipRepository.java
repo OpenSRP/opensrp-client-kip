@@ -259,7 +259,7 @@ public class KipRepository extends Repository {
     private void upgradeToVersion8ReportDeceased(SQLiteDatabase database) {
         try {
 
-            String ALTER_ADD_DEATHDATE_COLUMN = "ALTER TABLE " + KipConstants.CHILD_TABLE_NAME + " ADD COLUMN " + KipConstants.EC_CHILD_TABLE.DOD + " VARCHAR";
+            String ALTER_ADD_DEATHDATE_COLUMN = "ALTER TABLE " + KipConstants.CHILD_TABLE_NAME + " ALTER COLUMN " + KipConstants.EC_CHILD_TABLE.DOD + " VARCHAR";
             database.execSQL(ALTER_ADD_DEATHDATE_COLUMN);
 
             ArrayList<String> newlyAddedFields = new ArrayList<>();
@@ -296,7 +296,7 @@ public class KipRepository extends Repository {
 
             addFieldsToFTSTable(database, KipConstants.CHILD_TABLE_NAME, newlyAddedFields);
 
-            String ALTER_ADD_CHW_NAME_COLUMN = "ALTER TABLE " + KipConstants.CHILD_TABLE_NAME + " ADD COLUMN " + KipConstants.EC_CHILD_TABLE.CHW_NAME + " VARCHAR";
+            String ALTER_ADD_CHW_NAME_COLUMN = "ALTER TABLE " + KipConstants.CHILD_TABLE_NAME + " ADD ALTER " + KipConstants.EC_CHILD_TABLE.CHW_NAME + " VARCHAR";
             database.execSQL(ALTER_ADD_CHW_NAME_COLUMN);
 
             String ALTER_ADD_CHW_PHONE_NUMBER_COLUMN = "ALTER TABLE " + KipConstants.CHILD_TABLE_NAME + " ADD COLUMN " + KipConstants.EC_CHILD_TABLE.CHW_PHONE_NUMBER + " VARCHAR";
