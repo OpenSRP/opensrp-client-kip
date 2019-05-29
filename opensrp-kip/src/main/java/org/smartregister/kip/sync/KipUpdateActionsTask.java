@@ -153,12 +153,13 @@ public class KipUpdateActionsTask {
             // Retrieve database host from preferences
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
             AllSharedPreferences allSharedPreferences = new AllSharedPreferences(preferences);
+            String locatioId = allSharedPreferences.fetchDefaultLocalityId(allSharedPreferences.fetchRegisteredANM());
             while (true) {
                 long startSyncTimeStamp = ecUpdater.getLastSyncTimeStamp();
 
                 Map<String, String> params = new HashMap<>();
                 params.put(AllConstants.SyncFilters.FILTER_PROVIDER, allSharedPreferences.fetchRegisteredANM());
-//                params.put(AllConstants.SyncFilters.FILTER_LOCATION_ID, allSharedPreferences.fetchCurrentLocality());
+                params.put(AllConstants.SyncFilters.FILTER_LOCATION_ID, locatioId);
 
                 int eCount = ecUpdater.fetchAllClientsAndEvents(params);
                 totalCount += eCount;
