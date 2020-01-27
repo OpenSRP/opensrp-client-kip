@@ -1,12 +1,16 @@
 package org.smartregister.kip.repository;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.AllConstants;
+import org.smartregister.anc.library.repository.PartialContactRepositoryHelper;
+import org.smartregister.anc.library.repository.PatientRepositoryHelper;
+import org.smartregister.anc.library.repository.PreviousContactRepositoryHelper;
 import org.smartregister.child.util.Utils;
 import org.smartregister.configurableviews.repository.ConfigurableViewsRepository;
 import org.smartregister.domain.db.Column;
@@ -20,6 +24,14 @@ import org.smartregister.immunization.repository.RecurringServiceRecordRepositor
 import org.smartregister.immunization.repository.RecurringServiceTypeRepository;
 import org.smartregister.immunization.repository.VaccineRepository;
 import org.smartregister.immunization.util.IMDatabaseUtils;
+import org.smartregister.opd.repository.OpdCheckInRepository;
+import org.smartregister.opd.repository.OpdDetailsRepository;
+import org.smartregister.opd.repository.OpdDiagnosisAndTreatmentFormRepository;
+import org.smartregister.opd.repository.OpdDiagnosisRepository;
+import org.smartregister.opd.repository.OpdServiceDetailRepository;
+import org.smartregister.opd.repository.OpdTestConductedRepository;
+import org.smartregister.opd.repository.OpdTreatmentRepository;
+import org.smartregister.opd.repository.OpdVisitRepository;
 import org.smartregister.repository.AlertRepository;
 import org.smartregister.repository.EventClientRepository;
 import org.smartregister.repository.Hia2ReportRepository;
@@ -35,17 +47,14 @@ import timber.log.Timber;
 
 public class KipRepository extends Repository {
 
-
-    private static final String TAG = KipApplication.class.getCanonicalName();
-
     protected SQLiteDatabase readableDatabase;
     protected SQLiteDatabase writableDatabase;
     private Context context;
 
-    public KipRepository(Context context, org.smartregister.Context openSRPContext) {
+    public KipRepository(@NonNull Context context, @NonNull org.smartregister.Context openSRPContext) {
         super(context, AllConstants.DATABASE_NAME, BuildConfig.DATABASE_VERSION, openSRPContext.session(),
                 KipApplication
-                        .createCommonFtsObject(), openSRPContext.sharedRepositoriesArray());
+                        .createCommonFtsObject(context), openSRPContext.sharedRepositoriesArray());
         this.context = context;
     }
 
@@ -56,27 +65,36 @@ public class KipRepository extends Repository {
                 .createTable(database, EventClientRepository.Table.client, EventClientRepository.client_column.values());
         EventClientRepository
                 .createTable(database, EventClientRepository.Table.event, EventClientRepository.event_column.values());
-
         ConfigurableViewsRepository.createTable(database);
         UniqueIdRepository.createTable(database);
 
-        SettingsRepository.onUpgrade(database);
+        PartialContactRepositoryHelper.createTable(database);
+        PreviousContactRepositoryHelper.createTable(database);
 
+        SettingsRepository.onUpgrade(database);
         WeightRepository.createTable(database);
         HeightRepository.createTable(database);
         VaccineRepository.createTable(database);
 
+        OpdVisitRepository.createTable(database);
+        OpdCheckInRepository.createTable(database);
+        OpdDetailsRepository.createTable(database);
+        OpdDiagnosisAndTreatmentFormRepository.createTable(database);
+        OpdDiagnosisRepository.createTable(database);
+        OpdTreatmentRepository.createTable(database);
+        OpdTestConductedRepository.createTable(database);
+        OpdServiceDetailRepository.createTable(database);
+
         runLegacyUpgrades(database);
 
-        onUpgrade(database, 7, BuildConfig.DATABASE_VERSION);
+        onUpgrade(database, 8, BuildConfig.DATABASE_VERSION);
     }
 
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.w(WeightRepository.class.getName(),
-                "Upgrading database from version " + oldVersion + " to "
-                        + newVersion + ", which will destroy all old data");
+        Timber.w("Upgrading database from version %d to %d, which will destroy all old data", oldVersion, newVersion);
+
         int upgradeTo = oldVersion + 1;
         while (upgradeTo <= newVersion) {
             switch (upgradeTo) {
@@ -106,6 +124,8 @@ public class KipRepository extends Repository {
             }
             upgradeTo++;
         }
+
+        PatientRepositoryHelper.performMigrations(db);
     }
 
     @Override
@@ -150,7 +170,7 @@ public class KipRepository extends Repository {
             }
             return readableDatabase;
         } catch (Exception e) {
-            Log.e(TAG, "Database Error. " + e.getMessage());
+            Timber.e(e);
             return null;
         }
 
@@ -168,7 +188,7 @@ public class KipRepository extends Repository {
         super.close();
     }
 
-    private void runLegacyUpgrades(SQLiteDatabase database) {
+    private void runLegacyUpgrades(@NonNull SQLiteDatabase database) {
         upgradeToVersion2(database);
         upgradeToVersion3(database);
         upgradeToVersion4(database);
@@ -180,7 +200,6 @@ public class KipRepository extends Repository {
         upgradeToVersion7VaccineRecurringServiceRecordChange(database);
         upgradeToVersion7WeightHeightVaccineRecurringServiceChange(database);
         upgradeToVersion7RemoveUnnecessaryTables(database);
-        upgradeToVersion8AddServiceGroupColumn(database);
     }
 
     /**
@@ -188,12 +207,11 @@ public class KipRepository extends Repository {
      *
      * @param database
      */
-    private void upgradeToVersion8AddServiceGroupColumn(SQLiteDatabase database) {
-        try{
+    private void upgradeToVersion8AddServiceGroupColumn(@NonNull SQLiteDatabase database) {
+        try {
             database.execSQL(RecurringServiceTypeRepository.ADD_SERVICE_GROUP_COLUMN);
-        }
-        catch (Exception e){
-            Timber.e(e,"upgradeToVersion8AddServiceGroupColumn");
+        } catch (Exception e) {
+            Timber.e(e, "upgradeToVersion8AddServiceGroupColumn");
         }
     }
 
@@ -202,7 +220,7 @@ public class KipRepository extends Repository {
      *
      * @param database
      */
-    private void upgradeToVersion2(SQLiteDatabase database) {
+    private void upgradeToVersion2(@NonNull SQLiteDatabase database) {
         try {
             // Run insert query
             ArrayList<String> newlyAddedFields = new ArrayList<>();
@@ -217,7 +235,7 @@ public class KipRepository extends Repository {
         }
     }
 
-    private void upgradeToVersion3(SQLiteDatabase db) {
+    private void upgradeToVersion3(@NonNull SQLiteDatabase db) {
         try {
             db.execSQL(VaccineRepository.UPDATE_TABLE_ADD_EVENT_ID_COL);
             db.execSQL(VaccineRepository.EVENT_ID_INDEX);
@@ -236,7 +254,7 @@ public class KipRepository extends Repository {
         }
     }
 
-    private void upgradeToVersion4(SQLiteDatabase db) {
+    private void upgradeToVersion4(@NonNull SQLiteDatabase db) {
         try {
             db.execSQL(AlertRepository.ALTER_ADD_OFFLINE_COLUMN);
             db.execSQL(AlertRepository.OFFLINE_INDEX);
@@ -245,7 +263,7 @@ public class KipRepository extends Repository {
         }
     }
 
-    private void upgradeToVersion5(SQLiteDatabase db) {
+    private void upgradeToVersion5(@NonNull SQLiteDatabase db) {
         try {
             RecurringServiceTypeRepository.createTable(db);
             RecurringServiceRecordRepository.createTable(db);
@@ -258,7 +276,7 @@ public class KipRepository extends Repository {
         }
     }
 
-    private void upgradeToVersion6(SQLiteDatabase db) {
+    private void upgradeToVersion6(@NonNull SQLiteDatabase db) {
         try {
             WeightZScoreRepository.createTable(db);
             db.execSQL(WeightRepository.ALTER_ADD_Z_SCORE_COLUMN);
@@ -270,7 +288,7 @@ public class KipRepository extends Repository {
         }
     }
 
-    private void upgradeToVersion7OutOfArea(SQLiteDatabase db) {
+    private void upgradeToVersion7OutOfArea(@NonNull SQLiteDatabase db) {
         try {
             db.execSQL(VaccineRepository.UPDATE_TABLE_ADD_OUT_OF_AREA_COL);
             db.execSQL(VaccineRepository.UPDATE_TABLE_ADD_OUT_OF_AREA_COL_INDEX);
@@ -285,7 +303,7 @@ public class KipRepository extends Repository {
         }
     }
 
-    private void upgradeToVersion7RecurringServiceUpdate(SQLiteDatabase db) {
+    private void upgradeToVersion7RecurringServiceUpdate(@NonNull SQLiteDatabase db) {
         try {
 
             // Recurring service json changed. update
@@ -298,7 +316,7 @@ public class KipRepository extends Repository {
         }
     }
 
-    private void upgradeToVersion7EventWeightHeightVaccineRecurringChange(SQLiteDatabase db) {
+    private void upgradeToVersion7EventWeightHeightVaccineRecurringChange(@NonNull SQLiteDatabase db) {
         try {
             Column[] columns = {EventClientRepository.event_column.formSubmissionId};
             EventClientRepository.createIndex(db, EventClientRepository.Table.event, columns);
@@ -320,7 +338,7 @@ public class KipRepository extends Repository {
         }
     }
 
-    private void upgradeToVersion7VaccineRecurringServiceRecordChange(SQLiteDatabase db) {
+    private void upgradeToVersion7VaccineRecurringServiceRecordChange(@NonNull SQLiteDatabase db) {
         try {
             db.execSQL(VaccineRepository.UPDATE_TABLE_ADD_TEAM_ID_COL);
             db.execSQL(VaccineRepository.UPDATE_TABLE_ADD_TEAM_COL);
@@ -332,7 +350,7 @@ public class KipRepository extends Repository {
         }
     }
 
-    private void upgradeToVersion7WeightHeightVaccineRecurringServiceChange(SQLiteDatabase db) {
+    private void upgradeToVersion7WeightHeightVaccineRecurringServiceChange(@NonNull SQLiteDatabase db) {
         try {
 
             db.execSQL(WeightRepository.UPDATE_TABLE_ADD_TEAM_ID_COL);
@@ -352,7 +370,7 @@ public class KipRepository extends Repository {
         }
     }
 
-    private void upgradeToVersion7RemoveUnnecessaryTables(SQLiteDatabase db) {
+    private void upgradeToVersion7RemoveUnnecessaryTables(@NonNull SQLiteDatabase db) {
         try {
             db.execSQL("DROP TABLE IF EXISTS address");
             db.execSQL("DROP TABLE IF EXISTS obs");
@@ -368,6 +386,4 @@ public class KipRepository extends Repository {
             Timber.e("upgradeToVersion7RemoveUnnecessaryTables( %s", Log.getStackTraceString(e));
         }
     }
-
-
 }

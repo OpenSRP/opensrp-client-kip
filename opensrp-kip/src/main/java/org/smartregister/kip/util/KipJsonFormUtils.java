@@ -205,7 +205,7 @@ public class KipJsonFormUtils extends JsonFormUtils {
 
         if (form.has(JsonFormUtils.STEP1) && form.getJSONObject(JsonFormUtils.STEP1).has(KipConstants.KEY.TITLE) && form.getJSONObject(JsonFormUtils.STEP1).getString(KipConstants.KEY.TITLE)
                 .equals(Constants.EventType.BITRH_REGISTRATION)) {
-            form.getJSONObject(JsonFormUtils.STEP1).put(KipConstants.KEY.TITLE, Constants.EventType.UPDATE_BITRH_REGISTRATION);
+            form.getJSONObject(JsonFormUtils.STEP1).put(KipConstants.KEY.TITLE, KipConstants.FormTitleUtil.UPDATE_CHILD_FORM);
         }
     }
 

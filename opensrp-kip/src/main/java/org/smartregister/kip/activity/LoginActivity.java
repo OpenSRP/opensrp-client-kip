@@ -3,8 +3,10 @@ package org.smartregister.kip.activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import org.smartregister.anc.library.activity.SiteCharacteristicsEnterActivity;
 import org.smartregister.kip.R;
 import org.smartregister.kip.presenter.LoginPresenter;
+import org.smartregister.kip.util.KipConstants;
 import org.smartregister.kip.util.KipUtils;
 import org.smartregister.task.SaveTeamLocationsTask;
 import org.smartregister.view.activity.BaseLoginActivity;
@@ -41,8 +43,16 @@ public class LoginActivity extends BaseLoginActivity implements BaseLoginContrac
         if (remote) {
             org.smartregister.util.Utils.startAsyncTask(new SaveTeamLocationsTask(), null);
         }
-        Intent intent = new Intent(this, ChildRegisterActivity.class);
-        startActivity(intent);
+
+        if (mLoginPresenter.isServerSettingsSet()) {
+            Intent intent = new Intent(this, OpdRegisterActivity.class);
+            intent.putExtra(KipConstants.IntentKeyUtil.IS_REMOTE_LOGIN, remote);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(this, SiteCharacteristicsEnterActivity.class);
+            intent.putExtra(KipConstants.IntentKeyUtil.IS_REMOTE_LOGIN, remote);
+            startActivity(intent);
+        }
         finish();
     }
 

@@ -29,7 +29,15 @@ public class NavigationModel implements NavigationContract.Model {
             NavigationOption childNavigationOption = new NavigationOption(R.mipmap.sidemenu_children,
                     R.mipmap.sidemenu_children_active, R.string.menu_child_clients, KipConstants.DrawerMenu.CHILD_CLIENTS,
                     0);
-            navigationOptions.addAll(asList(childNavigationOption));
+
+            NavigationOption ancNavigationOption = new NavigationOption(R.mipmap.sidemenu_children,
+                    R.mipmap.sidemenu_children_active, R.string.menu_anc_clients, KipConstants.DrawerMenu.ANC_CLIENTS,
+                    0);
+
+            NavigationOption allClientsOption = new NavigationOption(R.mipmap.sidemenu_children
+                    , R.mipmap.sidemenu_children_active, R.string.all_clients, KipConstants.DrawerMenu.ALL_CLIENTS, 0);
+
+            navigationOptions.addAll(asList(allClientsOption, childNavigationOption, ancNavigationOption));
         }
 
         return navigationOptions;

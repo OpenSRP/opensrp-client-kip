@@ -2,7 +2,6 @@ package org.smartregister.kip.presenter;
 
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.CheckBox;
@@ -12,22 +11,28 @@ import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.smartregister.AllConstants;
+import org.smartregister.child.util.Constants;
 import org.smartregister.configurableviews.model.LoginConfiguration;
 import org.smartregister.configurableviews.model.ViewConfiguration;
+import org.smartregister.domain.Setting;
 import org.smartregister.kip.R;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.interactor.LoginInteractor;
-import org.smartregister.kip.util.KipConstants;
 import org.smartregister.kip.util.ImageLoaderRequest;
+import org.smartregister.kip.util.KipConstants;
 import org.smartregister.login.model.BaseLoginModel;
 import org.smartregister.login.presenter.BaseLoginPresenter;
 import org.smartregister.view.contract.BaseLoginContract;
 
 import java.lang.ref.WeakReference;
 
-public class LoginPresenter extends BaseLoginPresenter implements BaseLoginContract.Presenter {
+import timber.log.Timber;
 
-    private static final String TAG = LoginPresenter.class.getCanonicalName();
+public class LoginPresenter extends BaseLoginPresenter implements BaseLoginContract.Presenter {
 
     public LoginPresenter(BaseLoginContract.View loginView) {
         mLoginView = new WeakReference<>(loginView);
@@ -86,12 +91,27 @@ public class LoginPresenter extends BaseLoginPresenter implements BaseLoginContr
             }
 
         } catch (Exception e) {
-            Log.d(TAG, e.getMessage());
+            Timber.e(e);
         }
     }
 
     @Override
     public boolean isServerSettingsSet() {
-        return false;
+        try {
+            Setting setting = KipApplication.getInstance().getContext().allSettings().getSetting(KipConstants.KEY.SITE_CHARACTERISTICS);
+            JSONObject jsonObject = setting != null ? new JSONObject(setting.getValue()) : null;
+            JSONArray settingArray = jsonObject != null && jsonObject.has(AllConstants.SETTINGS) ?
+                    jsonObject.getJSONArray(AllConstants.SETTINGS) : null;
+
+            if (settingArray != null && settingArray.length() > 0) {
+                JSONObject settingObject = settingArray.getJSONObject(0);
+                return !settingObject.isNull(Constants.KEY.VALUE);
+
+            }
+            return false;
+        } catch (JSONException e) {
+            Timber.e(e);
+            return false;
+        }
     }
 }

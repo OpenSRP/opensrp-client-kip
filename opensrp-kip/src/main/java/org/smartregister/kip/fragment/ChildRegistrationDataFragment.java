@@ -9,11 +9,14 @@ import org.smartregister.kip.R;
 import org.smartregister.kip.util.KipConstants;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * Created by ndegwamartin on 2019-05-30.
+ */
 public class ChildRegistrationDataFragment extends BaseChildRegistrationDataFragment {
 
     @Override
@@ -70,5 +73,10 @@ public class ChildRegistrationDataFragment extends BaseChildRegistrationDataFrag
         }
 
         setmAdapter(new ChildRegistrationDataAdapter(mArrayList));
+    }
+
+    @Override
+    protected List<String> addUnFormattedNumberFields(String... key) {
+        return Arrays.asList("mother_guardian_number");
     }
 }

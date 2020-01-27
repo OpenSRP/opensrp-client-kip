@@ -5,7 +5,9 @@ import org.smartregister.child.model.BaseChildRegisterFragmentModel;
 import org.smartregister.domain.Response;
 import org.smartregister.kip.util.KipConstants;
 
-
+/**
+ * Created by ndegwamartin on 2019-05-27.
+ */
 public class ChildRegisterFragmentModel extends BaseChildRegisterFragmentModel {
     @Override
     public AdvancedMatrixCursor createMatrixCursor(Response<String> response) {

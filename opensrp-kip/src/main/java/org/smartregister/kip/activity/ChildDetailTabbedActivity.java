@@ -10,23 +10,34 @@ import com.vijay.jsonwizard.constants.JsonFormConstants;
 import com.vijay.jsonwizard.domain.Form;
 
 import org.apache.commons.lang3.tuple.Triple;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.smartregister.AllConstants;
 import org.smartregister.child.activity.BaseChildDetailTabbedActivity;
-import org.smartregister.child.activity.BaseChildFormActivity;
 import org.smartregister.child.fragment.StatusEditDialogFragment;
 import org.smartregister.child.task.LoadAsyncTask;
-import org.smartregister.kip.R;
 import org.smartregister.kip.fragment.ChildRegistrationDataFragment;
+import org.smartregister.kip.R;
 import org.smartregister.kip.util.KipJsonFormUtils;
 import org.smartregister.kip.util.KipUtils;
+import org.smartregister.util.FormUtils;
+import org.smartregister.util.JsonFormUtils;
 import org.smartregister.util.Utils;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
+import timber.log.Timber;
 
 import static org.smartregister.kip.util.KipUtils.setAppLocale;
 
 
+/**
+ * Created by ndegwamartin on 06/03/2019.
+ */
 public class ChildDetailTabbedActivity extends BaseChildDetailTabbedActivity {
     private static List<String> nonEditableFields = Arrays.asList("Date_Birth", "Sex", "zeir_id", "Birth_Weight", "Birth_Height");
 
@@ -138,7 +149,7 @@ public class ChildDetailTabbedActivity extends BaseChildDetailTabbedActivity {
 
     @Override
     protected void navigateToRegisterActivity() {
-        Intent intent = new Intent(getApplicationContext(), ChildRegisterActivity.class);
+        Intent intent = new Intent(getApplicationContext(), org.smartregister.kip.activity.ChildRegisterActivity.class);
         intent.putExtra(AllConstants.INTENT_KEY.IS_REMOTE_LOGIN, false);
         startActivity(intent);
         finish();
@@ -146,18 +157,47 @@ public class ChildDetailTabbedActivity extends BaseChildDetailTabbedActivity {
 
     @Override
     public void startFormActivity(String formData) {
-        Intent intent = new Intent(getApplicationContext(), BaseChildFormActivity.class);
-
         Form formParam = new Form();
         formParam.setWizard(false);
         formParam.setHideSaveLabel(true);
         formParam.setNextLabel("");
 
+        Intent intent = new Intent(getApplicationContext(), org.smartregister.child.util.Utils.metadata().childFormActivity);
         intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, formParam);
         intent.putExtra(JsonFormConstants.JSON_FORM_KEY.JSON, formData);
 
         startActivityForResult(intent, REQUEST_CODE_GET_JSON);
+    }
 
+    @Override
+    protected String getReportDeceasedMetadata() {
+        try {
+            JSONObject form = FormUtils.getInstance(getApplicationContext()).getFormJson("report_deceased");
+            if (form != null) {
+                //inject zeir id into the form
+                JSONObject stepOne = form.getJSONObject(JsonFormUtils.STEP1);
+                JSONArray jsonArray = stepOne.getJSONArray(JsonFormUtils.FIELDS);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Date_of_Death")) {
+                        SimpleDateFormat simpleDateFormat =
+                                new SimpleDateFormat(com.vijay.jsonwizard.utils.FormUtils.NATIIVE_FORM_DATE_FORMAT_PATTERN,
+                                        Locale.ENGLISH);
+                        String dobString = Utils.getValue(childDetails.getColumnmaps(), "dob", true);
+                        Date dob = Utils.dobStringToDate(dobString);
+                        if (dob != null) {
+                            jsonObject.put("min_date", simpleDateFormat.format(dob));
+                        }
+                        break;
+                    }
+                }
+            }
 
+            return form == null ? null : form.toString();
+
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+        return "";
     }
 }

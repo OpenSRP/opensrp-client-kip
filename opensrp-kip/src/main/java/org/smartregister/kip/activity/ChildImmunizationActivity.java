@@ -27,11 +27,20 @@ public class ChildImmunizationActivity extends BaseChildImmunizationActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LocationSwitcherToolbar myToolbar  = (LocationSwitcherToolbar) this.getToolbar();
+
+        if (myToolbar != null) {
+            myToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+        }
     }
 
     @Override
     protected void goToRegisterPage() {
-        Intent intent = new Intent(this, ChildRegisterActivity.class);
+        Intent intent = new Intent(this, org.smartregister.kip.activity.ChildRegisterActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();

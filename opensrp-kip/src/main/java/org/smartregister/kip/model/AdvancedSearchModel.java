@@ -15,7 +15,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * Created by ndegwamartin on 2019-05-27.
+ */
 public class AdvancedSearchModel extends BaseChildAdvancedSearchModel {
     @Override
     public Map<String, String> createEditMap(Map<String, String> editMap) {

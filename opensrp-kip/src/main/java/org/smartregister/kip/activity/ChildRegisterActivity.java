@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
-import android.view.MenuItem;
 
 import com.vijay.jsonwizard.constants.JsonFormConstants;
 import com.vijay.jsonwizard.domain.Form;
@@ -22,17 +21,26 @@ import org.smartregister.child.util.Constants;
 import org.smartregister.child.util.JsonFormUtils;
 import org.smartregister.child.util.Utils;
 import org.smartregister.kip.R;
+import org.smartregister.kip.contract.NavigationMenuContract;
 import org.smartregister.kip.event.LoginEvent;
-import org.smartregister.kip.fragment.AdvancedSearchFragment;
 import org.smartregister.kip.fragment.ChildRegisterFragment;
+import org.smartregister.kip.fragment.KipMeFragment;
 import org.smartregister.kip.util.KipConstants;
 import org.smartregister.kip.util.KipUtils;
+import org.smartregister.kip.view.NavDrawerActivity;
 import org.smartregister.kip.view.NavigationMenu;
 import org.smartregister.view.fragment.BaseRegisterFragment;
 
 import java.lang.ref.WeakReference;
 
-public class ChildRegisterActivity extends BaseChildRegisterActivity {
+public class ChildRegisterActivity extends BaseChildRegisterActivity implements NavDrawerActivity, NavigationMenuContract {
+
+    private NavigationMenu navigationMenu;
+
+    @Override
+    public NavigationMenu getNavigationMenu() {
+        return navigationMenu;
+    }
 
     @Override
     protected void attachBaseContext(android.content.Context base) {
@@ -46,30 +54,24 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity {
     }
 
     @Override
-    protected void registerBottomNavigation() {
-        super.registerBottomNavigation();
-
-        MenuItem clients = bottomNavigationView.getMenu().findItem(org.smartregister.child.R.id.action_clients);
-        if (clients != null) {
-            clients.setTitle(getString(org.smartregister.child.R.string.header_children));
-        }
-        bottomNavigationView.getMenu().removeItem(R.id.action_scan_qr);
-        bottomNavigationView.getMenu().removeItem(R.id.action_scan_card);
-    }
-
-    @Override
     protected Fragment[] getOtherFragments() {
-        ADVANCED_SEARCH_POSITION = 1;
+        ME_POSITION = 1;
 
         Fragment[] fragments = new Fragment[1];
-        fragments[ADVANCED_SEARCH_POSITION - 1] = new AdvancedSearchFragment();
+        fragments[ME_POSITION - 1] = new KipMeFragment();
 
         return fragments;
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void registerBottomNavigation() {
+        //do nothing
     }
 
     @Override
@@ -104,13 +106,27 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity {
     @Override
     protected void onResumption() {
         super.onResumption();
-        openDrawer();
+        createDrawer();
     }
 
-    public void openDrawer() {
-        NavigationMenu navigationMenu = NavigationMenu.getInstance(this, null, null);
+    private void createDrawer() {
+        navigationMenu = NavigationMenu.getInstance(this, null, null);
         navigationMenu.getNavigationAdapter().setSelectedView(KipConstants.DrawerMenu.CHILD_CLIENTS);
         navigationMenu.runRegisterCount();
+    }
+
+    @Override
+    public void openDrawer() {
+        if (navigationMenu != null) {
+            navigationMenu.openDrawer();
+        }
+    }
+
+    @Override
+    public void closeDrawer() {
+        if (navigationMenu != null) {
+            navigationMenu.closeDrawer();
+        }
     }
 
     @Override
@@ -130,7 +146,6 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity {
                     showNfcDialog();
                 }
             });
-
         }
     }
 
@@ -160,5 +175,11 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity {
 
         intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, form);
         startActivityForResult(intent, JsonFormUtils.REQUEST_CODE_GET_JSON);
+    }
+
+
+    @Override
+    public void finishActivity() {
+        finish();
     }
 }

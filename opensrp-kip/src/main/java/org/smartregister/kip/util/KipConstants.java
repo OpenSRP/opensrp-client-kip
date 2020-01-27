@@ -2,6 +2,10 @@ package org.smartregister.kip.util;
 
 public class KipConstants {
 
+    public static final String MOTHER_TDV_DOSES = "mother_tdv_doses";
+    public static final String PROTECTED_AT_BIRTH = "protected_at_birth";
+    public static final String REACTION_VACCINE = "Reaction_Vaccine";
+
     public static final class KEY {
         public static final String MOTHER_BASE_ENTITY_ID = "mother_base_entity_id";
         public static final String DB_MOTHER_DOB = "mother_dob";
@@ -140,13 +144,14 @@ public class KipConstants {
         public static final String LASTNAME = "lastName";
         public static final String ATTRIBUTES = "attributes";
         public static final int FIVE_YEAR = 5;
+        public static final String OPD_REGISTRATION = "Opd Registration" ;
         public static String FINGERPRINT_MESSAGE = "FINGERPRINT_MESSAGE";
-        public static final String M_KIP_ID = "M_KIP_ID";
-        public static final String OPENMRS_ID = "OPENMRS_ID";
+        public static String SITE_CHARACTERISTICS = "site_characteristics";
     }
 
     public static final class DrawerMenu {
         public static final String ALL_FAMILIES = "All Families";
+        public static final String ALL_CLIENTS = "All Clients";
         public static final String ANC_CLIENTS = "ANC Clients";
         public static final String CHILD_CLIENTS = "Child Clients";
         public static final String HIV_CLIENTS = "Hiv Clients";
@@ -155,6 +160,10 @@ public class KipConstants {
         public static final String PNC = "PNC";
         public static final String FAMILY_PLANNING = "Family Planning";
         public static final String MALARIA = "Malaria";
+    }
+
+    public static final class FormTitleUtil {
+        public static final String UPDATE_CHILD_FORM = "Update Child Registration";
     }
 
     public static final class RQ_CODE {
@@ -247,5 +256,18 @@ public class KipConstants {
     public static final class JSONFORM {
         public final static String CHILD_ENROLLMENT = "child_enrollment";
         public final static String OUT_OF_CATCHMENT = "out_of_catchment_service";
+    }
+
+    public class IntentKeyUtil {
+        public static final String IS_REMOTE_LOGIN = "is_remote_login";
+    }
+
+    public interface DateFormat {
+        String HH_MM_AMPM = "h:mm a";
+    }
+
+    public interface RegisterType {
+        String ANC = "anc";
+        String CHILD = "child";
     }
 }
