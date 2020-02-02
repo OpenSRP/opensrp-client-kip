@@ -80,12 +80,4 @@ public class NavigationListener implements View.OnClickListener {
 
         activity.startActivity(new Intent(activity, clas));
     }
-
-    /*private void startRegisterActivity(Class registerClass) {
-        Intent intent = new Intent(activity, registerClass);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        activity.startActivity(intent);
-        activity.overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
-        activity.finish();
-    }*/
 }

@@ -50,10 +50,8 @@ import java.util.Locale;
 import timber.log.Timber;
 
 public class NavigationMenu implements NavigationContract.View, SyncStatusBroadcastReceiver.SyncStatusListener, OnLocationChangeListener {
-
     private static NavigationMenu instance;
     private static WeakReference<Activity> activityWeakReference;
-    private String TAG = NavigationMenu.class.getCanonicalName();
     private DrawerLayout drawer;
     private Toolbar toolbar;
     private NavigationAdapter navigationAdapter;
@@ -164,12 +162,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         LinearLayout locationLayout = rootView.findViewById(R.id.giz_location_layout);
 
 
-        locationLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                KipUtils.showLocations(activity, instance, null);
-            }
-        });
+        locationLayout.setOnClickListener(v -> KipUtils.showLocations(activity, instance, null));
 
         txtLocationSelected = rootView.findViewById(R.id.giz_txt_location_selected);
 
@@ -206,15 +199,12 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
 
     private void registerSettings(@NonNull final Activity activity) {
         if (settingsLayout != null) {
-            settingsLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (activity instanceof BaseRegisterActivity) {
-                        ((BaseRegisterActivity) activity).switchToFragment(BaseRegisterActivity.ME_POSITION);
-                        closeDrawer();
-                    } else {
-                        Timber.e(new Exception("Cannot open Settings since this activity is not a child of BaseRegisterActivity"));
-                    }
+            settingsLayout.setOnClickListener(v -> {
+                if (activity instanceof BaseRegisterActivity) {
+                    ((BaseRegisterActivity) activity).switchToFragment(BaseRegisterActivity.ME_POSITION);
+                    closeDrawer();
+                } else {
+                    Timber.e(new Exception("Cannot open Settings since this activity is not a child of BaseRegisterActivity"));
                 }
             });
         }
@@ -236,12 +226,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
 
     private void registerLogout(final Activity parentActivity) {
         mPresenter.displayCurrentUser();
-        tvLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logout(parentActivity);
-            }
-        });
+        tvLogout.setOnClickListener(v -> logout(parentActivity));
     }
 
     private void registerSync(final Activity parentActivity) {
@@ -250,13 +235,10 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         ivSync = rootView.findViewById(R.id.ivSyncIcon);
         syncProgressBar = rootView.findViewById(R.id.pbSync);
 
-        View.OnClickListener syncClicker = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(parentActivity, parentActivity.getResources().getText(R.string.action_start_sync),
-                        Toast.LENGTH_SHORT).show();
-                mPresenter.sync(parentActivity);
-            }
+        View.OnClickListener syncClicker = v -> {
+            Toast.makeText(parentActivity, parentActivity.getResources().getText(R.string.action_start_sync),
+                    Toast.LENGTH_SHORT).show();
+            mPresenter.sync(parentActivity);
         };
 
 
@@ -274,12 +256,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
 
     private void registerDeviceToDeviceSync(@NonNull final Activity activity) {
         rootView.findViewById(R.id.rlIconDevice)
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        startP2PActivity(activity);
-                    }
-                });
+                .setOnClickListener(v -> startP2PActivity(activity));
     }
 
     protected void refreshSyncProgressSpinner() {

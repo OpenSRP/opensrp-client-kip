@@ -14,11 +14,8 @@ import org.smartregister.kip.util.KipUtils;
 import org.smartregister.view.LocationPickerView;
 
 public class KipMeFragment extends MeFragment implements OnLocationChangeListener {
-
     private View view;
-
     private KipMeFragment fragment;
-
     private LocationPickerView facilitySelection;
 
     @Override
