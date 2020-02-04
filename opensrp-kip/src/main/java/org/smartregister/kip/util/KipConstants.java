@@ -102,7 +102,7 @@ public class KipConstants {
         public static final String COUNTY = "County";
         public static final String SUB_COUNTY = "Sub_County";
         public static final String WARD = "Ward";
-        public static final String MALAWI_ID = "mer_id";
+        public static final String KIP_ID = "zeir_id";
         public static final String CHILD_REGISTER_CARD_NUMBER = "Child_Register_Card_Number";
         public static final String MIDDLE_NAME = "middle_name";
         public static final String BIRTH_HEIGHT = "Birth_Height";

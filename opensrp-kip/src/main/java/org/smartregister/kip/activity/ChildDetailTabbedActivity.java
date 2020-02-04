@@ -72,11 +72,8 @@ public class ChildDetailTabbedActivity extends BaseChildDetailTabbedActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         super.onOptionsItemSelected(item);
-
         detailsMap = getChildDetails().getColumnmaps();
-
         switch (item.getItemId()) {
             case R.id.registration_data:
                 String populatedForm = KipChildJsonFormUtils.getMetadataForEditForm(this, detailsMap, nonEditableFields);

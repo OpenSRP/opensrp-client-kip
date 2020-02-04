@@ -2,6 +2,7 @@ package org.smartregister.kip.repository;
 
 import android.database.Cursor;
 
+import org.jetbrains.annotations.NotNull;
 import org.opensrp.api.domain.Location;
 import org.smartregister.repository.LocationRepository;
 
@@ -14,13 +15,13 @@ import java.util.Set;
 import timber.log.Timber;
 
 public class KipLocationRepository extends LocationRepository {
-    public static final String LOCATIONS_TABLE_NAME = "locations";
-    public static final String ID_COLUMN = "_id";
-    public static final String UUID_COLUMN = "uuid";
-    public static final String NAME_COLUMN = "name";
-    public static final String TAG_COLUMN = "geojson";
-    public static final String PARENT_UUID_COLUMN = "parent_uuid";
-    public static final String[] LOCATIONS_TABLE_COLUMNS = {ID_COLUMN, UUID_COLUMN, NAME_COLUMN, TAG_COLUMN, PARENT_UUID_COLUMN};
+    private static final String LOCATIONS_TABLE_NAME = "locations";
+    private static final String ID_COLUMN = "_id";
+    private static final String UUID_COLUMN = "uuid";
+    private static final String NAME_COLUMN = "name";
+    private static final String TAG_COLUMN = "geojson";
+    private static final String PARENT_UUID_COLUMN = "parent_uuid";
+    private static final String[] LOCATIONS_TABLE_COLUMNS = {ID_COLUMN, UUID_COLUMN, NAME_COLUMN, TAG_COLUMN, PARENT_UUID_COLUMN};
 
     public KipLocationRepository(KipRepository repository) {
         super(repository);
@@ -41,20 +42,26 @@ public class KipLocationRepository extends LocationRepository {
         if (cursor != null && cursor.getCount() > 0 && cursor.moveToFirst()) {
             cursor.moveToFirst();
             while (cursor.getCount() > 0 && !cursor.isAfterLast()) {
-                Location location = new Location();
-                location.setLocationId(cursor.getString(1));
-                location.setName(cursor.getString(2));
-
-                String tagString = cursor.getString(3);
-                String[] tagsArray = tagString.split(":");
-                Set<String> tags = new HashSet<>(Arrays.asList(tagsArray));
-                location.setTags(tags);
-
-                locations.add(location);
-
+                locations.add(getLocation(cursor));
                 cursor.moveToNext();
             }
         }
         return locations;
+    }
+
+    @NotNull
+    private Location getLocation(Cursor cursor) {
+        Location location = new Location();
+        location.setLocationId(cursor.getString(cursor.getColumnIndex(ID_COLUMN)));
+        location.setName(cursor.getString(cursor.getColumnIndex(NAME_COLUMN)));
+        location.setTags(getTags(cursor));
+        return location;
+    }
+
+    @NotNull
+    private Set<String> getTags(Cursor cursor) {
+        String tagString = cursor.getString(cursor.getColumnIndex(TAG_COLUMN));
+        String[] tagsArray = tagString.split(":");
+        return new HashSet<>(Arrays.asList(tagsArray));
     }
 }

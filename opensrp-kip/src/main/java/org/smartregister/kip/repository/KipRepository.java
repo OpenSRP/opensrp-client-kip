@@ -46,7 +46,6 @@ import timber.log.Timber;
 
 
 public class KipRepository extends Repository {
-
     protected SQLiteDatabase readableDatabase;
     protected SQLiteDatabase writableDatabase;
     private Context context;

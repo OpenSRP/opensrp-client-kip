@@ -10,6 +10,7 @@ import org.smartregister.kip.util.KipConstants;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,6 +85,6 @@ public class ChildRegistrationDataFragment extends BaseChildRegistrationDataFrag
 
     @Override
     protected List<String> addUnFormattedNumberFields(String... key) {
-        return Arrays.asList("mother_guardian_number");
+        return Collections.singletonList("mother_guardian_number");
     }
 }
