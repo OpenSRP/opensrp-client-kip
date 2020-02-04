@@ -42,7 +42,7 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
-public class KipUtils extends Utils {
+public class KipChildUtils extends Utils {
 
     public static final ArrayList<String> ALLOWED_LEVELS;
     public static final String FACILITY = "Facility";

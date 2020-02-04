@@ -13,6 +13,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
+import org.smartregister.Context;
 import org.smartregister.child.activity.BaseChildRegisterActivity;
 import org.smartregister.child.enums.LocationHierarchy;
 import org.smartregister.child.model.BaseChildRegisterModel;
@@ -25,10 +26,12 @@ import org.smartregister.kip.contract.NavigationMenuContract;
 import org.smartregister.kip.event.LoginEvent;
 import org.smartregister.kip.fragment.ChildRegisterFragment;
 import org.smartregister.kip.fragment.KipMeFragment;
+import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.kip.util.KipConstants;
-import org.smartregister.kip.util.KipUtils;
+import org.smartregister.kip.util.KipLocationUtility;
 import org.smartregister.kip.view.NavDrawerActivity;
 import org.smartregister.kip.view.NavigationMenu;
+import org.smartregister.login.task.RemoteLoginTask;
 import org.smartregister.view.fragment.BaseRegisterFragment;
 
 import java.lang.ref.WeakReference;
@@ -45,8 +48,8 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
     @Override
     protected void attachBaseContext(android.content.Context base) {
         // get language from prefs
-        String lang = KipUtils.getLanguage(base.getApplicationContext());
-        super.attachBaseContext(KipUtils.setAppLocale(base, lang));
+        String lang = KipChildUtils.getLanguage(base.getApplicationContext());
+        super.attachBaseContext(KipChildUtils.setAppLocale(base, lang));
     }
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +141,7 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void showNfcNotInstalledDialog(LoginEvent event) {
         if (event != null) {
-            KipUtils.removeStickyEvent(event);
+            KipChildUtils.removeStickyEvent(event);
 
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
@@ -150,7 +153,7 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
     }
 
     private void showNfcDialog() {
-        KipUtils.showDialogMessage(this, R.string.nfc_sdk_missing, R.string.please_install_nfc_sdk);
+        KipChildUtils.showDialogMessage(this, R.string.nfc_sdk_missing, R.string.please_install_nfc_sdk);
     }
 
     public void refresh() {
@@ -162,10 +165,12 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
     @Override
     public void startFormActivity(JSONObject jsonForm) {
         Intent intent = new Intent(this, Utils.metadata().childFormActivity);
+        Context context = RemoteLoginTask.getOpenSRPContext();
         if (jsonForm.has(KipConstants.KEY.ENCOUNTER_TYPE) && jsonForm.optString(KipConstants.KEY.ENCOUNTER_TYPE).equals(
                 KipConstants.KEY.BIRTH_REGISTRATION)) {
             JsonFormUtils.addChildRegLocHierarchyQuestions(jsonForm, KipConstants.KEY.REGISTRATION_HOME_ADDRESS, LocationHierarchy.ENTIRE_TREE);
         }
+        KipLocationUtility.addChildRegLocHierarchyQuestions(jsonForm, context);
         intent.putExtra(Constants.INTENT_KEY.JSON, jsonForm.toString());
 
         Form form = new Form();

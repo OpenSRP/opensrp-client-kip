@@ -34,7 +34,7 @@ import org.smartregister.kip.contract.NavigationContract;
 import org.smartregister.kip.listener.OnLocationChangeListener;
 import org.smartregister.kip.model.NavigationOption;
 import org.smartregister.kip.presenter.NavigationPresenter;
-import org.smartregister.kip.util.KipUtils;
+import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.p2p.activity.P2pModeSelectActivity;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
 import org.smartregister.view.activity.BaseRegisterActivity;
@@ -162,7 +162,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         LinearLayout locationLayout = rootView.findViewById(R.id.giz_location_layout);
 
 
-        locationLayout.setOnClickListener(v -> KipUtils.showLocations(activity, instance, null));
+        locationLayout.setOnClickListener(v -> KipChildUtils.showLocations(activity, instance, null));
 
         txtLocationSelected = rootView.findViewById(R.id.giz_txt_location_selected);
 

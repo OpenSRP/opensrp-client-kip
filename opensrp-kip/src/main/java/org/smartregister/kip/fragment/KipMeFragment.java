@@ -10,7 +10,7 @@ import org.smartregister.kip.R;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.contract.NavigationMenuContract;
 import org.smartregister.kip.listener.OnLocationChangeListener;
-import org.smartregister.kip.util.KipUtils;
+import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.view.LocationPickerView;
 
 public class KipMeFragment extends MeFragment implements OnLocationChangeListener {
@@ -35,7 +35,7 @@ public class KipMeFragment extends MeFragment implements OnLocationChangeListene
             locationLayout.setOnClickListener(v -> {
                 Activity activity = fragment.getActivity();
                 if (activity instanceof NavigationMenuContract) {
-                    KipUtils.showLocations(getActivity(), fragment, ((NavigationMenuContract) activity).getNavigationMenu());
+                    KipChildUtils.showLocations(getActivity(), fragment, ((NavigationMenuContract) activity).getNavigationMenu());
                 }
             });
         }

@@ -28,7 +28,7 @@ import org.smartregister.domain.jsonmapping.Table;
 import org.smartregister.kip.activity.ChildImmunizationActivity;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.util.KipConstants;
-import org.smartregister.kip.util.KipUtils;
+import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.growthmonitoring.domain.Height;
 import org.smartregister.growthmonitoring.domain.Weight;
 import org.smartregister.growthmonitoring.repository.HeightRepository;
@@ -168,7 +168,7 @@ public class KipProcessorForJava extends ClientProcessorForJava {
 
     private void processDeathEvent(@NonNull EventClient eventClient) {
         if (eventClient.getEvent().getEntityType().equals(KipConstants.EntityType.CHILD)) {
-            KipUtils.updateChildDeath(eventClient);
+            KipChildUtils.updateChildDeath(eventClient);
         }
     }
 

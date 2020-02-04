@@ -25,7 +25,7 @@ import java.util.Map;
 
 import timber.log.Timber;
 
-public class KipJsonFormUtils extends JsonFormUtils {
+public class KipChildJsonFormUtils extends JsonFormUtils {
 
     public static String getMetadataForEditForm(Context context, Map<String, String> childDetails, List<String> nonEditableFields) {
         try {

@@ -25,7 +25,7 @@ import org.smartregister.kip.application.KipApplication;
 
 @PrepareForTest({Utils.class, KipApplication.class, CoreLibrary.class})
 @RunWith(PowerMockRunner.class)
-public class KipUtilsTest {
+public class KipChildUtilsTest {
 
     @Mock
     private KipApplication gizMalawiApplication;
@@ -63,7 +63,7 @@ public class KipUtilsTest {
         client.setDeathdate(new DateTime());
         EventClient eventClient = new EventClient(new Event(), client);
 
-        KipUtils.updateChildDeath(eventClient);
+        KipChildUtils.updateChildDeath(eventClient);
 
         Mockito.verify(allCommonsRepository).update((String) argumentCaptorUpdateChildTable.capture(), (ContentValues) argumentCaptorUpdateChildTable.capture(), (String) argumentCaptorUpdateChildTable.capture());
         Mockito.verify(allCommonsRepository).updateSearch((String) argumentCaptorUpdateChildFtsTable.capture());

@@ -302,5 +302,101 @@
         }
       }
     ]
+  },
+  {
+    "type": "ITN",
+    "service_logic": "",
+    "units": "",
+    "openmrs_service_name": {
+      "parent_entity": "",
+      "entity": "concept",
+      "entity_id": "159855AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "openmrs_date": {
+      "parent_entity": "",
+      "entity": "date",
+      "entity_id": "159432AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "services": [
+      {
+        "id": "21",
+        "name": "ITN 1",
+        "dose": "",
+        "schedule": {
+          "due": {
+            "reference": "dob",
+            "offset": "+0d"
+          },
+          "expiry": {
+            "reference": "dob",
+            "offset": "+5y"
+          }
+        }
+      },
+      {
+        "id": "22",
+        "name": "ITN 2",
+        "dose": "",
+        "schedule": {
+          "due": {
+            "reference": "prerequisite",
+            "prerequisite": "ITN 1",
+            "offset": "+12m"
+          },
+          "expiry": {
+            "reference": "dob",
+            "offset": "+5y"
+          }
+        }
+      },
+      {
+        "id": "23",
+        "name": "ITN 3",
+        "dose": "",
+        "schedule": {
+          "due": {
+            "reference": "prerequisite",
+            "prerequisite": "ITN 2",
+            "offset": "+12m"
+          },
+          "expiry": {
+            "reference": "dob",
+            "offset": "+5y"
+          }
+        }
+      },
+      {
+        "id": "24",
+        "name": "ITN 4",
+        "dose": "",
+        "schedule": {
+          "due": {
+            "reference": "prerequisite",
+            "prerequisite": "ITN 3",
+            "offset": "+12m"
+          },
+          "expiry": {
+            "reference": "dob",
+            "offset": "+5y"
+          }
+        }
+      },
+      {
+        "id": "25",
+        "name": "ITN 5",
+        "dose": "",
+        "schedule": {
+          "due": {
+            "reference": "prerequisite",
+            "prerequisite": "ITN 4",
+            "offset": "+12m"
+          },
+          "expiry": {
+            "reference": "dob",
+            "offset": "+5y"
+          }
+        }
+      }
+    ]
   }
 ]

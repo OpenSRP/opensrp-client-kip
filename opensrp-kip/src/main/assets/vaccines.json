@@ -455,119 +455,6 @@
     ]
   },
   {
-    "name": "5 Months",
-    "id": "Five_Months",
-    "days_after_birth_due": 152,
-    "vaccines": [
-      {
-        "name": "MV 1",
-        "type": "MV",
-        "openmrs_date": {
-          "parent_entity": "783AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-          "entity": "concept",
-          "entity_id": "1410AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-        },
-        "openmrs_calculate": {
-          "parent_entity": "783AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-          "entity": "concept",
-          "entity_id": "1418AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-          "calculation": 0
-        },
-        "schedule": {
-          "due": [
-            {
-              "reference": "dob",
-              "offset": "+5m",
-              "window": "+14d"
-            }
-          ],
-          "expiry": [
-            {
-              "reference": "dob",
-              "offset": "+10m"
-            }
-          ]
-        }
-      }
-    ]
-  },
-  {
-    "name": "6 Months",
-    "id": "Six_Months",
-    "days_after_birth_due": 183,
-    "vaccines": [
-      {
-        "name": "MV 2",
-        "type": "MV",
-        "openmrs_date": {
-          "parent_entity": "783AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-          "entity": "concept",
-          "entity_id": "1410AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-        },
-        "openmrs_calculate": {
-          "parent_entity": "783AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-          "entity": "concept",
-          "entity_id": "1418AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-          "calculation": 0
-        },
-        "schedule": {
-          "due": [
-            {
-              "reference": "prerequisite",
-              "prerequisite": "MV 1",
-              "offset": "+1m",
-              "window": "+14d"
-            }
-          ],
-          "expiry": [
-            {
-              "reference": "dob",
-              "offset": "+1y,8m"
-            }
-          ]
-        }
-      }
-    ]
-  },
-  {
-    "name": "7 Months",
-    "id": "Seven_Months",
-    "days_after_birth_due": 213,
-    "vaccines": [
-      {
-        "name": "MV 3",
-        "type": "MV",
-        "openmrs_date": {
-          "parent_entity": "783AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-          "entity": "concept",
-          "entity_id": "1410AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-        },
-        "openmrs_calculate": {
-          "parent_entity": "783AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-          "entity": "concept",
-          "entity_id": "1418AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-          "calculation": 0
-        },
-        "schedule": {
-          "due": [
-            {
-              "reference": "prerequisite",
-              "prerequisite": "MV 2",
-              "offset": "+1m",
-              "window": "+14d"
-            }
-          ],
-          "expiry": [
-            {
-              "reference": "dob",
-              "offset": "+1y,9m"
-            }
-          ]
-        }
-      }
-    ]
-  },
-  {
     "name": "9 Months",
     "id": "Nine_Months",
     "days_after_birth_due": 274,
@@ -604,9 +491,10 @@
       }
     ]
   },
+
   {
-    "name": "15 Months",
-    "id": "Fifteen_Months",
+    "name": "18 Months",
+    "id": "Eighteen_Months",
     "days_after_birth_due": 456,
     "vaccines": [
       {
@@ -626,8 +514,9 @@
         "schedule": {
           "due": [
             {
-              "reference": "dob",
-              "offset": "+15m",
+              "reference": "prerequisite",
+              "prerequisite": "MR 1",
+              "offset": "+18m",
               "window": "+35d"
             }
           ],
@@ -643,44 +532,6 @@
               "vaccine": "MR 1",
               "comparison": "at_least",
               "value": "+0d"
-            }
-          ]
-        }
-      }
-    ]
-  },
-  {
-    "name": "22 Months",
-    "id": "Twenty_Two_Months",
-    "days_after_birth_due": 669,
-    "vaccines": [
-      {
-        "name": "MV 4",
-        "type": "MV",
-        "openmrs_date": {
-          "parent_entity": "783AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-          "entity": "concept",
-          "entity_id": "1410AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-        },
-        "openmrs_calculate": {
-          "parent_entity": "783AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-          "entity": "concept",
-          "entity_id": "1418AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-          "calculation": 0
-        },
-        "schedule": {
-          "due": [
-            {
-              "reference": "prerequisite",
-              "prerequisite": "MV 3",
-              "offset": "+1m",
-              "window": "+14d"
-            }
-          ],
-          "expiry": [
-            {
-              "reference": "dob",
-              "offset": "+3y"
             }
           ]
         }

@@ -98,7 +98,10 @@ public class KipConstants {
         public static final String DEVICEID = "deviceid";
         public static final String VIEW_CONFIGURATION_PREFIX = "ViewConfiguration_";
         public static final String ARABIC_LOCALE = "ar";
-        public static final String HOME_FACILITY = "home_address";
+        public static final String HOME_FACILITY = "Home_Facility";
+        public static final String COUNTY = "County";
+        public static final String SUB_COUNTY = "Sub_County";
+        public static final String WARD = "Ward";
         public static final String MALAWI_ID = "mer_id";
         public static final String CHILD_REGISTER_CARD_NUMBER = "Child_Register_Card_Number";
         public static final String MIDDLE_NAME = "middle_name";
@@ -144,7 +147,7 @@ public class KipConstants {
         public static final String LASTNAME = "lastName";
         public static final String ATTRIBUTES = "attributes";
         public static final int FIVE_YEAR = 5;
-        public static final String OPD_REGISTRATION = "Opd Registration" ;
+        public static final String OPD_REGISTRATION = "Opd Registration";
         public static String FINGERPRINT_MESSAGE = "FINGERPRINT_MESSAGE";
         public static String SITE_CHARACTERISTICS = "site_characteristics";
     }

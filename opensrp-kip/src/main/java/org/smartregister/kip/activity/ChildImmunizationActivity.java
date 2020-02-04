@@ -13,15 +13,15 @@ import org.smartregister.child.toolbar.LocationSwitcherToolbar;
 import org.smartregister.child.util.Constants;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.kip.application.KipApplication;
-import org.smartregister.kip.util.KipUtils;
+import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.location.helper.LocationHelper;
 
 public class ChildImmunizationActivity extends BaseChildImmunizationActivity {
     @Override
     protected void attachBaseContext(Context base) {
         // get language from prefs
-        String lang = KipUtils.getLanguage(base.getApplicationContext());
-        super.attachBaseContext(KipUtils.setAppLocale(base, lang));
+        String lang = KipChildUtils.getLanguage(base.getApplicationContext());
+        super.attachBaseContext(KipChildUtils.setAppLocale(base, lang));
     }
 
     @Override

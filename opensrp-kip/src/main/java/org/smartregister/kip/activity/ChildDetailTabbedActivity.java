@@ -18,8 +18,8 @@ import org.smartregister.child.fragment.StatusEditDialogFragment;
 import org.smartregister.child.task.LoadAsyncTask;
 import org.smartregister.kip.fragment.ChildRegistrationDataFragment;
 import org.smartregister.kip.R;
-import org.smartregister.kip.util.KipJsonFormUtils;
-import org.smartregister.kip.util.KipUtils;
+import org.smartregister.kip.util.KipChildJsonFormUtils;
+import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.util.FormUtils;
 import org.smartregister.util.JsonFormUtils;
 import org.smartregister.util.Utils;
@@ -32,7 +32,7 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
-import static org.smartregister.kip.util.KipUtils.setAppLocale;
+import static org.smartregister.kip.util.KipChildUtils.setAppLocale;
 
 
 /**
@@ -44,7 +44,7 @@ public class ChildDetailTabbedActivity extends BaseChildDetailTabbedActivity {
     @Override
     protected void attachBaseContext(android.content.Context base) {
         // get language from prefs
-        String lang = KipUtils.getLanguage(base.getApplicationContext());
+        String lang = KipChildUtils.getLanguage(base.getApplicationContext());
         super.attachBaseContext(setAppLocale(base, lang));
     }
 
@@ -79,7 +79,7 @@ public class ChildDetailTabbedActivity extends BaseChildDetailTabbedActivity {
 
         switch (item.getItemId()) {
             case R.id.registration_data:
-                String populatedForm = KipJsonFormUtils.getMetadataForEditForm(this, detailsMap, nonEditableFields);
+                String populatedForm = KipChildJsonFormUtils.getMetadataForEditForm(this, detailsMap, nonEditableFields);
                 startFormActivity(populatedForm);
                 // User chose the "Settings" item, show the app settings UI...
                 return true;

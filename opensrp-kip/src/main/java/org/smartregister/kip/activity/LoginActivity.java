@@ -6,7 +6,7 @@ import android.os.Bundle;
 import org.smartregister.kip.R;
 import org.smartregister.kip.presenter.LoginPresenter;
 import org.smartregister.kip.util.KipConstants;
-import org.smartregister.kip.util.KipUtils;
+import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.task.SaveTeamLocationsTask;
 import org.smartregister.view.activity.BaseLoginActivity;
 import org.smartregister.view.contract.BaseLoginContract;
@@ -52,7 +52,7 @@ public class LoginActivity extends BaseLoginActivity implements BaseLoginContrac
     @Override
     protected void attachBaseContext(android.content.Context base) {
         // get language from prefs
-        String lang = KipUtils.getLanguage(base.getApplicationContext());
-        super.attachBaseContext(KipUtils.setAppLocale(base, lang));
+        String lang = KipChildUtils.getLanguage(base.getApplicationContext());
+        super.attachBaseContext(KipChildUtils.setAppLocale(base, lang));
     }
 }

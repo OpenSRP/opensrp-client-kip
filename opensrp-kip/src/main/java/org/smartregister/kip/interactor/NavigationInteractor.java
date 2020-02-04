@@ -10,7 +10,7 @@ import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.contract.NavigationContract;
 import org.smartregister.kip.util.AppExecutors;
 import org.smartregister.kip.util.KipConstants;
-import org.smartregister.kip.util.KipUtils;
+import org.smartregister.kip.util.KipChildUtils;
 
 import java.text.MessageFormat;
 import java.util.Date;
@@ -77,7 +77,7 @@ public class NavigationInteractor implements NavigationContract.Interactor {
         String mainCondition = "";
         if (tableName.equalsIgnoreCase(KipConstants.TABLE_NAME.CHILD)) {
             mainCondition = String.format(" where %s is null AND %s", KipConstants.KEY.DATE_REMOVED,
-                    KipUtils.childAgeLimitFilter());
+                    KipChildUtils.childAgeLimitFilter());
         } else if (tableName.equalsIgnoreCase(KipConstants.TABLE_NAME.MOTHER_TABLE_NAME)) {
             mainCondition = "WHERE next_contact IS NOT NULL";
         }

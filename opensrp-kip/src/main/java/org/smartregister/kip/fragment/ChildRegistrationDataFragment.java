@@ -34,6 +34,13 @@ public class ChildRegistrationDataFragment extends BaseChildRegistrationDataFrag
         resourceIds.put("home_addresss", R.string.home_address);
         resourceIds.put("village", R.string.village);
         resourceIds.put("traditional_authority", R.string.traditional_authority);
+        resourceIds.put("town", R.string.town);
+        resourceIds.put("union_council", R.string.union_council);
+        resourceIds.put("county", R.string.county);
+        resourceIds.put("sub_county", R.string.sub_county);
+        resourceIds.put("ward", R.string.ward);
+        resourceIds.put("sub_location", R.string.sub_location);
+        resourceIds.put("landmark", R.string.landmark);
         resourceIds.put("mother_guardian_first_name", R.string.mother_guardian_name);
         resourceIds.put("mother_guardian_last_name", R.string.mother_second_name);
         resourceIds.put("mother_dob", R.string.mother_guardian_dob);
