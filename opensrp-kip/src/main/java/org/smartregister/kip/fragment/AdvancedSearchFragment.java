@@ -16,6 +16,9 @@ import org.smartregister.view.activity.BaseRegisterActivity;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Created by ndegwamartin on 08/03/2019.
+ */
 public class AdvancedSearchFragment extends BaseAdvancedSearchFragment {
     protected MaterialEditText openSrpId;
     protected MaterialEditText motherGuardianLastName;

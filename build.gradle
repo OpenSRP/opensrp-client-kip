@@ -6,24 +6,18 @@ buildscript {
         google()
         jcenter()
     }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.0'
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-    }
 }
+
 
 allprojects {
     repositories {
-        maven { url 'https://maven.google.com' }
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         mavenLocal()
         mavenCentral()
         maven { url 'https://jitpack.io' }
-        maven { url "http://acra.googlecode.com/svn/repository/releases" }
-        maven { url "http://repo.maven.apache.org/maven2" }
-        maven { url "http://cloudant.github.io/cloudant-sync-eap/repository" }
+        maven { url "https://acra.googlecode.com/svn/repository/releases" }
+        maven { url "https://repo.maven.apache.org/maven2" }
+        maven { url "https://cloudant.github.io/cloudant-sync-eap/repository" }
         maven { url "https://s3.amazonaws.com/repo.commonsware.com" }
         google()
         jcenter()
@@ -36,7 +30,7 @@ subprojects {
 
     group = 'org.smartregister'
 
-    ext.androidToolsBuildGradle = '28.0.3'
+    ext.androidToolsBuildGradle = '3.1.2'
     ext.androidBuildToolsVersion = '28.0.3'
     ext.androidMinSdkVersion = 18
     ext.androidCompileSdkVersion = 28
@@ -44,6 +38,9 @@ subprojects {
 
     ext.androidAnnotationsVersion = '3.0.1'
     ext.androidAnnotationsAPIVersion = '3.0.1'
+
+    ext.jacocoVersion = "0.7.9"
+    ext.coverallsVersion = "2.8.1"
 
     // Improve build server performance by allowing disabling of pre-dexing
     // (see http://tools.android.com/tech-docs/new-build-system/tips#TOC-Improving-Build-Server-performance.)
@@ -56,6 +53,12 @@ subprojects {
     }
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+apply plugin: 'java'
+apply plugin: 'build-dashboard'
+
+buildDashboard {
+    reports.html.setDestination(file("build/"))
 }
+
+test.reports.html.enabled = false
+test.reports.junitXml.enabled = false

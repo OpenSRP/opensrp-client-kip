@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1.0"
-        android:background="@drawable/login_background">">
+        android:background="#F6F6F6"
+        android:paddingBottom="@dimen/login_bottom_margin">
 
 
         <!-- Top section -->
@@ -139,20 +140,20 @@
             <Button
                 android:id="@+id/login_login_btn"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_gravity="right|top"
-                android:layout_marginTop="25dp"
+                android:layout_height="55dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
                 android:layout_weight="8"
-                android:background="@drawable/login_button"
+                android:background="@drawable/login_button_bg"
                 android:ems="10"
-                android:onClick="login"
                 android:shadowColor="#ffffff"
                 android:shadowDx="0"
                 android:shadowDy="1"
                 android:shadowRadius="0.5"
                 android:text="@string/login_text"
-                android:textColor="#666666"
-                android:textSize="20sp"/>
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
 
         </LinearLayout>
         <!-- Bottom section -->

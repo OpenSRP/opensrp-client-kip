@@ -9,11 +9,15 @@ import org.smartregister.kip.R;
 import org.smartregister.kip.util.KipConstants;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * Created by ndegwamartin on 2019-05-30.
+ */
 public class ChildRegistrationDataFragment extends BaseChildRegistrationDataFragment {
 
     @Override
@@ -31,6 +35,13 @@ public class ChildRegistrationDataFragment extends BaseChildRegistrationDataFrag
         resourceIds.put("home_addresss", R.string.home_address);
         resourceIds.put("village", R.string.village);
         resourceIds.put("traditional_authority", R.string.traditional_authority);
+        resourceIds.put("town", R.string.town);
+        resourceIds.put("union_council", R.string.union_council);
+        resourceIds.put("county", R.string.county);
+        resourceIds.put("sub_county", R.string.sub_county);
+        resourceIds.put("ward", R.string.ward);
+        resourceIds.put("sub_location", R.string.sub_location);
+        resourceIds.put("landmark", R.string.landmark);
         resourceIds.put("mother_guardian_first_name", R.string.mother_guardian_name);
         resourceIds.put("mother_guardian_last_name", R.string.mother_second_name);
         resourceIds.put("mother_dob", R.string.mother_guardian_dob);
@@ -70,5 +81,10 @@ public class ChildRegistrationDataFragment extends BaseChildRegistrationDataFrag
         }
 
         setmAdapter(new ChildRegistrationDataAdapter(mArrayList));
+    }
+
+    @Override
+    protected List<String> addUnFormattedNumberFields(String... key) {
+        return Collections.singletonList("mother_guardian_number");
     }
 }

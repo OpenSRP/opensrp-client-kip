@@ -1,39 +1,61 @@
 package org.smartregister.kip.util;
 
+import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.util.DisplayMetrics;
 
+import com.google.common.reflect.TypeToken;
+import com.vijay.jsonwizard.customviews.TreeViewDialog;
+
 import org.greenrobot.eventbus.EventBus;
+import org.jetbrains.annotations.Nullable;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.smartregister.child.util.Constants;
+import org.smartregister.child.util.Utils;
+import org.smartregister.commonregistry.AllCommonsRepository;
+import org.smartregister.domain.db.Client;
+import org.smartregister.domain.db.EventClient;
+import org.smartregister.domain.form.FormLocation;
+import org.smartregister.kip.BuildConfig;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.event.BaseEvent;
+import org.smartregister.kip.listener.OnLocationChangeListener;
+import org.smartregister.kip.view.NavigationMenu;
+import org.smartregister.location.helper.LocationHelper;
 import org.smartregister.repository.AllSharedPreferences;
+import org.smartregister.util.AssetHandler;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
-public class KipUtils extends org.smartregister.child.util.Utils {
+import timber.log.Timber;
+
+public class KipChildUtils extends Utils {
 
     public static final ArrayList<String> ALLOWED_LEVELS;
-    public static final String FACILITY = "Ward";
-    public static final String ZONE = "Health Facility";
+    public static final String FACILITY = "Facility";
+    public static final String DEFAULT_LOCATION_LEVEL = "Health Facility";
     public static final SimpleDateFormat DB_DF = new SimpleDateFormat("yyyy-MM-dd");
     public static final String LANGUAGE = "language";
     private static final String PREFERENCES_FILE = "lang_prefs";
-    public static final String DEFAULT_LOCATION_LEVEL = "Health Facility";
 
     static {
         ALLOWED_LEVELS = new ArrayList<>();
-        ALLOWED_LEVELS.add("Health Facility");
-        ALLOWED_LEVELS.add("Zone");
+        ALLOWED_LEVELS.add(DEFAULT_LOCATION_LEVEL);
+        ALLOWED_LEVELS.add(FACILITY);
     }
-
 
     public static void showDialogMessage(Context context, int title, int message) {
         showDialogMessage(context, title > 0 ? context.getResources().getString(title) : "",
@@ -120,4 +142,58 @@ public class KipUtils extends org.smartregister.child.util.Utils {
     private static String childAgeLimitFilter(String dateColumn, int age) {
         return " ((( julianday('now') - julianday(" + dateColumn + "))/365.25) <" + age + ")";
     }
+
+    public static void updateChildDeath(@NonNull EventClient eventClient) {
+        Client client = eventClient.getClient();
+        ContentValues values = new ContentValues();
+        values.put(Constants.KEY.DOD, Utils.convertDateFormat(client.getDeathdate()));
+        values.put(Constants.KEY.DATE_REMOVED, Utils.convertDateFormat(client.getDeathdate().toDate(), Utils.DB_DF));
+        String tableName = Utils.metadata().childRegister.tableName;
+        AllCommonsRepository allCommonsRepository = KipApplication.getInstance().context().allCommonsRepositoryobjects(tableName);
+        if (allCommonsRepository != null) {
+            allCommonsRepository.update(tableName, values, client.getBaseEntityId());
+            allCommonsRepository.updateSearch(client.getBaseEntityId());
+        }
+    }
+
+    @NonNull
+    private static ArrayList<String> getLocationLevels() {
+        return new ArrayList<>(Arrays.asList(BuildConfig.LOCATION_LEVELS));
+    }
+
+    @NonNull
+    private static ArrayList<String> getHealthFacilityLevels() {
+        return new ArrayList<>(Arrays.asList(BuildConfig.HEALTH_FACILITY_LEVELS));
+    }
+
+    public static void showLocations(@Nullable Activity context, @NonNull OnLocationChangeListener onLocationChangeListener, @Nullable NavigationMenu navigationMenu) {
+        try {
+            ArrayList<String> allLevels = getLocationLevels();
+            ArrayList<String> healthFacilities = getHealthFacilityLevels();
+            ArrayList<String> defaultLocation = (ArrayList<String>) LocationHelper.getInstance().generateDefaultLocationHierarchy(allLevels);
+            List<FormLocation> upToFacilities = LocationHelper.getInstance().generateLocationHierarchyTree(false, healthFacilities);
+            String upToFacilitiesString = AssetHandler.javaToJsonString(upToFacilities, new TypeToken<List<FormLocation>>() {
+            }.getType());
+            TreeViewDialog treeViewDialog = new TreeViewDialog(context,
+                    new JSONArray(upToFacilitiesString), defaultLocation, defaultLocation);
+            treeViewDialog.setCancelable(true);
+            treeViewDialog.setCanceledOnTouchOutside(true);
+            treeViewDialog.setOnDismissListener(dialog -> {
+                ArrayList<String> treeViewDialogName = treeViewDialog.getName();
+                if (!treeViewDialogName.isEmpty()) {
+                    String newLocation = treeViewDialogName.get(treeViewDialogName.size() - 1);
+                    KipApplication.getInstance().context().allSharedPreferences().saveCurrentLocality(newLocation);
+                    onLocationChangeListener.updateUi(newLocation);
+                    if (navigationMenu != null) {
+                        navigationMenu.updateUi(newLocation);
+                    }
+                }
+
+            });
+            treeViewDialog.show();
+        } catch (JSONException e) {
+            Timber.e(e);
+        }
+    }
+
 }

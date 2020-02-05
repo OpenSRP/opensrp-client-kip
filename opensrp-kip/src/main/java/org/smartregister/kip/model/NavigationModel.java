@@ -26,9 +26,7 @@ public class NavigationModel implements NavigationContract.Model {
     @Override
     public List<NavigationOption> getNavigationItems() {
         if (navigationOptions.size() == 0) {
-            NavigationOption childNavigationOption = new NavigationOption(R.mipmap.sidemenu_children,
-                    R.mipmap.sidemenu_children_active, R.string.menu_child_clients, KipConstants.DrawerMenu.CHILD_CLIENTS,
-                    0);
+            NavigationOption childNavigationOption = new NavigationOption(R.mipmap.sidemenu_children, R.mipmap.sidemenu_children_active, R.string.menu_child_clients, KipConstants.DrawerMenu.CHILD_CLIENTS, 0);
             navigationOptions.addAll(asList(childNavigationOption));
         }
 

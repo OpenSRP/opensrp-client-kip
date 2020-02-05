@@ -4,17 +4,20 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -28,10 +31,13 @@ import org.smartregister.kip.R;
 import org.smartregister.kip.adapter.NavigationAdapter;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.contract.NavigationContract;
+import org.smartregister.kip.listener.OnLocationChangeListener;
 import org.smartregister.kip.model.NavigationOption;
 import org.smartregister.kip.presenter.NavigationPresenter;
+import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.p2p.activity.P2pModeSelectActivity;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
+import org.smartregister.view.activity.BaseRegisterActivity;
 
 import java.lang.ref.WeakReference;
 import java.text.MessageFormat;
@@ -43,10 +49,9 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
-public class NavigationMenu implements NavigationContract.View, SyncStatusBroadcastReceiver.SyncStatusListener {
+public class NavigationMenu implements NavigationContract.View, SyncStatusBroadcastReceiver.SyncStatusListener, OnLocationChangeListener {
     private static NavigationMenu instance;
     private static WeakReference<Activity> activityWeakReference;
-    private String TAG = NavigationMenu.class.getCanonicalName();
     private DrawerLayout drawer;
     private Toolbar toolbar;
     private NavigationAdapter navigationAdapter;
@@ -56,6 +61,9 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     private ImageView ivSync;
     private ProgressBar syncProgressBar;
     private NavigationContract.Presenter mPresenter;
+    private RelativeLayout settingsLayout;
+    private TextView txtLocationSelected;
+
     private View parentView;
     private List<NavigationOption> navigationOptions = new ArrayList<>();
 
@@ -148,7 +156,18 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         recyclerView = rootView.findViewById(R.id.rvOptions);
         ivSync = rootView.findViewById(R.id.ivSyncIcon);
         syncProgressBar = rootView.findViewById(R.id.pbSync);
+        settingsLayout = rootView.findViewById(R.id.rlSettings);
+
         ImageView ivLogo = rootView.findViewById(R.id.ivLogo);
+        LinearLayout locationLayout = rootView.findViewById(R.id.giz_location_layout);
+
+
+        locationLayout.setOnClickListener(v -> KipChildUtils.showLocations(activity, instance, null));
+
+        txtLocationSelected = rootView.findViewById(R.id.giz_txt_location_selected);
+
+        updateUi(KipApplication.getInstance().context().allSharedPreferences().fetchCurrentLocality());
+
         ivLogo.setContentDescription(activity.getString(R.string.nav_logo));
         ivLogo.setImageResource(R.drawable.ic_logo);
 
@@ -156,11 +175,11 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         tvLogo.setText(activity.getString(R.string.nav_logo));
 
         if (syncProgressBar != null) {
-            FadingCircle circle = new FadingCircle();
-            syncProgressBar.setIndeterminateDrawable(circle);
+
+            syncProgressBar.setIndeterminateDrawable(new FadingCircle());
 
             if (toolbar != null) {
-                toolbar.setNavigationIcon(circle);
+                toolbar.setNavigationIcon(new FadingCircle());
             }
         }
 
@@ -172,8 +191,23 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         registerLanguageSwitcher(activity);
 
         registerDeviceToDeviceSync(activity);
+        registerSettings(activity);
+
         // update all actions
         mPresenter.refreshLastSync();
+    }
+
+    private void registerSettings(@NonNull final Activity activity) {
+        if (settingsLayout != null) {
+            settingsLayout.setOnClickListener(v -> {
+                if (activity instanceof BaseRegisterActivity) {
+                    ((BaseRegisterActivity) activity).switchToFragment(BaseRegisterActivity.ME_POSITION);
+                    closeDrawer();
+                } else {
+                    Timber.e(new Exception("Cannot open Settings since this activity is not a child of BaseRegisterActivity"));
+                }
+            });
+        }
     }
 
     private void registerNavigation(Activity parentActivity) {
@@ -192,12 +226,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
 
     private void registerLogout(final Activity parentActivity) {
         mPresenter.displayCurrentUser();
-        tvLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logout(parentActivity);
-            }
-        });
+        tvLogout.setOnClickListener(v -> logout(parentActivity));
     }
 
     private void registerSync(final Activity parentActivity) {
@@ -206,13 +235,10 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         ivSync = rootView.findViewById(R.id.ivSyncIcon);
         syncProgressBar = rootView.findViewById(R.id.pbSync);
 
-        View.OnClickListener syncClicker = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(parentActivity, parentActivity.getResources().getText(R.string.action_start_sync),
-                        Toast.LENGTH_SHORT).show();
-                mPresenter.sync(parentActivity);
-            }
+        View.OnClickListener syncClicker = v -> {
+            Toast.makeText(parentActivity, parentActivity.getResources().getText(R.string.action_start_sync),
+                    Toast.LENGTH_SHORT).show();
+            mPresenter.sync(parentActivity);
         };
 
 
@@ -230,12 +256,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
 
     private void registerDeviceToDeviceSync(@NonNull final Activity activity) {
         rootView.findViewById(R.id.rlIconDevice)
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        startP2PActivity(activity);
-                    }
-                });
+                .setOnClickListener(v -> startP2PActivity(activity));
     }
 
     protected void refreshSyncProgressSpinner() {
@@ -302,7 +323,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
 
     @Override
     public void onSyncInProgress(FetchStatus fetchStatus) {
-        Log.v(TAG, "onSyncInProgress");
+        Timber.v("onSyncInProgress");
     }
 
     @Override
@@ -313,5 +334,26 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         mPresenter.refreshLastSync();
         // refreshLastSync(new Date());
         mPresenter.refreshNavigationCount();
+    }
+
+    public void openDrawer() {
+        drawer.openDrawer(GravityCompat.START);
+    }
+
+    public DrawerLayout getDrawer() {
+        return drawer;
+    }
+
+    public static void closeDrawer() {
+        if (instance != null && instance.getDrawer() != null) {
+            instance.getDrawer().closeDrawer(Gravity.START);
+        }
+    }
+
+    @Override
+    public void updateUi(@Nullable String location) {
+        if (txtLocationSelected != null && StringUtils.isNotBlank(location)) {
+            txtLocationSelected.setText(location);
+        }
     }
 }

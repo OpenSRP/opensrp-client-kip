@@ -1,2 +1,1 @@
-# opensrp-kip
-
+# opensrp-client-kip

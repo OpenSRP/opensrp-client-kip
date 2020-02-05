@@ -62,7 +62,7 @@
     "title": "Birth Registration",
     "fields": [
       {
-        "key": "Child_Photo",
+        "key": "photo",
         "openmrs_entity_parent": "",
         "openmrs_entity": "",
         "openmrs_entity_id": "",
@@ -75,11 +75,13 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "openmrs_data_type": "text",
-        "type": "edit_text",
-        "edit_type": "name",
-        "read_only": true,
-        "hidden": true,
-        "hint": "Child Registration Facility *"
+        "type": "tree",
+        "tree": [],
+        "hint": "Child Registration Facility",
+        "v_required": {
+          "value": false,
+          "err": "Please enter the Child's Registration Facility"
+        }
       },
       {
         "key": "First_Name",
@@ -303,8 +305,13 @@
         "openmrs_entity_id": "relationship",
         "entity_id": "mother",
         "type": "spinner",
+        "Value": "Parent/Child",
         "hint": "Relationship to child *",
-        "values": []
+        "values": ["Doctor/Patient",
+          "Sibling/Sibling",
+          "Parent/Child",
+          "Grandparent/Grandchild",
+          "Aunt/Uncle/Niece/Nephew"]
       },
       {
         "key": "Mother_Guardian_ID",
@@ -401,7 +408,9 @@
         "entity_id": "guardian",
         "type": "spinner",
         "hint": "Relationship to child *",
-        "values": [],
+        "values": ["Parent",
+          "Grandparent",
+          "Guardian"],
         "relevance": {
           "step1:Father_Guardian_Name": {
             "type": "string",
@@ -428,13 +437,13 @@
         }
       },
       {
-        "key": "Ce_County",
+        "key": "County",
         "openmrs_entity_parent": "usual_residence",
         "openmrs_entity": "person_address",
         "openmrs_entity_id": "stateProvince",
         "openmrs_data_type": "text",
         "type": "spinner",
-        "hint": "County *",
+        "hint": "County",
         "values": [],
         "v_required": {
           "value": true,
@@ -443,13 +452,13 @@
         "look_up": "true"
       },
       {
-        "key": "Ce_Sub_County",
+        "key": "Sub_County",
         "openmrs_entity_parent": "usual_residence",
         "openmrs_entity": "person_address",
         "openmrs_entity_id": "countyDistrict",
         "openmrs_data_type": "text",
         "type": "spinner",
-        "hint": "Sub County *",
+        "hint": "Sub County",
         "values": [],
         "v_required": {
           "value": true,
@@ -458,14 +467,15 @@
         "look_up": "true"
       },
       {
-        "key": "Ce_Ward",
+        "key": "Ward",
         "openmrs_entity_parent": "usual_residence",
         "openmrs_entity": "person_address",
         "openmrs_entity_id": "cityVillage",
         "openmrs_data_type": "text",
         "type": "spinner",
-        "hint": "Ward *",
-        "values": [],
+        "hint": "Ward",
+        "values": ["Central Alego",
+          "North Alego"],
         "v_required": {
           "value": true,
           "err": "Please enter the child's ward"
@@ -473,13 +483,13 @@
         "look_up": "true"
       },
       {
-        "key": "Ce_Sub_Location",
+        "key": "Sub_Location",
         "openmrs_entity_parent": "usual_residence",
         "openmrs_entity": "person_address",
         "openmrs_entity_id": "address4",
         "openmrs_data_type": "text",
         "type": "edit_text",
-        "hint": "Sub Location *",
+        "hint": "Sub Location",
         "edit_type": "name",
         "v_required": {
           "value": true,
@@ -487,13 +497,13 @@
         }
       },
       {
-        "key": "Ce_Village",
+        "key": "Village",
         "openmrs_entity_parent": "usual_residence",
         "openmrs_entity": "person_address",
-        "openmrs_entity_id": "address3",
+        "openmrs_entity_id": "address1",
         "openmrs_data_type": "text",
         "type": "edit_text",
-        "hint": "Village *",
+        "hint": "Village",
         "edit_type": "name",
         "v_required": {
           "value": true,
@@ -501,7 +511,7 @@
         }
       },
       {
-        "key": "Ce_Landmark",
+        "key": "Landmark",
         "openmrs_entity_parent": "usual_residence",
         "openmrs_entity": "person_address",
         "openmrs_entity_id": "address2",
@@ -510,10 +520,10 @@
         "edit_type": "name"
       },
       {
-        "key": "Ce_Address",
+        "key": "Address",
         "openmrs_entity_parent": "usual_residence",
         "openmrs_entity": "person_address",
-        "openmrs_entity_id": "address1",
+        "openmrs_entity_id": "address3",
         "openmrs_data_type": "text",
         "type": "edit_text",
         "hint": "Address",

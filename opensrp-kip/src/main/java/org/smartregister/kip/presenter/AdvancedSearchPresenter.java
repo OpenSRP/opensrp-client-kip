@@ -11,7 +11,9 @@ import org.smartregister.kip.model.AdvancedSearchModel;
 import org.smartregister.kip.util.DBQueryHelper;
 import org.smartregister.kip.util.KipConstants;
 
-
+/**
+ * Created by ndegwamartin on 11/04/2019.
+ */
 public class AdvancedSearchPresenter extends BaseChildAdvancedSearchPresenter {
     public AdvancedSearchPresenter(ChildAdvancedSearchContract.View view, String viewConfigurationIdentifier) {
         super(view, viewConfigurationIdentifier, new AdvancedSearchModel());

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="primary">#358CB7</color>
+    <color name="check_in_bg_grey">#f4f4f4</color>
+    <color name="check_in_txt_dark_grey">#686868</color>
     <color name="colorPrimary">#358CB7</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
@@ -35,7 +38,6 @@
     <color name="female_pink">#de47dc</color>
     <color name="female_light_pink">#f7dbf7</color>
 
-    <color name="primary">#358CB7</color>
     <color name="primary_dark">#276C91</color>
     <color name="accent">#358CB7</color>
     <color name="text_color_primary">#737373</color>

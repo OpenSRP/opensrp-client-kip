@@ -4,15 +4,15 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 
 import org.smartregister.child.util.Utils;
-import org.smartregister.kip.util.KipUtils;
+import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.view.activity.BaseProfileActivity;
 
 public class ChildProfileActivity extends BaseProfileActivity {
     @Override
     protected void attachBaseContext(android.content.Context base) {
         // get language from prefs
-        String lang = KipUtils.getLanguage(base.getApplicationContext());
-        super.attachBaseContext(KipUtils.setAppLocale(base, lang));
+        String lang = KipChildUtils.getLanguage(base.getApplicationContext());
+        super.attachBaseContext(KipChildUtils.setAppLocale(base, lang));
     }
 
     @Override
