@@ -91,6 +91,7 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
     private boolean lastModified;
     private ECSyncHelper ecSyncHelper;
     private EventClientRepository eventClientRepository;
+    private KipLocationRepository locationRepository;
 
     public static JsonSpecHelper getJsonSpecHelper() {
         return jsonSpecHelper;
@@ -456,6 +457,12 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
         }
 
         ImmunizationLibrary.getInstance().setVaccines(vaccines);
+    }
+    public KipLocationRepository locationRepository() {
+        if (locationRepository == null) {
+            locationRepository = new KipLocationRepository((KipRepository) getRepository());
+        }
+        return locationRepository;
     }
 
     @VisibleForTesting

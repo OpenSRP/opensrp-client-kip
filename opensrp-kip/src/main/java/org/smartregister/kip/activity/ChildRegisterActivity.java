@@ -16,7 +16,6 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.smartregister.Context;
 import org.smartregister.child.activity.BaseChildRegisterActivity;
-import org.smartregister.child.enums.LocationHierarchy;
 import org.smartregister.child.model.BaseChildRegisterModel;
 import org.smartregister.child.presenter.BaseChildRegisterPresenter;
 import org.smartregister.child.util.Constants;
@@ -29,13 +28,15 @@ import org.smartregister.kip.fragment.ChildRegisterFragment;
 import org.smartregister.kip.fragment.KipMeFragment;
 import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.kip.util.KipConstants;
-import org.smartregister.kip.util.KipLocationUtility;
+import org.smartregister.kip.util.KipJsonFormUtils;
 import org.smartregister.kip.view.NavDrawerActivity;
 import org.smartregister.kip.view.NavigationMenu;
 import org.smartregister.login.task.RemoteLoginTask;
 import org.smartregister.view.fragment.BaseRegisterFragment;
 
 import java.lang.ref.WeakReference;
+
+import static org.smartregister.login.task.RemoteLoginTask.getOpenSRPContext;
 
 public class ChildRegisterActivity extends BaseChildRegisterActivity implements NavDrawerActivity, NavigationMenuContract {
     private NavigationMenu navigationMenu;
@@ -163,9 +164,10 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
         Intent intent = new Intent(this, Utils.metadata().childFormActivity);
         Context context = RemoteLoginTask.getOpenSRPContext();
         if (jsonForm.has(KipConstants.KEY.ENCOUNTER_TYPE) && jsonForm.optString(KipConstants.KEY.ENCOUNTER_TYPE).equals(KipConstants.KEY.BIRTH_REGISTRATION)) {
-            JsonFormUtils.addChildRegLocHierarchyQuestions(jsonForm, KipConstants.KEY.REGISTRATION_HOME_ADDRESS, LocationHierarchy.ENTIRE_TREE);
+            KipJsonFormUtils.KipAddChildRegLocHierarchyQuestions(jsonForm, getOpenSRPContext());
+
         }
-        KipLocationUtility.addChildRegLocHierarchyQuestions(jsonForm, context);
+//        KipLocationUtility.addChildRegLocHierarchyQuestions(jsonForm, context);
         intent.putExtra(Constants.INTENT_KEY.JSON, jsonForm.toString());
         intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, getForm());
         startActivityForResult(intent, JsonFormUtils.REQUEST_CODE_GET_JSON);

@@ -9,6 +9,7 @@ public class KipConstants {
     public static final class KEY {
         public static final String MOTHER_BASE_ENTITY_ID = "mother_base_entity_id";
         public static final String DB_MOTHER_DOB = "mother_dob";
+        public static final String MALAWI_ID = "mer_id";
         public static final String CHILD = "child";
         public static final String MOTHER_FIRST_NAME = "mother_first_name";
         public static final String FIRST_NAME = "first_name";
