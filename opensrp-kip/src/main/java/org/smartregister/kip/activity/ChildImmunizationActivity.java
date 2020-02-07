@@ -30,11 +30,7 @@ public class ChildImmunizationActivity extends BaseChildImmunizationActivity {
         LocationSwitcherToolbar myToolbar  = (LocationSwitcherToolbar) this.getToolbar();
 
         if (myToolbar != null) {
-            myToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    finish();
-                }
-            });
+            myToolbar.setNavigationOnClickListener(v -> finish());
         }
     }
 

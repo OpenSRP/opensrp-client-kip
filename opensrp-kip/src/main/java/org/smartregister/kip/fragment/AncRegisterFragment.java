@@ -26,22 +26,14 @@ public class AncRegisterFragment extends HomeRegisterFragment {
             ImageView addPatientBtn = view.findViewById(R.id.add_child_image_view);
 
             if (addPatientBtn != null) {
-                addPatientBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        startRegistration();
-                    }
-                });
+                addPatientBtn.setOnClickListener(v -> startRegistration());
             }
 
             ImageView hamburgerMenu = view.findViewById(R.id.left_menu);
             if (hamburgerMenu != null) {
-                hamburgerMenu.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (getActivity() instanceof AncRegisterActivity) {
-                            ((AncRegisterActivity) getActivity()).openDrawer();
-                        }
+                hamburgerMenu.setOnClickListener(v -> {
+                    if (getActivity() instanceof AncRegisterActivity) {
+                        ((AncRegisterActivity) getActivity()).openDrawer();
                     }
                 });
             }

@@ -23,6 +23,7 @@ import java.util.HashMap;
 public class ChildRegisterFragment extends BaseChildRegisterFragment implements CompoundButton.OnCheckedChangeListener {
     private View view;
     private SwitchCompat filterSection;
+
     @Override
     protected void initializePresenter() {
         if (getActivity() == null) {
@@ -87,34 +88,40 @@ public class ChildRegisterFragment extends BaseChildRegisterFragment implements 
             client = (CommonPersonObjectClient) view.getTag();
         }
 
-        switch (view.getId()) {
-            case R.id.child_profile_info_layout:
-                ChildImmunizationActivity.launchActivity(getActivity(), client, registerClickables);
-                break;
-            case R.id.record_growth:
-                registerClickables.setRecordWeight(true);
-                ChildImmunizationActivity.launchActivity(getActivity(), client, registerClickables);
-                break;
-            case R.id.record_vaccination:
-                registerClickables.setRecordAll(true);
-                ChildImmunizationActivity.launchActivity(getActivity(), client, registerClickables);
-                break;
-            case R.id.filter_selection:
-                toggleFilterSelection();
-                break;
-            case R.id.global_search:
-                ((ChildRegisterActivity) getActivity()).startAdvancedSearch();
-                break;
-            case R.id.scan_qr_code:
-                ((ChildRegisterActivity) getActivity()).startQrCodeScanner();
-                break;
-            case R.id.back_button:
-                ((ChildRegisterActivity) getActivity()).openDrawer();
-                break;
-            default:
-                break;
-        }
+        attachClickActions(view, registerClickables, client);
 
+    }
+
+    private void attachClickActions(View view, RegisterClickables registerClickables, CommonPersonObjectClient client) {
+        if (getActivity() != null) {
+            switch (view.getId()) {
+                case R.id.child_profile_info_layout:
+                    ChildImmunizationActivity.launchActivity(getActivity(), client, registerClickables);
+                    break;
+                case R.id.record_growth:
+                    registerClickables.setRecordWeight(true);
+                    ChildImmunizationActivity.launchActivity(getActivity(), client, registerClickables);
+                    break;
+                case R.id.record_vaccination:
+                    registerClickables.setRecordAll(true);
+                    ChildImmunizationActivity.launchActivity(getActivity(), client, registerClickables);
+                    break;
+                case R.id.filter_selection:
+                    toggleFilterSelection();
+                    break;
+                case R.id.global_search:
+                    ((ChildRegisterActivity) getActivity()).startAdvancedSearch();
+                    break;
+                case R.id.scan_qr_code:
+                    ((ChildRegisterActivity) getActivity()).startQrCodeScanner();
+                    break;
+                case R.id.back_button:
+                    ((ChildRegisterActivity) getActivity()).openDrawer();
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     @Override

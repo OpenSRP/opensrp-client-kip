@@ -17,8 +17,6 @@ import org.smartregister.view.fragment.BaseRegisterFragment;
  */
 
 public class AncRegisterActivity extends BaseHomeRegisterActivity implements NavDrawerActivity, NavigationMenuContract {
-
-
     private org.smartregister.kip.view.NavigationMenu navigationMenu;
 
     @Override
