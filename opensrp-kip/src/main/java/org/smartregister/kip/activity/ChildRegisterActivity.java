@@ -18,6 +18,8 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.smartregister.Context;
+import org.smartregister.anc.library.fragment.MeFragment;
+import org.smartregister.anc.library.fragment.SortFilterFragment;
 import org.smartregister.child.ChildLibrary;
 import org.smartregister.child.activity.BaseChildRegisterActivity;
 import org.smartregister.child.enums.LocationHierarchy;
@@ -30,8 +32,8 @@ import org.smartregister.helper.BottomNavigationHelper;
 import org.smartregister.kip.R;
 import org.smartregister.kip.contract.NavigationMenuContract;
 import org.smartregister.kip.event.LoginEvent;
+import org.smartregister.kip.fragment.AdvancedSearchFragment;
 import org.smartregister.kip.fragment.ChildRegisterFragment;
-import org.smartregister.kip.fragment.KipMeFragment;
 import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.kip.util.KipConstants;
 import org.smartregister.kip.util.KipLocationUtility;
@@ -39,6 +41,7 @@ import org.smartregister.kip.view.NavDrawerActivity;
 import org.smartregister.kip.view.NavigationMenu;
 import org.smartregister.listener.BottomNavigationListener;
 import org.smartregister.login.task.RemoteLoginTask;
+import org.smartregister.view.activity.BaseRegisterActivity;
 import org.smartregister.view.fragment.BaseRegisterFragment;
 
 import java.lang.ref.WeakReference;
@@ -66,7 +69,7 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
     protected void registerBottomNavigation() {
         bottomNavigationHelper = new BottomNavigationHelper();
         bottomNavigationView = findViewById(org.smartregister.R.id.bottom_navigation);
-        this.bottomNavigationView.setVisibility( ChildLibrary.getInstance().getProperties().getPropertyBoolean("feature.bottom.navigation.enabled") ? View.VISIBLE : View.GONE);
+        this.bottomNavigationView.setVisibility(ChildLibrary.getInstance().getProperties().getPropertyBoolean("feature.bottom.navigation.enabled") ? View.VISIBLE : View.GONE);
         if (bottomNavigationView != null) {
             if (isMeItemEnabled()) {
                 bottomNavigationView.getMenu().add(Menu.NONE, org.smartregister.R.string.action_me, Menu.NONE, org.smartregister.R.string.me).setIcon(
@@ -91,11 +94,34 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
     @Override
     protected Fragment[] getOtherFragments() {
         ME_POSITION = 1;
+        int positionCounter = getPositionCounter();
 
-        Fragment[] fragments = new Fragment[1];
-        fragments[ME_POSITION - 1] = new KipMeFragment();
+        Fragment[] fragments = new Fragment[positionCounter];
+        if (isAdvancedSearchEnabled()) {
+            fragments[BaseRegisterActivity.ADVANCED_SEARCH_POSITION - 1] = new AdvancedSearchFragment();
+        }
+
+        fragments[BaseRegisterActivity.SORT_FILTER_POSITION - 1] = new SortFilterFragment();
+
+        if (isMeItemEnabled()) {
+            fragments[BaseRegisterActivity.ME_POSITION - 1] = new MeFragment();
+        }
 
         return fragments;
+    }
+
+    private int getPositionCounter() {
+        int positionCounter = 0;
+        if (isAdvancedSearchEnabled()) {
+            BaseRegisterActivity.ADVANCED_SEARCH_POSITION = ++positionCounter;
+        }
+
+        BaseRegisterActivity.SORT_FILTER_POSITION = ++positionCounter;
+
+        if (isMeItemEnabled()) {
+            BaseRegisterActivity.ME_POSITION = ++positionCounter;
+        }
+        return positionCounter;
     }
 
     @Override
