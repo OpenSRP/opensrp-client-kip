@@ -1,6 +1,5 @@
 package org.smartregister.kip.interactor;
 
-import org.smartregister.kip.BuildConfig;
 import org.smartregister.growthmonitoring.job.HeightIntentServiceJob;
 import org.smartregister.growthmonitoring.job.WeightIntentServiceJob;
 import org.smartregister.growthmonitoring.job.ZScoreRefreshIntentServiceJob;
@@ -9,6 +8,7 @@ import org.smartregister.immunization.job.VaccineServiceJob;
 import org.smartregister.job.ImageUploadServiceJob;
 import org.smartregister.job.PullUniqueIdsServiceJob;
 import org.smartregister.job.SyncServiceJob;
+import org.smartregister.kip.BuildConfig;
 import org.smartregister.login.interactor.BaseLoginInteractor;
 import org.smartregister.view.contract.BaseLoginContract;
 

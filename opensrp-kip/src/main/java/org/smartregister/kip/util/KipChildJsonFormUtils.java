@@ -57,6 +57,16 @@ public class KipChildJsonFormUtils extends JsonFormUtils {
         return "";
     }
 
+    private static void updateRegistrationEventType(JSONObject form) throws JSONException {
+        if (form.has(JsonFormUtils.ENCOUNTER_TYPE) && form.getString(JsonFormUtils.ENCOUNTER_TYPE).equals(Constants.EventType.BITRH_REGISTRATION)) {
+            form.put(JsonFormUtils.ENCOUNTER_TYPE, Constants.EventType.UPDATE_BITRH_REGISTRATION);
+        }
+
+        if (form.has(JsonFormUtils.STEP1) && form.getJSONObject(JsonFormUtils.STEP1).has(KipConstants.KEY.TITLE) && form.getJSONObject(JsonFormUtils.STEP1).getString(KipConstants.KEY.TITLE).equals(Constants.EventType.BITRH_REGISTRATION)) {
+            form.getJSONObject(JsonFormUtils.STEP1).put(KipConstants.KEY.TITLE, KipConstants.FormTitleUtil.UPDATE_CHILD_FORM);
+        }
+    }
+
     private static void updateFormDetailsForEdit(Map<String, String> childDetails, JSONArray jsonArray, List<String> nonEditableFields) throws JSONException {
         String prefix;
         for (int i = 0; i < jsonArray.length(); i++) {
@@ -96,16 +106,16 @@ public class KipChildJsonFormUtils extends JsonFormUtils {
         }
     }
 
-    private static void getDobUnknown(Map<String, String> childDetails, JSONObject jsonObject) throws JSONException {
-        JSONObject optionsObject = jsonObject.getJSONArray(Constants.JSON_FORM_KEY.OPTIONS).getJSONObject(0);
-        optionsObject.put(JsonFormUtils.VALUE, Utils.getValue(childDetails, Constants.JSON_FORM_KEY.DOB_UNKNOWN, false));
-    }
-
     @NotNull
     private static String getPrefix(JSONObject jsonObject) throws JSONException {
         String prefix;
         prefix = jsonObject.has(JsonFormUtils.ENTITY_ID) && jsonObject.getString(JsonFormUtils.ENTITY_ID).equalsIgnoreCase(KipConstants.KEY.MOTHER) ? KipConstants.KEY.MOTHER_ : "";
         return prefix;
+    }
+
+    private static void getDobUnknown(Map<String, String> childDetails, JSONObject jsonObject) throws JSONException {
+        JSONObject optionsObject = jsonObject.getJSONArray(Constants.JSON_FORM_KEY.OPTIONS).getJSONObject(0);
+        optionsObject.put(JsonFormUtils.VALUE, Utils.getValue(childDetails, Constants.JSON_FORM_KEY.DOB_UNKNOWN, false));
     }
 
     private static void processLocationTree(Map<String, String> childDetails, List<String> nonEditableFields, JSONObject jsonObject) throws JSONException {
@@ -176,16 +186,6 @@ public class KipChildJsonFormUtils extends JsonFormUtils {
 
     private static void addNonEditableFields(List<String> nonEditableFields, JSONObject jsonObject) throws JSONException {
         jsonObject.put(JsonFormUtils.READ_ONLY, nonEditableFields.contains(jsonObject.getString(JsonFormUtils.KEY)));
-    }
-
-    private static void updateRegistrationEventType(JSONObject form) throws JSONException {
-        if (form.has(JsonFormUtils.ENCOUNTER_TYPE) && form.getString(JsonFormUtils.ENCOUNTER_TYPE).equals(Constants.EventType.BITRH_REGISTRATION)) {
-            form.put(JsonFormUtils.ENCOUNTER_TYPE, Constants.EventType.UPDATE_BITRH_REGISTRATION);
-        }
-
-        if (form.has(JsonFormUtils.STEP1) && form.getJSONObject(JsonFormUtils.STEP1).has(KipConstants.KEY.TITLE) && form.getJSONObject(JsonFormUtils.STEP1).getString(KipConstants.KEY.TITLE).equals(Constants.EventType.BITRH_REGISTRATION)) {
-            form.getJSONObject(JsonFormUtils.STEP1).put(KipConstants.KEY.TITLE, KipConstants.FormTitleUtil.UPDATE_CHILD_FORM);
-        }
     }
 
     public static String getJsonString(JSONObject jsonObject, String field) {

@@ -27,7 +27,7 @@ public class ChildImmunizationActivity extends BaseChildImmunizationActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LocationSwitcherToolbar myToolbar  = (LocationSwitcherToolbar) this.getToolbar();
+        LocationSwitcherToolbar myToolbar = (LocationSwitcherToolbar) this.getToolbar();
 
         if (myToolbar != null) {
             myToolbar.setNavigationOnClickListener(v -> finish());

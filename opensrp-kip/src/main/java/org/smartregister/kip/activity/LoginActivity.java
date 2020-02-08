@@ -5,8 +5,8 @@ import android.os.Bundle;
 
 import org.smartregister.kip.R;
 import org.smartregister.kip.presenter.LoginPresenter;
-import org.smartregister.kip.util.KipConstants;
 import org.smartregister.kip.util.KipChildUtils;
+import org.smartregister.kip.util.KipConstants;
 import org.smartregister.task.SaveTeamLocationsTask;
 import org.smartregister.view.activity.BaseLoginActivity;
 import org.smartregister.view.contract.BaseLoginContract;

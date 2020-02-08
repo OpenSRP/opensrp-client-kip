@@ -42,15 +42,15 @@ public class KipMeFragment extends MeFragment implements OnLocationChangeListene
     }
 
     @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        if (isVisibleToUser)
+            updateUi(KipApplication.getInstance().context().allSharedPreferences().fetchCurrentLocality());
+    }
+
+    @Override
     public void updateUi(@Nullable String location) {
         if (facilitySelection != null && StringUtils.isNotBlank(location)) {
             facilitySelection.setText(location);
         }
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        if (isVisibleToUser)
-            updateUi(KipApplication.getInstance().context().allSharedPreferences().fetchCurrentLocality());
     }
 }

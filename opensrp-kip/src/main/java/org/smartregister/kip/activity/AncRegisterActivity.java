@@ -25,23 +25,8 @@ public class AncRegisterActivity extends BaseHomeRegisterActivity implements Nav
     }
 
     @Override
-    public void setSelectedBottomBarMenuItem(int itemId) {
-        // Do nothing here
-    }
-
-    public void createDrawer() {
-        navigationMenu = NavigationMenu.getInstance(this, null, null);
-
-        if (navigationMenu != null) {
-            navigationMenu.getNavigationAdapter().setSelectedView(KipConstants.DrawerMenu.ANC_CLIENTS);
-            navigationMenu.runRegisterCount();
-        }
-    }
-
-    @Override
-    protected void onResumption() {
-        super.onResumption();
-        createDrawer();
+    public BaseRegisterFragment getRegisterFragment() {
+        return new AncRegisterFragment();
     }
 
     @Override
@@ -61,13 +46,8 @@ public class AncRegisterActivity extends BaseHomeRegisterActivity implements Nav
     }
 
     @Override
-    public BaseRegisterFragment getRegisterFragment() {
-        return new AncRegisterFragment();
-    }
-
-    @Override
-    public boolean isLibraryItemEnabled() {
-        return false;
+    public void setSelectedBottomBarMenuItem(int itemId) {
+        // Do nothing here
     }
 
     @Override
@@ -76,8 +56,33 @@ public class AncRegisterActivity extends BaseHomeRegisterActivity implements Nav
     }
 
     @Override
+    public boolean isLibraryItemEnabled() {
+        return false;
+    }
+
+    @Override
     public boolean isAdvancedSearchEnabled() {
         return false;
+    }
+
+    @Override
+    protected void onResumption() {
+        super.onResumption();
+        createDrawer();
+    }
+
+    public void createDrawer() {
+        navigationMenu = NavigationMenu.getInstance(this, null, null);
+
+        if (navigationMenu != null) {
+            navigationMenu.getNavigationAdapter().setSelectedView(KipConstants.DrawerMenu.ANC_CLIENTS);
+            navigationMenu.runRegisterCount();
+        }
+    }
+
+    @Override
+    public void finishActivity() {
+        finish();
     }
 
     public void openDrawer() {
@@ -88,14 +93,8 @@ public class AncRegisterActivity extends BaseHomeRegisterActivity implements Nav
 
     public void closeDrawer() {
         if (navigationMenu != null) {
-            navigationMenu.closeDrawer();
+            NavigationMenu.closeDrawer();
         }
-    }
-
-
-    @Override
-    public void finishActivity() {
-        finish();
     }
 
     @Override

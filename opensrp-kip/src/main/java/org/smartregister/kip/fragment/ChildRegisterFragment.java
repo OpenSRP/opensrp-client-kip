@@ -39,21 +39,6 @@ public class ChildRegisterFragment extends BaseChildRegisterFragment implements 
         //do nothing
     }
 
-
-    @Override
-    protected void toggleFilterSelection() {
-        if (filterSection != null) {
-            String tagString = "PRESSED";
-            if (filterSection.getTag() == null) {
-                filter("", "", filterSelectionCondition(false), false);
-                filterSection.setTag(tagString);
-            } else if (filterSection.getTag().toString().equals(tagString)) {
-                filter("", "", "", false);
-                filterSection.setTag(null);
-            }
-        }
-    }
-
     @Override
     public void setupViews(View view) {
         this.view = view;
@@ -92,6 +77,42 @@ public class ChildRegisterFragment extends BaseChildRegisterFragment implements 
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        toolbar.setContentInsetsAbsolute(0, 0);
+        toolbar.setContentInsetsRelative(0, 0);
+        toolbar.setContentInsetStartWithNavigation(0);
+        toolbar.setNavigationIcon(R.drawable.ic_action_menu);
+
+        NavigationMenu.getInstance(getActivity(), null, toolbar);
+    }
+
+    @Override
+    protected void toggleFilterSelection() {
+        if (filterSection != null) {
+            String tagString = "PRESSED";
+            if (filterSection.getTag() == null) {
+                filter("", "", filterSelectionCondition(false), false);
+                filterSection.setTag(tagString);
+            } else if (filterSection.getTag().toString().equals(tagString)) {
+                filter("", "", "", false);
+                filterSection.setTag(null);
+            }
+        }
+    }
+
+    @Override
+    protected String filterSelectionCondition(boolean urgentOnly) {
+        return DBQueryHelper.getFilterSelectionCondition(urgentOnly);
+    }
+
+    @Override
+    public void onClick(View view) {
+        onViewClicked(view);
+    }
+
     private void attachClickActions(View view, RegisterClickables registerClickables, CommonPersonObjectClient client) {
         if (getActivity() != null) {
             switch (view.getId()) {
@@ -123,29 +144,6 @@ public class ChildRegisterFragment extends BaseChildRegisterFragment implements 
             }
         }
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Toolbar toolbar = view.findViewById(R.id.toolbar);
-        toolbar.setContentInsetsAbsolute(0, 0);
-        toolbar.setContentInsetsRelative(0, 0);
-        toolbar.setContentInsetStartWithNavigation(0);
-        toolbar.setNavigationIcon(R.drawable.ic_action_menu);
-
-        NavigationMenu.getInstance(getActivity(), null, toolbar);
-    }
-
-    @Override
-    protected String filterSelectionCondition(boolean urgentOnly) {
-        return DBQueryHelper.getFilterSelectionCondition(urgentOnly);
-    }
-
-    @Override
-    public void onClick(View view) {
-        onViewClicked(view);
-    }
-
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {

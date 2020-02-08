@@ -25,10 +25,6 @@ import org.smartregister.domain.jsonmapping.ClientClassification;
 import org.smartregister.domain.jsonmapping.ClientField;
 import org.smartregister.domain.jsonmapping.Column;
 import org.smartregister.domain.jsonmapping.Table;
-import org.smartregister.kip.activity.ChildImmunizationActivity;
-import org.smartregister.kip.application.KipApplication;
-import org.smartregister.kip.util.KipConstants;
-import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.growthmonitoring.domain.Height;
 import org.smartregister.growthmonitoring.domain.Weight;
 import org.smartregister.growthmonitoring.repository.HeightRepository;
@@ -45,6 +41,10 @@ import org.smartregister.immunization.repository.RecurringServiceTypeRepository;
 import org.smartregister.immunization.repository.VaccineRepository;
 import org.smartregister.immunization.service.intent.RecurringIntentService;
 import org.smartregister.immunization.service.intent.VaccineIntentService;
+import org.smartregister.kip.activity.ChildImmunizationActivity;
+import org.smartregister.kip.application.KipApplication;
+import org.smartregister.kip.util.KipChildUtils;
+import org.smartregister.kip.util.KipConstants;
 import org.smartregister.opd.processor.OpdMiniClientProcessorForJava;
 import org.smartregister.opd.utils.OpdConstants;
 import org.smartregister.repository.DetailsRepository;
@@ -166,20 +166,111 @@ public class KipProcessorForJava extends ClientProcessorForJava {
         }
     }
 
-    private void processDeathEvent(@NonNull EventClient eventClient) {
-        if (eventClient.getEvent().getEntityType().equals(KipConstants.EntityType.CHILD)) {
-            KipChildUtils.updateChildDeath(eventClient);
+    private void processVaccinationEvent(Table vaccineTable, EventClient eventClient, Event event, String eventType) throws Exception {
+        if (vaccineTable == null) {
+            return;
+        }
+
+        if (!childExists(eventClient.getClient().getBaseEntityId())) {
+            List<String> createCase = new ArrayList<>();
+            createCase.add("ec_child");
+            processCaseModel(event, eventClient.getClient(), createCase);
+        }
+
+        processVaccine(eventClient, vaccineTable,
+                eventType.equals(VaccineIntentService.EVENT_TYPE_OUT_OF_CATCHMENT));
+    }
+
+    private void processWeightEvent(Table weightTable, Table heightTable, EventClient eventClient, String eventType) throws Exception {
+        if (weightTable == null) {
+            return;
+        }
+
+        if (heightTable == null) {
+            return;
+        }
+
+        processWeight(eventClient, weightTable,
+                eventType.equals(WeightIntentService.EVENT_TYPE_OUT_OF_CATCHMENT));
+        processHeight(eventClient, heightTable,
+                eventType.equals(HeightIntentService.EVENT_TYPE_OUT_OF_CATCHMENT));
+    }
+
+    private Boolean processService(EventClient service, Table serviceTable) {
+        try {
+            if (service == null || service.getEvent() == null) {
+                return false;
+            }
+
+            if (serviceTable == null) {
+                return false;
+            }
+
+            Timber.d("Starting processService table: %s", serviceTable.name);
+
+            ContentValues contentValues = processCaseModel(service, serviceTable);
+
+            // save the values to db
+            if (contentValues != null && contentValues.size() > 0) {
+                String name = getServiceTypeName(contentValues);
+
+                String eventDateStr = contentValues.getAsString(RecurringServiceRecordRepository.DATE);
+                Date date = getDate(eventDateStr);
+
+                String value = null;
+
+                if (StringUtils.containsIgnoreCase(name, "ITN")) {
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    String itnDateString = contentValues.getAsString("itn_date");
+                    if (StringUtils.isNotBlank(itnDateString)) {
+                        date = simpleDateFormat.parse(itnDateString);
+                    }
+
+                    value = getServiceValue(contentValues);
+
+                }
+
+                List<ServiceType> serviceTypeList = getServiceTypes(name);
+                if (serviceTypeList == null || serviceTypeList.isEmpty()) {
+                    return false;
+                }
+
+                if (date == null) {
+                    return false;
+                }
+
+                recordServiceRecord(service, contentValues, name, date, value, serviceTypeList);
+
+                Timber.d("Ending processService table: %s", serviceTable.name);
+            }
+            return true;
+
+        } catch (Exception e) {
+            Timber.e(e, "Process Service Error");
+            return null;
         }
     }
 
-    private void processUnsyncEvents(@NonNull List<Event> unsyncEvents) {
-        if (!unsyncEvents.isEmpty()) {
-            unSync(unsyncEvents);
+    private void processBCGScarEvent(EventClient bcgScarEventClient) {
+        if (bcgScarEventClient == null || bcgScarEventClient.getEvent() == null) {
+            return;
         }
 
-        for (MiniClientProcessorForJava miniClientProcessorForJava : unsyncEventsPerProcessor.keySet()) {
-            List<Event> processorUnsyncEvents = unsyncEventsPerProcessor.get(miniClientProcessorForJava);
-            miniClientProcessorForJava.unSync(processorUnsyncEvents);
+        Event event = bcgScarEventClient.getEvent();
+        String baseEntityId = event.getBaseEntityId();
+        DateTime eventDate = event.getEventDate();
+        long date = 0;
+        if (eventDate != null) {
+            date = eventDate.getMillis();
+        }
+
+        DetailsRepository detailsRepository = KipApplication.getInstance().context().detailsRepository();
+        detailsRepository.add(baseEntityId, ChildImmunizationActivity.SHOW_BCG_SCAR, String.valueOf(date), date);
+    }
+
+    private void processDeathEvent(@NonNull EventClient eventClient) {
+        if (eventClient.getEvent().getEntityType().equals(KipConstants.EntityType.CHILD)) {
+            KipChildUtils.updateChildDeath(eventClient);
         }
     }
 
@@ -208,34 +299,15 @@ public class KipProcessorForJava extends ClientProcessorForJava {
         }
     }
 
-    private void processWeightEvent(Table weightTable, Table heightTable, EventClient eventClient, String eventType) throws Exception {
-        if (weightTable == null) {
-            return;
+    private void processUnsyncEvents(@NonNull List<Event> unsyncEvents) {
+        if (!unsyncEvents.isEmpty()) {
+            unSync(unsyncEvents);
         }
 
-        if (heightTable == null) {
-            return;
+        for (MiniClientProcessorForJava miniClientProcessorForJava : unsyncEventsPerProcessor.keySet()) {
+            List<Event> processorUnsyncEvents = unsyncEventsPerProcessor.get(miniClientProcessorForJava);
+            miniClientProcessorForJava.unSync(processorUnsyncEvents);
         }
-
-        processWeight(eventClient, weightTable,
-                eventType.equals(WeightIntentService.EVENT_TYPE_OUT_OF_CATCHMENT));
-        processHeight(eventClient, heightTable,
-                eventType.equals(HeightIntentService.EVENT_TYPE_OUT_OF_CATCHMENT));
-    }
-
-    private void processVaccinationEvent(Table vaccineTable, EventClient eventClient, Event event, String eventType) throws Exception {
-        if (vaccineTable == null) {
-            return;
-        }
-
-        if (!childExists(eventClient.getClient().getBaseEntityId())) {
-            List<String> createCase = new ArrayList<>();
-            createCase.add("ec_child");
-            processCaseModel(event, eventClient.getClient(), createCase);
-        }
-
-        processVaccine(eventClient, vaccineTable,
-                eventType.equals(VaccineIntentService.EVENT_TYPE_OUT_OF_CATCHMENT));
     }
 
     private boolean childExists(String entityId) {
@@ -408,131 +480,6 @@ public class KipProcessorForJava extends ClientProcessorForJava {
         }
     }
 
-    private Boolean processService(EventClient service, Table serviceTable) {
-        try {
-            if (service == null || service.getEvent() == null) {
-                return false;
-            }
-
-            if (serviceTable == null) {
-                return false;
-            }
-
-            Timber.d("Starting processService table: %s", serviceTable.name);
-
-            ContentValues contentValues = processCaseModel(service, serviceTable);
-
-            // save the values to db
-            if (contentValues != null && contentValues.size() > 0) {
-                String name = getServiceTypeName(contentValues);
-
-                String eventDateStr = contentValues.getAsString(RecurringServiceRecordRepository.DATE);
-                Date date = getDate(eventDateStr);
-
-                String value = null;
-
-                if (StringUtils.containsIgnoreCase(name, "ITN")) {
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                    String itnDateString = contentValues.getAsString("itn_date");
-                    if (StringUtils.isNotBlank(itnDateString)) {
-                        date = simpleDateFormat.parse(itnDateString);
-                    }
-
-                    value = getServiceValue(contentValues);
-
-                }
-
-                List<ServiceType> serviceTypeList = getServiceTypes(name);
-                if (serviceTypeList == null || serviceTypeList.isEmpty()) {
-                    return false;
-                }
-
-                if (date == null) {
-                    return false;
-                }
-
-                recordServiceRecord(service, contentValues, name, date, value, serviceTypeList);
-
-                Timber.d("Ending processService table: %s", serviceTable.name);
-            }
-            return true;
-
-        } catch (Exception e) {
-            Timber.e(e, "Process Service Error");
-            return null;
-        }
-    }
-
-    @NotNull
-    private String getServiceValue(ContentValues contentValues) {
-        String value;
-        value = RecurringIntentService.ITN_PROVIDED;
-        if (contentValues.getAsString("itn_has_net") != null) {
-            value = RecurringIntentService.CHILD_HAS_NET;
-        }
-        return value;
-    }
-
-    @Nullable
-    private String getServiceTypeName(ContentValues contentValues) {
-        String name = contentValues.getAsString(RecurringServiceTypeRepository.NAME);
-        if (StringUtils.isNotBlank(name)) {
-            name = name.replaceAll("_", " ").replace("dose", "").trim();
-        }
-        return name;
-    }
-
-    private void recordServiceRecord(EventClient service, ContentValues contentValues, String name, Date date, String value, List<ServiceType> serviceTypeList) {
-        RecurringServiceRecordRepository recurringServiceRecordRepository = KipApplication.getInstance()
-                .recurringServiceRecordRepository();
-        ServiceRecord serviceObj = getServiceRecord(service, contentValues, name, date, value, serviceTypeList);
-        String createdAtString = contentValues.getAsString(RecurringServiceRecordRepository.CREATED_AT);
-        Date createdAt = getDate(createdAtString);
-        serviceObj.setCreatedAt(createdAt);
-
-        recurringServiceRecordRepository.add(serviceObj);
-    }
-
-    private List<ServiceType> getServiceTypes(String name) {
-        RecurringServiceTypeRepository recurringServiceTypeRepository = KipApplication.getInstance()
-                .recurringServiceTypeRepository();
-        return recurringServiceTypeRepository.searchByName(name);
-    }
-
-    private void processBCGScarEvent(EventClient bcgScarEventClient) {
-        if (bcgScarEventClient == null || bcgScarEventClient.getEvent() == null) {
-            return;
-        }
-
-        Event event = bcgScarEventClient.getEvent();
-        String baseEntityId = event.getBaseEntityId();
-        DateTime eventDate = event.getEventDate();
-        long date = 0;
-        if (eventDate != null) {
-            date = eventDate.getMillis();
-        }
-
-        DetailsRepository detailsRepository = KipApplication.getInstance().context().detailsRepository();
-        detailsRepository.add(baseEntityId, ChildImmunizationActivity.SHOW_BCG_SCAR, String.valueOf(date), date);
-    }
-
-    private boolean unSync(List<Event> events) {
-        try {
-
-            if (events == null || events.isEmpty()) {
-                return false;
-            }
-
-            ClientField clientField = assetJsonToJava("ec_client_fields.json", ClientField.class);
-            return clientField != null;
-
-        } catch (Exception e) {
-            Timber.e(e);
-        }
-
-        return false;
-    }
-
     @VisibleForTesting
     ContentValues processCaseModel(@NonNull EventClient eventClient, @NonNull Table table) {
         try {
@@ -550,13 +497,13 @@ public class KipProcessorForJava extends ClientProcessorForJava {
         return null;
     }
 
-    private Integer parseInt(String string) {
-        try {
-            return Integer.valueOf(string);
-        } catch (NumberFormatException e) {
-            Timber.e(e, e.toString());
+    @Nullable
+    private String getServiceTypeName(ContentValues contentValues) {
+        String name = contentValues.getAsString(RecurringServiceTypeRepository.NAME);
+        if (StringUtils.isNotBlank(name)) {
+            name = name.replaceAll("_", " ").replace("dose", "").trim();
         }
-        return null;
+        return name;
     }
 
     @Nullable
@@ -580,6 +527,59 @@ public class KipProcessorForJava extends ClientProcessorForJava {
             }
         }
         return date;
+    }
+
+    @NotNull
+    private String getServiceValue(ContentValues contentValues) {
+        String value;
+        value = RecurringIntentService.ITN_PROVIDED;
+        if (contentValues.getAsString("itn_has_net") != null) {
+            value = RecurringIntentService.CHILD_HAS_NET;
+        }
+        return value;
+    }
+
+    private List<ServiceType> getServiceTypes(String name) {
+        RecurringServiceTypeRepository recurringServiceTypeRepository = KipApplication.getInstance()
+                .recurringServiceTypeRepository();
+        return recurringServiceTypeRepository.searchByName(name);
+    }
+
+    private void recordServiceRecord(EventClient service, ContentValues contentValues, String name, Date date, String value, List<ServiceType> serviceTypeList) {
+        RecurringServiceRecordRepository recurringServiceRecordRepository = KipApplication.getInstance()
+                .recurringServiceRecordRepository();
+        ServiceRecord serviceObj = getServiceRecord(service, contentValues, name, date, value, serviceTypeList);
+        String createdAtString = contentValues.getAsString(RecurringServiceRecordRepository.CREATED_AT);
+        Date createdAt = getDate(createdAtString);
+        serviceObj.setCreatedAt(createdAt);
+
+        recurringServiceRecordRepository.add(serviceObj);
+    }
+
+    private boolean unSync(List<Event> events) {
+        try {
+
+            if (events == null || events.isEmpty()) {
+                return false;
+            }
+
+            ClientField clientField = assetJsonToJava("ec_client_fields.json", ClientField.class);
+            return clientField != null;
+
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+
+        return false;
+    }
+
+    private Integer parseInt(String string) {
+        try {
+            return Integer.valueOf(string);
+        } catch (NumberFormatException e) {
+            Timber.e(e, e.toString());
+        }
+        return null;
     }
 
     private Float parseFloat(String string) {

@@ -11,8 +11,6 @@ import java.util.List;
 
 import timber.log.Timber;
 
-import static java.util.Arrays.asList;
-
 public class NavigationModel implements NavigationContract.Model {
     private static NavigationModel instance;
     private static List<NavigationOption> navigationOptions = new ArrayList<>();

@@ -123,19 +123,12 @@ public class OpdRegisterActivityInteractor extends BaseOpdRegisterActivityIntera
         }
     }
 
-    private void addImageLocation(String jsonString, int i, Client baseClient, Event baseEvent) {
-        if (baseClient != null || baseEvent != null) {
-            String imageLocation = null;
-            if (i == 0) {
-                imageLocation = OpdJsonFormUtils.getFieldValue(jsonString, OpdConstants.KEY.PHOTO);
-            } else if (i == 1) {
-                imageLocation =
-                        OpdJsonFormUtils.getFieldValue(jsonString, OpdJsonFormUtils.STEP2, OpdConstants.KEY.PHOTO);
-            }
-
-            if (StringUtils.isNotBlank(imageLocation)) {
-                OpdJsonFormUtils.saveImage(baseEvent.getProviderId(), baseClient.getBaseEntityId(), imageLocation);
-            }
+    private void addEvent(RegisterParams params, List<String> currentFormSubmissionIds, Event baseEvent) throws JSONException {
+        if (baseEvent != null) {
+            JSONObject eventJson = new JSONObject(OpdJsonFormUtils.gson.toJson(baseEvent));
+            getSyncHelper().addEvent(baseEvent.getBaseEntityId(), eventJson, params.getStatus());
+            currentFormSubmissionIds
+                    .add(eventJson.getString(EventClientRepository.event_column.formSubmissionId.toString()));
         }
     }
 
@@ -165,12 +158,19 @@ public class OpdRegisterActivityInteractor extends BaseOpdRegisterActivityIntera
         }
     }
 
-    private void addEvent(RegisterParams params, List<String> currentFormSubmissionIds, Event baseEvent) throws JSONException {
-        if (baseEvent != null) {
-            JSONObject eventJson = new JSONObject(OpdJsonFormUtils.gson.toJson(baseEvent));
-            getSyncHelper().addEvent(baseEvent.getBaseEntityId(), eventJson, params.getStatus());
-            currentFormSubmissionIds
-                    .add(eventJson.getString(EventClientRepository.event_column.formSubmissionId.toString()));
+    private void addImageLocation(String jsonString, int i, Client baseClient, Event baseEvent) {
+        if (baseClient != null || baseEvent != null) {
+            String imageLocation = null;
+            if (i == 0) {
+                imageLocation = OpdJsonFormUtils.getFieldValue(jsonString, OpdConstants.KEY.PHOTO);
+            } else if (i == 1) {
+                imageLocation =
+                        OpdJsonFormUtils.getFieldValue(jsonString, OpdJsonFormUtils.STEP2, OpdConstants.KEY.PHOTO);
+            }
+
+            if (StringUtils.isNotBlank(imageLocation)) {
+                OpdJsonFormUtils.saveImage(baseEvent.getProviderId(), baseClient.getBaseEntityId(), imageLocation);
+            }
         }
     }
 

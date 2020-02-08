@@ -82,7 +82,7 @@ public class OpdRegisterQueryProvider extends OpdRegisterQueryProviderContract {
     public String[] countExecuteQueries(@Nullable String filters, @Nullable String mainCondition) {
         SmartRegisterQueryBuilder sqb = new SmartRegisterQueryBuilder();
 
-        return new String[] {
+        return new String[]{
                 sqb.countQueryFts("ec_child", null, mainCondition, filters),
                 sqb.countQueryFts("ec_mother", null, mainCondition, filters),
                 sqb.countQueryFts("ec_client", null, mainCondition, filters)

@@ -91,6 +91,7 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
     private boolean lastModified;
     private ECSyncHelper ecSyncHelper;
     private EventClientRepository eventClientRepository;
+    private KipLocationRepository locationRepository;
 
     public static JsonSpecHelper getJsonSpecHelper() {
         return jsonSpecHelper;
@@ -208,6 +209,10 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
             vaccineGroups = VaccinatorUtils.getVaccineGroupsFromVaccineConfigFile(context, VaccinatorUtils.vaccines_file);
         }
         return vaccineGroups;
+    }
+
+    public static synchronized KipApplication getInstance() {
+        return (KipApplication) mInstance;
     }
 
     @Override
@@ -346,10 +351,6 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
         return kipLocationRepository;
     }
 
-    public static synchronized KipApplication getInstance() {
-        return (KipApplication) mInstance;
-    }
-
     private void initRepositories() {
         weightRepository();
         heightRepository();
@@ -456,6 +457,13 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
         }
 
         ImmunizationLibrary.getInstance().setVaccines(vaccines);
+    }
+
+    public KipLocationRepository locationRepository() {
+        if (locationRepository == null) {
+            locationRepository = new KipLocationRepository((KipRepository) getRepository());
+        }
+        return locationRepository;
     }
 
     @VisibleForTesting
