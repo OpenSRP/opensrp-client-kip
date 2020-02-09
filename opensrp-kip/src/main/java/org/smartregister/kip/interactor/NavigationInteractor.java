@@ -9,8 +9,8 @@ import org.smartregister.cursoradapter.SmartRegisterQueryBuilder;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.contract.NavigationContract;
 import org.smartregister.kip.util.AppExecutors;
-import org.smartregister.kip.util.KipConstants;
 import org.smartregister.kip.util.KipChildUtils;
+import org.smartregister.kip.util.KipConstants;
 
 import java.text.MessageFormat;
 import java.util.Date;
@@ -41,7 +41,7 @@ public class NavigationInteractor implements NavigationContract.Interactor {
                             String[] tableNames = tableName.split("\\|");
                             int currentCount = 0;
 
-                            for (String tableName: tableNames) {
+                            for (String tableName : tableNames) {
                                 if (!TextUtils.isEmpty(tableName)) {
                                     currentCount += getCount(tableName);
                                 }

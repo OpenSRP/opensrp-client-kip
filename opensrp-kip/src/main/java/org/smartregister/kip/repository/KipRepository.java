@@ -14,8 +14,6 @@ import org.smartregister.anc.library.repository.PreviousContactRepositoryHelper;
 import org.smartregister.child.util.Utils;
 import org.smartregister.configurableviews.repository.ConfigurableViewsRepository;
 import org.smartregister.domain.db.Column;
-import org.smartregister.kip.BuildConfig;
-import org.smartregister.kip.application.KipApplication;
 import org.smartregister.growthmonitoring.repository.HeightRepository;
 import org.smartregister.growthmonitoring.repository.HeightZScoreRepository;
 import org.smartregister.growthmonitoring.repository.WeightRepository;
@@ -24,6 +22,8 @@ import org.smartregister.immunization.repository.RecurringServiceRecordRepositor
 import org.smartregister.immunization.repository.RecurringServiceTypeRepository;
 import org.smartregister.immunization.repository.VaccineRepository;
 import org.smartregister.immunization.util.IMDatabaseUtils;
+import org.smartregister.kip.BuildConfig;
+import org.smartregister.kip.application.KipApplication;
 import org.smartregister.opd.repository.OpdCheckInRepository;
 import org.smartregister.opd.repository.OpdDetailsRepository;
 import org.smartregister.opd.repository.OpdDiagnosisAndTreatmentFormRepository;
@@ -202,19 +202,6 @@ public class KipRepository extends Repository {
     }
 
     /**
-     * Version 16 added service_group column
-     *
-     * @param database
-     */
-    private void upgradeToVersion8AddServiceGroupColumn(@NonNull SQLiteDatabase database) {
-        try {
-            database.execSQL(RecurringServiceTypeRepository.ADD_SERVICE_GROUP_COLUMN);
-        } catch (Exception e) {
-            Timber.e(e, "upgradeToVersion8AddServiceGroupColumn");
-        }
-    }
-
-    /**
      * Version 2 added some columns to the ec_child table
      *
      * @param database
@@ -383,6 +370,19 @@ public class KipRepository extends Repository {
 
         } catch (Exception e) {
             Timber.e("upgradeToVersion7RemoveUnnecessaryTables( %s", Log.getStackTraceString(e));
+        }
+    }
+
+    /**
+     * Version 16 added service_group column
+     *
+     * @param database
+     */
+    private void upgradeToVersion8AddServiceGroupColumn(@NonNull SQLiteDatabase database) {
+        try {
+            database.execSQL(RecurringServiceTypeRepository.ADD_SERVICE_GROUP_COLUMN);
+        } catch (Exception e) {
+            Timber.e(e, "upgradeToVersion8AddServiceGroupColumn");
         }
     }
 }

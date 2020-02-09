@@ -14,16 +14,16 @@ import org.smartregister.opd.presenter.OpdFormFragmentPresenter;
 
 public class OpdFormFragment extends BaseOpdFormFragment implements ClientLookUpListAdapter.ClickListener {
 
-    @Override
-    protected JsonWizardFormFragmentPresenter createPresenter() {
-        return new OpdFormFragmentPresenter(this, new OpdFormInteractor());
-    }
-
     public static JsonWizardFormFragment getFormFragment(String stepName) {
         OpdFormFragment jsonFormFragment = new OpdFormFragment();
         Bundle bundle = new Bundle();
         bundle.putString(JsonFormConstants.JSON_FORM_KEY.STEPNAME, stepName);
         jsonFormFragment.setArguments(bundle);
         return jsonFormFragment;
+    }
+
+    @Override
+    protected JsonWizardFormFragmentPresenter createPresenter() {
+        return new OpdFormFragmentPresenter(this, new OpdFormInteractor());
     }
 }

@@ -156,16 +156,6 @@ public class KipChildUtils extends Utils {
         }
     }
 
-    @NonNull
-    private static ArrayList<String> getLocationLevels() {
-        return new ArrayList<>(Arrays.asList(BuildConfig.LOCATION_LEVELS));
-    }
-
-    @NonNull
-    private static ArrayList<String> getHealthFacilityLevels() {
-        return new ArrayList<>(Arrays.asList(BuildConfig.HEALTH_FACILITY_LEVELS));
-    }
-
     public static void showLocations(@Nullable Activity context, @NonNull OnLocationChangeListener onLocationChangeListener, @Nullable NavigationMenu navigationMenu) {
         try {
             ArrayList<String> allLevels = getLocationLevels();
@@ -194,6 +184,16 @@ public class KipChildUtils extends Utils {
         } catch (JSONException e) {
             Timber.e(e);
         }
+    }
+
+    @NonNull
+    private static ArrayList<String> getLocationLevels() {
+        return new ArrayList<>(Arrays.asList(BuildConfig.LOCATION_LEVELS));
+    }
+
+    @NonNull
+    private static ArrayList<String> getHealthFacilityLevels() {
+        return new ArrayList<>(Arrays.asList(BuildConfig.HEALTH_FACILITY_LEVELS));
     }
 
 }

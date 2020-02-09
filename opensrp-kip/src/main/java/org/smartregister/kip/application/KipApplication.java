@@ -211,6 +211,10 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
         return vaccineGroups;
     }
 
+    public static synchronized KipApplication getInstance() {
+        return (KipApplication) mInstance;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -347,10 +351,6 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
         return kipLocationRepository;
     }
 
-    public static synchronized KipApplication getInstance() {
-        return (KipApplication) mInstance;
-    }
-
     private void initRepositories() {
         weightRepository();
         heightRepository();
@@ -458,6 +458,7 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
 
         ImmunizationLibrary.getInstance().setVaccines(vaccines);
     }
+
     public KipLocationRepository locationRepository() {
         if (locationRepository == null) {
             locationRepository = new KipLocationRepository((KipRepository) getRepository());

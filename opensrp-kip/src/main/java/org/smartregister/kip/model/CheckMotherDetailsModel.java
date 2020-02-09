@@ -1,8 +1,8 @@
 package org.smartregister.kip.model;
 
 import org.json.JSONObject;
-import org.smartregister.kip.util.KipConstants;
 import org.smartregister.kip.util.KipChildJsonFormUtils;
+import org.smartregister.kip.util.KipConstants;
 
 public class CheckMotherDetailsModel {
     private JSONObject client;

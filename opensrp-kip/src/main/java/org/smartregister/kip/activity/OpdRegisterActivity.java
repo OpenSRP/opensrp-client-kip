@@ -45,15 +45,20 @@ public class OpdRegisterActivity extends BaseOpdRegisterActivity implements NavD
     }
 
     @Override
-    public NavigationMenu getNavigationMenu() {
-        return navigationMenu;
+    protected Fragment[] getOtherFragments() {
+        ME_POSITION = 1;
+
+        Fragment[] fragments = new Fragment[1];
+        fragments[ME_POSITION - 1] = new KipMeFragment();
+
+        return fragments;
     }
 
     @Override
-    protected BaseRegisterFragment getRegisterFragment() {
-        return new OpdRegisterFragment();
+    protected void onResumption() {
+        super.onResumption();
+        createDrawer();
     }
-
 
     public void createDrawer() {
         navigationMenu = NavigationMenu.getInstance(this, null, null);
@@ -64,26 +69,56 @@ public class OpdRegisterActivity extends BaseOpdRegisterActivity implements NavD
     }
 
     @Override
-    protected void onResumption() {
-        super.onResumption();
-        createDrawer();
-    }
-
-    @Override
-    public void finishActivity() {
+    public void switchToBaseFragment() {
+        Intent intent = new Intent(this, OpdRegisterActivity.class);
+        startActivity(intent);
         finish();
     }
 
     @Override
-    public void openDrawer() {
-        if (navigationMenu != null) {
-            navigationMenu.openDrawer();
+    public OpdRegisterActivityContract.Presenter presenter() {
+        return (OpdRegisterActivityContract.Presenter) presenter;
+    }
+
+    @Override
+    public void startRegistration() {
+        //Do nothing
+    }
+
+    @Override
+    public void startFormActivity(String formName, String entityId, String metaData) {
+        if (mBaseFragment instanceof BaseOpdRegisterFragment) {
+            String locationId = OpdUtils.context().allSharedPreferences().getPreference(AllConstants.CURRENT_LOCATION_ID);
+            presenter().startForm(formName, entityId, metaData, locationId, null, null);
+        } else {
+            displayToast(getString(R.string.error_unable_to_start_form));
         }
     }
 
     @Override
-    public void closeDrawer() {
-        NavigationMenu.closeDrawer();
+    public NavigationMenu getNavigationMenu() {
+        return navigationMenu;
+    }
+
+    @Override
+    protected BaseRegisterFragment getRegisterFragment() {
+        return new OpdRegisterFragment();
+    }
+
+    @Override
+    public void startFormActivity(JSONObject jsonForm) {
+
+        Intent intent = new Intent(this, OpdLibrary.getInstance().getOpdConfiguration().getOpdMetadata().getOpdFormActivity());
+
+        intent.putExtra(OpdConstants.JSON_FORM_EXTRA.JSON, jsonForm.toString());
+
+        Form form = new Form();
+        form.setWizard(false);
+        form.setHideSaveLabel(true);
+        form.setNextLabel("");
+
+        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, form);
+        startActivityForResult(intent, OpdJsonFormUtils.REQUEST_CODE_GET_JSON);
     }
 
     @Override
@@ -117,56 +152,19 @@ public class OpdRegisterActivity extends BaseOpdRegisterActivity implements NavD
     }
 
     @Override
-    public void startFormActivity(String formName, String entityId, String metaData) {
-        if (mBaseFragment instanceof BaseOpdRegisterFragment) {
-            String locationId = OpdUtils.context().allSharedPreferences().getPreference(AllConstants.CURRENT_LOCATION_ID);
-            presenter().startForm(formName, entityId, metaData, locationId, null, null);
-        } else {
-            displayToast(getString(R.string.error_unable_to_start_form));
-        }
-    }
-
-    @Override
-    public void startFormActivity(JSONObject jsonForm) {
-
-        Intent intent = new Intent(this, OpdLibrary.getInstance().getOpdConfiguration().getOpdMetadata().getOpdFormActivity());
-
-        intent.putExtra(OpdConstants.JSON_FORM_EXTRA.JSON, jsonForm.toString());
-
-        Form form = new Form();
-        form.setWizard(false);
-        form.setHideSaveLabel(true);
-        form.setNextLabel("");
-
-        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, form);
-        startActivityForResult(intent, OpdJsonFormUtils.REQUEST_CODE_GET_JSON);
-    }
-
-
-    @Override
-    public void switchToBaseFragment() {
-        Intent intent = new Intent(this, OpdRegisterActivity.class);
-        startActivity(intent);
+    public void finishActivity() {
         finish();
     }
 
     @Override
-    public OpdRegisterActivityContract.Presenter presenter() {
-        return (OpdRegisterActivityContract.Presenter) presenter;
+    public void openDrawer() {
+        if (navigationMenu != null) {
+            navigationMenu.openDrawer();
+        }
     }
 
     @Override
-    public void startRegistration() {
-        //Do nothing
-    }
-
-    @Override
-    protected Fragment[] getOtherFragments() {
-        ME_POSITION = 1;
-
-        Fragment[] fragments = new Fragment[1];
-        fragments[ME_POSITION - 1] = new KipMeFragment();
-
-        return fragments;
+    public void closeDrawer() {
+        NavigationMenu.closeDrawer();
     }
 }

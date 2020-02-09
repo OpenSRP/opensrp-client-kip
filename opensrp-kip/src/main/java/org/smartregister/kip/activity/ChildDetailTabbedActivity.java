@@ -16,8 +16,8 @@ import org.smartregister.AllConstants;
 import org.smartregister.child.activity.BaseChildDetailTabbedActivity;
 import org.smartregister.child.fragment.StatusEditDialogFragment;
 import org.smartregister.child.task.LoadAsyncTask;
-import org.smartregister.kip.fragment.ChildRegistrationDataFragment;
 import org.smartregister.kip.R;
+import org.smartregister.kip.fragment.ChildRegistrationDataFragment;
 import org.smartregister.kip.util.KipChildJsonFormUtils;
 import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.util.FormUtils;
@@ -153,20 +153,6 @@ public class ChildDetailTabbedActivity extends BaseChildDetailTabbedActivity {
     }
 
     @Override
-    public void startFormActivity(String formData) {
-        Form formParam = new Form();
-        formParam.setWizard(false);
-        formParam.setHideSaveLabel(true);
-        formParam.setNextLabel("");
-
-        Intent intent = new Intent(getApplicationContext(), org.smartregister.child.util.Utils.metadata().childFormActivity);
-        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, formParam);
-        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.JSON, formData);
-
-        startActivityForResult(intent, REQUEST_CODE_GET_JSON);
-    }
-
-    @Override
     protected String getReportDeceasedMetadata() {
         try {
             JSONObject form = FormUtils.getInstance(getApplicationContext()).getFormJson("report_deceased");
@@ -196,5 +182,19 @@ public class ChildDetailTabbedActivity extends BaseChildDetailTabbedActivity {
             Timber.e(e);
         }
         return "";
+    }
+
+    @Override
+    public void startFormActivity(String formData) {
+        Form formParam = new Form();
+        formParam.setWizard(false);
+        formParam.setHideSaveLabel(true);
+        formParam.setNextLabel("");
+
+        Intent intent = new Intent(getApplicationContext(), org.smartregister.child.util.Utils.metadata().childFormActivity);
+        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, formParam);
+        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.JSON, formData);
+
+        startActivityForResult(intent, REQUEST_CODE_GET_JSON);
     }
 }
