@@ -14,7 +14,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
-import org.smartregister.Context;
 import org.smartregister.child.activity.BaseChildRegisterActivity;
 import org.smartregister.child.model.BaseChildRegisterModel;
 import org.smartregister.child.presenter.BaseChildRegisterPresenter;
@@ -31,7 +30,6 @@ import org.smartregister.kip.util.KipConstants;
 import org.smartregister.kip.util.KipJsonFormUtils;
 import org.smartregister.kip.view.NavDrawerActivity;
 import org.smartregister.kip.view.NavigationMenu;
-import org.smartregister.login.task.RemoteLoginTask;
 import org.smartregister.view.fragment.BaseRegisterFragment;
 
 import java.lang.ref.WeakReference;
@@ -162,12 +160,10 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
     @Override
     public void startFormActivity(JSONObject jsonForm) {
         Intent intent = new Intent(this, Utils.metadata().childFormActivity);
-        Context context = RemoteLoginTask.getOpenSRPContext();
         if (jsonForm.has(KipConstants.KEY.ENCOUNTER_TYPE) && jsonForm.optString(KipConstants.KEY.ENCOUNTER_TYPE).equals(KipConstants.KEY.BIRTH_REGISTRATION)) {
             KipJsonFormUtils.KipAddChildRegLocHierarchyQuestions(jsonForm, getOpenSRPContext());
 
         }
-//        KipLocationUtility.addChildRegLocHierarchyQuestions(jsonForm, context);
         intent.putExtra(Constants.INTENT_KEY.JSON, jsonForm.toString());
         intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, getForm());
         startActivityForResult(intent, JsonFormUtils.REQUEST_CODE_GET_JSON);

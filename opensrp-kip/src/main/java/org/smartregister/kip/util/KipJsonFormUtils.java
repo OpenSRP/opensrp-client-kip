@@ -18,6 +18,7 @@ import org.smartregister.child.util.Constants;
 import org.smartregister.child.util.JsonFormUtils;
 import org.smartregister.child.util.Utils;
 import org.smartregister.kip.application.KipApplication;
+import org.smartregister.kip.context.AllSettings;
 import org.smartregister.kip.context.KipContext;
 import org.smartregister.kip.repository.KipLocationRepository;
 import org.smartregister.location.helper.LocationHelper;
@@ -80,8 +81,7 @@ public class KipJsonFormUtils extends JsonFormUtils {
     }
 
 
-    public static void KipAddChildRegLocHierarchyQuestions(JSONObject form,
-                                                           org.smartregister.Context context) {
+    public static void KipAddChildRegLocHierarchyQuestions(JSONObject form, org.smartregister.Context context) {
         try {
             JSONArray questions = form.getJSONObject("step1").getJSONArray("fields");
             ArrayList<String> allLevels = new ArrayList<>();
@@ -438,5 +438,42 @@ public class KipJsonFormUtils extends JsonFormUtils {
         }
 
         return null;
+    }
+
+
+    public void addRelationshipTypesQuestions(JSONObject form) {
+        String UNIVERSAL_OPENMRS_RELATIONSHIP_TYPE_UUID = "8d91a210-c2cc-11de-8d13-0010c6dffd0f";
+
+        try {
+            JSONArray questions = form.getJSONObject("step1").getJSONArray("fields");
+            JSONArray relationshipTypes = new JSONObject(AllSettings.fetchRelationshipTypes() ).getJSONArray("relationshipTypes");
+
+            for (int i = 0; i < questions.length(); i++) {
+                if (questions.getJSONObject(i).getString("key").equals("Mother_Guardian_Relationship")
+                        || questions.getJSONObject(i).getString("key").equals("Father_Guardian_Relationship")) {
+
+                    JSONArray values = new JSONArray();
+                    String value = "";
+
+                    if (relationshipTypes != null && relationshipTypes.length() > 0) {
+                        for (int n = 0; n < relationshipTypes.length(); n++) {
+                            JSONObject rType = new JSONObject(relationshipTypes.getString(n));
+                            values.put(rType.getString("name"));
+                            if (rType.has("key") && rType.get("key").equals(UNIVERSAL_OPENMRS_RELATIONSHIP_TYPE_UUID)) {
+                                value = rType.getString("name");
+                            }
+                        }
+                    }
+
+                    questions.getJSONObject(i).remove(JsonFormUtils.VALUES);
+                    questions.getJSONObject(i).put(JsonFormUtils.VALUES, values);
+                    // Set the default relationship type.
+                    questions.getJSONObject(i).remove(JsonFormUtils.VALUE);
+                    questions.getJSONObject(i).put(JsonFormUtils.VALUE, value);
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, Log.getStackTraceString(e));
+        }
     }
 }
