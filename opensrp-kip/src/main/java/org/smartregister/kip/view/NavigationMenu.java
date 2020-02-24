@@ -137,17 +137,6 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         }
     }
 
-    private void registerDrawer(Activity parentActivity) {
-        if (drawer != null) {
-            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                    parentActivity, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-            drawer.addDrawerListener(toggle);
-            toggle.syncState();
-
-        }
-    }
-
     @Override
     public void prepareViews(Activity activity) {
         drawer = activity.findViewById(R.id.drawer_layout);
@@ -197,16 +186,55 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         mPresenter.refreshLastSync();
     }
 
-    private void registerSettings(@NonNull final Activity activity) {
-        if (settingsLayout != null) {
-            settingsLayout.setOnClickListener(v -> {
-                if (activity instanceof BaseRegisterActivity) {
-                    ((BaseRegisterActivity) activity).switchToFragment(BaseRegisterActivity.ME_POSITION);
-                    closeDrawer();
-                } else {
-                    Timber.e(new Exception("Cannot open Settings since this activity is not a child of BaseRegisterActivity"));
-                }
-            });
+    @Override
+    public void refreshLastSync(Date lastSync) {
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa, MMM d", Locale.getDefault());
+        if (rootView != null) {
+            TextView tvLastSyncTime = rootView.findViewById(R.id.tvSyncTime);
+            if (lastSync != null) {
+                tvLastSyncTime.setVisibility(View.VISIBLE);
+                tvLastSyncTime.setText(MessageFormat.format(" {0}", sdf.format(lastSync)));
+            } else {
+                tvLastSyncTime.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
+
+    @Override
+    public void refreshCurrentUser(String name) {
+        if (tvLogout != null && activityWeakReference.get() != null) {
+            tvLogout.setText(
+                    String.format("%s %s", activityWeakReference.get().getResources().getString(R.string.log_out_as), name));
+        }
+    }
+
+    @Override
+    public void logout(Activity activity) {
+        Toast.makeText(activity.getApplicationContext(), activity.getResources().getText(R.string.action_log_out),
+                Toast.LENGTH_SHORT).show();
+        KipApplication.getInstance().logoutCurrentUser();
+    }
+
+    @Override
+    public void refreshCount() {
+        navigationAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void updateUi(@Nullable String location) {
+        if (txtLocationSelected != null && StringUtils.isNotBlank(location)) {
+            txtLocationSelected.setText(location);
+        }
+    }
+
+    private void registerDrawer(Activity parentActivity) {
+        if (drawer != null) {
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    parentActivity, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.addDrawerListener(toggle);
+            toggle.syncState();
+
         }
     }
 
@@ -259,6 +287,19 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
                 .setOnClickListener(v -> startP2PActivity(activity));
     }
 
+    private void registerSettings(@NonNull final Activity activity) {
+        if (settingsLayout != null) {
+            settingsLayout.setOnClickListener(v -> {
+                if (activity instanceof BaseRegisterActivity) {
+                    ((BaseRegisterActivity) activity).switchToFragment(BaseRegisterActivity.ME_POSITION);
+                    closeDrawer();
+                } else {
+                    Timber.e(new Exception("Cannot open Settings since this activity is not a child of BaseRegisterActivity"));
+                }
+            });
+        }
+    }
+
     protected void refreshSyncProgressSpinner() {
         if (SyncStatusBroadcastReceiver.getInstance().isSyncing()) {
             syncProgressBar.setVisibility(View.VISIBLE);
@@ -273,38 +314,14 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         activity.startActivity(new Intent(activity, P2pModeSelectActivity.class));
     }
 
-    @Override
-    public void refreshLastSync(Date lastSync) {
-        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa, MMM d", Locale.getDefault());
-        if (rootView != null) {
-            TextView tvLastSyncTime = rootView.findViewById(R.id.tvSyncTime);
-            if (lastSync != null) {
-                tvLastSyncTime.setVisibility(View.VISIBLE);
-                tvLastSyncTime.setText(MessageFormat.format(" {0}", sdf.format(lastSync)));
-            } else {
-                tvLastSyncTime.setVisibility(View.INVISIBLE);
-            }
+    public static void closeDrawer() {
+        if (instance != null && instance.getDrawer() != null) {
+            instance.getDrawer().closeDrawer(Gravity.START);
         }
     }
 
-    @Override
-    public void refreshCurrentUser(String name) {
-        if (tvLogout != null && activityWeakReference.get() != null) {
-            tvLogout.setText(
-                    String.format("%s %s", activityWeakReference.get().getResources().getString(R.string.log_out_as), name));
-        }
-    }
-
-    @Override
-    public void logout(Activity activity) {
-        Toast.makeText(activity.getApplicationContext(), activity.getResources().getText(R.string.action_log_out),
-                Toast.LENGTH_SHORT).show();
-        KipApplication.getInstance().logoutCurrentUser();
-    }
-
-    @Override
-    public void refreshCount() {
-        navigationAdapter.notifyDataSetChanged();
+    public DrawerLayout getDrawer() {
+        return drawer;
     }
 
     public NavigationAdapter getNavigationAdapter() {
@@ -338,22 +355,5 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
 
     public void openDrawer() {
         drawer.openDrawer(GravityCompat.START);
-    }
-
-    public DrawerLayout getDrawer() {
-        return drawer;
-    }
-
-    public static void closeDrawer() {
-        if (instance != null && instance.getDrawer() != null) {
-            instance.getDrawer().closeDrawer(Gravity.START);
-        }
-    }
-
-    @Override
-    public void updateUi(@Nullable String location) {
-        if (txtLocationSelected != null && StringUtils.isNotBlank(location)) {
-            txtLocationSelected.setText(location);
-        }
     }
 }

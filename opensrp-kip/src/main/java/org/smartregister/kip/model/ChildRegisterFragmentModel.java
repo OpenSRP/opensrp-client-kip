@@ -10,12 +10,6 @@ import org.smartregister.kip.util.KipConstants;
  */
 public class ChildRegisterFragmentModel extends BaseChildRegisterFragmentModel {
     @Override
-    public AdvancedMatrixCursor createMatrixCursor(Response<String> response) {
-        //Just overriddenn
-        return null;
-    }
-
-    @Override
     protected String[] mainColumns(String tableName, String parentTableName) {
         return new String[]{
                 tableName + "." + KipConstants.KEY.RELATIONALID,
@@ -43,5 +37,11 @@ public class ChildRegisterFragmentModel extends BaseChildRegisterFragmentModel {
                 tableName + "." + KipConstants.KEY.CLIENT_REG_DATE,
                 tableName + "." + KipConstants.KEY.LAST_INTERACTED_WITH
         };
+    }
+
+    @Override
+    public AdvancedMatrixCursor createMatrixCursor(Response<String> response) {
+        //Just overriddenn
+        return null;
     }
 }

@@ -40,6 +40,79 @@ public class AdvancedSearchFragment extends BaseAdvancedSearchFragment {
     }
 
     @Override
+    public void populateSearchableFields(View view) {
+        firstName = view.findViewById(org.smartregister.child.R.id.first_name);
+        advancedFormSearchableFields.put(KipConstants.KEY.FIRST_NAME, firstName);
+
+        lastName = view.findViewById(org.smartregister.child.R.id.last_name);
+        advancedFormSearchableFields.put(KipConstants.KEY.LAST_NAME, lastName);
+
+        openSrpId = view.findViewById(org.smartregister.child.R.id.opensrp_id);
+        advancedFormSearchableFields.put(KipConstants.KEY.ZEIR_ID, openSrpId);
+
+        motherGuardianFirstName = view.findViewById(org.smartregister.child.R.id.mother_guardian_first_name);
+        advancedFormSearchableFields.put(KipConstants.KEY.MOTHER_FIRST_NAME, motherGuardianFirstName);
+
+        motherGuardianLastName = view.findViewById(org.smartregister.child.R.id.mother_guardian_last_name);
+        advancedFormSearchableFields.put(KipConstants.KEY.MOTHER_LAST_NAME, motherGuardianLastName);
+
+        motherGuardianNid = view.findViewById(org.smartregister.child.R.id.mother_guardian_nrc);
+        advancedFormSearchableFields.put(KipConstants.KEY.MOTHER_NRC_NUMBER, motherGuardianNid);
+
+        motherGuardianPhoneNumber = view.findViewById(org.smartregister.child.R.id.mother_guardian_phone_number);
+        advancedFormSearchableFields.put(KipConstants.KEY.MOTHER_GUARDIAN_NUMBER, motherGuardianPhoneNumber);
+
+
+        firstName.addTextChangedListener(advancedSearchTextwatcher);
+        lastName.addTextChangedListener(advancedSearchTextwatcher);
+        openSrpId.addTextChangedListener(advancedSearchTextwatcher);
+        motherGuardianFirstName.addTextChangedListener(advancedSearchTextwatcher);
+        motherGuardianLastName.addTextChangedListener(advancedSearchTextwatcher);
+        motherGuardianNid.addTextChangedListener(advancedSearchTextwatcher);
+        motherGuardianPhoneNumber.addTextChangedListener(advancedSearchTextwatcher);
+    }
+
+    @Override
+    public void assignedValuesBeforeBarcode() {
+        if (searchFormData.size() > 0) {
+            firstName.setText(searchFormData.get(KipConstants.KEY.FIRST_NAME));
+            lastName.setText(searchFormData.get(KipConstants.KEY.LAST_NAME));
+            motherGuardianFirstName.setText(searchFormData.get(KipConstants.KEY.MOTHER_FIRST_NAME));
+            motherGuardianLastName.setText(searchFormData.get(KipConstants.KEY.MOTHER_LAST_NAME));
+            motherGuardianNid.setText(searchFormData.get(KipConstants.KEY.MOTHER_NRC_NUMBER));
+            motherGuardianPhoneNumber.setText(searchFormData.get(KipConstants.KEY.MOTHER_GUARDIAN_NUMBER));
+            openSrpId.setText(searchFormData.get(KipConstants.KEY.ZEIR_ID));
+        }
+    }
+
+    @Override
+    protected HashMap<String, String> createSelectedFieldMap() {
+        HashMap<String, String> fields = new HashMap<>();
+        fields.put(KipConstants.KEY.FIRST_NAME, firstName.getText().toString());
+        fields.put(KipConstants.KEY.LAST_NAME, lastName.getText().toString());
+        fields.put(KipConstants.KEY.MOTHER_FIRST_NAME, motherGuardianFirstName.getText().toString());
+        fields.put(KipConstants.KEY.MOTHER_LAST_NAME, motherGuardianLastName.getText().toString());
+        fields.put(KipConstants.KEY.MOTHER_NRC_NUMBER, motherGuardianNid.getText().toString());
+        fields.put(KipConstants.KEY.MOTHER_GUARDIAN_NUMBER, motherGuardianPhoneNumber.getText().toString());
+        fields.put(KipConstants.KEY.ZEIR_ID, openSrpId.getText().toString());
+        return fields;
+    }
+
+    @Override
+
+    protected void clearFormFields() {
+        super.clearFormFields();
+        openSrpId.setText("");
+        firstName.setText("");
+        lastName.setText("");
+        motherGuardianFirstName.setText("");
+        motherGuardianLastName.setText("");
+        motherGuardianNid.setText("");
+        motherGuardianPhoneNumber.setText("");
+
+    }
+
+    @Override
     protected String getMainCondition() {
         return DBQueryHelper.getHomeRegisterCondition();
     }
@@ -89,79 +162,6 @@ public class AdvancedSearchFragment extends BaseAdvancedSearchFragment {
         }
 
         return searchParams;
-    }
-
-    @Override
-    public void assignedValuesBeforeBarcode() {
-        if (searchFormData.size() > 0) {
-            firstName.setText(searchFormData.get(KipConstants.KEY.FIRST_NAME));
-            lastName.setText(searchFormData.get(KipConstants.KEY.LAST_NAME));
-            motherGuardianFirstName.setText(searchFormData.get(KipConstants.KEY.MOTHER_FIRST_NAME));
-            motherGuardianLastName.setText(searchFormData.get(KipConstants.KEY.MOTHER_LAST_NAME));
-            motherGuardianNid.setText(searchFormData.get(KipConstants.KEY.MOTHER_NRC_NUMBER));
-            motherGuardianPhoneNumber.setText(searchFormData.get(KipConstants.KEY.MOTHER_GUARDIAN_NUMBER));
-            openSrpId.setText(searchFormData.get(KipConstants.KEY.ZEIR_ID));
-        }
-    }
-
-    @Override
-    public void populateSearchableFields(View view) {
-        firstName = view.findViewById(org.smartregister.child.R.id.first_name);
-        advancedFormSearchableFields.put(KipConstants.KEY.FIRST_NAME, firstName);
-
-        lastName = view.findViewById(org.smartregister.child.R.id.last_name);
-        advancedFormSearchableFields.put(KipConstants.KEY.LAST_NAME, lastName);
-
-        openSrpId = view.findViewById(org.smartregister.child.R.id.opensrp_id);
-        advancedFormSearchableFields.put(KipConstants.KEY.ZEIR_ID, openSrpId);
-
-        motherGuardianFirstName = view.findViewById(org.smartregister.child.R.id.mother_guardian_first_name);
-        advancedFormSearchableFields.put(KipConstants.KEY.MOTHER_FIRST_NAME, motherGuardianFirstName);
-
-        motherGuardianLastName = view.findViewById(org.smartregister.child.R.id.mother_guardian_last_name);
-        advancedFormSearchableFields.put(KipConstants.KEY.MOTHER_LAST_NAME, motherGuardianLastName);
-
-        motherGuardianNid = view.findViewById(org.smartregister.child.R.id.mother_guardian_nrc);
-        advancedFormSearchableFields.put(KipConstants.KEY.MOTHER_NRC_NUMBER, motherGuardianNid);
-
-        motherGuardianPhoneNumber = view.findViewById(org.smartregister.child.R.id.mother_guardian_phone_number);
-        advancedFormSearchableFields.put(KipConstants.KEY.MOTHER_GUARDIAN_NUMBER, motherGuardianPhoneNumber);
-
-
-        firstName.addTextChangedListener(advancedSearchTextwatcher);
-        lastName.addTextChangedListener(advancedSearchTextwatcher);
-        openSrpId.addTextChangedListener(advancedSearchTextwatcher);
-        motherGuardianFirstName.addTextChangedListener(advancedSearchTextwatcher);
-        motherGuardianLastName.addTextChangedListener(advancedSearchTextwatcher);
-        motherGuardianNid.addTextChangedListener(advancedSearchTextwatcher);
-        motherGuardianPhoneNumber.addTextChangedListener(advancedSearchTextwatcher);
-    }
-
-    @Override
-    protected HashMap<String, String> createSelectedFieldMap() {
-        HashMap<String, String> fields = new HashMap<>();
-        fields.put(KipConstants.KEY.FIRST_NAME, firstName.getText().toString());
-        fields.put(KipConstants.KEY.LAST_NAME, lastName.getText().toString());
-        fields.put(KipConstants.KEY.MOTHER_FIRST_NAME, motherGuardianFirstName.getText().toString());
-        fields.put(KipConstants.KEY.MOTHER_LAST_NAME, motherGuardianLastName.getText().toString());
-        fields.put(KipConstants.KEY.MOTHER_NRC_NUMBER, motherGuardianNid.getText().toString());
-        fields.put(KipConstants.KEY.MOTHER_GUARDIAN_NUMBER, motherGuardianPhoneNumber.getText().toString());
-        fields.put(KipConstants.KEY.ZEIR_ID, openSrpId.getText().toString());
-        return fields;
-    }
-
-    @Override
-
-    protected void clearFormFields() {
-        super.clearFormFields();
-        openSrpId.setText("");
-        firstName.setText("");
-        lastName.setText("");
-        motherGuardianFirstName.setText("");
-        motherGuardianLastName.setText("");
-        motherGuardianNid.setText("");
-        motherGuardianPhoneNumber.setText("");
-
     }
 
     @Override

@@ -6,6 +6,15 @@ public class KipConstants {
     public static final String PROTECTED_AT_BIRTH = "protected_at_birth";
     public static final String REACTION_VACCINE = "Reaction_Vaccine";
 
+    public interface DateFormat {
+        String HH_MM_AMPM = "h:mm a";
+    }
+
+    public interface RegisterType {
+        String ANC = "anc";
+        String CHILD = "child";
+    }
+
     public static final class KEY {
         public static final String MOTHER_BASE_ENTITY_ID = "mother_base_entity_id";
         public static final String DB_MOTHER_DOB = "mother_dob";
@@ -214,7 +223,6 @@ public class KipConstants {
         public static final String CHILD = "child";
     }
 
-
     public static final class EntityType {
         public static final String CHILD = "child";
     }
@@ -252,7 +260,6 @@ public class KipConstants {
         public static final String NO = "2";
     }
 
-
     public static final class CONCEPT {
         public final static String VACCINE_DATE = "1410AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
     }
@@ -264,14 +271,5 @@ public class KipConstants {
 
     public class IntentKeyUtil {
         public static final String IS_REMOTE_LOGIN = "is_remote_login";
-    }
-
-    public interface DateFormat {
-        String HH_MM_AMPM = "h:mm a";
-    }
-
-    public interface RegisterType {
-        String ANC = "anc";
-        String CHILD = "child";
     }
 }

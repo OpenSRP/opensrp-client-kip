@@ -52,6 +52,15 @@ public class OpdRegisterActivityPresenter extends BaseOpdRegisterActivityPresent
     }
 
     @Override
+    public void saveLanguage(String language) {
+        model.saveLanguage(language);
+
+        if (getView() != null) {
+            getView().displayToast(String.format(getView().getContext().getString(R.string.language_x_selected), language));
+        }
+    }
+
+    @Override
     public void onNoUniqueId() {
         if (getView() != null) {
             getView().displayShortToast(R.string.no_unique_id);
@@ -72,15 +81,6 @@ public class OpdRegisterActivityPresenter extends BaseOpdRegisterActivityPresent
             return viewReference.get();
         } else {
             return null;
-        }
-    }
-
-    @Override
-    public void saveLanguage(String language) {
-        model.saveLanguage(language);
-
-        if (getView() != null) {
-            getView().displayToast(String.format(getView().getContext().getString(R.string.language_x_selected), language));
         }
     }
 }

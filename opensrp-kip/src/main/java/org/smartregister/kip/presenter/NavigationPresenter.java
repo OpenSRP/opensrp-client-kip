@@ -2,11 +2,6 @@ package org.smartregister.kip.presenter;
 
 import android.app.Activity;
 
-import org.smartregister.kip.contract.NavigationContract;
-import org.smartregister.kip.interactor.NavigationInteractor;
-import org.smartregister.kip.model.NavigationModel;
-import org.smartregister.kip.model.NavigationOption;
-import org.smartregister.kip.util.KipConstants;
 import org.smartregister.growthmonitoring.job.HeightIntentServiceJob;
 import org.smartregister.growthmonitoring.job.WeightIntentServiceJob;
 import org.smartregister.growthmonitoring.job.ZScoreRefreshIntentServiceJob;
@@ -14,6 +9,11 @@ import org.smartregister.immunization.job.VaccineServiceJob;
 import org.smartregister.job.ImageUploadServiceJob;
 import org.smartregister.job.SyncServiceJob;
 import org.smartregister.job.SyncSettingsServiceJob;
+import org.smartregister.kip.contract.NavigationContract;
+import org.smartregister.kip.interactor.NavigationInteractor;
+import org.smartregister.kip.model.NavigationModel;
+import org.smartregister.kip.model.NavigationOption;
+import org.smartregister.kip.util.KipConstants;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;

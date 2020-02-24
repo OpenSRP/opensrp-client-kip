@@ -9,7 +9,6 @@ import org.smartregister.kip.R;
 import org.smartregister.kip.util.KipConstants;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;

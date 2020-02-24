@@ -78,6 +78,11 @@ public class OpdRegisterFragment extends BaseOpdRegisterFragment {
     }
 
     @Override
+    protected String getDefaultSortQuery() {
+        return "";
+    }
+
+    @Override
     protected void startRegistration() {
         OpdRegisterActivity opdRegisterActivity = (OpdRegisterActivity) getActivity();
         OpdMetadata opdMetadata = OpdLibrary.getInstance().getOpdConfiguration().getOpdMetadata();
@@ -86,6 +91,15 @@ public class OpdRegisterFragment extends BaseOpdRegisterFragment {
             opdRegisterActivity.startFormActivity(opdMetadata.getOpdRegistrationFormName()
                     , null
                     , null);
+        }
+    }
+
+    @Override
+    protected void onViewClicked(View view) {
+        super.onViewClicked(view);
+
+        if (view.getId() == R.id.switch_selection) {
+            toggleFilterSelection(view);
         }
     }
 
@@ -126,20 +140,6 @@ public class OpdRegisterFragment extends BaseOpdRegisterFragment {
             Intent intent = new Intent(getActivity(), opdMetadata.getProfileActivity());
             intent.putExtra(OpdConstants.IntentKey.CLIENT_OBJECT, commonPersonObjectClient);
             startActivity(intent);
-        }
-    }
-
-    @Override
-    protected String getDefaultSortQuery() {
-        return "";
-    }
-
-    @Override
-    protected void onViewClicked(View view) {
-        super.onViewClicked(view);
-
-        if (view.getId() == R.id.switch_selection) {
-            toggleFilterSelection(view);
         }
     }
 

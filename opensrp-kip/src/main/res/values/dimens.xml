@@ -55,5 +55,5 @@
 
     <dimen name="sync_time_padding_right">20dp</dimen>
     <dimen name="sync_time_padding">15dp</dimen>
-
+    <dimen name="advanced_search_text_size">16sp</dimen>
 </resources>

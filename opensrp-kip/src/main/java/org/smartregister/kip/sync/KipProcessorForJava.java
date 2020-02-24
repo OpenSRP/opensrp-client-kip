@@ -99,7 +99,7 @@ public class KipProcessorForJava extends ClientProcessorForJava {
                         continue;
                     }
 
-                    if(!childExists(eventClient.getClient().getBaseEntityId())){
+                    if (!childExists(eventClient.getClient().getBaseEntityId())) {
                         List<String> createCase = new ArrayList<>();
                         createCase.add("ec_child");
                         processCaseModel(event, eventClient.getClient(), createCase);
@@ -384,42 +384,6 @@ public class KipProcessorForJava extends ClientProcessorForJava {
         }
     }
 
-    @NotNull
-    private String getServiceValue(ContentValues contentValues) {
-        String value;
-        value = RecurringIntentService.ITN_PROVIDED;
-        if (contentValues.getAsString("itn_has_net") != null) {
-            value = RecurringIntentService.CHILD_HAS_NET;
-        }
-        return value;
-    }
-
-    @Nullable
-    private String getServiceTypeName(ContentValues contentValues) {
-        String name = contentValues.getAsString(RecurringServiceTypeRepository.NAME);
-        if (StringUtils.isNotBlank(name)) {
-            name = name.replaceAll("_", " ").replace("dose", "").trim();
-        }
-        return name;
-    }
-
-    private void recordServiceRecord(EventClient service, ContentValues contentValues, String name, Date date, String value, List<ServiceType> serviceTypeList) {
-        RecurringServiceRecordRepository recurringServiceRecordRepository = KipApplication.getInstance()
-                .recurringServiceRecordRepository();
-        ServiceRecord serviceObj = getServiceRecord(service, contentValues, name, date, value, serviceTypeList);
-        String createdAtString = contentValues.getAsString(RecurringServiceRecordRepository.CREATED_AT);
-        Date createdAt = getDate(createdAtString);
-        serviceObj.setCreatedAt(createdAt);
-
-        recurringServiceRecordRepository.add(serviceObj);
-    }
-
-    private List<ServiceType> getServiceTypes(String name) {
-        RecurringServiceTypeRepository recurringServiceTypeRepository = KipApplication.getInstance()
-                .recurringServiceTypeRepository();
-        return recurringServiceTypeRepository.searchByName(name);
-    }
-
     private void processBCGScarEvent(EventClient bcgScarEventClient) {
         if (bcgScarEventClient == null || bcgScarEventClient.getEvent() == null) {
             return;
@@ -514,6 +478,42 @@ public class KipProcessorForJava extends ClientProcessorForJava {
             Timber.e(e, e.toString());
         }
         return null;
+    }
+
+    @Nullable
+    private String getServiceTypeName(ContentValues contentValues) {
+        String name = contentValues.getAsString(RecurringServiceTypeRepository.NAME);
+        if (StringUtils.isNotBlank(name)) {
+            name = name.replaceAll("_", " ").replace("dose", "").trim();
+        }
+        return name;
+    }
+
+    @NotNull
+    private String getServiceValue(ContentValues contentValues) {
+        String value;
+        value = RecurringIntentService.ITN_PROVIDED;
+        if (contentValues.getAsString("itn_has_net") != null) {
+            value = RecurringIntentService.CHILD_HAS_NET;
+        }
+        return value;
+    }
+
+    private List<ServiceType> getServiceTypes(String name) {
+        RecurringServiceTypeRepository recurringServiceTypeRepository = KipApplication.getInstance()
+                .recurringServiceTypeRepository();
+        return recurringServiceTypeRepository.searchByName(name);
+    }
+
+    private void recordServiceRecord(EventClient service, ContentValues contentValues, String name, Date date, String value, List<ServiceType> serviceTypeList) {
+        RecurringServiceRecordRepository recurringServiceRecordRepository = KipApplication.getInstance()
+                .recurringServiceRecordRepository();
+        ServiceRecord serviceObj = getServiceRecord(service, contentValues, name, date, value, serviceTypeList);
+        String createdAtString = contentValues.getAsString(RecurringServiceRecordRepository.CREATED_AT);
+        Date createdAt = getDate(createdAtString);
+        serviceObj.setCreatedAt(createdAt);
+
+        recurringServiceRecordRepository.add(serviceObj);
     }
 
     @NotNull

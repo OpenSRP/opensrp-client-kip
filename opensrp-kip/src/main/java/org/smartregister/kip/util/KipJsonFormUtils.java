@@ -19,7 +19,6 @@ import org.smartregister.child.util.JsonFormUtils;
 import org.smartregister.child.util.Utils;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.context.AllSettings;
-import org.smartregister.kip.context.KipContext;
 import org.smartregister.kip.repository.KipLocationRepository;
 import org.smartregister.location.helper.LocationHelper;
 import org.smartregister.util.AssetHandler;
@@ -124,7 +123,6 @@ public class KipJsonFormUtils extends JsonFormUtils {
     }
 
 
-
     private static JSONArray generateLocationArray(String locationTag, org.smartregister.Context context, boolean b, ArrayList<String> strings) throws
             JSONException {
 
@@ -222,7 +220,7 @@ public class KipJsonFormUtils extends JsonFormUtils {
     }
 
     public static String getOpenMrsReadableName(String name) {
-        String readableName = new String(name);
+        String readableName = name;
 
         Pattern prefixPattern = Pattern.compile("^[a-z]{2} (.*)$");
         Matcher prefixMatcher = prefixPattern.matcher(readableName);
