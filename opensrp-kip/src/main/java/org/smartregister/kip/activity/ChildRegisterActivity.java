@@ -39,13 +39,10 @@ import org.smartregister.kip.util.KipJsonFormUtils;
 import org.smartregister.kip.view.NavDrawerActivity;
 import org.smartregister.kip.view.NavigationMenu;
 import org.smartregister.listener.BottomNavigationListener;
-import org.smartregister.login.task.RemoteLoginTask;
 import org.smartregister.view.activity.BaseRegisterActivity;
 import org.smartregister.view.fragment.BaseRegisterFragment;
 
 import java.lang.ref.WeakReference;
-
-import static org.smartregister.login.task.RemoteLoginTask.getOpenSRPContext;
 
 public class ChildRegisterActivity extends BaseChildRegisterActivity implements NavDrawerActivity, NavigationMenuContract {
     private NavigationMenu navigationMenu;
@@ -123,18 +120,6 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
             BaseRegisterActivity.ME_POSITION = ++positionCounter;
         }
         return positionCounter;
-    }
-
-    @Override
-    public void startFormActivity(JSONObject jsonForm) {
-        Intent intent = new Intent(this, Utils.metadata().childFormActivity);
-        Context context = RemoteLoginTask.getOpenSRPContext();
-        if (jsonForm.has(KipConstants.KEY.ENCOUNTER_TYPE) && jsonForm.optString(KipConstants.KEY.ENCOUNTER_TYPE).equals(KipConstants.KEY.BIRTH_REGISTRATION)) {
-            KipJsonFormUtils.KipAddChildRegLocHierarchyQuestions(jsonForm, getOpenSRPContext());
-        }
-        intent.putExtra(Constants.INTENT_KEY.JSON, jsonForm.toString());
-        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, getForm());
-        startActivityForResult(intent, JsonFormUtils.REQUEST_CODE_GET_JSON);
     }
 
     @Override
@@ -231,6 +216,18 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
     }
 
     @Override
+    public void startFormActivity(JSONObject jsonForm) {
+        Intent intent = new Intent(this, Utils.metadata().childFormActivity);
+        if (jsonForm.has(KipConstants.KEY.ENCOUNTER_TYPE) && jsonForm.optString(KipConstants.KEY.ENCOUNTER_TYPE).equals(KipConstants.KEY.BIRTH_REGISTRATION)) {
+            Context context = org.smartregister.login.task.RemoteLoginTask.getOpenSRPContext();
+            KipJsonFormUtils.KipAddChildRegLocHierarchyQuestions(jsonForm, context);
+
+        }
+        intent.putExtra(Constants.INTENT_KEY.JSON, jsonForm.toString());
+        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, getForm());
+        startActivityForResult(intent, JsonFormUtils.REQUEST_CODE_GET_JSON);
+    }
+
     public void finishActivity() {
         finish();
     }
