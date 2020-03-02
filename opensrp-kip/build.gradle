@@ -163,7 +163,7 @@ dependencies {
         exclude group: 'io.ona.rdt-capture', module: 'lib'
     }
 
-    implementation('org.smartregister:opensrp-client-child:0.2.7-SNAPSHOT@aar') {
+    implementation('org.smartregister:opensrp-client-child:0.2.8001-SNAPSHOT@aar') {
 
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'

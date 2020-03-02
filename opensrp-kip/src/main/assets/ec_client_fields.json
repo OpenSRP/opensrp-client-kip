@@ -14,7 +14,7 @@
           "column_name": "zeir_id",
           "type": "Client",
           "json_mapping": {
-            "field": "identifiers.M_KIP_ID"
+            "field": "identifiers.m_zeir_id"
           }
         },
         {
@@ -244,7 +244,35 @@
           "column_name": "zeir_id",
           "type": "Client",
           "json_mapping": {
-            "field": "identifiers.OPENMRS_ID"
+            "field": "identifiers.zeir_id"
+          }
+        },
+        {
+          "column_name": "Permanent_Register_Number",
+          "type": "Client",
+          "json_mapping": {
+            "field": "identifiers.PERMANENT_REGISTER_NUMBER"
+          }
+        },
+        {
+          "column_name": "National_Unique_Patient_Identifier",
+          "type": "Client",
+          "json_mapping": {
+            "field": "identifiers.National_Unique_Patient_Identifier"
+          }
+        },
+        {
+          "column_name": "CWC_Number",
+          "type": "Client",
+          "json_mapping": {
+            "field": "identifiers.CWC_Number"
+          }
+        },
+        {
+          "column_name": "HDSS_Number",
+          "type": "Client",
+          "json_mapping": {
+            "field": "identifiers.HDSS_Number"
           }
         },
         {
@@ -301,6 +329,22 @@
           "type": "Client",
           "json_mapping": {
             "field": "deathdate"
+          }
+        },
+        {
+          "column_name": "Child_Birth_Notification",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "162051AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
+        },
+        {
+          "column_name": "First_Health_Facility_Contact",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "163260AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
           }
         },
         {
