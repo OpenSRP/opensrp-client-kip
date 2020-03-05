@@ -41,7 +41,7 @@
                 android:layout_margin="5dp"
                 android:gravity="center_horizontal"
                 android:text="@string/malawi_app_name"
-                android:textColor="#272727"
+                android:textColor="#F6F6F6"
                 android:textSize="@dimen/login_title_text_size"
                 android:textStyle="bold"
                 android:typeface="sans" />

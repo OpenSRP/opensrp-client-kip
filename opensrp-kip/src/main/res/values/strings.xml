@@ -4,7 +4,7 @@
     <string name="sync" translatable="false">Sync</string>
     <string name="action_log_out">Logging Out</string>
     <string name="powered_by" translatable="false">Powered by</string>
-    <string name="malawi_app_name">Kenya Immunization Program (KIP)</string>
+    <string name="malawi_app_name">Kenya Immunization Platform (KIP)</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="done">Done</string>
@@ -27,7 +27,7 @@
     <string name="zeir_id" translatable="false">KIP ID</string>
     <string name="iz_id_hint">KIP ID number</string>
 
-    <string name="nav_logo" translatable="false">Kenya Immunization Program (KIP)</string>
+    <string name="nav_logo" translatable="false">Kenya Immunization Platform (KIP)</string>
     <string name="title_activity_child_immunization" translatable="false">ChildImmunizationActivity</string>
 
     <!-- Nfc-->
