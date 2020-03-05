@@ -1,8 +1,8 @@
 package org.smartregister.kip.model;
 
 import org.json.JSONObject;
-import org.smartregister.kip.util.KipChildJsonFormUtils;
 import org.smartregister.kip.util.KipConstants;
+import org.smartregister.kip.util.KipJsonFormUtils;
 
 public class CheckMotherDetailsModel {
     private JSONObject client;
@@ -32,10 +32,10 @@ public class CheckMotherDetailsModel {
         motherLastName = "";
 
         if (client.has(KipConstants.KEY.MOTHER)) {
-            JSONObject mother = KipChildJsonFormUtils.getJsonObject(client, KipConstants.KEY.MOTHER);
-            motherFirstName = KipChildJsonFormUtils.getJsonString(mother, KipConstants.KEY.FIRSTNAME);
-            motherLastName = KipChildJsonFormUtils.getJsonString(mother, KipConstants.KEY.LASTNAME);
-            motherBaseEntityId = KipChildJsonFormUtils.getJsonString(mother, KipConstants.KEY.BASE_ENTITY_ID);
+            JSONObject mother = KipJsonFormUtils.getJsonObject(client, KipConstants.KEY.MOTHER);
+            motherFirstName = KipJsonFormUtils.getJsonString(mother, KipConstants.KEY.FIRSTNAME);
+            motherLastName = KipJsonFormUtils.getJsonString(mother, KipConstants.KEY.LASTNAME);
+            motherBaseEntityId = KipJsonFormUtils.getJsonString(mother, KipConstants.KEY.BASE_ENTITY_ID);
         }
         return this;
     }

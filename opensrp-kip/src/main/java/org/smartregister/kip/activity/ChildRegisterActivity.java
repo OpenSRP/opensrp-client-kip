@@ -36,6 +36,7 @@ import org.smartregister.kip.fragment.ChildRegisterFragment;
 import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.kip.util.KipConstants;
 import org.smartregister.kip.util.KipJsonFormUtils;
+import org.smartregister.kip.util.KipLocationUtility;
 import org.smartregister.kip.view.NavDrawerActivity;
 import org.smartregister.kip.view.NavigationMenu;
 import org.smartregister.listener.BottomNavigationListener;
@@ -220,7 +221,8 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
         Intent intent = new Intent(this, Utils.metadata().childFormActivity);
         if (jsonForm.has(KipConstants.KEY.ENCOUNTER_TYPE) && jsonForm.optString(KipConstants.KEY.ENCOUNTER_TYPE).equals(KipConstants.KEY.BIRTH_REGISTRATION)) {
             Context context = org.smartregister.login.task.RemoteLoginTask.getOpenSRPContext();
-            KipJsonFormUtils.KipAddChildRegLocHierarchyQuestions(jsonForm, context);
+            KipLocationUtility.addChildRegLocHierarchyQuestions(jsonForm, context);
+            KipJsonFormUtils.addRelationshipTypesQuestions(jsonForm);
 
         }
         intent.putExtra(Constants.INTENT_KEY.JSON, jsonForm.toString());

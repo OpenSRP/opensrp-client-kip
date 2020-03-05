@@ -18,8 +18,8 @@ import org.smartregister.child.fragment.StatusEditDialogFragment;
 import org.smartregister.child.task.LoadAsyncTask;
 import org.smartregister.kip.R;
 import org.smartregister.kip.fragment.ChildRegistrationDataFragment;
-import org.smartregister.kip.util.KipChildJsonFormUtils;
 import org.smartregister.kip.util.KipChildUtils;
+import org.smartregister.kip.util.KipJsonFormUtils;
 import org.smartregister.util.FormUtils;
 import org.smartregister.util.JsonFormUtils;
 import org.smartregister.util.Utils;
@@ -76,7 +76,7 @@ public class ChildDetailTabbedActivity extends BaseChildDetailTabbedActivity {
         detailsMap = getChildDetails().getColumnmaps();
         switch (item.getItemId()) {
             case R.id.registration_data:
-                String populatedForm = KipChildJsonFormUtils.getMetadataForEditForm(this, detailsMap, nonEditableFields);
+                String populatedForm = KipJsonFormUtils.getMetadataForEditForm(this, detailsMap, nonEditableFields);
                 startFormActivity(populatedForm);
                 // User chose the "Settings" item, show the app settings UI...
                 return true;

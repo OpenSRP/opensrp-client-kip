@@ -48,16 +48,16 @@ public class KipLocationUtility extends JsonFormUtils {
                         }
                     }
                     break;
-                case "County":
-                    questions.getJSONObject(i).remove(KipChildJsonFormUtils.VALUES);
+                case "Ce_County":
+                    questions.getJSONObject(i).remove(KipJsonFormUtils.VALUES);
                     questions.getJSONObject(i).put("values", counties);
                     break;
-                case "Sub_County":
-                    questions.getJSONObject(i).remove(KipChildJsonFormUtils.VALUES);
+                case "Ce_Sub_County":
+                    questions.getJSONObject(i).remove(KipJsonFormUtils.VALUES);
                     questions.getJSONObject(i).put("values", subCounties);
                     break;
-                case "Ward":
-                    questions.getJSONObject(i).remove(KipChildJsonFormUtils.VALUES);
+                case "Ce_Ward":
+                    questions.getJSONObject(i).remove(KipJsonFormUtils.VALUES);
                     questions.getJSONObject(i).put("values", wards);
                     break;
                 default:
