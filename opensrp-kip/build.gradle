@@ -1,81 +1,114 @@
 buildscript {
     repositories {
+        google()
         jcenter()
         maven { url 'https://maven.fabric.io/public' }
+
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:1.2.3"
-        classpath 'org.apache.commons:commons-lang3:3.3.2'
-        classpath 'org.robolectric:robolectric-gradle-plugin:1.1.0'
-        classpath 'io.fabric.tools:gradle:1.27.1'
-        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.4.0'
-    }
-}
-
-allprojects {
-    repositories {
-        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
-        mavenLocal()
+        classpath "com.android.tools.build:gradle:3.5.3"
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.2'
+        classpath 'io.fabric.tools:gradle:1.31.2'
     }
 }
 
 apply plugin: 'com.android.application'
-apply plugin: 'io.fabric'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
+apply plugin: 'io.fabric'
 
-repositories {
-    maven { url 'https://maven.fabric.io/public' }
-    maven { url 'https://jitpack.io' }
-
+jacoco {
+    toolVersion = "0.8.0"
 }
 
+
 android {
-    compileSdkVersion 22
-    buildToolsVersion "28.0.3"
+    useLibrary 'org.apache.http.legacy'
+    compileSdkVersion androidCompileSdkVersion
+    buildToolsVersion androidBuildToolsVersion
+
     defaultConfig {
         applicationId "org.smartregister.kip"
-        minSdkVersion 19
-        targetSdkVersion 21
-        versionCode 11
-        versionName "1.3.3"
+        minSdkVersion androidMinSdkVersion
+        targetSdkVersion androidTargetSdkVersion
+        versionCode 12
+        versionName "0.2.2"
         multiDexEnabled true
+        buildConfigField "long", "MAX_SERVER_TIME_DIFFERENCE", "1800000l"
+        buildConfigField "boolean", "TIME_CHECK", "false"
+        buildConfigField "String", "SYNC_TYPE", '"teamId"'
+        buildConfigField "int", "MAX_SYNC_RETRIES", '3'
+        buildConfigField "long", "BUILD_TIMESTAMP", System.currentTimeMillis() + "L"
+        buildConfigField "boolean", "IS_SYNC_SETTINGS", "true"
+        buildConfigField "long", "EVENT_VERSION", System.currentTimeMillis() + "L"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [eventBusIndex: 'org.smartregister.kip.KipEventBusIndex']
+            }
+        }
+        vectorDrawables.useSupportLibrary = true
     }
     dexOptions {
-        incremental true
         javaMaxHeapSize "4g"
     }
+
     lintOptions {
         lintConfig file("lint.xml")
+        abortOnError false
     }
+
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
+
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            resValue "string", 'opensrp_url', '""'
-            buildConfigField "String", 'OPENMRS_URL', '""'
-            buildConfigField "String", 'OPENMRS_IDGEN_URL', '"/module/idgen/exportIdentifiers.form"'
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rule.pro'
+            resValue "string", 'opensrp_url', '"https://jembi-preview.smartregister.org/opensrp/"'
             buildConfigField "int", "OPENMRS_UNIQUE_ID_INITIAL_BATCH_SIZE", '250'
             buildConfigField "int", "OPENMRS_UNIQUE_ID_BATCH_SIZE", '100'
             buildConfigField "int", "OPENMRS_UNIQUE_ID_SOURCE", '1'
-            buildConfigField "int", "DATABASE_VERSION", '11'
+            buildConfigField "int", "DATABASE_VERSION", '9'
             buildConfigField "long", "MAX_SERVER_TIME_DIFFERENCE", "1800000l"
             buildConfigField "boolean", "TIME_CHECK", "true"
+            buildConfigField "int", "DATA_SYNC_DURATION_MINUTES", '15'
+            buildConfigField "int", "VACCINE_SYNC_PROCESSING_MINUTES", '30'
+            buildConfigField "int", "IMAGE_UPLOAD_MINUTES", '180'
+            buildConfigField "int", "PULL_UNIQUE_IDS_MINUTES", '180'
+            buildConfigField "int", "VIEW_SYNC_CONFIGURATIONS_MINUTES", '15'
+            buildConfigField "int", "CLIENT_SETTINGS_SYNC_MINUTES", '15'
+            buildConfigField "int", "GROWTH_MONITORING_SYNC_TIME", '15'
+            buildConfigField "String[]", "LOCATION_LEVELS", '{"Country", "Province", "District", "Facility", "Village"}'
+            buildConfigField "String[]", "HEALTH_FACILITY_LEVELS", '{"Country", "Province", "District", "Health Facility", "Village"}'
         }
 
         debug {
-            resValue "string", 'opensrp_url', '"http://197.254.67.146:8080/opensrp"'
-            buildConfigField "String", 'OPENMRS_URL', '"http://197.254.67.146:8080/openmrs"'
-            buildConfigField "String", 'OPENMRS_IDGEN_URL', '"/module/idgen/exportIdentifiers.form"'
+            resValue "string", 'opensrp_url', '"http://197.254.67.146:8080/opensrp/"'
             buildConfigField "int", "OPENMRS_UNIQUE_ID_INITIAL_BATCH_SIZE", '250'
             buildConfigField "int", "OPENMRS_UNIQUE_ID_BATCH_SIZE", '100'
-            buildConfigField "int", "OPENMRS_UNIQUE_ID_SOURCE", '1'
-            buildConfigField "int", "DATABASE_VERSION", '11'
+            buildConfigField "int", "OPENMRS_UNIQUE_ID_SOURCE", '2'
+            buildConfigField "int", "DATABASE_VERSION", '9'
             buildConfigField "long", "MAX_SERVER_TIME_DIFFERENCE", "1800000l"
             buildConfigField "boolean", "TIME_CHECK", "false"
+            buildConfigField "int", "DATA_SYNC_DURATION_MINUTES", '15'
+            buildConfigField "int", "VACCINE_SYNC_PROCESSING_MINUTES", '15'
+            buildConfigField "int", "IMAGE_UPLOAD_MINUTES", '15'
+            buildConfigField "int", "PULL_UNIQUE_IDS_MINUTES", '15'
+            buildConfigField "int", "VIEW_SYNC_CONFIGURATIONS_MINUTES", '15'
+            buildConfigField "int", "CLIENT_SETTINGS_SYNC_MINUTES", '15'
+            buildConfigField "int", "GROWTH_MONITORING_SYNC_TIME", '15'
+            buildConfigField "String[]", "LOCATION_LEVELS", '{"Country", "Province", "Department", "Health Facility", "Zone", "Residential Area", "Facility"}'
+            buildConfigField "String[]", "HEALTH_FACILITY_LEVELS", '{"Country", "Province", "Department", "Health Facility", "Facility"}'
+
             testCoverageEnabled true
         }
     }
+
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES.txt'
         exclude 'META-INF/LICENSE.txt'
@@ -88,78 +121,114 @@ android {
         exclude 'META-INF/dependencies.txt'
         exclude 'META-INF/LGPL2.1'
         exclude 'LICENSE.txt'
+
     }
+
     testOptions {
-        unitTests.returnDefaultValues = true
+        unitTests {
+            returnDefaultValues = true
+            includeAndroidResources = true
+        }
     }
+    dataBinding {
+        enabled = true
+    }
+}
+
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
 }
 
 dependencies {
-    compile fileTree(include: ['commons-validator-1.6.jar'], dir: 'libs')
-    compile('org.smartregister:opensrp-client-native-form:1.0.3-SNAPSHOT@aar') {
+    implementation 'com.evrencoskun.library:tableview:0.8.8'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.15'
+
+    implementation('org.smartregister:opensrp-client-opd:0.0.10-SNAPSHOT@aar') {
+        transitive = true
+        exclude group: 'org.smartregister', module: 'opensrp-client-core'
+        exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
+        exclude group: 'org.smartregister', module: 'opensrp-client-configurable-views'
+        exclude group: 'com.android.support', module: 'appcompat-v7'
+    }
+
+    implementation('org.smartregister:opensrp-client-native-form:1.6.64-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.android.support', module: 'recyclerview-v7'
+        exclude group: 'com.android.support', module: 'appcompat-v7'
+        exclude group: 'com.android.support', module: 'cardview-v7'
+        exclude group: 'com.android.support', module: 'support-media-compat'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude group: 'com.android.support', module: 'design'
+        exclude group: 'org.yaml', module: 'snakeyaml'
+        exclude group: 'io.ona.rdt-capture', module: 'lib'
     }
-    compile('org.smartregister:opensrp-client-core:1.1.1-SNAPSHOT@aar') {
+
+    implementation('org.smartregister:opensrp-client-child:0.2.1-SNAPSHOT@aar') {
+
         transitive = true
-        exclude group: 'com.github.bmelnychuk', module: 'atv'
+        exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
+        exclude group: 'com.android.support', module: 'appcompat-v7'
     }
-    compile('org.smartregister:opensrp-client-immunization:1.1.4-SNAPSHOT@aar') {
+
+    implementation('org.smartregister:opensrp-client-anc:0.0.7-SNAPSHOT@aar') {
+        transitive = true
+        exclude group: 'org.smartregister', module: 'opensrp-client-core'
+        exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
+        exclude group: 'org.smartregister', module: 'opensrp-client-configurable-views'
+        exclude group: 'com.android.support', module: 'appcompat-v7'
+    }
+
+    annotationProcessor 'com.jakewharton:butterknife:10.2.0'
+    implementation 'net.zetetic:android-database-sqlcipher:4.2.0@aar'
+    implementation 'commons-validator:commons-validator:1.6'
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.3@aar') {
         transitive = true
     }
-    compile('org.smartregister:opensrp-client-growth-monitoring:1.0.3-SNAPSHOT@aar') {
-        transitive = true
-    }
-    compile('com.android.support:design:22.2.1') {
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'org.greenrobot:eventbus:3.1.1'
+    annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.1.1'
+    implementation 'com.google.guava:guava:24.1-jre'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    // Because RxAndroid releases are few and far between, it is recommended you also
+    // explicitly depend on RxJava's latest version for bug fixes and new features.
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.15'
+    implementation 'com.evernote:android-job:1.2.6'
+    implementation 'com.github.lecho:hellocharts-android:v1.5.8'
+    implementation 'id.zelory:compressor:2.1.0'
+    implementation('com.android.support:design:28.0.0') {
         exclude group: 'com.android.support', module: 'recyclerview-v7'
+        exclude group: 'com.android.support', module: 'cardview-v7'
+    }
 
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    implementation 'com.android.support:cardview-v7:28.0.0'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation group: 'org.yaml', name: 'snakeyaml', version: '1.25'
+    implementation 'de.hdodenhof:circleimageview:3.0.1'
+    implementation 'org.jeasy:easy-rules-core:3.3.0'
+    implementation 'org.jeasy:easy-rules-mvel:3.3.0'
+    implementation('com.crashlytics.sdk.android:crashlytics:2.10.1@aar') {
+        transitive = true
     }
-    compile 'com.android.support:appcompat-v7:22.1.1'
-    compile 'com.android.support:cardview-v7:22.2.1'
-    compile 'com.android.support:leanback-v17:22.2.1'
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
-        transitive = true;
-    }
-    compile 'com.jjoe64:graphview:4.2.1'
-    compile 'com.android.support:support-v4:22.2.1'
-    compile 'id.zelory:compressor:1.0.4'
-    compile 'com.twotoasters.SectionCursorAdapter:library:1.0.+'
-    compile 'com.github.ybq:Android-SpinKit:1.1.0'
-    compile 'junit:junit:4.12'
-    testCompile('org.robolectric:robolectric:3.4.2') {
+    implementation group: 'io.fabric.sdk.android', name: 'fabric', version: '1.4.8'
 
-        exclude group: 'com.google.guava', module: 'guava'
-        exclude group: 'org.apache.maven', module: 'maven-model'
-        exclude group: 'org.apache.maven', module: 'maven-ant-tasks'
-        exclude group: 'com.android.support'
-    }
-    testCompile('org.robolectric:shadows-multidex:3.4-rc2') {
-        exclude group: 'com.google.guava', module: 'guava'
-    }
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.+') {
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.apache.maven:maven-ant-tasks:2.1.3'
+    testImplementation('com.squareup:fest-android:1.0.8') { exclude module: 'support-v4' }
 
-        exclude group: 'com.android.support', module: 'support-annotations'
-        exclude group: 'junit', module: 'junit'
-    }
+    testImplementation 'org.mockito:mockito-inline:2.13.0'
+    testImplementation 'org.robolectric:robolectric:4.3.1'
+    testImplementation 'org.robolectric:shadows-multidex:4.3.1'
     // PowerMock
-    def powerMockVersion = '1.7.1'
-    testCompile "org.powermock:powermock-module-junit4:$powerMockVersion"
-    testCompile "org.powermock:powermock-module-junit4-rule:$powerMockVersion"
-    testCompile "org.powermock:powermock-api-mockito2:$powerMockVersion"
-    testCompile("org.powermock:powermock-classloading-xstream:$powerMockVersion")
-    {
-        exclude group: 'com.thoughtworks.xstream', module: 'xstream'
-    }
-    testCompile 'org.apache.maven:maven-ant-tasks:2.1.3'
+    def powerMockVersion = '2.0.0'
+    testImplementation "org.powermock:powermock-module-junit4:$powerMockVersion"
+    testImplementation "org.powermock:powermock-module-junit4-rule:$powerMockVersion"
+    testImplementation "org.powermock:powermock-api-mockito2:$powerMockVersion"
+    testImplementation "org.powermock:powermock-classloading-xstream:$powerMockVersion"
 }
 
-//Testing and coveralls
-
-coveralls {
-    jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/merged.xml"
-}
-
-task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebug']) {
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
 
     reports {
         xml.enabled = true
@@ -176,11 +245,10 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebug']) {
     sourceDirectories = files([mainSrc])
     classDirectories = files([debugTree])
     executionData = fileTree(dir: project.buildDir, includes: [
-            'jacoco/testDebug.exec', 'outputs/code-coverage/connected/*coverage.ec'
+            'jacoco/testDebugUnitTest.exec', 'outputs/code-coverage/connected/*coverage.ec'
     ])
 }
 
-//End testing and coveralls
-dependencies {
-    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
+coveralls {
+    jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/merged.xml"
 }

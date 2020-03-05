@@ -40,6 +40,12 @@
       "json_mapping": {
         "field": "locationId"
       }
+    },
+    {
+      "column_name": "created_at",
+      "json_mapping": {
+        "field": "dateCreated"
+      }
     }
   ]
 }

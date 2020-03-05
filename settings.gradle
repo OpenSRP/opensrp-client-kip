@@ -1,2 +1,3 @@
-rootProject.name = 'opensrp-client-kip'
 include ':opensrp-kip'
+// ':opensrp-opd'
+// project(":opensrp-opd").projectDir = new File("../opensrp-client-opd/opensrp-opd")

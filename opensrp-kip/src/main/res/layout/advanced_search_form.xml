@@ -10,14 +10,16 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:paddingBottom="20dp"
         android:paddingTop="20dp"
+        android:paddingBottom="20dp"
         android:scrollbars="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
             android:layout_marginLeft="30dp"
+            android:layout_marginEnd="30dp"
             android:layout_marginRight="30dp"
             android:orientation="vertical">
 
@@ -26,7 +28,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:paddingLeft="0dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
                 android:text="@string/search_limits"
                 android:textColor="@color/client_list_grey"
                 android:textSize="@dimen/advanced_search_label_size" />
@@ -35,28 +38,28 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:orientation="horizontal"
-                android:weightSum="2">
+                android:orientation="vertical">
 
                 <RelativeLayout
                     android:id="@+id/out_and_inside_layout"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="1.5dp"
-                    android:layout_weight="1">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:layout_marginBottom="5dp">
 
                     <com.vijay.jsonwizard.customviews.RadioButton
                         android:id="@+id/out_and_inside"
                         style="@style/Material.Drawable.RadioButton.AdvancedSearch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentTop="true" />
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:gravity="center_vertical" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_toRightOf="@id/out_and_inside"
+                        android:layout_toEndOf="@id/out_and_inside"
                         android:orientation="vertical">
 
                         <org.smartregister.view.customcontrols.CustomFontTextView
@@ -81,24 +84,24 @@
 
                 <RelativeLayout
                     android:id="@+id/my_catchment_layout"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="1.5dp"
-                    android:layout_weight="1">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:layout_marginBottom="5dp">
 
                     <com.vijay.jsonwizard.customviews.RadioButton
                         android:id="@+id/my_catchment"
                         style="@style/Material.Drawable.RadioButton.AdvancedSearch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentTop="true" />
+                        android:layout_alignParentStart="true"
+                        android:gravity="center_vertical" />
 
                     <org.smartregister.view.customcontrols.CustomFontTextView
                         style="@style/CustomFontTextViewStyle.ClientList.Light"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_toRightOf="@id/my_catchment"
+                        android:layout_toEndOf="@id/my_catchment"
                         android:maxLines="2"
                         android:text="@string/my_catchment_area"
                         android:textColor="@color/client_list_grey"
@@ -112,38 +115,39 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:paddingLeft="0dp"
+                android:paddingStart="0dp"
                 android:text="@string/client_status"
                 android:textColor="@color/client_list_grey"
                 android:textSize="@dimen/advanced_search_label_size" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:weightSum="3">
+                android:orientation="vertical">
 
 
                 <RelativeLayout
                     android:id="@+id/active_layout"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.85">
+                    android:layout_margin="2dp">
 
                     <com.vijay.jsonwizard.customviews.CheckBox
                         android:id="@+id/active"
                         style="@style/Material.Drawable.CheckBox.AdvancedSearch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentLeft="true" />
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true" />
 
                     <org.smartregister.view.customcontrols.CustomFontTextView
                         style="@style/CustomFontTextViewStyle.ClientList.Light"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_toEndOf="@id/active"
                         android:layout_toRightOf="@id/active"
                         android:gravity="center_vertical"
                         android:text="@string/active"
@@ -154,22 +158,24 @@
 
                 <RelativeLayout
                     android:id="@+id/inactive_layout"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.85">
+                    android:layout_margin="2dp">
 
                     <com.vijay.jsonwizard.customviews.CheckBox
                         android:id="@+id/inactive"
                         style="@style/Material.Drawable.CheckBox.AdvancedSearch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentLeft="true" />
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true" />
 
                     <org.smartregister.view.customcontrols.CustomFontTextView
                         style="@style/CustomFontTextViewStyle.ClientList.Light"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_toEndOf="@id/inactive"
                         android:layout_toRightOf="@id/inactive"
                         android:gravity="center_vertical"
                         android:text="@string/inactive"
@@ -180,21 +186,23 @@
 
                 <RelativeLayout
                     android:id="@+id/lost_to_follow_up_layout"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1.3">
+                    android:layout_margin="2dp">
 
                     <com.vijay.jsonwizard.customviews.CheckBox
                         android:id="@+id/lost_to_follow_up"
                         style="@style/Material.Drawable.CheckBox.AdvancedSearch"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:layout_alignParentStart="true"
                         android:layout_alignParentLeft="true" />
 
                     <org.smartregister.view.customcontrols.CustomFontTextView
                         style="@style/CustomFontTextViewStyle.ClientList.Light"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_toEndOf="@id/lost_to_follow_up"
                         android:layout_toRightOf="@id/lost_to_follow_up"
                         android:gravity="center_vertical"
                         android:text="@string/lost_to_follow_up"
@@ -207,23 +215,38 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <com.rengwuxian.materialedittext.MaterialEditText
-                    android:id="@+id/zeir_id"
+                    android:id="@+id/card_id"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/zeir_id_hint"
+                    android:hint="@string/card_id_hint"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:textColor="@color/client_list_grey"
                     android:textColorHint="@color/light_grey"
                     android:textSize="@dimen/advanced_search_text_size"
                     app:met_floatingLabel="highlight"
-                    app:met_floatingLabelText="@string/zeir_id"
+                    app:met_floatingLabelText="@string/card_id_hint"
                     app:met_floatingLabelTextSize="@dimen/advanced_search_text_size"
                     app:met_primaryColor="@color/light_blue"
                     app:met_singleLineEllipsis="true" />
+
+                <Button
+                    android:id="@+id/scanCardButton"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/advanced_search_qr_code"
+                    android:paddingStart="@dimen/register_search_bar_min_margin"
+                    android:paddingLeft="@dimen/register_search_bar_min_margin"
+                    android:paddingEnd="@dimen/register_search_bar_min_margin"
+                    android:paddingRight="@dimen/register_search_bar_min_margin"
+                    android:text="@string/scan_card"
+                    android:textColor="@color/advance_search_qr_code"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <LinearLayout
@@ -238,6 +261,7 @@
                     android:hint="@string/first_name_hint"
                     android:imeOptions="actionNext"
                     android:inputType="text"
+                    android:paddingStart="@dimen/advanced_search_label_padding"
                     android:paddingLeft="@dimen/advanced_search_label_padding"
                     android:textColor="@color/client_list_grey"
                     android:textColorHint="@color/light_grey"
@@ -261,6 +285,7 @@
                     android:hint="@string/last_name_hint"
                     android:imeOptions="actionNext"
                     android:inputType="text"
+                    android:paddingStart="@dimen/advanced_search_label_padding"
                     android:paddingLeft="@dimen/advanced_search_label_padding"
                     android:textColor="@color/client_list_grey"
                     android:textColorHint="@color/light_grey"
@@ -278,18 +303,19 @@
                 android:orientation="vertical">
 
                 <com.rengwuxian.materialedittext.MaterialEditText
-                    android:id="@+id/mother_guardian_name"
+                    android:id="@+id/mother_guardian_first_name"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/mother_guardian_name_hint"
+                    android:hint="@string/mother_guardian_first_name_hint"
                     android:imeOptions="actionNext"
                     android:inputType="text"
+                    android:paddingStart="@dimen/advanced_search_label_padding"
                     android:paddingLeft="@dimen/advanced_search_label_padding"
                     android:textColor="@color/client_list_grey"
                     android:textColorHint="@color/light_grey"
                     android:textSize="@dimen/advanced_search_text_size"
                     app:met_floatingLabel="highlight"
-                    app:met_floatingLabelText="@string/mother_guardian_name"
+                    app:met_floatingLabelText="@string/mother_guardian_first_name_hint"
                     app:met_floatingLabelTextSize="@dimen/advanced_search_text_size"
                     app:met_primaryColor="@color/light_blue"
                     app:met_singleLineEllipsis="true" />
@@ -301,12 +327,38 @@
                 android:orientation="vertical">
 
                 <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/mother_guardian_last_name"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/mother_guardian_last_name_hint"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:paddingStart="@dimen/advanced_search_label_padding"
+                    android:paddingLeft="@dimen/advanced_search_label_padding"
+                    android:textColor="@color/client_list_grey"
+                    android:textColorHint="@color/light_grey"
+                    android:textSize="@dimen/advanced_search_text_size"
+                    app:met_floatingLabel="highlight"
+                    app:met_floatingLabelText="@string/mother_guardian_last_name_hint"
+                    app:met_floatingLabelTextSize="@dimen/advanced_search_text_size"
+                    app:met_primaryColor="@color/light_blue"
+                    app:met_singleLineEllipsis="true" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.rengwuxian.materialedittext.MaterialEditText
                     android:id="@+id/mother_guardian_nrc"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/mother_guardian_nrc_hint"
                     android:imeOptions="actionNext"
                     android:inputType="text"
+                    android:paddingStart="@dimen/advanced_search_label_padding"
                     android:paddingLeft="@dimen/advanced_search_label_padding"
                     android:textColor="@color/client_list_grey"
                     android:textColorHint="@color/light_grey"
@@ -330,6 +382,7 @@
                     android:hint="@string/mother_guardian_phone_number_hint"
                     android:imeOptions="actionNext"
                     android:inputType="text"
+                    android:paddingStart="@dimen/advanced_search_label_padding"
                     android:paddingLeft="@dimen/advanced_search_label_padding"
                     android:textColor="@color/client_list_grey"
                     android:textColorHint="@color/light_grey"
@@ -350,6 +403,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingStart="5dp"
                     android:paddingLeft="5dp"
                     android:text="@string/date_birth_range"
                     android:textAppearance="?android:textAppearanceSmall"
@@ -359,15 +413,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="2">
+                    android:orientation="vertical">
 
                     <EditText
                         android:id="@+id/start_date"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:focusable="false"
+                        android:layout_marginTop="5dp"
                         android:hint="@string/start_date_hint"
                         android:imeOptions="actionNext"
                         android:inputType="text"
@@ -377,10 +430,10 @@
 
                     <EditText
                         android:id="@+id/end_date"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:focusable="false"
+                        android:layout_marginTop="5dp"
                         android:hint="@string/end_date_hint"
                         android:imeOptions="actionNext"
                         android:inputType="text"
@@ -391,6 +444,63 @@
                 </LinearLayout>
 
             </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/opensrp_id"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/iz_id_hint"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:textColor="@color/client_list_grey"
+                    android:textColorHint="@color/light_grey"
+                    android:textSize="@dimen/advanced_search_text_size"
+                    app:met_floatingLabel="highlight"
+                    app:met_floatingLabelText="@string/opensrp_id"
+                    app:met_floatingLabelTextSize="@dimen/advanced_search_text_size"
+                    app:met_primaryColor="@color/light_blue"
+                    app:met_singleLineEllipsis="true" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/qrCodeButtonTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerInParent="true"
+                    android:layout_marginBottom="@dimen/register_search_bar_max_margin"
+                    android:text="@string/qr_code_label"
+                    android:textColor="@color/client_list_grey"
+                    android:textSize="@dimen/advanced_search_label_size"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/qrCodeButton"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:background="@drawable/advanced_search_qr_code"
+                    android:paddingStart="@dimen/register_search_bar_min_margin"
+                    android:paddingLeft="@dimen/register_search_bar_min_margin"
+                    android:paddingEnd="@dimen/register_search_bar_min_margin"
+                    android:paddingRight="@dimen/register_search_bar_min_margin"
+                    android:text="@string/scan_qr_code"
+                    android:textColor="@color/advance_search_qr_code"
+                    android:visibility="visible" />
+
+            </RelativeLayout>
 
 
         </LinearLayout>
@@ -412,23 +522,23 @@
             android:src="@color/smart_register_client_divider_color" />
 
         <Button
-            android:id="@+id/search"
+            android:id="@+id/advanced_form_search_btn"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="5dp"
             android:background="@drawable/advanced_search_bg"
-            android:paddingBottom="15dp"
-            android:paddingTop="15dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:text="@string/search"
             android:textAllCaps="false"
             android:textAppearance="?android:textAppearanceSmall"
             android:textColor="@color/white"
-            android:textSize="28sp" />
+            android:textSize="20sp" />
     </LinearLayout>
-
-
 </LinearLayout>

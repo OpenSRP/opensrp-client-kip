@@ -46,8 +46,10 @@
     },
     "encounter_location": ""
   },
+
+
   "step1": {
-    "title": "Report Deceased",
+    "title": "Report Death",
     "fields": [
       {
         "key": "Date_of_Death",
@@ -56,50 +58,103 @@
         "openmrs_entity_id": "1543AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
         "openmrs_data_type": "date",
         "type": "date_picker",
-        "hint": "Date of death *",
+        "hint": "Date of death",
         "expanded": false,
         "min_date": "01-01-1900",
         "max_date": "today",
         "v_required": {
           "value": "true",
-          "err": "Date cannot be past today's date"
-        },
-        "constraints": [
-          {
-            "type": "date",
-            "ex": "greaterThanEqualTo(., step1:Date_Birth)",
-            "err": "Date of death can't occur before date of birth"
-          }
-        ]
+          "err": "Please enter the date of death"
+        }
       },
       {
-        "key": "Cause_Death",
-        "openmrs_entity_parent": "",
-        "openmrs_entity": "concept",
-        "openmrs_entity_id": "160218AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-        "type": "edit_text",
-        "hint": "Suspected cause of death",
-        "edit_type": "name"
-      },
-      {
-        "key": "Place_Death",
+        "key": "place_of_death",
         "openmrs_entity_parent": "",
         "openmrs_entity": "concept",
         "openmrs_entity_id": "1541AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-        "openmrs_data_type": "select one",
         "type": "spinner",
-        "hint": "Where did the death occur? *",
+        "hint": "Where did the death occur?",
         "values": [
-          "Health facility",
-          "Home"
+          "Home",
+          "Health Facility"
+        ],
+        "keys": [
+          "Home",
+          "Health Facility"
         ],
         "openmrs_choice_ids": {
-          "Health facility": "1588AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-          "Home": "1536AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          "Home": "1536AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "Health Facility": "1588AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
         },
         "v_required": {
           "value": "true",
           "err": "Please select one option"
+        }
+      },
+      {
+        "key": "death_cause",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "162580AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "type": "spinner",
+        "hint": "The cause of death",
+        "values": [
+          "Acute Respiratory Infection",
+          "Cancer",
+          "Diabetes",
+          "Diarrhoea",
+          "Malaria",
+          "Malnutrition",
+          "Meningococal Meningitis",
+          "Palmor Pallor",
+          "Sepsis",
+          "Skin Infection",
+          "Other"
+        ],
+        "keys": [
+          "Acute Respiratory Infection",
+          "Cancer",
+          "Diabetes",
+          "Diarrhoea",
+          "Malaria",
+          "Malnutrition",
+          "Meningococal Meningitis",
+          "Palmor Pallor",
+          "Sepsis",
+          "Skin Infection",
+          "Other"
+        ],
+        "openmrs_choice_ids": {
+          "Sepsis": "126721AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "Malaria": "116128AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "Diarrhoea": "142412AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "Malnutrition": "115122AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "Acute Respiratory Infection": "154983AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "Meningococal Meningitis": "134369AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "Skin Infection": "137293AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        },
+        "v_required": {
+          "value": "true",
+          "err": "Please select one option"
+        }
+      },
+      {
+        "key": "death_cause_other",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "160218AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "type": "edit_text",
+        "hint": "Other cause of death",
+        "edit_type": "name",
+        "v_required": {
+          "value": true,
+          "err": "Please specify the cause of death"
+        },
+        "relevance": {
+          "step1:death_cause": {
+            "type": "string",
+            "ex": "equalTo(., \"Other\")"
+          }
         }
       },
       {

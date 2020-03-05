@@ -8,10 +8,10 @@
       },
       {
         "type": "Deworming"
-      },
-      {
-        "type": "ITN"
       }
     ]
+  },
+  {
+    "type": "ITN"
   }
 ]

@@ -15,8 +15,8 @@ public class AllSettings extends org.smartregister.repository.AllSettings {
         super(preferences, settingsRepository);
     }
 
-    public String fetchRelationshipTypes() {
-        return settingsRepository.querySetting(RELATIONSHIP_TYPES, "");
+    public static String fetchRelationshipTypes() {
+        return KipContext.getInstance().kipSettingsRepository().querySetting(RELATIONSHIP_TYPES, "");
     }
 
     public void saveRelationshipTypes(String relationshipTypes) {

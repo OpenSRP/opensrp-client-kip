@@ -23,13 +23,13 @@
             {
               "reference": "dob",
               "offset": "+0d",
-              "window": "+10d"
+              "window": "+15d"
             }
           ],
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+13d"
+              "offset": "+15d"
             }
           ]
         }
@@ -53,13 +53,13 @@
             {
               "reference": "dob",
               "offset": "+0d",
-              "window": "+10d"
+              "window": "+14d"
             }
           ],
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+1y"
+              "offset": "+2y"
             }
           ]
         }
@@ -90,13 +90,13 @@
             {
               "reference": "dob",
               "offset": "+42d",
-              "window": "+10d"
+              "window": "+14d"
             }
           ],
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+4y,10m"
+              "offset": "+2y"
             }
           ]
         }
@@ -120,13 +120,13 @@
             {
               "reference": "dob",
               "offset": "+42d",
-              "window": "+10d"
+              "window": "+14d"
             }
           ],
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+4y,10m"
+              "offset": "+2ym"
             }
           ]
         }
@@ -150,13 +150,13 @@
             {
               "reference": "dob",
               "offset": "+42d",
-              "window": "+10d"
+              "window": "+14d"
             }
           ],
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+4y,10m"
+              "offset": "+2y"
             }
           ]
         }
@@ -180,13 +180,13 @@
             {
               "reference": "dob",
               "offset": "+42d",
-              "window": "+10d"
+              "window": "+14d"
             }
           ],
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+7m"
+              "offset": "+2y"
             }
           ]
         }
@@ -218,13 +218,13 @@
               "reference": "prerequisite",
               "prerequisite": "OPV 1",
               "offset": "+28d",
-              "window": "+10d"
+              "window": "+14d"
             }
           ],
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+4y,11m"
+              "offset": "+2y"
             }
           ]
         }
@@ -249,13 +249,13 @@
               "reference": "prerequisite",
               "prerequisite": "Penta 1",
               "offset": "+28d",
-              "window": "+10d"
+              "window": "+14d"
             }
           ],
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+4y,11m"
+              "offset": "+2y"
             }
           ]
         }
@@ -280,13 +280,13 @@
               "reference": "prerequisite",
               "prerequisite": "PCV 1",
               "offset": "+28d",
-              "window": "+10d"
+              "window": "+14d"
             }
           ],
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+4y,11m"
+              "offset": "+2y"
             }
           ]
         }
@@ -311,13 +311,13 @@
               "reference": "prerequisite",
               "prerequisite": "Rota 1",
               "offset": "+28d",
-              "window": "+10d"
+              "window": "+14d"
             }
           ],
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+8m"
+              "offset": "+2ym"
             }
           ]
         }
@@ -329,36 +329,6 @@
     "id": "Fourteen_Weeks",
     "days_after_birth_due": 98,
     "vaccines": [
-      {
-        "name": "IPV",
-        "type": "IPV",
-        "openmrs_date": {
-          "parent_entity": "1422AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-          "entity": "concept",
-          "entity_id": "1410AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-        },
-        "openmrs_calculate": {
-          "parent_entity": "1422AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-          "entity": "concept",
-          "entity_id": "1418AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-          "calculation": 0
-        },
-        "schedule": {
-          "due": [
-            {
-              "reference": "dob",
-              "offset": "+98d",
-              "window": "+10d"
-            }
-          ],
-          "expiry": [
-            {
-              "reference": "dob",
-              "offset": "+5y"
-            }
-          ]
-        }
-      },
       {
         "name": "OPV 3",
         "type": "OPV",
@@ -379,13 +349,13 @@
               "reference": "prerequisite",
               "prerequisite": "OPV 2",
               "offset": "+28d",
-              "window": "+10d"
+              "window": "+14d"
             }
           ],
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+5y"
+              "offset": "+2y"
             }
           ]
         }
@@ -410,13 +380,13 @@
               "reference": "prerequisite",
               "prerequisite": "Penta 2",
               "offset": "+28d",
-              "window": "+10d"
+              "window": "+14d"
             }
           ],
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+5y"
+              "offset": "+2y"
             }
           ]
         }
@@ -441,56 +411,43 @@
               "reference": "prerequisite",
               "prerequisite": "PCV 2",
               "offset": "+28d",
-              "window": "+10d"
+              "window": "+14d"
             }
           ],
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+5y"
+              "offset": "+2y"
             }
           ]
         }
-      }
-    ]
-  },
-  {
-    "name": "6 Months",
-    "id": "Six_Months",
-    "days_after_birth_due": 183,
-    "vaccines": [
+      },
       {
-        "name": "MR - CE",
-        "type": "MR",
+        "name": "IPV",
+        "type": "IPV",
         "openmrs_date": {
-          "parent_entity": "162586AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "parent_entity": "1422AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
           "entity": "concept",
           "entity_id": "1410AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
         },
         "openmrs_calculate": {
-          "parent_entity": "162586AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "parent_entity": "1422AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
           "entity": "concept",
           "entity_id": "1418AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-          "calculation": 6
+          "calculation": 3
         },
         "schedule": {
           "due": [
             {
               "reference": "dob",
-              "offset": "+6m",
-              "window": "+10d"
-            }
-          ],
-          "conditions": [
-            {
-              "attribute": "pmtct_status",
-              "value": "Exposed (CE)"
+              "offset": "+28d",
+              "window": "+14d"
             }
           ],
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+5y"
+              "offset": "+2y"
             }
           ]
         }
@@ -511,7 +468,7 @@
           "entity_id": "1410AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
         },
         "openmrs_calculate": {
-          "parent_entity": "162586AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "parent_entity": "36AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
           "entity": "concept",
           "entity_id": "1418AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
           "calculation": 1
@@ -521,37 +478,7 @@
             {
               "reference": "dob",
               "offset": "+9m",
-              "window": "+10d"
-            }
-          ],
-          "conditions": [
-            {
-              "type": "not_given",
-              "vaccine": "MR 1"
-            }
-          ]
-        }
-      },
-      {
-        "name": "YF",
-        "type": "YF",
-        "openmrs_date": {
-          "parent_entity": "5864AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-          "entity": "concept",
-          "entity_id": "1410AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-        },
-        "openmrs_calculate": {
-          "parent_entity": "5864AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-          "entity": "concept",
-          "entity_id": "1418AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-          "calculation": 1
-        },
-        "schedule": {
-          "due": [
-            {
-              "reference": "dob",
-              "offset": "+9m",
-              "window": "+10d"
+              "window": "+14d"
             }
           ],
           "expiry": [
@@ -564,10 +491,11 @@
       }
     ]
   },
+
   {
     "name": "18 Months",
     "id": "Eighteen_Months",
-    "days_after_birth_due": 548,
+    "days_after_birth_due": 456,
     "vaccines": [
       {
         "name": "MR 2",
@@ -578,7 +506,7 @@
           "entity_id": "1410AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
         },
         "openmrs_calculate": {
-          "parent_entity": "162586AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "parent_entity": "36AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
           "entity": "concept",
           "entity_id": "1418AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
           "calculation": 2
@@ -588,14 +516,22 @@
             {
               "reference": "prerequisite",
               "prerequisite": "MR 1",
-              "offset": "+9m",
-              "window": "+10d"
+              "offset": "+18m",
+              "window": "+35d"
+            }
+          ],
+          "expiry": [
+            {
+              "reference": "dob",
+              "offset": "+5y"
             }
           ],
           "conditions": [
             {
-              "type": "not_given",
-              "vaccine": "MR 2"
+              "type": "given",
+              "vaccine": "MR 1",
+              "comparison": "at_least",
+              "value": "+0d"
             }
           ]
         }

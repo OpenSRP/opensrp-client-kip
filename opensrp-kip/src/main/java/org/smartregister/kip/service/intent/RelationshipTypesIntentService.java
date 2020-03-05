@@ -6,8 +6,8 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import org.json.JSONObject;
-import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.context.AllSettings;
+import org.smartregister.kip.context.KipContext;
 
 /**
  * Created by amos.laboso on 07/11/2017.
@@ -44,7 +44,7 @@ public class RelationshipTypesIntentService extends IntentService {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        allSettings = KipApplication.getInstance().context().allSettings();
+        allSettings = (AllSettings) KipContext.getInstance().allSettings();
         return super.onStartCommand(intent, flags, startId);
     }
 }
