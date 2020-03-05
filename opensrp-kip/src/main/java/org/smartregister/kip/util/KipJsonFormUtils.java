@@ -71,12 +71,11 @@ public class KipJsonFormUtils extends JsonFormUtils {
                 return birthRegistrationForm.toString();
             }
         } catch (Exception e) {
-            Timber.e(e, "GizJsonFormUtils --> getMetadataForEditForm");
+            Timber.e(e, "KipJsonFormUtils --> getMetadataForEditForm");
         }
 
         return "";
     }
-
     private static void updateFormDetailsForEdit(Map<String, String> childDetails, JSONArray jsonArray, List<String> nonEditableFields)
             throws JSONException {
         String prefix;
@@ -220,7 +219,7 @@ public class KipJsonFormUtils extends JsonFormUtils {
 
         if (form.has(JsonFormUtils.STEP1) && form.getJSONObject(JsonFormUtils.STEP1).has(KipConstants.KEY.TITLE) && form.getJSONObject(JsonFormUtils.STEP1).getString(KipConstants.KEY.TITLE)
                 .equals(Constants.EventType.BITRH_REGISTRATION)) {
-            form.getJSONObject(JsonFormUtils.STEP1).put(KipConstants.KEY.TITLE, KipConstants.FormTitleUtil.UPDATE_CHILD_FORM);
+            form.getJSONObject(JsonFormUtils.STEP1).put(KipConstants.KEY.TITLE, Constants.EventType.UPDATE_BITRH_REGISTRATION);
         }
     }
 
@@ -252,7 +251,6 @@ public class KipJsonFormUtils extends JsonFormUtils {
 
         return null;
     }
-
     public static void addRelationshipTypesQuestions(JSONObject form) {
         String UNIVERSAL_OPENMRS_RELATIONSHIP_TYPE_UUID = "8d91a210-c2cc-11de-8d13-0010c6dffd0f";
 

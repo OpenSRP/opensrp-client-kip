@@ -6,7 +6,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.smartregister.child.util.JsonFormUtils;
 import org.smartregister.clientandeventmodel.DateUtil;
-//import org.smartregister.kip.util.KipChildJsonFormUtils;
 import org.smartregister.kip.util.KipConstants;
 import org.smartregister.kip.util.KipJsonFormUtils;
 

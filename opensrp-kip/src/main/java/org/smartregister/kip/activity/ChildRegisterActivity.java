@@ -224,6 +224,7 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
             KipLocationUtility.addChildRegLocHierarchyQuestions(jsonForm, context);
             KipJsonFormUtils.addRelationshipTypesQuestions(jsonForm);
 
+
         }
         intent.putExtra(Constants.INTENT_KEY.JSON, jsonForm.toString());
         intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, getForm());

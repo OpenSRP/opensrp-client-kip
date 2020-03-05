@@ -1,6 +1,7 @@
 *.iml
 *.ipr
 *.iws
+<<<<<<< HEAD
 .idea/
 .classpath
 .project
@@ -22,3 +23,31 @@ build/
 opensrp-path/fabric.properties
 opensrp-path/reports/
 opensrp-path/jacoco.exec
+=======
+.DS_Store
+.classpath
+.externalNativeBuild
+.gradle
+.idea/
+.project
+.settings
+/.idea/assetWizardSettings.xml
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/navEditor.xml
+/.idea/workspace.xml
+/build
+/captures
+/local.properties
+bin/
+classes/
+drishti-app/tmp/
+gen/
+jacoco.exec
+local.properties
+out/
+project.properties
+target/
+tmp/
+>>>>>>> d456c72b679f33ba06834f6db39edd4bc04b2f10
