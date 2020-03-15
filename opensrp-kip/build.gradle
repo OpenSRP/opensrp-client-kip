@@ -88,7 +88,8 @@ android {
         }
 
         debug {
-            resValue "string", 'opensrp_url', '"http://197.254.67.146:8080/opensrp/"'
+            //resValue "string", 'opensrp_url', '"http://197.254.67.146:8080/opensrp/"'
+            resValue "string", 'opensrp_url', '"https://opensrp-jembi-eregister.smartregister.org/opensrp/"'
             buildConfigField "int", "OPENMRS_UNIQUE_ID_INITIAL_BATCH_SIZE", '250'
             buildConfigField "int", "OPENMRS_UNIQUE_ID_BATCH_SIZE", '100'
             buildConfigField "int", "OPENMRS_UNIQUE_ID_SOURCE", '2'
@@ -143,14 +144,6 @@ dependencies {
     implementation 'com.evrencoskun.library:tableview:0.8.8'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.15'
 
-    implementation('org.smartregister:opensrp-client-opd:0.0.13-SNAPSHOT@aar') {
-        transitive = true
-        exclude group: 'org.smartregister', module: 'opensrp-client-core'
-        exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
-        exclude group: 'org.smartregister', module: 'opensrp-client-configurable-views'
-        exclude group: 'com.android.support', module: 'appcompat-v7'
-    }
-
     implementation('org.smartregister:opensrp-client-native-form:1.7.24-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'com.android.support', module: 'recyclerview-v7'
@@ -167,14 +160,6 @@ dependencies {
 
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
-        exclude group: 'com.android.support', module: 'appcompat-v7'
-    }
-
-    implementation('org.smartregister:opensrp-client-anc:0.0.7-SNAPSHOT@aar') {
-        transitive = true
-        exclude group: 'org.smartregister', module: 'opensrp-client-core'
-        exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
-        exclude group: 'org.smartregister', module: 'opensrp-client-configurable-views'
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
 
