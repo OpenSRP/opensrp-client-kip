@@ -228,7 +228,8 @@ public class KipConstants {
     }
 
     public static final class EC_CHILD_TABLE {
-        public static final String BASE_ENTITY_ID = "base_entity_id";
+        public static final String BASE_ENTITY_ID = "baseEntityId";
+        public static final String ZEIR_ID="zeir_id";
         public static final String DOB = "dob";
         public static final String DOD = "dod";
         public static final String REG_DATE = "client_reg_date";

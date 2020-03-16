@@ -88,7 +88,7 @@ public class CheckChildDetailsModel {
                 return this;
             }
 
-            entityId = KipChildJsonFormUtils.getJsonString(child, KipConstants.KEY.BASE_ENTITY_ID);
+            entityId = KipChildJsonFormUtils.getJsonString(child, KipConstants.EC_CHILD_TABLE.BASE_ENTITY_ID);
             firstName = KipChildJsonFormUtils.getJsonString(child, KipConstants.KEY.FIRSTNAME);
             middleName = KipChildJsonFormUtils.getJsonString(child, KipConstants.KEY.MIDDLENAME);
             lastName = KipChildJsonFormUtils.getJsonString(child, KipConstants.KEY.LASTNAME);
@@ -105,7 +105,7 @@ public class CheckChildDetailsModel {
                 }
             }
 
-            zeirId = KipChildJsonFormUtils.getJsonString(KipChildJsonFormUtils.getJsonObject(child, KipConstants.KEY.IDENTIFIERS), JsonFormUtils.ZEIR_ID);
+            zeirId = KipChildJsonFormUtils.getJsonString(KipChildJsonFormUtils.getJsonObject(child, KipConstants.KEY.IDENTIFIERS), KipConstants.EC_CHILD_TABLE.ZEIR_ID);
             if (StringUtils.isNotBlank(zeirId)) {
                 zeirId = zeirId.replace("-", "");
             }
