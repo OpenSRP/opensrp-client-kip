@@ -54,9 +54,7 @@ public class KipJsonFormUtils extends JsonFormUtils {
                 birthRegistrationForm.put(JsonFormUtils.ENTITY_ID, childDetails.get(Constants.KEY.BASE_ENTITY_ID));
                 birthRegistrationForm.put(JsonFormUtils.ENCOUNTER_TYPE, Utils.metadata().childRegister.updateEventType);
                 birthRegistrationForm.put(JsonFormUtils.RELATIONAL_ID, childDetails.get(RELATIONAL_ID));
-                birthRegistrationForm.put(JsonFormUtils.CURRENT_ZEIR_ID,
-                        Utils.getValue(childDetails, KipConstants.KEY.MALAWI_ID, true).replace("-",
-                                ""));
+                birthRegistrationForm.put(JsonFormUtils.CURRENT_ZEIR_ID, Utils.getValue(childDetails, KipConstants.KEY.MALAWI_ID, true).replace("-", ""));
                 birthRegistrationForm.put(JsonFormUtils.CURRENT_OPENSRP_ID,
                         Utils.getValue(childDetails, Constants.JSON_FORM_KEY.UNIQUE_ID, false));
 

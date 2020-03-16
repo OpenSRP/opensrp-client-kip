@@ -60,7 +60,7 @@ import org.smartregister.location.helper.LocationHelper;
 import org.smartregister.opd.OpdLibrary;
 import org.smartregister.opd.activity.BaseOpdProfileActivity;
 import org.smartregister.opd.configuration.OpdConfiguration;
-import org.smartregister.opd.pojos.OpdMetadata;
+import org.smartregister.opd.pojo.OpdMetadata;
 import org.smartregister.opd.utils.OpdConstants;
 import org.smartregister.opd.utils.OpdDbConstants;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
@@ -240,7 +240,7 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
         ImmunizationLibrary.init(context, getRepository(), createCommonFtsObject(context.applicationContext()), BuildConfig.VERSION_CODE, BuildConfig.DATABASE_VERSION);
         fixHardcodedVaccineConfiguration();
 
-        ConfigurableViewsLibrary.init(context, getRepository());
+        ConfigurableViewsLibrary.init(context);
         ChildLibrary.init(context, getRepository(), getMetadata(), BuildConfig.VERSION_CODE, BuildConfig.DATABASE_VERSION);
 
         ActivityConfiguration activityConfiguration = new ActivityConfiguration();
@@ -346,7 +346,7 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
 
     public KipLocationRepository kipLocationRepository() {
         if (kipLocationRepository == null) {
-            kipLocationRepository = new KipLocationRepository((KipRepository) getRepository());
+            kipLocationRepository = new KipLocationRepository();
         }
         return kipLocationRepository;
     }
@@ -408,7 +408,7 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
 
     public EventClientRepository eventClientRepository() {
         if (eventClientRepository == null) {
-            eventClientRepository = new EventClientRepository(getRepository());
+            eventClientRepository = new EventClientRepository();
         }
         return eventClientRepository;
     }
@@ -461,7 +461,7 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
 
     public KipLocationRepository locationRepository() {
         if (locationRepository == null) {
-            locationRepository = new KipLocationRepository((KipRepository) getRepository());
+            locationRepository = new KipLocationRepository();
         }
         return locationRepository;
     }

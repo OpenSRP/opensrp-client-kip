@@ -7,8 +7,8 @@ import org.smartregister.domain.FetchStatus;
 import org.smartregister.kip.R;
 import org.smartregister.kip.interactor.OpdRegisterActivityInteractor;
 import org.smartregister.opd.contract.OpdRegisterActivityContract;
-import org.smartregister.opd.pojos.OpdEventClient;
-import org.smartregister.opd.pojos.RegisterParams;
+import org.smartregister.opd.pojo.RegisterParams;
+import org.smartregister.opd.pojo.OpdEventClient;
 import org.smartregister.opd.presenter.BaseOpdRegisterActivityPresenter;
 import org.smartregister.opd.utils.OpdJsonFormUtils;
 import org.smartregister.opd.utils.OpdUtils;
@@ -28,7 +28,7 @@ public class OpdRegisterActivityPresenter extends BaseOpdRegisterActivityPresent
     }
 
     @Override
-    public void saveForm(@NonNull String jsonString, @NonNull RegisterParams registerParams) {
+    public void saveForm(String jsonString, @NonNull RegisterParams registerParams) {
         try {
             if (registerParams.getFormTag() == null) {
                 registerParams.setFormTag(OpdJsonFormUtils.formTag(OpdUtils.getAllSharedPreferences()));

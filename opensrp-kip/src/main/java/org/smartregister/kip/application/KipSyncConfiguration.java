@@ -5,6 +5,8 @@ import org.smartregister.SyncFilter;
 import org.smartregister.kip.BuildConfig;
 import org.smartregister.repository.AllSharedPreferences;
 
+import java.util.List;
+
 public class KipSyncConfiguration extends SyncConfiguration {
     @Override
     public int getSyncMaxRetries() {
@@ -52,5 +54,15 @@ public class KipSyncConfiguration extends SyncConfiguration {
     public boolean updateClientDetailsTable() {
         return true;
     }
+
+//    @Override
+//    public List<String> getSynchronizedLocationTags() {
+//        return null;
+//    }
+//
+//    @Override
+//    public String getTopAllowedLocationLevel() {
+//        return null;
+//    }
 }
 

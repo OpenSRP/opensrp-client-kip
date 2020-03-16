@@ -102,8 +102,8 @@
         }
       },
       {
-        "name": "Penta 1",
-        "type": "Penta",
+        "name": "PENTA 1",
+        "type": "PENTA",
         "openmrs_date": {
           "parent_entity": "1685AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
           "entity": "concept",
@@ -162,8 +162,8 @@
         }
       },
       {
-        "name": "Rota 1",
-        "type": "Rota",
+        "name": "ROTA 1",
+        "type": "ROTA",
         "openmrs_date": {
           "parent_entity": "159698AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
           "entity": "concept",
@@ -230,8 +230,8 @@
         }
       },
       {
-        "name": "Penta 2",
-        "type": "Penta",
+        "name": "PENTA 2",
+        "type": "PENTA",
         "openmrs_date": {
           "parent_entity": "1685AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
           "entity": "concept",
@@ -247,7 +247,7 @@
           "due": [
             {
               "reference": "prerequisite",
-              "prerequisite": "Penta 1",
+              "prerequisite": "PENTA 1",
               "offset": "+28d",
               "window": "+14d"
             }
@@ -292,8 +292,8 @@
         }
       },
       {
-        "name": "Rota 2",
-        "type": "Rota",
+        "name": "ROTA 2",
+        "type": "ROTA",
         "openmrs_date": {
           "parent_entity": "159698AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
           "entity": "concept",
@@ -309,7 +309,7 @@
           "due": [
             {
               "reference": "prerequisite",
-              "prerequisite": "Rota 1",
+              "prerequisite": "ROTA 1",
               "offset": "+28d",
               "window": "+14d"
             }
@@ -361,8 +361,8 @@
         }
       },
       {
-        "name": "Penta 3",
-        "type": "Penta",
+        "name": "PENTA 3",
+        "type": "PENTA",
         "openmrs_date": {
           "parent_entity": "1685AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
           "entity": "concept",
@@ -378,7 +378,7 @@
           "due": [
             {
               "reference": "prerequisite",
-              "prerequisite": "Penta 2",
+              "prerequisite": "PENTA 2",
               "offset": "+28d",
               "window": "+14d"
             }

@@ -171,7 +171,7 @@ public class KipProcessorForJava extends ClientProcessorForJava {
             return;
         }
 
-        if (!childExists(eventClient.getClient().getBaseEntityId())) {
+        if (eventClient.getClient() != null && !childExists(eventClient.getClient().getBaseEntityId())) {
             List<String> createCase = new ArrayList<>();
             createCase.add("ec_child");
             processCaseModel(event, eventClient.getClient(), createCase);

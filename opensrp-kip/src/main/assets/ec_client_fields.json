@@ -14,7 +14,7 @@
           "column_name": "zeir_id",
           "type": "Client",
           "json_mapping": {
-            "field": "identifiers.M_KIP_ID"
+            "field": "identifiers.M_ZEIR_ID"
           }
         },
         {
@@ -171,62 +171,6 @@
           "json_mapping": {
             "field": "eventDate"
           }
-        },
-        {
-          "column_name": "date_removed",
-          "type": "Client",
-          "json_mapping": {
-            "field": "attributes.dateRemoved"
-          }
-        },
-        {
-          "column_name": "red_flag_count",
-          "type": "Client",
-          "json_mapping": {
-            "field": "attributes.red_flag_count"
-          }
-        },
-        {
-          "column_name": "yellow_flag_count",
-          "type": "Client",
-          "json_mapping": {
-            "field": "attributes.yellow_flag_count"
-          }
-        },
-        {
-          "column_name": "contact_status",
-          "type": "Client",
-          "json_mapping": {
-            "field": "attributes.contact_status"
-          }
-        },
-        {
-          "column_name": "next_contact",
-          "type": "Client",
-          "json_mapping": {
-            "field": "attributes.next_contact"
-          }
-        },
-        {
-          "column_name": "next_contact_date",
-          "type": "Client",
-          "json_mapping": {
-            "field": "attributes.next_contact_date"
-          }
-        },
-        {
-          "column_name": "last_contact_record_date",
-          "type": "Client",
-          "json_mapping": {
-            "field": "attributes.last_contact_record_date"
-          }
-        },
-        {
-          "column_name": "visit_start_date",
-          "type": "Client",
-          "json_mapping": {
-            "field": "attributes.visit_start_date"
-          }
         }
       ]
     },
@@ -244,7 +188,35 @@
           "column_name": "zeir_id",
           "type": "Client",
           "json_mapping": {
-            "field": "identifiers.OPENMRS_ID"
+            "field": "identifiers.zeir_id"
+          }
+        },
+        {
+          "column_name": "Permanent_Register_Number",
+          "type": "Client",
+          "json_mapping": {
+            "field": "identifiers.PERMANENT_REGISTER_NUMBER"
+          }
+        },
+        {
+          "column_name": "National_Unique_Patient_Identifier",
+          "type": "Client",
+          "json_mapping": {
+            "field": "identifiers.National_Unique_Patient_Identifier"
+          }
+        },
+        {
+          "column_name": "CWC_Number",
+          "type": "Client",
+          "json_mapping": {
+            "field": "identifiers.CWC_Number"
+          }
+        },
+        {
+          "column_name": "HDSS_Number",
+          "type": "Client",
+          "json_mapping": {
+            "field": "identifiers.HDSS_Number"
           }
         },
         {
@@ -301,6 +273,22 @@
           "type": "Client",
           "json_mapping": {
             "field": "deathdate"
+          }
+        },
+        {
+          "column_name": "Child_Birth_Notification",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "162051AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
+        },
+        {
+          "column_name": "First_Health_Facility_Contact",
+          "type": "Event",
+          "json_mapping": {
+            "field": "obs.fieldCode",
+            "concept": "163260AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
           }
         },
         {
