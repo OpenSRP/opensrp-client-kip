@@ -35,7 +35,7 @@ public class CheckMotherDetailsModel {
             JSONObject mother = KipChildJsonFormUtils.getJsonObject(client, KipConstants.KEY.MOTHER);
             motherFirstName = KipChildJsonFormUtils.getJsonString(mother, KipConstants.KEY.FIRSTNAME);
             motherLastName = KipChildJsonFormUtils.getJsonString(mother, KipConstants.KEY.LASTNAME);
-            motherBaseEntityId = KipChildJsonFormUtils.getJsonString(mother, KipConstants.KEY.BASE_ENTITY_ID);
+            motherBaseEntityId = KipChildJsonFormUtils.getJsonString(mother, KipConstants.EC_CHILD_TABLE.BASE_ENTITY_ID);
         }
         return this;
     }
