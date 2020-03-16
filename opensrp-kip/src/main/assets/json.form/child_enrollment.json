@@ -79,7 +79,7 @@
         "edit_type": "name",
         "read_only": true,
         "hidden": true,
-        "hint": "Child Registration Facility *"
+        "hint": "Child Registration Facility"
       },
       {
         "key": "First_Name",
@@ -100,7 +100,7 @@
         "openmrs_entity": "person",
         "openmrs_entity_id": "last_name",
         "type": "edit_text",
-        "hint": "Last name *",
+        "hint": "Last name",
         "edit_type": "name",
         "v_required": {
           "value": "true",
@@ -117,7 +117,7 @@
         "openmrs_entity": "person",
         "openmrs_entity_id": "birthdate",
         "type": "date_picker",
-        "hint": "Child's DOB *",
+        "hint": "Child's DOB",
         "expanded": false,
         "duration": {
           "label": "Age"
@@ -135,7 +135,7 @@
         "openmrs_entity": "person",
         "openmrs_entity_id": "gender",
         "type": "spinner",
-        "hint": "Gender *",
+        "hint": "Gender",
         "values": [
           "Male",
           "Female"
@@ -158,10 +158,10 @@
         "key": "zeir_id",
         "openmrs_entity_parent": "",
         "openmrs_entity": "person_identifier",
-        "openmrs_entity_id": "OPENMRS_ID",
+        "openmrs_entity_id": "zeir_id",
         "type": "barcode",
         "barcode_type": "qrcode",
-        "hint": "Child's KIP ID *",
+        "hint": "Child's KIP ID",
         "scanButtonText": "Scan QR Code",
         "value": "0",
         "v_required": {
@@ -208,7 +208,7 @@
         "openmrs_entity_id": "163260AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
         "openmrs_data_type": "text",
         "type": "date_picker",
-        "hint": "Date first seen *",
+        "hint": "Date first seen",
         "expanded": false,
         "min_date": "today-5y",
         "max_date": "today",
@@ -231,7 +231,7 @@
         "openmrs_entity_id": "first_name",
         "entity_id": "mother",
         "type": "edit_text",
-        "hint": "Mother/guardian first name *",
+        "hint": "Mother/guardian first name",
         "edit_type": "name",
         "look_up": "true",
         "v_required": {
@@ -250,7 +250,7 @@
         "openmrs_entity_id": "last_name",
         "entity_id": "mother",
         "type": "edit_text",
-        "hint": "Mother/guardian last name *",
+        "hint": "Mother/guardian last name",
         "edit_type": "name",
         "look_up": "true",
         "v_required": {
@@ -269,7 +269,7 @@
         "openmrs_entity_id": "gender",
         "entity_id": "mother",
         "type": "spinner",
-        "hint": "Mother/guardian gender *",
+        "hint": "Mother/guardian gender",
         "value": "Female",
         "values": [
           "Male",
@@ -304,7 +304,7 @@
         "entity_id": "mother",
         "type": "spinner",
         "Value": "Parent/Child",
-        "hint": "Relationship to child *",
+        "hint": "Relationship to child",
         "values": ["Doctor/Patient",
           "Sibling/Sibling",
           "Parent/Child",
@@ -360,7 +360,7 @@
         "openmrs_entity_id": "gender",
         "entity_id": "guardian",
         "type": "spinner",
-        "hint": "Father/guardian gender *",
+        "hint": "Father/guardian gender",
         "value": "Male",
         "values": [
           "Male",
@@ -405,7 +405,7 @@
         "openmrs_entity_id": "relationship",
         "entity_id": "guardian",
         "type": "spinner",
-        "hint": "Relationship to child *",
+        "hint": "Relationship to child",
         "values": [],
         "relevance": {
           "step1:Father_Guardian_Name": {
@@ -439,7 +439,7 @@
         "openmrs_entity_id": "stateProvince",
         "openmrs_data_type": "text",
         "type": "spinner",
-        "hint": "County *",
+        "hint": "County",
         "values": [],
         "v_required": {
           "value": true,
@@ -454,7 +454,7 @@
         "openmrs_entity_id": "countyDistrict",
         "openmrs_data_type": "text",
         "type": "spinner",
-        "hint": "Sub County *",
+        "hint": "Sub County",
         "values": [],
         "v_required": {
           "value": true,
@@ -469,7 +469,7 @@
         "openmrs_entity_id": "cityVillage",
         "openmrs_data_type": "text",
         "type": "spinner",
-        "hint": "Ward *",
+        "hint": "Ward",
         "values": [],
         "v_required": {
           "value": true,
@@ -484,7 +484,7 @@
         "openmrs_entity_id": "address4",
         "openmrs_data_type": "text",
         "type": "edit_text",
-        "hint": "Sub Location *",
+        "hint": "Sub Location",
         "edit_type": "name",
         "v_required": {
           "value": true,
@@ -498,7 +498,7 @@
         "openmrs_entity_id": "address3",
         "openmrs_data_type": "text",
         "type": "edit_text",
-        "hint": "Village *",
+        "hint": "Village",
         "edit_type": "name",
         "v_required": {
           "value": true,

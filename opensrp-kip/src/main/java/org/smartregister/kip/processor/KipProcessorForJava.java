@@ -10,8 +10,6 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
-import org.smartregister.anc.library.sync.BaseAncClientProcessorForJava;
-import org.smartregister.anc.library.sync.MiniClientProcessorForJava;
 import org.smartregister.child.util.Constants;
 import org.smartregister.child.util.JsonFormUtils;
 import org.smartregister.child.util.MoveToMyCatchmentUtils;
@@ -45,11 +43,10 @@ import org.smartregister.kip.activity.ChildImmunizationActivity;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.kip.util.KipConstants;
-import org.smartregister.opd.processor.OpdMiniClientProcessorForJava;
-import org.smartregister.opd.utils.OpdConstants;
 import org.smartregister.repository.DetailsRepository;
 import org.smartregister.repository.EventClientRepository;
 import org.smartregister.sync.ClientProcessorForJava;
+import org.smartregister.sync.MiniClientProcessorForJava;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -61,7 +58,6 @@ import java.util.HashSet;
 import java.util.List;
 
 import timber.log.Timber;
-
 public class KipProcessorForJava extends ClientProcessorForJava {
 
     private static KipProcessorForJava instance;
@@ -71,16 +67,11 @@ public class KipProcessorForJava extends ClientProcessorForJava {
 
     private KipProcessorForJava(Context context) {
         super(context);
-
-        BaseAncClientProcessorForJava baseAncClientProcessorForJava = new BaseAncClientProcessorForJava(context);
-        OpdMiniClientProcessorForJava opdMiniClientProcessorForJava = new OpdMiniClientProcessorForJava(context);
-
-        addMiniProcessors(baseAncClientProcessorForJava, opdMiniClientProcessorForJava);
     }
 
-    private void addMiniProcessors(MiniClientProcessorForJava... miniClientProcessorsForJava) {
+    protected void addMiniProcessors(MiniClientProcessorForJava... miniClientProcessorsForJava) {
         for (MiniClientProcessorForJava miniClientProcessorForJava : miniClientProcessorsForJava) {
-            unsyncEventsPerProcessor.put(miniClientProcessorForJava, new ArrayList<Event>());
+            unsyncEventsPerProcessor.put(miniClientProcessorForJava, new ArrayList<>());
 
             HashSet<String> eventTypes = miniClientProcessorForJava.getEventTypes();
 
@@ -141,9 +132,9 @@ public class KipProcessorForJava extends ClientProcessorForJava {
                     unsyncEvents.add(event);
                 } else if (eventType.equals(Constants.EventType.BITRH_REGISTRATION) || eventType
                         .equals(Constants.EventType.UPDATE_BITRH_REGISTRATION) || eventType
-                        .equals(Constants.EventType.NEW_WOMAN_REGISTRATION) || eventType.equals(OpdConstants.EventType.OPD_REGISTRATION)) {
-                    if (eventType.equals(OpdConstants.EventType.OPD_REGISTRATION) && eventClient.getClient() == null) {
-                        Timber.e(new Exception(), "Cannot find client corresponding to %s with base-entity-id %s", OpdConstants.EventType.OPD_REGISTRATION, event.getBaseEntityId());
+                        .equals(Constants.EventType.NEW_WOMAN_REGISTRATION)) {
+                    if (eventClient.getClient() == null) {
+                        Timber.e(new Exception(), "Cannot find client corresponding to with base-entity-id %s", event.getBaseEntityId());
                         continue;
                     }
 
@@ -171,7 +162,7 @@ public class KipProcessorForJava extends ClientProcessorForJava {
             return;
         }
 
-        if (!childExists(eventClient.getClient().getBaseEntityId())) {
+        if (eventClient.getClient() != null && !childExists(eventClient.getClient().getBaseEntityId())) {
             List<String> createCase = new ArrayList<>();
             createCase.add("ec_child");
             processCaseModel(event, eventClient.getClient(), createCase);

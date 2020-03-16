@@ -23,6 +23,7 @@ public class ChildRegistrationDataFragment extends BaseChildRegistrationDataFrag
     protected Map<String, Integer> getDataRowLabelResourceIds() {
         Map<String, Integer> resourceIds = new HashMap<>();
 
+        resourceIds.put("zeir_id", R.string.label_zeir);
         resourceIds.put("birth_registration_number", R.string.birth_registration_number);
         resourceIds.put("First_Name", R.string.first_name);
         resourceIds.put("Last_Name", R.string.last_name);

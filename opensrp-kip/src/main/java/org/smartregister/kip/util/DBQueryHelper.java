@@ -25,10 +25,10 @@ public class DBQueryHelper {
         final String IS_NULL_OR = " IS NULL OR ";
         final String TRUE = "'true'";
 
-        String mainCondition = " ( " + Constants.KEY.DOD + " is NULL OR " + Constants.KEY.DOD + " = '' ) " +
+        StringBuilder mainCondition = new StringBuilder(" ( " + Constants.KEY.DOD + " is NULL OR " + Constants.KEY.DOD + " = '' ) " +
                 AND + " (" + Constants.CHILD_STATUS.INACTIVE + IS_NULL_OR + Constants.CHILD_STATUS.INACTIVE + " != " + TRUE + " ) " +
                 AND + " (" + Constants.CHILD_STATUS.LOST_TO_FOLLOW_UP + IS_NULL_OR + Constants.CHILD_STATUS.LOST_TO_FOLLOW_UP + " != " + TRUE + " ) " +
-                AND + " ( ";
+                AND + " ( ");
         List<VaccineRepo.Vaccine> vaccines = ImmunizationLibrary.getInstance().getVaccineCacheMap().get(Constants.CHILD_TYPE).vaccineRepo;
 
         vaccines.remove(VaccineRepo.Vaccine.bcg2);
@@ -52,59 +52,43 @@ public class DBQueryHelper {
         for (int i = 0; i < vaccines.size(); i++) {
             VaccineRepo.Vaccine vaccine = vaccines.get(i);
             if (i == vaccines.size() - 1) {
-                mainCondition += " " + VaccinateActionUtils.addHyphen(vaccine.display()) + " = " + URGENT + " ";
+                mainCondition.append(" ").append(VaccinateActionUtils.addHyphen(vaccine.display())).append(" = ").append(URGENT).append(" ");
             } else {
-                mainCondition += " " + VaccinateActionUtils.addHyphen(vaccine.display()) + " = " + URGENT + OR;
+                mainCondition.append(" ").append(VaccinateActionUtils.addHyphen(vaccine.display())).append(" = ").append(URGENT).append(OR);
             }
         }
 
-        mainCondition += OR + " ( " + VaccinateActionUtils.addHyphen(VaccineRepo.Vaccine.opv0.display()) + " = " + URGENT +
-                AND + VaccinateActionUtils.addHyphen(VaccineRepo.Vaccine.opv4.display()) + " != " + COMPLETE + " ) ";
-        mainCondition += OR + " ( " + VaccinateActionUtils.addHyphen(VaccineRepo.Vaccine.opv4.display()) + " = " + URGENT +
-                AND + VaccinateActionUtils.addHyphen(VaccineRepo.Vaccine.opv0.display()) + " != " + COMPLETE + " ) ";
+        mainCondition.append(OR + " ( ").append(VaccinateActionUtils.addHyphen(VaccineRepo.Vaccine.opv0.display())).append(" = ").append(URGENT).append(" ) ");
+        mainCondition.append(OR + " ( ").append(VaccinateActionUtils.addHyphen(VaccineRepo.Vaccine.opv0.display())).append(" != ").append(COMPLETE).append(" ) ");
 
-        mainCondition += OR + " ( " + VaccinateActionUtils
-                .addHyphen(VaccineRepo.Vaccine.measles1.display()) + " = " + URGENT +
-                AND + VaccinateActionUtils.addHyphen(VaccineRepo.Vaccine.mr1.display()) + " != " + COMPLETE + " ) ";
-        mainCondition += OR + " ( " + VaccinateActionUtils.addHyphen(VaccineRepo.Vaccine.mr1.display()) + " = " + URGENT +
-                AND + VaccinateActionUtils.addHyphen(VaccineRepo.Vaccine.measles1.display()) + " != " + COMPLETE + " ) ";
+        mainCondition.append(OR + " ( ").append(VaccinateActionUtils.addHyphen(VaccineRepo.Vaccine.mr1.display())).append(" != ").append(COMPLETE).append(" ) ");
+        mainCondition.append(OR + " ( ").append(VaccinateActionUtils.addHyphen(VaccineRepo.Vaccine.mr1.display())).append(" = ").append(URGENT).append(" ) ");
 
-        mainCondition += OR + " ( " + VaccinateActionUtils
-                .addHyphen(VaccineRepo.Vaccine.measles2.display()) + " = " + URGENT +
-                AND + VaccinateActionUtils.addHyphen(VaccineRepo.Vaccine.mr2.display()) + " != " + COMPLETE + " ) ";
-        mainCondition += OR + " ( " + VaccinateActionUtils.addHyphen(VaccineRepo.Vaccine.mr2.display()) + " = " + URGENT +
-                AND + VaccinateActionUtils.addHyphen(VaccineRepo.Vaccine.measles2.display()) + " != " + COMPLETE + " ) ";
+        mainCondition.append(OR + " ( ").append(VaccinateActionUtils.addHyphen(VaccineRepo.Vaccine.mr2.display())).append(" != ").append(COMPLETE).append(" ) ");
+        mainCondition.append(OR + " ( ").append(VaccinateActionUtils.addHyphen(VaccineRepo.Vaccine.mr2.display())).append(" = ").append(URGENT).append(" ) ");
 
         if (urgentOnly) {
             return mainCondition + " ) ";
         }
 
-        mainCondition += OR;
+        mainCondition.append(OR);
         for (int i = 0; i < vaccines.size(); i++) {
             VaccineRepo.Vaccine vaccine = vaccines.get(i);
             if (i == vaccines.size() - 1) {
-                mainCondition += " " + VaccinateActionUtils.addHyphen(vaccine.display()) + " = " + NORMAL + " ";
+                mainCondition.append(" ").append(VaccinateActionUtils.addHyphen(vaccine.display())).append(" = ").append(NORMAL).append(" ");
             } else {
-                mainCondition += " " + VaccinateActionUtils.addHyphen(vaccine.display()) + " = " + NORMAL + OR;
+                mainCondition.append(" ").append(VaccinateActionUtils.addHyphen(vaccine.display())).append(" = ").append(NORMAL).append(OR);
             }
         }
 
-        mainCondition += OR + " ( " + VaccinateActionUtils.addHyphen(VaccineRepo.Vaccine.opv0.display()) + " = " + NORMAL +
-                AND + VaccinateActionUtils.addHyphen(VaccineRepo.Vaccine.opv4.display()) + " != " + COMPLETE + " ) ";
-        mainCondition += OR + " ( " + VaccinateActionUtils.addHyphen(VaccineRepo.Vaccine.opv4.display()) + " = " + NORMAL +
-                AND + VaccinateActionUtils.addHyphen(VaccineRepo.Vaccine.opv0.display()) + " != " + COMPLETE + " ) ";
+        mainCondition.append(OR + " ( ").append(VaccinateActionUtils.addHyphen(VaccineRepo.Vaccine.opv0.display())).append(" = ").append(NORMAL).append(" ) ");
+        mainCondition.append(OR + " ( ").append(VaccinateActionUtils.addHyphen(VaccineRepo.Vaccine.opv0.display())).append(" != ").append(COMPLETE).append(" ) ");
 
-        mainCondition += OR + " ( " + VaccinateActionUtils
-                .addHyphen(VaccineRepo.Vaccine.measles1.display()) + " = " + NORMAL +
-                AND + VaccinateActionUtils.addHyphen(VaccineRepo.Vaccine.mr1.display()) + " != " + COMPLETE + " ) ";
-        mainCondition += OR + " ( " + VaccinateActionUtils.addHyphen(VaccineRepo.Vaccine.mr1.display()) + " = " + NORMAL +
-                AND + VaccinateActionUtils.addHyphen(VaccineRepo.Vaccine.measles1.display()) + " != " + COMPLETE + " ) ";
+        mainCondition.append(OR + " ( ").append(VaccinateActionUtils.addHyphen(VaccineRepo.Vaccine.mr1.display())).append(" != ").append(COMPLETE).append(" ) ");
+        mainCondition.append(OR + " ( ").append(VaccinateActionUtils.addHyphen(VaccineRepo.Vaccine.mr1.display())).append(" = ").append(NORMAL).append(" ) ");
 
-        mainCondition += OR + " ( " + VaccinateActionUtils
-                .addHyphen(VaccineRepo.Vaccine.measles2.display()) + " = " + NORMAL +
-                AND + VaccinateActionUtils.addHyphen(VaccineRepo.Vaccine.mr2.display()) + " != " + COMPLETE + " ) ";
-        mainCondition += OR + " ( " + VaccinateActionUtils.addHyphen(VaccineRepo.Vaccine.mr2.display()) + " = " + NORMAL +
-                AND + VaccinateActionUtils.addHyphen(VaccineRepo.Vaccine.measles2.display()) + " != " + COMPLETE + " ) ";
+        mainCondition.append(OR + " ( ").append(VaccinateActionUtils.addHyphen(VaccineRepo.Vaccine.mr2.display())).append(" != ").append(COMPLETE).append(" ) ");
+        mainCondition.append(OR + " ( ").append(VaccinateActionUtils.addHyphen(VaccineRepo.Vaccine.mr2.display())).append(" = ").append(NORMAL).append(" ) ");
 
         return mainCondition + " ) ";
     }

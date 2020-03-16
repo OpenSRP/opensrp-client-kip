@@ -23,8 +23,8 @@ public class KipLocationRepository extends LocationRepository {
     private static final String PARENT_UUID_COLUMN = "parent_uuid";
     private static final String[] LOCATIONS_TABLE_COLUMNS = {ID_COLUMN, UUID_COLUMN, NAME_COLUMN, TAG_COLUMN, PARENT_UUID_COLUMN};
 
-    public KipLocationRepository(KipRepository repository) {
-        super(repository);
+    public KipLocationRepository() {
+        super();
     }
 
     public List<Location> getLocationsByTag(String tag) {

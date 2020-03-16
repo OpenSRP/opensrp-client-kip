@@ -8,9 +8,6 @@ import net.sqlcipher.database.SQLiteDatabase;
 
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.AllConstants;
-import org.smartregister.anc.library.repository.PartialContactRepositoryHelper;
-import org.smartregister.anc.library.repository.PatientRepositoryHelper;
-import org.smartregister.anc.library.repository.PreviousContactRepositoryHelper;
 import org.smartregister.child.util.Utils;
 import org.smartregister.configurableviews.repository.ConfigurableViewsRepository;
 import org.smartregister.domain.db.Column;
@@ -24,14 +21,6 @@ import org.smartregister.immunization.repository.VaccineRepository;
 import org.smartregister.immunization.util.IMDatabaseUtils;
 import org.smartregister.kip.BuildConfig;
 import org.smartregister.kip.application.KipApplication;
-import org.smartregister.opd.repository.OpdCheckInRepository;
-import org.smartregister.opd.repository.OpdDetailsRepository;
-import org.smartregister.opd.repository.OpdDiagnosisAndTreatmentFormRepository;
-import org.smartregister.opd.repository.OpdDiagnosisRepository;
-import org.smartregister.opd.repository.OpdServiceDetailRepository;
-import org.smartregister.opd.repository.OpdTestConductedRepository;
-import org.smartregister.opd.repository.OpdTreatmentRepository;
-import org.smartregister.opd.repository.OpdVisitRepository;
 import org.smartregister.repository.AlertRepository;
 import org.smartregister.repository.EventClientRepository;
 import org.smartregister.repository.Hia2ReportRepository;
@@ -66,24 +55,10 @@ public class KipRepository extends Repository {
                 .createTable(database, EventClientRepository.Table.event, EventClientRepository.event_column.values());
         ConfigurableViewsRepository.createTable(database);
         UniqueIdRepository.createTable(database);
-
-        PartialContactRepositoryHelper.createTable(database);
-        PreviousContactRepositoryHelper.createTable(database);
-
         SettingsRepository.onUpgrade(database);
         WeightRepository.createTable(database);
         HeightRepository.createTable(database);
         VaccineRepository.createTable(database);
-
-        OpdVisitRepository.createTable(database);
-        OpdCheckInRepository.createTable(database);
-        OpdDetailsRepository.createTable(database);
-        OpdDiagnosisAndTreatmentFormRepository.createTable(database);
-        OpdDiagnosisRepository.createTable(database);
-        OpdTreatmentRepository.createTable(database);
-        OpdTestConductedRepository.createTable(database);
-        OpdServiceDetailRepository.createTable(database);
-
         runLegacyUpgrades(database);
 
         onUpgrade(database, 8, BuildConfig.DATABASE_VERSION);
@@ -123,8 +98,6 @@ public class KipRepository extends Repository {
             }
             upgradeTo++;
         }
-
-        PatientRepositoryHelper.performMigrations(db);
     }
 
     @Override
