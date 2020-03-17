@@ -62,7 +62,7 @@
     "title": "Birth Registration",
     "fields": [
       {
-        "key": "Child_Photo",
+        "key": "Photo",
         "openmrs_entity_parent": "",
         "openmrs_entity": "",
         "openmrs_entity_id": "",
@@ -158,7 +158,7 @@
         "key": "zeir_id",
         "openmrs_entity_parent": "",
         "openmrs_entity": "person_identifier",
-        "openmrs_entity_id": "zeir_id",
+        "openmrs_entity_id": "OPENMRS_ID",
         "type": "barcode",
         "barcode_type": "qrcode",
         "hint": "Child's KIP ID",

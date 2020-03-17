@@ -188,7 +188,7 @@
           "column_name": "zeir_id",
           "type": "Client",
           "json_mapping": {
-            "field": "identifiers.zeir_id"
+            "field": "identifiers.OPENMRS_ID"
           }
         },
         {

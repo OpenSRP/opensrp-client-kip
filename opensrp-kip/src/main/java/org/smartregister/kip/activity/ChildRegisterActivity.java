@@ -18,8 +18,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.smartregister.Context;
-import org.smartregister.anc.library.fragment.MeFragment;
-import org.smartregister.anc.library.fragment.SortFilterFragment;
 import org.smartregister.child.ChildLibrary;
 import org.smartregister.child.activity.BaseChildRegisterActivity;
 import org.smartregister.child.model.BaseChildRegisterModel;
@@ -33,6 +31,7 @@ import org.smartregister.kip.contract.NavigationMenuContract;
 import org.smartregister.kip.event.LoginEvent;
 import org.smartregister.kip.fragment.AdvancedSearchFragment;
 import org.smartregister.kip.fragment.ChildRegisterFragment;
+import org.smartregister.kip.fragment.MeFragment;
 import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.kip.util.KipConstants;
 import org.smartregister.kip.util.KipJsonFormUtils;
@@ -78,11 +77,7 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
             bottomNavigationView.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
 
             if (!isLibraryItemEnabled()) {
-                bottomNavigationView.getMenu().removeItem(org.smartregister.anc.library.R.id.action_library);
-            }
-
-            if (!isAdvancedSearchEnabled()) {
-                bottomNavigationView.getMenu().removeItem(org.smartregister.anc.library.R.id.action_search);
+                bottomNavigationView.getMenu().removeItem(R.id.action_library);
             }
 
             BottomNavigationListener bottomNavigationListener = new BottomNavigationListener(this);
@@ -100,8 +95,6 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
             fragments[BaseRegisterActivity.ADVANCED_SEARCH_POSITION - 1] = new AdvancedSearchFragment();
         }
 
-        fragments[BaseRegisterActivity.SORT_FILTER_POSITION - 1] = new SortFilterFragment();
-
         if (isMeItemEnabled()) {
             fragments[BaseRegisterActivity.ME_POSITION - 1] = new MeFragment();
         }
@@ -114,8 +107,6 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
         if (isAdvancedSearchEnabled()) {
             BaseRegisterActivity.ADVANCED_SEARCH_POSITION = ++positionCounter;
         }
-
-        BaseRegisterActivity.SORT_FILTER_POSITION = ++positionCounter;
 
         if (isMeItemEnabled()) {
             BaseRegisterActivity.ME_POSITION = ++positionCounter;

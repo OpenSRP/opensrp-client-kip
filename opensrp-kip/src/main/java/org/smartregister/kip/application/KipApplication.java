@@ -15,9 +15,6 @@ import com.evernote.android.job.JobManager;
 import org.jetbrains.annotations.NotNull;
 import org.smartregister.Context;
 import org.smartregister.CoreLibrary;
-import org.smartregister.anc.library.AncLibrary;
-import org.smartregister.anc.library.activity.ActivityConfiguration;
-import org.smartregister.anc.library.util.DBConstantsUtils;
 import org.smartregister.child.ChildLibrary;
 import org.smartregister.child.domain.ChildMetadata;
 import org.smartregister.commonregistry.CommonFtsObject;
@@ -40,15 +37,10 @@ import org.smartregister.immunization.repository.VaccineRepository;
 import org.smartregister.immunization.util.VaccinateActionUtils;
 import org.smartregister.immunization.util.VaccinatorUtils;
 import org.smartregister.kip.BuildConfig;
-import org.smartregister.kip.activity.AncRegisterActivity;
 import org.smartregister.kip.activity.ChildFormActivity;
 import org.smartregister.kip.activity.ChildImmunizationActivity;
 import org.smartregister.kip.activity.ChildProfileActivity;
 import org.smartregister.kip.activity.LoginActivity;
-import org.smartregister.kip.activity.OpdFormActivity;
-import org.smartregister.kip.configuration.GizOpdRegisterRowOptions;
-import org.smartregister.kip.configuration.GizOpdRegisterSwitcher;
-import org.smartregister.kip.configuration.OpdRegisterQueryProvider;
 import org.smartregister.kip.job.KipJobCreator;
 import org.smartregister.kip.processor.KipProcessorForJava;
 import org.smartregister.kip.repository.KipLocationRepository;
@@ -57,12 +49,6 @@ import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.kip.util.KipConstants;
 import org.smartregister.kip.util.VaccineDuplicate;
 import org.smartregister.location.helper.LocationHelper;
-import org.smartregister.opd.OpdLibrary;
-import org.smartregister.opd.activity.BaseOpdProfileActivity;
-import org.smartregister.opd.configuration.OpdConfiguration;
-import org.smartregister.opd.pojo.OpdMetadata;
-import org.smartregister.opd.utils.OpdConstants;
-import org.smartregister.opd.utils.OpdDbConstants;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
 import org.smartregister.repository.EventClientRepository;
 import org.smartregister.repository.Repository;
@@ -111,49 +97,37 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
     }
 
     private static String[] getFtsTables() {
-        return new String[]{KipConstants.TABLE_NAME.CHILD, DBConstantsUtils.WOMAN_TABLE_NAME, OpdDbConstants.KEY.TABLE};
+        return new String[]{KipConstants.TABLE_NAME.CHILD};
     }
 
     private static String[] getFtsSearchFields(String tableName) {
         if (tableName.equals(KipConstants.TABLE_NAME.CHILD)) {
             return new String[]{KipConstants.KEY.ZEIR_ID, KipConstants.KEY.FIRST_NAME, KipConstants.KEY.LAST_NAME};
-        } else if (tableName.equalsIgnoreCase(DBConstantsUtils.WOMAN_TABLE_NAME)) {
-            return new String[]{DBConstantsUtils.KeyUtils.FIRST_NAME, DBConstantsUtils.KeyUtils.LAST_NAME, DBConstantsUtils.KeyUtils.ANC_ID};
-        } else if (tableName.equals(OpdDbConstants.KEY.TABLE)) {
-            return new String[]{OpdDbConstants.KEY.FIRST_NAME, OpdDbConstants.KEY.LAST_NAME, OpdDbConstants.KEY.OPENSRP_ID};
         }
 
         return null;
     }
 
     private static String[] getFtsSortFields(String tableName, android.content.Context context) {
-        switch (tableName) {
-            case KipConstants.TABLE_NAME.CHILD:
-                List<VaccineGroup> vaccines = getVaccineGroups(context);
-                List<String> names = new ArrayList<>();
-                names.add(KipConstants.KEY.FIRST_NAME);
-                names.add(KipConstants.KEY.DOB);
-                names.add(KipConstants.KEY.ZEIR_ID);
-                names.add(KipConstants.KEY.LAST_INTERACTED_WITH);
-                names.add(KipConstants.KEY.INACTIVE);
-                names.add(KipConstants.KEY.LOST_TO_FOLLOW_UP);
-                names.add(KipConstants.KEY.DOD);
-                names.add(KipConstants.KEY.DATE_REMOVED);
+        if (KipConstants.TABLE_NAME.CHILD.equals(tableName)) {
+            List<VaccineGroup> vaccines = getVaccineGroups(context);
+            List<String> names = new ArrayList<>();
+            names.add(KipConstants.KEY.FIRST_NAME);
+            names.add(KipConstants.KEY.DOB);
+            names.add(KipConstants.KEY.ZEIR_ID);
+            names.add(KipConstants.KEY.LAST_INTERACTED_WITH);
+            names.add(KipConstants.KEY.INACTIVE);
+            names.add(KipConstants.KEY.LOST_TO_FOLLOW_UP);
+            names.add(KipConstants.KEY.DOD);
+            names.add(KipConstants.KEY.DATE_REMOVED);
 
-                for (VaccineGroup vaccineGroup : vaccines) {
-                    populateAlertColumnNames(vaccineGroup.vaccines, names);
-                }
+            for (VaccineGroup vaccineGroup : vaccines) {
+                populateAlertColumnNames(vaccineGroup.vaccines, names);
+            }
 
-                return names.toArray(new String[names.size()]);
-            case DBConstantsUtils.WOMAN_TABLE_NAME:
-                return new String[]{DBConstantsUtils.KeyUtils.BASE_ENTITY_ID, DBConstantsUtils.KeyUtils.FIRST_NAME, DBConstantsUtils.KeyUtils.LAST_NAME,
-                        DBConstantsUtils.KeyUtils.LAST_INTERACTED_WITH, OpdDbConstants.KEY.REGISTER_ID, DBConstantsUtils.KeyUtils.DATE_REMOVED, DBConstantsUtils.KeyUtils.NEXT_CONTACT};
-            case OpdDbConstants.Table.EC_CLIENT:
-                return new String[]{OpdDbConstants.KEY.BASE_ENTITY_ID, OpdDbConstants.KEY.FIRST_NAME, OpdDbConstants.KEY.LAST_NAME,
-                        OpdDbConstants.KEY.LAST_INTERACTED_WITH, OpdDbConstants.KEY.DATE_REMOVED};
-            default:
-                return null;
+            return names.toArray(new String[names.size()]);
         }
+        return null;
 
     }
 
@@ -242,23 +216,6 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
 
         ConfigurableViewsLibrary.init(context);
         ChildLibrary.init(context, getRepository(), getMetadata(), BuildConfig.VERSION_CODE, BuildConfig.DATABASE_VERSION);
-
-        ActivityConfiguration activityConfiguration = new ActivityConfiguration();
-        activityConfiguration.setHomeRegisterActivityClass(AncRegisterActivity.class);
-        AncLibrary.init(context, getRepository(), BuildConfig.DATABASE_VERSION, activityConfiguration);
-
-        OpdMetadata opdMetadata = new OpdMetadata(OpdConstants.JSON_FORM_KEY.NAME, OpdDbConstants.KEY.TABLE,
-                OpdConstants.EventType.OPD_REGISTRATION, OpdConstants.EventType.UPDATE_OPD_REGISTRATION,
-                OpdConstants.CONFIG, OpdFormActivity.class, BaseOpdProfileActivity.class, true);
-
-        OpdConfiguration opdConfiguration = new OpdConfiguration.Builder(OpdRegisterQueryProvider.class)
-                .setOpdMetadata(opdMetadata)
-                .setOpdRegisterRowOptions(GizOpdRegisterRowOptions.class)
-                .setOpdRegisterSwitcher(GizOpdRegisterSwitcher.class)
-                .build();
-
-        OpdLibrary.init(context, getRepository(), opdConfiguration, BuildConfig.VERSION_CODE, BuildConfig.DATABASE_VERSION);
-
         Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
 
         initRepositories();
