@@ -31,10 +31,11 @@ public class CheckMotherDetailsModel {
         motherLastName = "";
 
         if (client.has(KipConstants.KEY.MOTHER)) {
+
             JSONObject mother = KipJsonFormUtils.getJsonObject(client, KipConstants.KEY.MOTHER);
             motherFirstName = KipJsonFormUtils.getJsonString(mother, KipConstants.KEY.FIRSTNAME);
             motherLastName = KipJsonFormUtils.getJsonString(mother, KipConstants.KEY.LASTNAME);
-            motherBaseEntityId = KipJsonFormUtils.getJsonString(mother, KipConstants.KEY.BASE_ENTITY_ID);
+            motherBaseEntityId = KipJsonFormUtils.getJsonString(mother, KipConstants.EC_CHILD_TABLE.BASE_ENTITY_ID);
         }
         return this;
     }
