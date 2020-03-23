@@ -195,6 +195,7 @@ public class KipConstants {
         public static final String UPDATE_CHILD_REGISTRATION = "Update Birth Registration";
         public static final String OUT_OF_CATCHMENT = "Out of Catchment";
 
+        public static final String NEW_GUARDIAN_REGISTRATION = "New Guardian Registration" ;
     }
 
     public static class JSON_FORM {

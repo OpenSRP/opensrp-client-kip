@@ -105,7 +105,7 @@ public class KipChildJsonFormUtilsTest {
         childDetails.put(KipConstants.KEY.MOTHER_NRC_NUMBER, "nrc_number");
         childDetails.put(KipConstants.KEY.MOTHER_SECOND_PHONE_NUMBER, "0232453923");
         List<String> nonEditableFields = new ArrayList<>();
-        String result = KipChildJsonFormUtils.getMetadataForEditForm(context, childDetails, nonEditableFields);
+        String result = KipJsonFormUtils.getMetadataForEditForm(context, childDetails, nonEditableFields);
         JSONObject jsonResultObject = new JSONObject(result);
         JSONObject stepOne = jsonResultObject.getJSONObject(JsonFormUtils.STEP1);
         JSONArray stepOneFields = stepOne.optJSONArray(org.smartregister.util.JsonFormUtils.FIELDS);
@@ -140,7 +140,7 @@ public class KipChildJsonFormUtilsTest {
         childDetails.put(KipConstants.KEY.BIRTH_FACILITY_NAME, "facility");
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(JsonFormUtils.KEY, KipConstants.KEY.BIRTH_FACILITY_NAME);
-        Whitebox.invokeMethod(KipChildJsonFormUtils.class, "updateBirthFacilityHierarchy", childDetails, jsonObject);
+        Whitebox.invokeMethod(KipJsonFormUtils.class, "updateBirthFacilityHierarchy", childDetails, jsonObject);
         Assert.assertEquals("[\"location\"]", jsonObject.getString(JsonFormUtils.VALUE));
     }
 
@@ -155,7 +155,7 @@ public class KipChildJsonFormUtilsTest {
         childDetails.put(KipConstants.KEY.ADDRESS_3, "address");
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(JsonFormUtils.KEY, KipConstants.KEY.RESIDENTIAL_AREA);
-        Whitebox.invokeMethod(KipChildJsonFormUtils.class, "updateResidentialAreaHierarchy", childDetails, jsonObject);
+        Whitebox.invokeMethod(KipJsonFormUtils.class, "updateResidentialAreaHierarchy", childDetails, jsonObject);
         Assert.assertEquals("[\"location\"]", jsonObject.getString(JsonFormUtils.VALUE));
     }
 }

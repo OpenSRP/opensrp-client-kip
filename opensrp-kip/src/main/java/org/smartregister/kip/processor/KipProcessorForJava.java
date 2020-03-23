@@ -132,7 +132,8 @@ public class KipProcessorForJava extends ClientProcessorForJava {
                     unsyncEvents.add(event);
                 } else if (eventType.equals(Constants.EventType.BITRH_REGISTRATION) || eventType
                         .equals(Constants.EventType.UPDATE_BITRH_REGISTRATION) || eventType
-                        .equals(Constants.EventType.NEW_WOMAN_REGISTRATION)) {
+                        .equals(Constants.EventType.NEW_WOMAN_REGISTRATION) || eventType
+                .equals(KipConstants.EventType.NEW_GUARDIAN_REGISTRATION)) {
                     if (eventClient.getClient() == null) {
                         Timber.e(new Exception(), "Cannot find client corresponding to with base-entity-id %s", event.getBaseEntityId());
                         continue;
