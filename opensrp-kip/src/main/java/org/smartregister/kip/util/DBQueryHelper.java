@@ -37,6 +37,10 @@ public class DBQueryHelper {
         vaccines.remove(VaccineRepo.Vaccine.opv4);
         vaccines.remove(VaccineRepo.Vaccine.measles1);
         vaccines.remove(VaccineRepo.Vaccine.mr1);
+        vaccines.remove(VaccineRepo.Vaccine.rtss1);
+        vaccines.remove(VaccineRepo.Vaccine.rtss2);
+        vaccines.remove(VaccineRepo.Vaccine.rtss3);
+        vaccines.remove(VaccineRepo.Vaccine.rtss4);
         vaccines.remove(VaccineRepo.Vaccine.measles2);
         vaccines.remove(VaccineRepo.Vaccine.mr2);
         vaccines.remove(VaccineRepo.Vaccine.mv1);

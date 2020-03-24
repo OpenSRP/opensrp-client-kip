@@ -460,8 +460,8 @@
     "days_after_birth_due": 183,
     "vaccines": [
       {
-        "name": "MV 1",
-        "type": "MV",
+        "name": "RTSS 1",
+        "type": "RTSS",
         "openmrs_date": {
           "parent_entity": "",
           "entity": "concept",
@@ -497,8 +497,8 @@
     "days_after_birth_due": 213,
     "vaccines": [
       {
-        "name": "MV 2",
-        "type": "MV",
+        "name": "RTSS 2",
+        "type": "RTSS",
         "openmrs_date": {
           "parent_entity": "",
           "entity": "concept",
@@ -514,7 +514,7 @@
           "due": [
             {
               "reference": "prerequisite",
-              "prerequisite": "MV 1",
+              "prerequisite": "RTSS 1",
               "offset": "+1m",
               "window": "+14d"
             }
@@ -565,8 +565,8 @@
         }
       },
       {
-        "name": "MV 3",
-        "type": "MV",
+        "name": "RTSS 3",
+        "type": "RTSS",
         "openmrs_date": {
           "parent_entity": "",
           "entity": "concept",
@@ -582,7 +582,7 @@
           "due": [
             {
               "reference": "prerequisite",
-              "prerequisite": "MV 2",
+              "prerequisite": "RTSS 2",
               "offset": "+1m",
               "window": "+14d"
             }
@@ -649,8 +649,8 @@
     "days_after_birth_due": 669,
     "vaccines": [
       {
-        "name": "MV 4",
-        "type": "MV",
+        "name": "RTSS 4",
+        "type": "RTSS",
         "openmrs_date": {
           "parent_entity": "",
           "entity": "concept",
@@ -666,7 +666,7 @@
           "due": [
             {
               "reference": "prerequisite",
-              "prerequisite": "MV 3",
+              "prerequisite": "RTSS 3",
               "offset": "+1m",
               "window": "+14d"
             }
