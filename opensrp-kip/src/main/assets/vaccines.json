@@ -102,8 +102,8 @@
         }
       },
       {
-        "name": "PENTA 1",
-        "type": "PENTA",
+        "name": "Penta 1",
+        "type": "Penta",
         "openmrs_date": {
           "parent_entity": "1685AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
           "entity": "concept",
@@ -162,8 +162,8 @@
         }
       },
       {
-        "name": "ROTA 1",
-        "type": "ROTA",
+        "name": "Rota 1",
+        "type": "Rota",
         "openmrs_date": {
           "parent_entity": "159698AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
           "entity": "concept",
@@ -230,8 +230,8 @@
         }
       },
       {
-        "name": "PENTA 2",
-        "type": "PENTA",
+        "name": "Penta 2",
+        "type": "Penta",
         "openmrs_date": {
           "parent_entity": "1685AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
           "entity": "concept",
@@ -247,7 +247,7 @@
           "due": [
             {
               "reference": "prerequisite",
-              "prerequisite": "PENTA 1",
+              "prerequisite": "Penta 1",
               "offset": "+28d",
               "window": "+14d"
             }
@@ -292,8 +292,8 @@
         }
       },
       {
-        "name": "ROTA 2",
-        "type": "ROTA",
+        "name": "Rota 2",
+        "type": "Rota",
         "openmrs_date": {
           "parent_entity": "159698AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
           "entity": "concept",
@@ -309,7 +309,7 @@
           "due": [
             {
               "reference": "prerequisite",
-              "prerequisite": "ROTA 1",
+              "prerequisite": "Rota 1",
               "offset": "+28d",
               "window": "+14d"
             }
@@ -361,8 +361,8 @@
         }
       },
       {
-        "name": "PENTA 3",
-        "type": "PENTA",
+        "name": "Penta 3",
+        "type": "Penta",
         "openmrs_date": {
           "parent_entity": "1685AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
           "entity": "concept",
@@ -378,7 +378,7 @@
           "due": [
             {
               "reference": "prerequisite",
-              "prerequisite": "PENTA 2",
+              "prerequisite": "Penta 2",
               "offset": "+28d",
               "window": "+14d"
             }
@@ -535,34 +535,34 @@
     "days_after_birth_due": 274,
     "vaccines": [
       {
-        "name": "MR 1",
-        "type": "MR",
-        "openmrs_date": {
-          "parent_entity": "162586AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-          "entity": "concept",
-          "entity_id": "1410AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-        },
-        "openmrs_calculate": {
-          "parent_entity": "36AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-          "entity": "concept",
-          "entity_id": "1418AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-          "calculation": 1
-        },
-        "schedule": {
-          "due": [
-            {
-              "reference": "dob",
-              "offset": "+9m",
-              "window": "+14d"
-            }
-          ],
-          "expiry": [
-            {
-              "reference": "dob",
-              "offset": "+5y"
-            }
-          ]
-        }
+      "name": "MR 1",
+      "type": "MR",
+      "openmrs_date": {
+        "parent_entity": "162586AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "entity": "concept",
+        "entity_id": "1410AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      },
+      "openmrs_calculate": {
+        "parent_entity": "36AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "entity": "concept",
+        "entity_id": "1418AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "calculation": 1
+      },
+      "schedule": {
+        "due": [
+          {
+            "reference": "dob",
+            "offset": "+9m",
+            "window": "+14d"
+          }
+        ],
+        "expiry": [
+          {
+            "reference": "dob",
+            "offset": "+5y"
+          }
+        ]
+      }
       },
       {
         "name": "RTSS 3",
