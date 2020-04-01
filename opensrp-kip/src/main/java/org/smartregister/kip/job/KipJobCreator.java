@@ -13,10 +13,12 @@ import org.smartregister.growthmonitoring.job.ZScoreRefreshIntentServiceJob;
 import org.smartregister.immunization.job.RecurringServiceJob;
 import org.smartregister.immunization.job.VaccineServiceJob;
 import org.smartregister.job.ExtendedSyncServiceJob;
+import org.smartregister.job.ImageUploadServiceJob;
 import org.smartregister.job.PullUniqueIdsServiceJob;
 import org.smartregister.job.SyncServiceJob;
 import org.smartregister.job.SyncSettingsServiceJob;
 import org.smartregister.job.ValidateSyncDataServiceJob;
+import org.smartregister.reporting.job.RecurringIndicatorGeneratingJob;
 import org.smartregister.sync.intent.SyncIntentService;
 
 public class KipJobCreator implements JobCreator {
@@ -44,6 +46,15 @@ public class KipJobCreator implements JobCreator {
                 return new ZScoreRefreshIntentServiceJob();
             case SyncSettingsServiceJob.TAG:
                 return new SyncSettingsServiceJob();
+            case RecurringIndicatorGeneratingJob.TAG:
+                return new RecurringIndicatorGeneratingJob();
+            case KipVaccineUpdateJob.TAG:
+                return new KipVaccineUpdateJob();
+            case KipVaccineUpdateJob.SCHEDULE_ADHOC_TAG:
+                return new KipVaccineUpdateJob();
+
+            case ImageUploadServiceJob.TAG:
+                return new ImageUploadServiceJob();
             default:
                 Log.w(KipJobCreator.class.getCanonicalName(), tag + " is not declared in Job Creator");
                 return null;

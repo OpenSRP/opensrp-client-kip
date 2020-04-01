@@ -13,6 +13,7 @@ public class KipConstants {
     public interface RegisterType {
         String ANC = "anc";
         String CHILD = "child";
+        String OPD = "opd";
     }
 
     public static final class KEY {
@@ -158,9 +159,14 @@ public class KipConstants {
         public static final String ATTRIBUTES = "attributes";
         public static final int FIVE_YEAR = 5;
         public static final String OPD_REGISTRATION = "Opd Registration";
-        public static final String PHOTO = "Child_Photo" ;
+        public static final String PHOTO = "photo" ;
         public static String FINGERPRINT_MESSAGE = "FINGERPRINT_MESSAGE";
         public static String SITE_CHARACTERISTICS = "site_characteristics";
+
+        public static final String FIELDS = "fields";
+        public static final String KEY = "key";
+        public static final String IS_VACCINE_GROUP = "is_vaccine_group";
+        public static final String OPTIONS = "options";
     }
 
     public static final class DrawerMenu {
@@ -210,8 +216,10 @@ public class KipConstants {
     }
 
     public static class TABLE_NAME {
-        public static final String CHILD = "ec_child";
-        public static final String MOTHER_TABLE_NAME = "ec_mother";
+        public static final String ALL_CLIENTS = "ec_client";
+        public static final String REGISTER_TYPE = "client_register_type";
+        public static final String CHILD = "ec_client";
+        public static final String MOTHER_TABLE_NAME = "ec_mother_details";
         public static final String FAMILY = "ec_family";
         public static final String FAMILY_MEMBER = "ec_family_member";
         public static final String CHILD_ACTIVITY = "ec_child_activity";
@@ -263,6 +271,15 @@ public class KipConstants {
         public static final String NO = "2";
     }
 
+    public interface Columns {
+        interface RegisterType {
+            String BASE_ENTITY_ID = "base_entity_id";
+            String REGISTER_TYPE = "register_type";
+            String DATE_REMOVED = "date_removed";
+            String DATE_CREATED = "date_created";
+        }
+    }
+
     public static final class CONCEPT {
         public final static String VACCINE_DATE = "1410AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
     }
@@ -274,5 +291,22 @@ public class KipConstants {
 
     public class IntentKeyUtil {
         public static final String IS_REMOTE_LOGIN = "is_remote_login";
+    }
+
+    public interface MultiResultProcessor {
+        String GROUPING_SEPARATOR = "_";
+    }
+
+    public interface IntentKey {
+        String REPORT_GROUPING = "report-grouping";
+    }
+
+    public interface Pref {
+        String APP_VERSION_CODE = "APP_VERSION_CODE";
+        String INDICATOR_DATA_INITIALISED = "INDICATOR_DATA_INITIALISED";
+    }
+
+    public interface File {
+        String INDICATOR_CONFIG_FILE = "config/indicator-definitions.yml";
     }
 }

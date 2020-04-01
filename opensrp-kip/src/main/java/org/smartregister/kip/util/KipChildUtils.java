@@ -13,8 +13,10 @@ import android.support.v7.app.AlertDialog;
 import android.util.DisplayMetrics;
 
 import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 import com.vijay.jsonwizard.customviews.TreeViewDialog;
 
+import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
@@ -143,9 +145,16 @@ public class KipChildUtils extends Utils {
         return " ((( julianday('now') - julianday(" + dateColumn + "))/365.25) <" + age + ")";
     }
 
-    public static void updateChildDeath(@NonNull EventClient eventClient) {
+    public static boolean updateChildDeath(@NonNull EventClient eventClient) {
         Client client = eventClient.getClient();
         ContentValues values = new ContentValues();
+
+        if (client.getDeathdate() == null) {
+            Timber.e(new Exception(), "Death event for %s cannot be processed because deathdate is NULL : %s"
+                    , client.getFirstName() + " " + client.getLastName(), new Gson().toJson(eventClient));
+            return false;
+        }
+
         values.put(Constants.KEY.DOD, Utils.convertDateFormat(client.getDeathdate()));
         values.put(Constants.KEY.DATE_REMOVED, Utils.convertDateFormat(client.getDeathdate().toDate(), Utils.DB_DF));
         String tableName = Utils.metadata().childRegister.tableName;
@@ -154,6 +163,26 @@ public class KipChildUtils extends Utils {
             allCommonsRepository.update(tableName, values, client.getBaseEntityId());
             allCommonsRepository.updateSearch(client.getBaseEntityId());
         }
+
+        return true;
+    }
+    @NonNull
+    public static Locale getLocale(Context context){
+        if (context == null) {
+            return Locale.getDefault();
+        } else {
+            return context.getResources().getConfiguration().locale;
+        }
+    }
+
+    @NonNull
+    public static String getCurrentLocality() {
+        String selectedLocation = KipApplication.getInstance().context().allSharedPreferences().fetchCurrentLocality();
+        if (StringUtils.isBlank(selectedLocation)) {
+            selectedLocation = LocationHelper.getInstance().getDefaultLocation();
+            KipApplication.getInstance().context().allSharedPreferences().saveCurrentLocality(selectedLocation);
+        }
+        return selectedLocation;
     }
 
     public static void showLocations(@Nullable Activity context, @NonNull OnLocationChangeListener onLocationChangeListener, @Nullable NavigationMenu navigationMenu) {

@@ -28,6 +28,7 @@ import com.github.ybq.android.spinkit.style.FadingCircle;
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.domain.FetchStatus;
 import org.smartregister.kip.R;
+import org.smartregister.kip.activity.ReportRegisterActivity;
 import org.smartregister.kip.adapter.NavigationAdapter;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.contract.NavigationContract;
@@ -35,6 +36,7 @@ import org.smartregister.kip.listener.OnLocationChangeListener;
 import org.smartregister.kip.model.NavigationOption;
 import org.smartregister.kip.presenter.NavigationPresenter;
 import org.smartregister.kip.util.KipChildUtils;
+import org.smartregister.location.helper.LocationHelper;
 import org.smartregister.p2p.activity.P2pModeSelectActivity;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
 import org.smartregister.view.activity.BaseRegisterActivity;
@@ -50,6 +52,7 @@ import java.util.Locale;
 import timber.log.Timber;
 
 public class NavigationMenu implements NavigationContract.View, SyncStatusBroadcastReceiver.SyncStatusListener, OnLocationChangeListener {
+
     private static NavigationMenu instance;
     private static WeakReference<Activity> activityWeakReference;
     private DrawerLayout drawer;
@@ -65,12 +68,14 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     private TextView txtLocationSelected;
 
     private View parentView;
+    private LinearLayout reportView;
     private List<NavigationOption> navigationOptions = new ArrayList<>();
 
     private NavigationMenu() {
 
     }
 
+    @Nullable
     public static NavigationMenu getInstance(Activity activity, View parentView, Toolbar myToolbar) {
         SyncStatusBroadcastReceiver.getInstance().removeSyncStatusListener(instance);
         activityWeakReference = new WeakReference<>(activity);
@@ -94,8 +99,9 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
             parentView = myParentView;
             mPresenter = new NavigationPresenter(this);
             prepareViews(activity);
+            registerDrawer(activity);
         } catch (Exception e) {
-            Timber.e(e, "NavigationMenu --> init");
+            Timber.e(e);
         }
     }
 
@@ -137,6 +143,17 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         }
     }
 
+    private void registerDrawer(Activity parentActivity) {
+        if (drawer != null) {
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    parentActivity, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.addDrawerListener(toggle);
+            toggle.syncState();
+
+        }
+    }
+
     @Override
     public void prepareViews(Activity activity) {
         drawer = activity.findViewById(R.id.drawer_layout);
@@ -146,16 +163,22 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         ivSync = rootView.findViewById(R.id.ivSyncIcon);
         syncProgressBar = rootView.findViewById(R.id.pbSync);
         settingsLayout = rootView.findViewById(R.id.rlSettings);
+        reportView = rootView.findViewById(R.id.report_view);
 
         ImageView ivLogo = rootView.findViewById(R.id.ivLogo);
         LinearLayout locationLayout = rootView.findViewById(R.id.giz_location_layout);
 
 
-        locationLayout.setOnClickListener(v -> KipChildUtils.showLocations(activity, instance, null));
+        locationLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                KipChildUtils.showLocations(activity, (OnLocationChangeListener) instance, null);
+            }
+        });
 
         txtLocationSelected = rootView.findViewById(R.id.giz_txt_location_selected);
 
-        updateUi(KipApplication.getInstance().context().allSharedPreferences().fetchCurrentLocality());
+        updateUi(LocationHelper.getInstance().getOpenMrsReadableName(KipChildUtils.getCurrentLocality()));
 
         ivLogo.setContentDescription(activity.getString(R.string.nav_logo));
         ivLogo.setImageResource(R.drawable.ic_logo);
@@ -179,11 +202,110 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         registerSync(activity);
         registerLanguageSwitcher(activity);
 
-        registerDeviceToDeviceSync(activity);
         registerSettings(activity);
+        registerReporting(activity);
 
         // update all actions
         mPresenter.refreshLastSync();
+    }
+
+    private void registerReporting(@Nullable Activity parentActivity) {
+        reportView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startReportActivity(parentActivity);
+            }
+        });
+    }
+
+    private void startReportActivity(@Nullable Activity parentActivity) {
+        if (parentActivity instanceof ReportRegisterActivity) {
+            drawer.closeDrawer(GravityCompat.START);
+            return;
+        }
+
+        if (parentActivity != null) {
+            Intent intent = new Intent(parentActivity, ReportRegisterActivity.class);
+            parentActivity.startActivity(intent);
+        }
+    }
+
+    private void registerSettings(@NonNull final Activity activity) {
+        if (settingsLayout != null) {
+            settingsLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (activity instanceof BaseRegisterActivity) {
+                        ((BaseRegisterActivity) activity).switchToFragment(BaseRegisterActivity.ME_POSITION);
+                        closeDrawer();
+                    } else {
+                        Timber.e(new Exception("Cannot open Settings since this activity is not a child of BaseRegisterActivity"));
+                    }
+                }
+            });
+        }
+    }
+
+    private void registerNavigation(Activity parentActivity) {
+        if (recyclerView != null) {
+            navigationOptions = mPresenter.getOptions();
+            if (navigationAdapter == null) {
+                navigationAdapter = new NavigationAdapter(navigationOptions, parentActivity);
+            }
+
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(parentActivity);
+            recyclerView.setLayoutManager(mLayoutManager);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setAdapter(navigationAdapter);
+        }
+    }
+
+    private void registerLogout(final Activity parentActivity) {
+        mPresenter.displayCurrentUser();
+        tvLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logout(parentActivity);
+            }
+        });
+    }
+
+    private void registerSync(final Activity parentActivity) {
+
+        TextView tvSync = rootView.findViewById(R.id.tvSync);
+        ivSync = rootView.findViewById(R.id.ivSyncIcon);
+        syncProgressBar = rootView.findViewById(R.id.pbSync);
+
+        View.OnClickListener syncClicker = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(parentActivity, parentActivity.getResources().getText(R.string.action_start_sync),
+                        Toast.LENGTH_SHORT).show();
+                mPresenter.sync(parentActivity);
+            }
+        };
+
+
+        tvSync.setOnClickListener(syncClicker);
+        ivSync.setOnClickListener(syncClicker);
+
+        refreshSyncProgressSpinner();
+    }
+
+    private void registerLanguageSwitcher(final Activity context) {
+        final TextView tvLang = rootView.findViewById(R.id.tvLang);
+        Locale current = context.getResources().getConfiguration().locale;
+        tvLang.setText(StringUtils.capitalize(current.getDisplayLanguage()));
+    }
+
+    protected void refreshSyncProgressSpinner() {
+        if (SyncStatusBroadcastReceiver.getInstance().isSyncing()) {
+            syncProgressBar.setVisibility(View.VISIBLE);
+            ivSync.setVisibility(View.INVISIBLE);
+        } else {
+            syncProgressBar.setVisibility(View.INVISIBLE);
+            ivSync.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -220,110 +342,6 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         navigationAdapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void updateUi(@Nullable String location) {
-        if (txtLocationSelected != null && StringUtils.isNotBlank(location)) {
-            txtLocationSelected.setText(location);
-        }
-    }
-
-    private void registerDrawer(Activity parentActivity) {
-        if (drawer != null) {
-            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                    parentActivity, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-            drawer.addDrawerListener(toggle);
-            toggle.syncState();
-
-        }
-    }
-
-    private void registerNavigation(Activity parentActivity) {
-        if (recyclerView != null) {
-            navigationOptions = mPresenter.getOptions();
-            if (navigationAdapter == null) {
-                navigationAdapter = new NavigationAdapter(navigationOptions, parentActivity);
-            }
-
-            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(parentActivity);
-            recyclerView.setLayoutManager(mLayoutManager);
-            recyclerView.setItemAnimator(new DefaultItemAnimator());
-            recyclerView.setAdapter(navigationAdapter);
-        }
-    }
-
-    private void registerLogout(final Activity parentActivity) {
-        mPresenter.displayCurrentUser();
-        tvLogout.setOnClickListener(v -> logout(parentActivity));
-    }
-
-    private void registerSync(final Activity parentActivity) {
-
-        TextView tvSync = rootView.findViewById(R.id.tvSync);
-        ivSync = rootView.findViewById(R.id.ivSyncIcon);
-        syncProgressBar = rootView.findViewById(R.id.pbSync);
-
-        View.OnClickListener syncClicker = v -> {
-            Toast.makeText(parentActivity, parentActivity.getResources().getText(R.string.action_start_sync),
-                    Toast.LENGTH_SHORT).show();
-            mPresenter.sync(parentActivity);
-        };
-
-
-        tvSync.setOnClickListener(syncClicker);
-        ivSync.setOnClickListener(syncClicker);
-
-        refreshSyncProgressSpinner();
-    }
-
-    private void registerLanguageSwitcher(final Activity context) {
-        final TextView tvLang = rootView.findViewById(R.id.tvLang);
-        Locale current = context.getResources().getConfiguration().locale;
-        tvLang.setText(StringUtils.capitalize(current.getDisplayLanguage()));
-    }
-
-    private void registerDeviceToDeviceSync(@NonNull final Activity activity) {
-        rootView.findViewById(R.id.rlIconDevice)
-                .setOnClickListener(v -> startP2PActivity(activity));
-    }
-
-    private void registerSettings(@NonNull final Activity activity) {
-        if (settingsLayout != null) {
-            settingsLayout.setOnClickListener(v -> {
-                if (activity instanceof BaseRegisterActivity) {
-                    ((BaseRegisterActivity) activity).switchToFragment(BaseRegisterActivity.ME_POSITION);
-                    closeDrawer();
-                } else {
-                    Timber.e(new Exception("Cannot open Settings since this activity is not a child of BaseRegisterActivity"));
-                }
-            });
-        }
-    }
-
-    protected void refreshSyncProgressSpinner() {
-        if (SyncStatusBroadcastReceiver.getInstance().isSyncing()) {
-            syncProgressBar.setVisibility(View.VISIBLE);
-            ivSync.setVisibility(View.INVISIBLE);
-        } else {
-            syncProgressBar.setVisibility(View.INVISIBLE);
-            ivSync.setVisibility(View.VISIBLE);
-        }
-    }
-
-    public void startP2PActivity(@NonNull Activity activity) {
-        activity.startActivity(new Intent(activity, P2pModeSelectActivity.class));
-    }
-
-    public static void closeDrawer() {
-        if (instance != null && instance.getDrawer() != null) {
-            instance.getDrawer().closeDrawer(Gravity.START);
-        }
-    }
-
-    public DrawerLayout getDrawer() {
-        return drawer;
-    }
-
     public NavigationAdapter getNavigationAdapter() {
         return navigationAdapter;
     }
@@ -353,7 +371,28 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         mPresenter.refreshNavigationCount();
     }
 
+    public DrawerLayout getDrawer() {
+        return drawer;
+    }
+
     public void openDrawer() {
         drawer.openDrawer(GravityCompat.START);
+    }
+
+    public static void closeDrawer() {
+        if (instance != null && instance.getDrawer() != null) {
+            instance.getDrawer().closeDrawer(Gravity.START);
+        }
+    }
+
+    @Override
+    public void updateUi(@Nullable String location) {
+        if (txtLocationSelected != null && StringUtils.isNotBlank(location)) {
+            txtLocationSelected.setText(location);
+        }
+    }
+
+    public void setReportsSelected() {
+        // TODO: Set the reports UI as selected
     }
 }

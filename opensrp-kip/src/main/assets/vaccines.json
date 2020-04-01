@@ -126,7 +126,7 @@
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+2ym"
+              "offset": "+2y"
             }
           ]
         }
@@ -317,7 +317,7 @@
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+2ym"
+              "offset": "+2y"
             }
           ]
         }
@@ -460,8 +460,8 @@
     "days_after_birth_due": 183,
     "vaccines": [
       {
-        "name": "RTSS 1",
-        "type": "RTSS",
+        "name": "MV 1",
+        "type": "MV",
         "openmrs_date": {
           "parent_entity": "",
           "entity": "concept",
@@ -484,7 +484,43 @@
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+10m"
+              "offset": "+2y"
+            }
+          ]
+        }
+      },
+      {
+        "name": "MR - CE",
+        "type": "MR",
+        "openmrs_date": {
+          "parent_entity": "162586AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "entity": "concept",
+          "entity_id": "1410AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        },
+        "openmrs_calculate": {
+          "parent_entity": "162586AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "entity": "concept",
+          "entity_id": "1418AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "calculation": 6
+        },
+        "schedule": {
+          "due": [
+            {
+              "reference": "dob",
+              "offset": "+6m",
+              "window": "+14d"
+            }
+          ],
+          "conditions": [
+            {
+              "attribute": "pmtct_status",
+              "value": "Exposed (CE)"
+            }
+          ],
+          "expiry": [
+            {
+              "reference": "dob",
+              "offset": "+5y"
             }
           ]
         }
@@ -497,8 +533,8 @@
     "days_after_birth_due": 213,
     "vaccines": [
       {
-        "name": "RTSS 2",
-        "type": "RTSS",
+        "name": "MV 2",
+        "type": "MV",
         "openmrs_date": {
           "parent_entity": "",
           "entity": "concept",
@@ -514,7 +550,7 @@
           "due": [
             {
               "reference": "prerequisite",
-              "prerequisite": "RTSS 1",
+              "prerequisite": "MV 1",
               "offset": "+1m",
               "window": "+14d"
             }
@@ -522,7 +558,7 @@
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+1y,8m"
+              "offset": "+2y"
             }
           ]
         }
@@ -565,8 +601,8 @@
       }
       },
       {
-        "name": "RTSS 3",
-        "type": "RTSS",
+        "name": "MV 3",
+        "type": "MV",
         "openmrs_date": {
           "parent_entity": "",
           "entity": "concept",
@@ -582,7 +618,7 @@
           "due": [
             {
               "reference": "prerequisite",
-              "prerequisite": "RTSS 2",
+              "prerequisite": "MV 2",
               "offset": "+1m",
               "window": "+14d"
             }
@@ -590,7 +626,7 @@
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+1y,9m"
+              "offset": "+2y"
             }
           ]
         }
@@ -644,30 +680,30 @@
     ]
   },
   {
-    "name": "22 Months",
-    "id": "Twenty_Two_Months",
-    "days_after_birth_due": 669,
+    "name": "24 Months",
+    "id": "Twenty_Four_Months",
+    "days_after_birth_due": 730,
     "vaccines": [
       {
-        "name": "RTSS 4",
-        "type": "RTSS",
+        "name": "MV 4",
+        "type": "MV",
         "openmrs_date": {
-          "parent_entity": "",
+          "parent_entity": "783AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
           "entity": "concept",
-          "entity_id": ""
+          "entity_id": "1410AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
         },
         "openmrs_calculate": {
-          "parent_entity": "",
+          "parent_entity": "783AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
           "entity": "concept",
-          "entity_id": "",
+          "entity_id": "1418AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
           "calculation": 0
         },
         "schedule": {
           "due": [
             {
               "reference": "prerequisite",
-              "prerequisite": "RTSS 3",
-              "offset": "+1m",
+              "prerequisite": "MV 3",
+              "offset": "+28d",
               "window": "+14d"
             }
           ],
