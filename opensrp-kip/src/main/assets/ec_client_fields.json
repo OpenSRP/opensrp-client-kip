@@ -18,6 +18,13 @@
           }
         },
         {
+          "column_name":"zeir_id",
+          "type":"Client",
+          "json_mapping":{
+            "field":"identifiers.M_ZAIR_ID"
+          }
+        },
+        {
           "column_name": "opensrp_id",
           "type": "Client",
           "json_mapping": {
@@ -78,6 +85,13 @@
           "type": "Client",
           "json_mapping": {
             "field": "deathdate"
+          }
+        },
+        {
+          "column_name":"openmrs_id",
+          "type":"Client",
+          "json_mapping":{
+            "field":"identifiers.OPENMRS_ID"
           }
         },
         {
@@ -175,6 +189,20 @@
           }
         },
         {
+          "column_name": "address1",
+          "type": "Client",
+          "json_mapping": {
+            "field": "addresses.addressFields.address1"
+          }
+        },
+        {
+          "column_name":"landmark",
+          "type":"Client",
+          "json_mapping":{
+            "field":"addresses.addressFields.address2"
+          }
+        },
+        {
           "column_name": "home_address",
           "type": "Client",
           "json_mapping": {
@@ -192,7 +220,49 @@
           "column_name": "village",
           "type": "Client",
           "json_mapping": {
-            "field": "addresses.addressFields.address1"
+            "field": "addresses.addressFields.address3"
+          }
+        },
+        {
+          "column_name": "town",
+          "type": "Client",
+          "json_mapping": {
+            "field": "addresses.town"
+          }
+        },
+        {
+          "column_name": "union_council",
+          "type": "Client",
+          "json_mapping": {
+            "field": "addresses.subTown"
+          }
+        },
+        {
+          "column_name":"county",
+          "type":"Client",
+          "json_mapping":{
+            "field":"addresses.stateProvince"
+          }
+        },
+        {
+          "column_name":"sub_county",
+          "type":"Client",
+          "json_mapping":{
+            "field":"addresses.countyDistrict"
+          }
+        },
+        {
+          "column_name":"ward",
+          "type":"Client",
+          "json_mapping":{
+            "field":"addresses.cityVillage"
+          }
+        },
+        {
+          "column_name":"sub_location",
+          "type":"Client",
+          "json_mapping":{
+            "field":"addresses.addressFields.address4"
           }
         },
         {
