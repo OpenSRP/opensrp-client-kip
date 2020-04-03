@@ -17,6 +17,7 @@ import org.smartregister.child.enums.LocationHierarchy;
 import org.smartregister.child.util.Constants;
 import org.smartregister.child.util.JsonFormUtils;
 import org.smartregister.child.util.Utils;
+import org.smartregister.commonregistry.CommonPersonObjectClient;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.context.AllSettings;
 import org.smartregister.kip.repository.KipLocationRepository;
@@ -38,6 +39,9 @@ import timber.log.Timber;
 import static org.smartregister.login.task.RemoteLoginTask.getOpenSRPContext;
 
 public class KipJsonFormUtils extends JsonFormUtils {
+
+//    private static CommonPersonObjectClient detailmaps;
+    private static Map<String, String> detailmaps;
 
 
     public static String getMetadataForEditForm(Context context, Map<String, String> childDetails, List<String> nonEditableFields) {
@@ -114,6 +118,34 @@ public class KipJsonFormUtils extends JsonFormUtils {
             if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase(KipConstants.KEY.MOTHER_SECOND_PHONE_NUMBER)) {
                 String secondaryNumber = Utils.getValue(childDetails, KipConstants.KEY.MOTHER_SECOND_PHONE_NUMBER, true);
                 jsonObject.put(JsonFormUtils.VALUE, secondaryNumber);
+            }
+
+            if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Ce_County")) {
+                jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(detailmaps, "stateProvince", true));
+            }
+            if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Ce_Sub_County")) {
+                jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(detailmaps, "countyDistrict", true));
+            }
+            if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Ce_Ward")) {
+                jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(detailmaps, "cityVillage", true));
+            }
+            if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Ce_Sub_Location")) {
+                jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(detailmaps, "address4", true));
+            }
+            if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Ce_Village")) {
+                jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(detailmaps, "address3", true));
+            }
+            if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Ce_Landmark")) {
+                jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(detailmaps, "address2", true));
+            }
+            if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Ce_Address")) {
+                jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(detailmaps, "address1", true));
+            }
+            if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("CHW_Name")) {
+                jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(detailmaps, "CHW_Name", true));
+            }
+            if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("CHW_Phone_Number")) {
+                jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(detailmaps, "CHW_Phone_Number", true));
             }
         }
     }

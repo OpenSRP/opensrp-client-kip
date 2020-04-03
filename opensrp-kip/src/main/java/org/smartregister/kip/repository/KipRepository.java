@@ -2,7 +2,6 @@ package org.smartregister.kip.repository;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
@@ -107,7 +106,7 @@ public class KipRepository extends Repository {
 
         runLegacyUpgrades(database);
 
-        onUpgrade(database, 8, BuildConfig.DATABASE_VERSION);
+        onUpgrade(database, 9, BuildConfig.DATABASE_VERSION);
 
         // initialize from yml file
         ReportingLibrary reportingLibraryInstance = ReportingLibrary.getInstance();
@@ -151,6 +150,9 @@ public class KipRepository extends Repository {
                     break;
                 case 8:
                     upgradeToVersion8AddServiceGroupColumn(db);
+                    break;
+                case 9:
+                    upgradeToVersion9(db);
                     break;
                 default:
                     break;
@@ -235,6 +237,7 @@ public class KipRepository extends Repository {
         upgradeToVersion7VaccineRecurringServiceRecordChange(database);
         upgradeToVersion7WeightHeightVaccineRecurringServiceChange(database);
         upgradeToVersion7RemoveUnnecessaryTables(database);
+        upgradeToVersion9(database);
     }
 
     /**
@@ -419,6 +422,14 @@ public class KipRepository extends Repository {
 
         } catch (Exception e) {
             Timber.e(e, "upgradeToVersion7RemoveUnnecessaryTables");
+        }
+    }
+
+    private void upgradeToVersion9(SQLiteDatabase database) {
+        try {
+            KipLocationRepository.createLocationsTable(database);
+        } catch (Exception e) {
+            Timber.e(e, " --> upgradeToVersion9 ");
         }
     }
 

@@ -2,14 +2,30 @@ package org.smartregister.kip.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Base64;
 
+import com.google.gson.Gson;
+
+import org.apache.commons.io.IOUtils;
+import org.smartregister.domain.LoginResponse;
+import org.smartregister.domain.jsonmapping.LoginResponseData;
+import org.smartregister.domain.jsonmapping.util.LocationTree;
 import org.smartregister.kip.R;
 import org.smartregister.kip.presenter.LoginPresenter;
 import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.kip.util.KipConstants;
+import org.smartregister.sync.helper.LocationServiceHelper;
 import org.smartregister.task.SaveTeamLocationsTask;
 import org.smartregister.view.activity.BaseLoginActivity;
 import org.smartregister.view.contract.BaseLoginContract;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+
+import timber.log.Timber;
+
+import static org.smartregister.domain.LoginResponse.SUCCESS;
 
 public class LoginActivity extends BaseLoginActivity implements BaseLoginContract.View {
 
@@ -43,11 +59,22 @@ public class LoginActivity extends BaseLoginActivity implements BaseLoginContrac
             org.smartregister.util.Utils.startAsyncTask(new SaveTeamLocationsTask(), null);
         }
 
+        LoginResponse loginResponse = SUCCESS;
+        String jsonPayload = new Gson().toJson(loginResponse.getRawData());
+
         Intent intent = new Intent(this, ChildRegisterActivity.class);
         intent.putExtra(KipConstants.IntentKeyUtil.IS_REMOTE_LOGIN, remote);
+
+        Timber.d("---------------> Kipresponse String: %s", jsonPayload);
+
+
+
+
         startActivity(intent);
         finish();
     }
+
+
 
     @Override
     protected void attachBaseContext(android.content.Context base) {
@@ -55,4 +82,5 @@ public class LoginActivity extends BaseLoginActivity implements BaseLoginContrac
         String lang = KipChildUtils.getLanguage(base.getApplicationContext());
         super.attachBaseContext(KipChildUtils.setAppLocale(base, lang));
     }
+
 }

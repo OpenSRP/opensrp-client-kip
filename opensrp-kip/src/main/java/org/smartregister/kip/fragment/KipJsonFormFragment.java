@@ -13,12 +13,14 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.rengwuxian.materialedittext.MaterialEditText;
+import com.vijay.jsonwizard.customviews.MaterialSpinner;
 import com.vijay.jsonwizard.fragments.JsonFormFragment;
 import com.vijay.jsonwizard.presenters.JsonFormFragmentPresenter;
 import com.vijay.jsonwizard.utils.FormUtils;
@@ -38,6 +40,7 @@ import org.smartregister.kip.R;
 import org.smartregister.kip.activity.KipJsonFormReportsActivity;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.util.KipConstants;
+import org.smartregister.kip.util.KipMotherLookUpUtils;
 import org.smartregister.util.Utils;
 
 import java.util.ArrayList;
@@ -306,6 +309,18 @@ public class KipJsonFormFragment extends JsonFormFragment {
                             }
                         }
 
+                        if (StringUtils.containsIgnoreCase(key, KipMotherLookUpUtils.ce_county)) {
+                            text = getValue(pc.getColumnmaps(), KipMotherLookUpUtils.county, true);
+                        }
+
+                        if (StringUtils.containsIgnoreCase(key, KipMotherLookUpUtils.ce_subCounty)) {
+                            text = getValue(pc.getColumnmaps(), KipMotherLookUpUtils.subCounty, true);
+                        }
+
+                        if (StringUtils.containsIgnoreCase(key, KipMotherLookUpUtils.ce_ward)) {
+                            text = getValue(pc.getColumnmaps(), KipMotherLookUpUtils.ward, true);
+                        }
+
                         if (view instanceof MaterialEditText) {
                             MaterialEditText materialEditText = (MaterialEditText) view;
                             materialEditText.setEnabled(false);
@@ -313,6 +328,22 @@ public class KipJsonFormFragment extends JsonFormFragment {
                             materialEditText.setText(text);
                             materialEditText.setInputType(InputType.TYPE_NULL);
                             disableEditText(materialEditText);
+                        }
+
+                        else if (view instanceof MaterialSpinner) {
+                            MaterialSpinner materialSpinner = (MaterialSpinner) view;
+                            materialSpinner.setTag(com.vijay.jsonwizard.R.id.after_look_up, true);
+                            materialSpinner.setTag(R.id.location_selected_value, text);
+                            if (StringUtils.isNotBlank(materialSpinner.getTag(R.id.key).toString())
+                                    && materialSpinner.getTag(R.id.key).toString().equalsIgnoreCase(KipMotherLookUpUtils.ce_county)) {
+                                Adapter adapter = materialSpinner.getAdapter();
+                                for (int n = 0; n < adapter.getCount(); n++) {
+                                    String s = (String) adapter.getItem(n);
+                                    if (s.equalsIgnoreCase(text)) {
+                                        materialSpinner.setSelection(n + 1);
+                                    }
+                                }
+                            }
                         }
                     }
 
