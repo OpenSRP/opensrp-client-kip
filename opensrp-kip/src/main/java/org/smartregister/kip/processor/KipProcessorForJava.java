@@ -268,18 +268,18 @@ public class KipProcessorForJava extends ClientProcessorForJava {
         if (vaccineTable == null) {
             return;
         }
-
         Client client = eventClient.getClient();
-        if (!childExists(client.getBaseEntityId())) {
+        if (client != null && !childExists(client.getBaseEntityId())) {
             List<String> createCase = new ArrayList<>();
+//            createCase.add("ec_child_details");
             createCase.add(Utils.metadata().childRegister.tableName);
-            processCaseModel(event, client, createCase);
+            processCaseModel(event,client, createCase);
         }
 
         processVaccine(eventClient, vaccineTable,
                 eventType.equals(VaccineIntentService.EVENT_TYPE_OUT_OF_CATCHMENT));
 
-        scheduleUpdatingClientAlerts(client.getBaseEntityId(), client.getBirthdate());
+//        scheduleUpdatingClientAlerts(client.getBaseEntityId(), client.getBirthdate());
     }
 
     private boolean childExists(String entityId) {
@@ -654,9 +654,9 @@ public class KipProcessorForJava extends ClientProcessorForJava {
 
     @Override
     public void updateFTSsearch(String tableName, String entityId, ContentValues contentValues) {
-//        if (GizConstants.TABLE_NAME.MOTHER_TABLE_NAME.equals(tableName)) {
-//            return;
-//        }
+        if (KipConstants.TABLE_NAME.MOTHER_TABLE_NAME.equals(tableName)) {
+            return;
+        }
 
         Timber.d("Starting updateFTSsearch table: %s", tableName);
 
@@ -667,10 +667,8 @@ public class KipProcessorForJava extends ClientProcessorForJava {
             allCommonsRepository.updateSearch(entityId);
         }
 
-        // Todo: Disable this in favour of the vaccine post-processing at the end :shrug: Might not be the best for real-time updates to the register
-        if (contentValues != null && KipConstants.TABLE_NAME.ALL_CLIENTS.equals(tableName)) {
+        if (contentValues != null && StringUtils.containsIgnoreCase(tableName, "child")) {
             String dobString = contentValues.getAsString(Constants.KEY.DOB);
-            // TODO: Fix this to use the ec_child_details table & fetch the birthDateTime from the ec_client table
             DateTime birthDateTime = Utils.dobStringToDateTime(dobString);
             if (birthDateTime != null) {
                 VaccineSchedule.updateOfflineAlerts(entityId, birthDateTime, "child");
