@@ -7,6 +7,7 @@ package org.smartregister.kip.domain;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Tally implements Serializable {
 
@@ -15,6 +16,9 @@ public class Tally implements Serializable {
     private long id;
     @JsonProperty
     private String value;
+    private MohIndicator mohIndicator;
+    private String providerId;
+    private Date updatedAt;
 
     public long getId() {
         return id;
@@ -38,5 +42,29 @@ public class Tally implements Serializable {
 
     public void setIndicator(String indicator) {
         this.indicator = indicator;
+    }
+
+    public MohIndicator getMohIndicator() {
+        return mohIndicator;
+    }
+
+    public void setMohIndicator(MohIndicator mohIndicator) {
+        this.mohIndicator = mohIndicator;
+    }
+
+    public String getProviderId() {
+        return providerId;
+    }
+
+    public void setProviderId(String providerId) {
+        this.providerId = providerId;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

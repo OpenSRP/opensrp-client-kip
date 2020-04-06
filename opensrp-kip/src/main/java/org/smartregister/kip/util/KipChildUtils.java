@@ -10,7 +10,9 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
@@ -36,11 +38,17 @@ import org.smartregister.location.helper.LocationHelper;
 import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.util.AssetHandler;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import timber.log.Timber;
 
@@ -223,6 +231,53 @@ public class KipChildUtils extends Utils {
     @NonNull
     private static ArrayList<String> getHealthFacilityLevels() {
         return new ArrayList<>(Arrays.asList(BuildConfig.HEALTH_FACILITY_LEVELS));
+    }
+
+    /**
+     * This method is only intended to be used for processing KIP_MOH_710_Report.csv
+     *
+     * @param csvFileName
+     * @param columns     this map has the db column name as value and the csv column no as the key
+     * @return each map is db row with key as the column name and value as the value from the csv file
+     */
+    public static List<Map<String, String>> populateMohIndicatorsTableFromCSV(Context context, String csvFileName, Map<Integer, String> columns) {
+        List<Map<String, String>> result = new ArrayList<>();
+
+        try {
+            InputStream is = org.smartregister.util.Utils.getAssetFileInputStream(context, csvFileName);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+
+            try {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    Map<String, String> csvValues = new HashMap<>();
+                    String[] rowData = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+                    if (!TextUtils.isDigitsOnly(rowData[0])) {
+                        continue;
+                    }
+                    for (Integer key : columns.keySet()) {
+                        String value = rowData[key];
+                        csvValues.put(columns.get(key), value);
+
+                    }
+                    result.add(csvValues);
+                }
+            } catch (IOException e) {
+                Timber.e(e, "-->populateMohIndicatorsTableFromCSV: error reading csv file ");
+
+            } finally {
+                try {
+                    is.close();
+                    reader.close();
+                } catch (Exception e) {
+                    Timber.e(e, "-->populateMohIndicatorsTableFromCSV: unable to close inputstream/bufferedreader ");
+                }
+            }
+
+        } catch (Exception e) {
+            Timber.e(e, "-->populateMohIndicatorsTableFromCSV ");
+        }
+        return result;
     }
 
 }

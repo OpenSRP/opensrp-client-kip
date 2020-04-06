@@ -61,6 +61,7 @@ import org.smartregister.kip.repository.KipAncRegisterQueryProvider;
 import org.smartregister.kip.repository.KipChildRegisterQueryProvider;
 import org.smartregister.kip.repository.KipLocationRepository;
 import org.smartregister.kip.repository.KipRepository;
+import org.smartregister.kip.repository.Moh710IndicatorsRepository;
 import org.smartregister.kip.repository.MonthlyTalliesRepository;
 import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.kip.util.KipConstants;
@@ -110,6 +111,7 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
     private DailyTalliesRepository dailyTalliesRepository;
     private MonthlyTalliesRepository monthlyTalliesRepository;
     private Hia2ReportRepository hia2ReportRepository;
+    private Moh710IndicatorsRepository moh710IndicatorsRepository;
 
     public static JsonSpecHelper getJsonSpecHelper() {
         return jsonSpecHelper;
@@ -523,6 +525,13 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
             locationRepository = new KipLocationRepository();
         }
         return locationRepository;
+    }
+
+    public Moh710IndicatorsRepository moh710IndicatorsRepository() {
+        if (moh710IndicatorsRepository == null) {
+            moh710IndicatorsRepository = new Moh710IndicatorsRepository();
+        }
+        return moh710IndicatorsRepository;
     }
 
     @VisibleForTesting

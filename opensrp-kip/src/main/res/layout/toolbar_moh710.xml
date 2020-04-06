@@ -5,7 +5,7 @@
     android:theme="@style/AppThemeNoTitle.AppBarOverlay">
 
 
-    <org.smartregister.kip.toolbar.LocationSwitcherToolbar
+    <org.smartregister.child.toolbar.LocationSwitcherToolbar
         android:id="@+id/location_switching_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize">
@@ -31,7 +31,7 @@
                 android:scaleType="fitXY"
                 android:visibility="invisible" />
         </FrameLayout>
-    </org.smartregister.kip.toolbar.LocationSwitcherToolbar>
+    </org.smartregister.child.toolbar.LocationSwitcherToolbar>
 
     <include
         layout="@layout/filter_moh710_bar"

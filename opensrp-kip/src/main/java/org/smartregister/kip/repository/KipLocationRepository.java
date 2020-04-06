@@ -38,7 +38,7 @@ public class KipLocationRepository extends BaseRepository {
 
     protected static void createLocationsTable(SQLiteDatabase database) {
         database.execSQL(LOCATIONS_SQL);
-        Timber.d("---------------> Kipresponse String: %s", LOCATIONS_SQL);
+        Timber.d("--> createLocationsTable: %s", LOCATIONS_SQL);
     }
 
     /**
@@ -73,11 +73,11 @@ public class KipLocationRepository extends BaseRepository {
                 }
 
                 database.insertWithOnConflict(LOCATIONS_TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-                Timber.d("---------------> Kipresponse String: %s", values);
+                Timber.d("--> bulkInsertLocations String: %s", values);
             }
             database.setTransactionSuccessful();
         } catch (SQLException e) {
-            Log.e(TAG, e.getMessage(), e);
+            Timber.e(e, "--> bulkInsertLocations");
         } finally {
             database.endTransaction();
         }
@@ -91,7 +91,7 @@ public class KipLocationRepository extends BaseRepository {
             List<Location> locations = readAll(cursor);
             location = locations.isEmpty() ? null : locations.get(0);
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage(), e);
+            Timber.e(e, "--> getLocationByName");
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -113,7 +113,7 @@ public class KipLocationRepository extends BaseRepository {
                 cursor.close();
             }
         }
-        Log.i(TAG, "ChildLocations list: " + locations.toString());
+        Timber.d("-->ChildLocations list %s: ", locations.toString());
         return locations;
     }
 
