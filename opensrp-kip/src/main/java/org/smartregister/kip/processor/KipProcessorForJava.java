@@ -10,9 +10,6 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joda.time.DateTime;
-import org.smartregister.anc.library.sync.BaseAncClientProcessorForJava;
-import org.smartregister.anc.library.sync.MiniClientProcessorForJava;
-import org.smartregister.anc.library.util.ConstantsUtils;
 import org.smartregister.child.util.Constants;
 import org.smartregister.child.util.JsonFormUtils;
 import org.smartregister.child.util.MoveToMyCatchmentUtils;
@@ -51,6 +48,7 @@ import org.smartregister.opd.utils.OpdConstants;
 import org.smartregister.repository.DetailsRepository;
 import org.smartregister.repository.EventClientRepository;
 import org.smartregister.sync.ClientProcessorForJava;
+import org.smartregister.sync.MiniClientProcessorForJava;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -74,14 +72,13 @@ public class KipProcessorForJava extends ClientProcessorForJava {
 
     private KipProcessorForJava(Context context) {
         super(context);
-
-        BaseAncClientProcessorForJava baseAncClientProcessorForJava = new BaseAncClientProcessorForJava(context);
-        OpdMiniClientProcessorForJava opdMiniClientProcessorForJava = new OpdMiniClientProcessorForJava(context);
-
-        addMiniProcessors(baseAncClientProcessorForJava, opdMiniClientProcessorForJava);
+//
+//        OpdMiniClientProcessorForJava opdMiniClientProcessorForJava = new OpdMiniClientProcessorForJava(context);
+//
+//        addMiniProcessors(opdMiniClientProcessorForJava);
     }
 
-    private void addMiniProcessors(MiniClientProcessorForJava... miniClientProcessorsForJava) {
+    protected void addMiniProcessors(MiniClientProcessorForJava... miniClientProcessorsForJava) {
         for (MiniClientProcessorForJava miniClientProcessorForJava : miniClientProcessorsForJava) {
             unsyncEventsPerProcessor.put(miniClientProcessorForJava, new ArrayList<Event>());
 
@@ -172,9 +169,6 @@ public class KipProcessorForJava extends ClientProcessorForJava {
                     processBirthAndWomanRegistrationEvent(clientClassification, eventClient, event);
                 } else if (processorMap.containsKey(eventType)) {
                     try {
-                        if(eventType.equals(ConstantsUtils.EventTypeUtils.REGISTRATION) && eventClient.getClient() != null){
-                            KipApplication.getInstance().registerTypeRepository().add(KipConstants.RegisterType.ANC, event.getBaseEntityId());
-                        }
                         processEventUsingMiniprocessor(clientClassification, eventClient, eventType);
                     } catch (Exception ex) {
                         Timber.e(ex);

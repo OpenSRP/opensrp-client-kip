@@ -4,43 +4,43 @@ indicators:
     indicatorQuery: "select count(*) from ec_client child WHERE '%s' = strftime('%Y-%m-%d', child.date)"
     grouping: "child"
 
-  - key: "ME_PAB_Gender"
-    description: "ME_PAB_Gender_label"
-    indicatorQuery: "SELECT ec_client.gender, count(*) from ec_details
-                     INNER JOIN ec_client
-                     ON ec_details.base_entity_id = ec_client.base_entity_id
-                     WHERE '%s' = strftime('%Y-%m-%d', ec_client.date)
-                     AND ec_details.key = 'protected_at_birth'
-                     AND ec_client.dob >= date('now','-2 years')
-                     group by ec_client.gender"
-    isMultiResult: true
-    expectedIndicators: ["ME_PAB_Gender_Female", "ME_PAB_Gender_Male"]
-    grouping: "child"
-
-  - key: "ME_PAB_Age"
-    description: "ME_PAB_Age_label"
-    indicatorQuery: "select
-                         CASE
-                         WHEN round(julianday('now') - julianday(ec_client.dob)) > 365.0 THEN 'Over_1'
-                         WHEN round(julianday('now') - julianday(ec_client.dob)) < 365.0 THEN 'Under_1'
-                         ELSE 'Null'
-                         END age, count(*) counter
-                     FROM ec_details
-                     INNER JOIN ec_client
-                     ON ec_details.base_entity_id = ec_client.base_entity_id
-                       WHERE ec_details.key = 'protected_at_birth' AND '%s' = strftime('%Y-%m-%d', ec_client.date)
-                       AND ec_client.dob >= date('now','-2 years')
-                     group by age
-                     UNION
-                       Select 'Total', count(distinct ec_client.base_entity_id) from ec_details
-                       JOIN ec_client
-                                          ON ec_details.base_entity_id = ec_client.base_entity_id
-                       WHERE ec_details.key = 'protected_at_birth' AND '%s' = strftime('%Y-%m-%d', ec_client.date)
-                       AND ec_client.dob >= date('now','-2 years')
-                     ORDER BY counter"
-    isMultiResult: true
-    expectedIndicators: ["ME_PAB_Age_Over_1", "ME_PAB_Age_Under_1", "ME_PAB_Age_Total"]
-    grouping: "child"
+#  - key: "ME_PAB_Gender"
+#    description: "ME_PAB_Gender_label"
+#    indicatorQuery: "SELECT ec_client.gender, count(*) from ec_details
+#                     INNER JOIN ec_client
+#                     ON ec_details.base_entity_id = ec_client.base_entity_id
+#                     WHERE '%s' = strftime('%Y-%m-%d', ec_client.date)
+#                     AND ec_details.key = 'protected_at_birth'
+#                     AND ec_client.dob >= date('now','-2 years')
+#                     group by ec_client.gender"
+#    isMultiResult: true
+#    expectedIndicators: ["ME_PAB_Gender_Female", "ME_PAB_Gender_Male"]
+#    grouping: "child"
+#
+#  - key: "ME_PAB_Age"
+#    description: "ME_PAB_Age_label"
+#    indicatorQuery: "select
+#                         CASE
+#                         WHEN round(julianday('now') - julianday(ec_client.dob)) > 365.0 THEN 'Over_1'
+#                         WHEN round(julianday('now') - julianday(ec_client.dob)) < 365.0 THEN 'Under_1'
+#                         ELSE 'Null'
+#                         END age, count(*) counter
+#                     FROM ec_details
+#                     INNER JOIN ec_client
+#                     ON ec_details.base_entity_id = ec_client.base_entity_id
+#                       WHERE ec_details.key = 'protected_at_birth' AND '%s' = strftime('%Y-%m-%d', ec_client.date)
+#                       AND ec_client.dob >= date('now','-2 years')
+#                     group by age
+#                     UNION
+#                       Select 'Total', count(distinct ec_client.base_entity_id) from ec_details
+#                       JOIN ec_client
+#                                          ON ec_details.base_entity_id = ec_client.base_entity_id
+#                       WHERE ec_details.key = 'protected_at_birth' AND '%s' = strftime('%Y-%m-%d', ec_client.date)
+#                       AND ec_client.dob >= date('now','-2 years')
+#                     ORDER BY counter"
+#    isMultiResult: true
+#    expectedIndicators: ["ME_PAB_Age_Over_1", "ME_PAB_Age_Under_1", "ME_PAB_Age_Total"]
+#    grouping: "child"
 
   - key: "ME_Vaccines_Gender"
     description: "ME_Vaccines_Gender_label"

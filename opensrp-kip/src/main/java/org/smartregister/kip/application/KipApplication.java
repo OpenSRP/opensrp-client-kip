@@ -15,16 +15,12 @@ import com.evernote.android.job.JobManager;
 import org.jetbrains.annotations.NotNull;
 import org.smartregister.Context;
 import org.smartregister.CoreLibrary;
-import org.smartregister.anc.library.AncLibrary;
-import org.smartregister.anc.library.activity.ActivityConfiguration;
-import org.smartregister.anc.library.util.DBConstantsUtils;
 import org.smartregister.child.ChildLibrary;
 import org.smartregister.child.domain.ChildMetadata;
 import org.smartregister.child.util.DBConstants;
 import org.smartregister.commonregistry.CommonFtsObject;
 import org.smartregister.configurableviews.ConfigurableViewsLibrary;
 import org.smartregister.configurableviews.helper.JsonSpecHelper;
-import org.smartregister.growthmonitoring.GrowthMonitoringConfig;
 import org.smartregister.growthmonitoring.GrowthMonitoringLibrary;
 import org.smartregister.growthmonitoring.repository.HeightRepository;
 import org.smartregister.growthmonitoring.repository.HeightZScoreRepository;
@@ -41,11 +37,9 @@ import org.smartregister.immunization.repository.VaccineRepository;
 import org.smartregister.immunization.util.VaccinateActionUtils;
 import org.smartregister.immunization.util.VaccinatorUtils;
 import org.smartregister.kip.BuildConfig;
-import org.smartregister.kip.activity.AncRegisterActivity;
 import org.smartregister.kip.activity.ChildFormActivity;
 import org.smartregister.kip.activity.ChildImmunizationActivity;
 import org.smartregister.kip.activity.ChildProfileActivity;
-import org.smartregister.kip.activity.ChildRegisterActivity;
 import org.smartregister.kip.activity.LoginActivity;
 import org.smartregister.kip.activity.OpdFormActivity;
 import org.smartregister.kip.configuration.KipOpdRegisterRowOptions;
@@ -57,7 +51,6 @@ import org.smartregister.kip.processor.TripleResultProcessor;
 import org.smartregister.kip.repository.ClientRegisterTypeRepository;
 import org.smartregister.kip.repository.DailyTalliesRepository;
 import org.smartregister.kip.repository.HIA2IndicatorsRepository;
-import org.smartregister.kip.repository.KipAncRegisterQueryProvider;
 import org.smartregister.kip.repository.KipChildRegisterQueryProvider;
 import org.smartregister.kip.repository.KipLocationRepository;
 import org.smartregister.kip.repository.KipRepository;
@@ -133,10 +126,7 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
     }
 
     private static String[] getFtsSearchFields(String tableName) {
-        if (tableName.equalsIgnoreCase(DBConstantsUtils.DEMOGRAPHIC_TABLE_NAME)) {
-            return new String[]{DBConstantsUtils.KeyUtils.FIRST_NAME, DBConstantsUtils.KeyUtils.LAST_NAME,
-                    DBConstantsUtils.KeyUtils.ANC_ID, KipConstants.KEY.ZEIR_ID};
-        } else if (tableName.equals(OpdDbConstants.KEY.TABLE)) {
+        if (tableName.equals(OpdDbConstants.KEY.TABLE)) {
             return new String[]{OpdDbConstants.KEY.FIRST_NAME, OpdDbConstants.KEY.LAST_NAME,
                     OpdDbConstants.KEY.OPENSRP_ID, DBConstants.KEY.ZEIR_ID};
         } else if ("ec_mother_details".equals(tableName)) {
@@ -159,8 +149,6 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
             names.add(KipConstants.KEY.DOD);
             names.add(KipConstants.KEY.DATE_REMOVED);
             return names.toArray(new String[names.size()]);
-        } else if ("ec_mother_details".equals(tableName)) {
-            return new String[]{DBConstantsUtils.KeyUtils.NEXT_CONTACT};
         } else if (tableName.equals(DBConstants.RegisterTable.CHILD_DETAILS)) {
             List<VaccineGroup> vaccineList = VaccinatorUtils.getVaccineGroupsFromVaccineConfigFile(context, VaccinatorUtils.vaccines_file);
             List<String> names = new ArrayList<>();
@@ -270,11 +258,6 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
         // Init Reporting library
         ReportingLibrary.init(context, getRepository(), null, BuildConfig.VERSION_CODE, BuildConfig.DATABASE_VERSION);
         ReportingLibrary.getInstance().addMultiResultProcessor(new TripleResultProcessor());
-
-        ActivityConfiguration activityConfiguration = new ActivityConfiguration();
-        activityConfiguration.setHomeRegisterActivityClass(AncRegisterActivity.class);
-        activityConfiguration.setLandingPageActivityClass(ChildRegisterActivity.class);
-        AncLibrary.init(context, BuildConfig.DATABASE_VERSION, activityConfiguration, null, new KipAncRegisterQueryProvider());
 
         OpdMetadata opdMetadata = new OpdMetadata(OpdConstants.JSON_FORM_KEY.NAME, OpdDbConstants.KEY.TABLE,
                 OpdConstants.EventType.OPD_REGISTRATION, OpdConstants.EventType.UPDATE_OPD_REGISTRATION,
