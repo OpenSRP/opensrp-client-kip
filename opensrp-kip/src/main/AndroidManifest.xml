@@ -95,7 +95,8 @@
         <activity
             android:name=".activity.Moh710ReportActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNoTitle.NoActionBar" />
+            android:theme="@style/ChildTheme.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
 
         <receiver android:name=".receiver.Moh710ServiceBroadcastReceiver" />
 
