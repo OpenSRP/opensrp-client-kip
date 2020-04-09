@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.view.View;
 
-import org.smartregister.anc.library.AncLibrary;
 import org.smartregister.kip.activity.ChildRegisterActivity;
 import org.smartregister.kip.activity.OpdRegisterActivity;
 import org.smartregister.kip.adapter.NavigationAdapter;
@@ -35,10 +34,6 @@ public class NavigationListener implements View.OnClickListener {
 
                 case KipConstants.DrawerMenu.ALL_CLIENTS:
                     navigateToActivity(OpdRegisterActivity.class);
-                    break;
-
-                case KipConstants.DrawerMenu.ANC_CLIENTS:
-                    navigateToActivity(AncLibrary.getInstance().getActivityConfiguration().getHomeRegisterActivityClass());
                     break;
 
                 default:

@@ -39,8 +39,6 @@ public class NavigationPresenter implements NavigationContract.Presenter {
 
     private void initialize() {
         tableMap.put(KipConstants.DrawerMenu.CHILD_CLIENTS, KipConstants.RegisterType.CHILD);
-        tableMap.put(KipConstants.DrawerMenu.ANC_CLIENTS, KipConstants.RegisterType.ANC);
-        tableMap.put(KipConstants.DrawerMenu.ANC, KipConstants.RegisterType.ANC);
         tableMap.put(KipConstants.DrawerMenu.ALL_CLIENTS, KipConstants.RegisterType.OPD);
     }
 

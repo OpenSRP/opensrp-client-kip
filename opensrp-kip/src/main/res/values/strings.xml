@@ -324,11 +324,11 @@
     <!-- START OF INDICATOR LABELS. DO NOT CHANGE MANUALLY OR MIX WITH OTHER LABELS -->
     <!-- THIS IS AUTOMATICALLY GENERATED -->
 
-    <string name="me_pab_gender_female">Under 2 Female Children Protected At Birth</string>
-    <string name="me_pab_gender_male">Under 2 Male Children Protected At Birth</string>
-    <string name="me_pab_age_over_1">Over 1 Children Protected At Birth</string>
-    <string name="me_pab_age_under_1">Under 1 Children Protected At Birth</string>
-    <string name="me_pab_age_total">Children Protected At Birth</string>
+<!--    <string name="me_pab_gender_female">Under 2 Female Children Protected At Birth</string>-->
+<!--    <string name="me_pab_gender_male">Under 2 Male Children Protected At Birth</string>-->
+<!--    <string name="me_pab_age_over_1">Over 1 Children Protected At Birth</string>-->
+<!--    <string name="me_pab_age_under_1">Under 1 Children Protected At Birth</string>-->
+<!--    <string name="me_pab_age_total">Children Protected At Birth</string>-->
     <string name="me_vaccines_gender_bcg_female">BCG Female</string>
     <string name="me_vaccines_gender_bcg_male">BCG Male</string>
     <string name="me_vaccines_gender_hepb_female">Hepatitis B Female</string>
@@ -357,14 +357,14 @@
     <string name="me_vaccines_gender_rota_1_female">Rota 1 Female</string>
     <string name="me_vaccines_gender_rota_2_male">Rota 2 Male</string>
     <string name="me_vaccines_gender_rota_2_female">Rota 2 Female</string>
-    <string name="me_vaccines_gender_mv_1_male">MV 1 Male</string>
-    <string name="me_vaccines_gender_mv_1_female">MV 2 Female</string>
-    <string name="me_vaccines_gender_mv_2_male">MV 2 Male</string>
-    <string name="me_vaccines_gender_mv_2_female">MV 2 Female</string>
-    <string name="me_vaccines_gender_mv_3_male">MV 3 Female</string>
-    <string name="me_vaccines_gender_mv_3_female">MV 3 Female</string>
-    <string name="me_vaccines_gender_mv_4_male">MV 4 Female</string>
-    <string name="me_vaccines_gender_mv_4_female">MV 4 Female</string>
+    <string name="me_vaccines_gender_mv_1_male">RTSS 1 Male</string>
+    <string name="me_vaccines_gender_mv_1_female">RTSS 2 Female</string>
+    <string name="me_vaccines_gender_mv_2_male">RTSS 2 Male</string>
+    <string name="me_vaccines_gender_mv_2_female">RTSS 2 Female</string>
+    <string name="me_vaccines_gender_mv_3_male">RTSS 3 Female</string>
+    <string name="me_vaccines_gender_mv_3_female">RTSS 3 Female</string>
+    <string name="me_vaccines_gender_mv_4_male">RTSS 4 Female</string>
+    <string name="me_vaccines_gender_mv_4_female">RTSS 4 Female</string>
     <string name="me_vaccines_gender_measles_1__mr_1_male">Measles 1/MR 1 Male</string>
     <string name="me_vaccines_gender_measles_1__mr_1_female">Measles 1/MR 1 Female</string>
     <string name="me_vaccines_gender_measles_2__mr_2_male">Measles 2/MR 2 Male</string>
@@ -395,12 +395,12 @@
     <string name="me_vaccines_age_rota_1_under_1">Rota 1 Under 1</string>
     <string name="me_vaccines_age_rota_2_over_1">Rota 2 Over 1</string>
     <string name="me_vaccines_age_rota_2_under_1">Rota 2 Under 1</string>
-    <string name="me_vaccines_age_mv_1_over_1">MV 1 Over 1</string>
-    <string name="me_vaccines_age_mv_1_under_1">MV 1 Under 1</string>
-    <string name="me_vaccines_age_mv_2_over_1">MV 2 Over 1</string>
-    <string name="me_vaccines_age_mv_2_under_1">MV 2 Under 1</string>
-    <string name="me_vaccines_age_mv_3_over_1">MV 3 Over 1</string>
-    <string name="me_vaccines_age_mv_3_under_1">MV 3 Under 1</string>
+    <string name="me_vaccines_age_mv_1_over_1">RTSS 1 Over 1</string>
+    <string name="me_vaccines_age_mv_1_under_1">RTSS 1 Under 1</string>
+    <string name="me_vaccines_age_mv_2_over_1">RTSS 2 Over 1</string>
+    <string name="me_vaccines_age_mv_2_under_1">RTSS 2 Under 1</string>
+    <string name="me_vaccines_age_mv_3_over_1">RTSS 3 Over 1</string>
+    <string name="me_vaccines_age_mv_3_under_1">RTSS 3 Under 1</string>
     <string name="me_vaccines_age_measles_1__mr_1_over_1">Measles 1/MR 1 Over 1</string>
     <string name="me_vaccines_age_measles_1__mr_1_under_1">Measles 1/MR 1 Under 1</string>
     <string name="me_vaccines_age_ipv_over_1">IPV Over 1</string>
@@ -417,9 +417,9 @@
     <string name="me_vaccines_under2_pcv_2">PCV 2 Under 2</string>
     <string name="me_vaccines_under2_rota_1">Rota 1 Under 2</string>
     <string name="me_vaccines_under2_rota_2">Rota 2 Under 2</string>
-    <string name="me_vaccines_under2_mv_1">MV 1 Under 2</string>
-    <string name="me_vaccines_under2_mv_2">MV 2 Under 2</string>
-    <string name="me_vaccines_under2_mv_3">MV 3 Under 2</string>
+    <string name="me_vaccines_under2_mv_1">RTSS 1 Under 2</string>
+    <string name="me_vaccines_under2_mv_2">RTSS 2 Under 2</string>
+    <string name="me_vaccines_under2_mv_3">RTSS 3 Under 2</string>
     <string name="me_vaccines_under2_measles_1__mr_1">Measles 1/MR 1 Under 2</string>
     <string name="me_child_hiv_status_under2_gender_hiv_exposed_female">HIV Exposed Female Under 2</string>
     <string name="me_child_hiv_status_under2_gender_hiv_exposed_male">HIV Exposed Male Under 2</string>
