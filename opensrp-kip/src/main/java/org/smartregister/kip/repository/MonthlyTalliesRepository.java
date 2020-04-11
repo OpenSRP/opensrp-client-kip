@@ -214,32 +214,6 @@ public class MonthlyTalliesRepository extends BaseRepository {
         return monthlyTallies;
     }
 
-    /**
-     * Returns a list of draft monthly tallies corresponding to a custom date range
-     *
-     * @param startDate The start date of the custom range
-     * @param endDate   The end date of the custom range
-     * @return
-     */
-    public List<MonthlyTally> findMoh710Drafts(Date startDate, Date endDate) {
-        List<MonthlyTally> monthlyTallies = new ArrayList<>();
-        try {
-
-            Timber.w( "-->Using daily tallies instead of monthly");
-            Map<Long, List<DailyTally>> dailyTallies = KipApplication.getInstance().dailyTalliesRepository().findTallies(startDate, endDate);
-            for (List<DailyTally> curList : dailyTallies.values()) {
-                MonthlyTally curTally = addUpDailyMoh710Tallies(curList);
-                if (curTally != null) {
-                    monthlyTallies.add(curTally);
-                }
-            }
-
-        } catch (SQLException e) {
-            Timber.e(e, "-->findMoh710Drafts");
-        }
-
-        return monthlyTallies;
-    }
 
 
     /**
@@ -293,7 +267,7 @@ public class MonthlyTalliesRepository extends BaseRepository {
             monthlyTally.setGrouping(indicatorTally.getGrouping());
         }
 
-        for (IndicatorTally dailyIndicatorTally: dailyTallies) {
+        for (IndicatorTally dailyIndicatorTally : dailyTallies) {
             try {
                 value += dailyIndicatorTally.getFloatCount();
             } catch (NumberFormatException e) {
@@ -309,32 +283,6 @@ public class MonthlyTalliesRepository extends BaseRepository {
 
         return monthlyTally;
     }
-
-    private MonthlyTally addUpDailyMoh710Tallies(List<DailyTally> dailyTallies) {
-        String userName = KipApplication.getInstance().context().allSharedPreferences().fetchRegisteredANM();
-        MonthlyTally monthlyTally = null;
-        double value = 0d;
-        for (int i = 0; i < dailyTallies.size(); i++) {
-            if (i == 0) {
-                monthlyTally = new MonthlyTally();
-                monthlyTally.setIndicator(dailyTallies.get(i).getIndicator());
-            }
-            try {
-                value = value + Double.valueOf(dailyTallies.get(i).getValue());
-            } catch (NumberFormatException e) {
-                Timber.e(e, "addUpDailyMoh710Tallies");
-            }
-        }
-
-        if (monthlyTally != null) {
-            monthlyTally.setUpdatedAt(Calendar.getInstance().getTime());
-            monthlyTally.setValue(String.valueOf(Math.round(value)));
-            monthlyTally.setProviderId(userName);
-        }
-
-        return monthlyTally;
-    }
-
 
 
 

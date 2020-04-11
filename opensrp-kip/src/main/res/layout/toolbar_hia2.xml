@@ -8,7 +8,7 @@
         android:id="@+id/location_switching_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/smart_register_blue">
+        android:background="#494949">
 
         <RelativeLayout
             android:id="@+id/back_btn_layout"
@@ -53,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
-                android:text="@string/reports" />
+                android:text="@string/side_nav_moh710" />
 
             <View
                 android:id="@+id/separator_v"
@@ -61,8 +61,8 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="right|center_vertical"
                 android:background="@drawable/vertical_separator_male"
-                android:visibility="invisible"
-                android:scaleType="fitXY" />
+                android:scaleType="fitXY"
+                android:visibility="invisible" />
         </FrameLayout>
     </org.smartregister.child.toolbar.LocationSwitcherToolbar>
 

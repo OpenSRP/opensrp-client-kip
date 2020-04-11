@@ -33,8 +33,8 @@ public class ReportsSectionsPagerAdapter extends FragmentPagerAdapter {
                 return DailyTalliesFragment.newInstance(hia2ReportsActivity.getReportGrouping());
             case 1:
                 return DraftMonthlyFragment.newInstance(hia2ReportsActivity.getReportGrouping());
-            case 2:
-                return SentMonthlyFragment.newInstance(hia2ReportsActivity.getReportGrouping());
+//            case 2:
+//                return SentMonthlyFragment.newInstance(hia2ReportsActivity.getReportGrouping());
             default:
                 break;
         }
@@ -43,18 +43,16 @@ public class ReportsSectionsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 2;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return hia2ReportsActivity.getString(R.string.hia2_daily_tallies);
+                return hia2ReportsActivity.getString(R.string.moh_daily_tally);
             case 1:
-                return hia2ReportsActivity.getString(R.string.hia2_draft_monthly);
-            case 2:
-                return hia2ReportsActivity.getString(R.string.hia2_sent_monthly);
+                return hia2ReportsActivity.getString(R.string.moh_monthly_report);
             default:
                 break;
         }

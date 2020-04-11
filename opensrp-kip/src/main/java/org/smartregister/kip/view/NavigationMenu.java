@@ -28,7 +28,6 @@ import com.github.ybq.android.spinkit.style.FadingCircle;
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.domain.FetchStatus;
 import org.smartregister.kip.R;
-import org.smartregister.kip.activity.Moh710ReportActivity;
 import org.smartregister.kip.activity.ReportRegisterActivity;
 import org.smartregister.kip.adapter.NavigationAdapter;
 import org.smartregister.kip.application.KipApplication;
@@ -38,7 +37,6 @@ import org.smartregister.kip.model.NavigationOption;
 import org.smartregister.kip.presenter.NavigationPresenter;
 import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.location.helper.LocationHelper;
-import org.smartregister.p2p.activity.P2pModeSelectActivity;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
 import org.smartregister.view.activity.BaseRegisterActivity;
 
@@ -70,7 +68,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
 
     private View parentView;
     private LinearLayout reportView;
-    private LinearLayout mohReporView;
+    private LinearLayout recordOutofcatment;
     private List<NavigationOption> navigationOptions = new ArrayList<>();
 
     private NavigationMenu() {
@@ -166,7 +164,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         syncProgressBar = rootView.findViewById(R.id.pbSync);
         settingsLayout = rootView.findViewById(R.id.rlSettings);
         reportView = rootView.findViewById(R.id.report_view);
-        mohReporView = rootView.findViewById(R.id.moh710);
+        recordOutofcatment = rootView.findViewById(R.id.nav_record_vaccination_out_catchment);
 
         ImageView ivLogo = rootView.findViewById(R.id.ivLogo);
         LinearLayout locationLayout = rootView.findViewById(R.id.giz_location_layout);
@@ -207,7 +205,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
 
         registerSettings(activity);
         registerReporting(activity);
-        registerMoh710Reporting(activity);
+//        registerOutofcatchment(activity);
 
         // update all actions
         mPresenter.refreshLastSync();
@@ -234,26 +232,15 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         }
     }
 
-    private void registerMoh710Reporting(@Nullable Activity parentActivity) {
-        mohReporView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startMoh710ReportActivity(parentActivity);
-            }
-        });
-    }
+//    private void registerOutofcatchment(@Nullable Activity parentActivity) {
+//        recordOutofcatment.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startMoh710ReportActivity(parentActivity);
+//            }
+//        });
+//    }
 
-    private void startMoh710ReportActivity(@Nullable Activity parentActivity) {
-        if (parentActivity instanceof Moh710ReportActivity) {
-            drawer.closeDrawer(GravityCompat.START);
-            return;
-        }
-
-        if (parentActivity != null) {
-            Intent intent = new Intent(parentActivity, Moh710ReportActivity.class);
-            parentActivity.startActivity(intent);
-        }
-    }
 
     private void registerSettings(@NonNull final Activity activity) {
         if (settingsLayout != null) {

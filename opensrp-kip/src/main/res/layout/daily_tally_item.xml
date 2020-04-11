@@ -19,7 +19,7 @@
             android:paddingStart="20dp"
             android:textAlignment="viewStart"
             android:paddingEnd="0dp"
-            android:src="@drawable/ic_sent_monthly" />
+            android:src="@drawable/moh710" />
 
         <LinearLayout
             android:layout_width="wrap_content"

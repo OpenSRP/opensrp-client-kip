@@ -26,7 +26,7 @@
                 android:textStyle="bold"
                 android:paddingStart="@dimen/table_row_side_margin"
                 android:paddingEnd="@dimen/table_row_middle_margin"
-                android:text="@string/indicator"
+                android:text="@string/moh_indicator"
                 android:textColor="@color/client_list_grey"
                 android:textSize="@dimen/indicator_table_contents_text_size" />
 
