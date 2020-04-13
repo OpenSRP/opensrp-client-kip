@@ -48,6 +48,8 @@ import java.util.Map;
 
 import timber.log.Timber;
 
+import static org.smartregister.kip.util.KipChildUtils.populateMohIndicatorsTableFromCSV;
+
 
 public class KipRepository extends Repository {
 
@@ -101,7 +103,7 @@ public class KipRepository extends Repository {
 
         runLegacyUpgrades(database);
 
-        onUpgrade(database, 8, BuildConfig.DATABASE_VERSION);
+        onUpgrade(database, 10, BuildConfig.DATABASE_VERSION);
 
         // initialize from yml file
         ReportingLibrary reportingLibraryInstance = ReportingLibrary.getInstance();
@@ -148,6 +150,9 @@ public class KipRepository extends Repository {
                     break;
                 case 9:
                     upgradeToVersion9(db);
+                    break;
+                case 10:
+                    upgradeToVersion10(db);
                     break;
                 default:
                     break;
@@ -425,6 +430,24 @@ public class KipRepository extends Repository {
         } catch (Exception e) {
             Timber.e(e, " --> upgradeToVersion9 ");
         }
+    }
+
+    private void upgradeToVersion10(SQLiteDatabase db) {
+        try {
+            Moh710IndicatorsRepository.createTable(db);
+            dumpMOH710IndicatorsCSV(db);
+        } catch (Exception e) {
+            Timber.e(e, "-->upgradeToVersion10 ");
+        }
+    }
+
+    private void dumpMOH710IndicatorsCSV(SQLiteDatabase db) {
+        List<Map<String, String>> csvData = populateMohIndicatorsTableFromCSV(
+                context,
+                Moh710IndicatorsRepository.INDICATORS_CSV_FILE,
+                Moh710IndicatorsRepository.CSV_COLUMN_MAPPING);
+        Moh710IndicatorsRepository moh710IndicatorsRepository = KipApplication.getInstance().moh710IndicatorsRepository();
+        moh710IndicatorsRepository.save(db, csvData);
     }
 
     private boolean checkIfAppUpdated() {

@@ -28,6 +28,7 @@ import com.github.ybq.android.spinkit.style.FadingCircle;
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.domain.FetchStatus;
 import org.smartregister.kip.R;
+import org.smartregister.kip.activity.Moh710ReportActivity;
 import org.smartregister.kip.activity.ReportRegisterActivity;
 import org.smartregister.kip.adapter.NavigationAdapter;
 import org.smartregister.kip.application.KipApplication;
@@ -69,6 +70,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     private View parentView;
     private LinearLayout reportView;
     private LinearLayout recordOutofcatment;
+    private LinearLayout mohReportView;
     private List<NavigationOption> navigationOptions = new ArrayList<>();
 
     private NavigationMenu() {
@@ -165,6 +167,8 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         settingsLayout = rootView.findViewById(R.id.rlSettings);
         reportView = rootView.findViewById(R.id.report_view);
         recordOutofcatment = rootView.findViewById(R.id.nav_record_vaccination_out_catchment);
+        mohReportView = rootView.findViewById(R.id.moh710_reports);
+
 
         ImageView ivLogo = rootView.findViewById(R.id.ivLogo);
         LinearLayout locationLayout = rootView.findViewById(R.id.giz_location_layout);
@@ -205,6 +209,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
 
         registerSettings(activity);
         registerReporting(activity);
+        registerMohReporting(activity);
 //        registerOutofcatchment(activity);
 
         // update all actions
@@ -228,6 +233,27 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
 
         if (parentActivity != null) {
             Intent intent = new Intent(parentActivity, ReportRegisterActivity.class);
+            parentActivity.startActivity(intent);
+        }
+    }
+
+    private void registerMohReporting(@Nullable Activity parentActivity) {
+        mohReportView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startReportMohActivity(parentActivity);
+            }
+        });
+    }
+
+    private void startReportMohActivity(@Nullable Activity parentActivity) {
+        if (parentActivity instanceof Moh710ReportActivity) {
+            drawer.closeDrawer(GravityCompat.START);
+            return;
+        }
+
+        if (parentActivity != null) {
+            Intent intent = new Intent(parentActivity, Moh710ReportActivity.class);
             parentActivity.startActivity(intent);
         }
     }

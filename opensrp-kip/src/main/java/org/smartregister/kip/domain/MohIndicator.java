@@ -3,9 +3,6 @@ package org.smartregister.kip.domain;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * Created by coder on 6/6/17.
- */
 public class MohIndicator implements Serializable {
     private long id;
     private String indicatorCode;
