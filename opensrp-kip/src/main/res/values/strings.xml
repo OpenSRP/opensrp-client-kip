@@ -541,6 +541,8 @@
     <string name="wrong_date_format">Wrong date format. Please use yyyy-mm-dd.</string>
     <string name="start_after_end">Please set start date before end date.</string>
     <string name="end_before_start">Please set end date after start date.</string>
-    <string name="moh_daily_tally">MOH710 Daily Tally</string>
-    <string name="moh_monthly_report">MOH710 Report</string>
+    <string name="moh_daily_tally">MOH710 Daily Report</string>
+    <string name="moh_monthly_report">MOH710 Monthly Report</string>
+
+    <string name="moh_daily_tally_">MOH710 Daily Report > %1$s</string>
 </resources>

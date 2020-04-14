@@ -167,7 +167,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         settingsLayout = rootView.findViewById(R.id.rlSettings);
         reportView = rootView.findViewById(R.id.report_view);
         recordOutofcatment = rootView.findViewById(R.id.nav_record_vaccination_out_catchment);
-        mohReportView = rootView.findViewById(R.id.moh710_reports);
+//        mohReportView = rootView.findViewById(R.id.moh710_reports);
 
 
         ImageView ivLogo = rootView.findViewById(R.id.ivLogo);
@@ -209,7 +209,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
 
         registerSettings(activity);
         registerReporting(activity);
-        registerMohReporting(activity);
+//        registerMohReporting(activity);
 //        registerOutofcatchment(activity);
 
         // update all actions
@@ -237,26 +237,26 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         }
     }
 
-    private void registerMohReporting(@Nullable Activity parentActivity) {
-        mohReportView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startReportMohActivity(parentActivity);
-            }
-        });
-    }
-
-    private void startReportMohActivity(@Nullable Activity parentActivity) {
-        if (parentActivity instanceof Moh710ReportActivity) {
-            drawer.closeDrawer(GravityCompat.START);
-            return;
-        }
-
-        if (parentActivity != null) {
-            Intent intent = new Intent(parentActivity, Moh710ReportActivity.class);
-            parentActivity.startActivity(intent);
-        }
-    }
+//    private void registerMohReporting(@Nullable Activity parentActivity) {
+//        mohReportView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startReportMohActivity(parentActivity);
+//            }
+//        });
+//    }
+//
+//    private void startReportMohActivity(@Nullable Activity parentActivity) {
+//        if (parentActivity instanceof Moh710ReportActivity) {
+//            drawer.closeDrawer(GravityCompat.START);
+//            return;
+//        }
+//
+//        if (parentActivity != null) {
+//            Intent intent = new Intent(parentActivity, Moh710ReportActivity.class);
+//            parentActivity.startActivity(intent);
+//        }
+//    }
 
 //    private void registerOutofcatchment(@Nullable Activity parentActivity) {
 //        recordOutofcatment.setOnClickListener(new View.OnClickListener() {

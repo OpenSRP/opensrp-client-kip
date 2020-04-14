@@ -36,6 +36,7 @@ import java.util.regex.Pattern;
 
 import timber.log.Timber;
 
+import static org.smartregister.kip.util.KipConstants.FormTitleUtil.UPDATE_CHILD_FORM;
 import static org.smartregister.login.task.RemoteLoginTask.getOpenSRPContext;
 
 public class KipJsonFormUtils extends JsonFormUtils {
@@ -120,33 +121,6 @@ public class KipJsonFormUtils extends JsonFormUtils {
                 jsonObject.put(JsonFormUtils.VALUE, secondaryNumber);
             }
 
-            if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Ce_County")) {
-                jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(detailmaps, "stateProvince", true));
-            }
-            if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Ce_Sub_County")) {
-                jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(detailmaps, "countyDistrict", true));
-            }
-            if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Ce_Ward")) {
-                jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(detailmaps, "cityVillage", true));
-            }
-            if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Ce_Sub_Location")) {
-                jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(detailmaps, "address4", true));
-            }
-            if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Ce_Village")) {
-                jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(detailmaps, "address3", true));
-            }
-            if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Ce_Landmark")) {
-                jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(detailmaps, "address2", true));
-            }
-            if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("Ce_Address")) {
-                jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(detailmaps, "address1", true));
-            }
-            if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("CHW_Name")) {
-                jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(detailmaps, "CHW_Name", true));
-            }
-            if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("CHW_Phone_Number")) {
-                jsonObject.put(JsonFormUtils.VALUE, Utils.getValue(detailmaps, "CHW_Phone_Number", true));
-            }
         }
     }
 
@@ -249,7 +223,7 @@ public class KipJsonFormUtils extends JsonFormUtils {
 
         if (form.has(JsonFormUtils.STEP1) && form.getJSONObject(JsonFormUtils.STEP1).has(KipConstants.KEY.TITLE) && form.getJSONObject(JsonFormUtils.STEP1).getString(KipConstants.KEY.TITLE)
                 .equals(Constants.EventType.BITRH_REGISTRATION)) {
-            form.getJSONObject(JsonFormUtils.STEP1).put(KipConstants.KEY.TITLE, Constants.EventType.UPDATE_BITRH_REGISTRATION);
+            form.getJSONObject(JsonFormUtils.STEP1).put(KipConstants.KEY.TITLE, UPDATE_CHILD_FORM);
         }
     }
 
