@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 
 import org.smartregister.kip.activity.ChildRegisterActivity;
+import org.smartregister.kip.activity.OpdRegisterActivity;
 import org.smartregister.kip.adapter.NavigationAdapter;
 import org.smartregister.kip.util.KipConstants;
 import org.smartregister.kip.view.NavDrawerActivity;
@@ -26,14 +27,23 @@ public class NavigationListener implements View.OnClickListener {
         if (v.getTag() != null && v.getTag() instanceof String) {
             String tag = (String) v.getTag();
 
-            if (KipConstants.DrawerMenu.CHILD_CLIENTS.equals(tag)) {
-                navigateToActivity(ChildRegisterActivity.class);
+            switch (tag) {
+                case KipConstants.DrawerMenu.CHILD_CLIENTS:
+                    navigateToActivity(ChildRegisterActivity.class);
+                    break;
+
+                case KipConstants.DrawerMenu.ALL_CLIENTS:
+                    navigateToActivity(OpdRegisterActivity.class);
+                    break;
+
+                default:
+                    break;
             }
             navigationAdapter.setSelectedView(tag);
         }
     }
 
-    private void navigateToActivity(@NonNull Class<?> aClass) {
+    private void navigateToActivity(@NonNull Class<?> clas) {
         NavigationMenu.closeDrawer();
 
         if (activity instanceof NavDrawerActivity) {
@@ -42,6 +52,6 @@ public class NavigationListener implements View.OnClickListener {
             activity.finish();
         }
 
-        activity.startActivity(new Intent(activity, aClass));
+        activity.startActivity(new Intent(activity, clas));
     }
 }

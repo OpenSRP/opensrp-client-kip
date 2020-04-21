@@ -23,13 +23,13 @@ import java.util.HashMap;
  * Created by Ephraim Kigamba - ekigamba@ona.io on 2019-12-04
  */
 @RunWith(MockitoJUnitRunner.class)
-public class GizOpdRegisterRowOptionsTest {
+public class KipOpdRegisterRowOptionsTest {
 
-    private GizOpdRegisterRowOptions gizOpdRegisterRowOptions;
+    private KipOpdRegisterRowOptions kipOpdRegisterRowOptions;
 
     @Before
     public void setUp() throws Exception {
-        gizOpdRegisterRowOptions = new GizOpdRegisterRowOptions();
+        kipOpdRegisterRowOptions = new KipOpdRegisterRowOptions();
     }
 
     @Test
@@ -50,7 +50,7 @@ public class GizOpdRegisterRowOptionsTest {
         Mockito.doReturn(context).when(dueBtn).getContext();
         Mockito.doReturn(Mockito.mock(Resources.class)).when(context).getResources();
 
-        gizOpdRegisterRowOptions.populateClientRow(Mockito.mock(Cursor.class), client, client, opdRegisterViewHolder);
+        kipOpdRegisterRowOptions.populateClientRow(Mockito.mock(Cursor.class), client, client, opdRegisterViewHolder);
 
         Assert.assertEquals(R.string.diagnose_and_treat, (int) intCaptor.getValue());
     }
@@ -74,7 +74,7 @@ public class GizOpdRegisterRowOptionsTest {
         Mockito.doReturn(context).when(dueBtn).getContext();
         Mockito.doReturn(Mockito.mock(Resources.class)).when(context).getResources();
 
-        gizOpdRegisterRowOptions.populateClientRow(Mockito.mock(Cursor.class), client, client, opdRegisterViewHolder);
+        kipOpdRegisterRowOptions.populateClientRow(Mockito.mock(Cursor.class), client, client, opdRegisterViewHolder);
 
         Assert.assertEquals(R.string.check_in, (int) intCaptor.getValue());
     }

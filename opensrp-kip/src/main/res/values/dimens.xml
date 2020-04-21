@@ -56,4 +56,7 @@
     <dimen name="sync_time_padding_right">20dp</dimen>
     <dimen name="sync_time_padding">15dp</dimen>
     <dimen name="advanced_search_text_size">16sp</dimen>
+    <dimen name="moh710_vertical_margin">15dp</dimen>
+    <dimen name="moh710_activity_horizontal_margin">64dp</dimen>
+    <dimen name="moh710_padding_left">0dp</dimen>
 </resources>

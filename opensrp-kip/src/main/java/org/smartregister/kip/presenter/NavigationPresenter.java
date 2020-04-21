@@ -15,6 +15,7 @@ import org.smartregister.kip.model.NavigationModel;
 import org.smartregister.kip.model.NavigationOption;
 import org.smartregister.kip.util.KipConstants;
 
+
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.List;
@@ -37,11 +38,8 @@ public class NavigationPresenter implements NavigationContract.Presenter {
     }
 
     private void initialize() {
-        tableMap.put(KipConstants.DrawerMenu.ALL_FAMILIES, KipConstants.TABLE_NAME.FAMILY);
-        tableMap.put(KipConstants.DrawerMenu.CHILD_CLIENTS, KipConstants.TABLE_NAME.CHILD);
-        tableMap.put(KipConstants.DrawerMenu.ANC_CLIENTS, KipConstants.TABLE_NAME.MOTHER_TABLE_NAME);
-        tableMap.put(KipConstants.DrawerMenu.ANC, KipConstants.TABLE_NAME.ANC_MEMBER);
-        tableMap.put(KipConstants.DrawerMenu.ALL_CLIENTS, String.format("%s|%s", KipConstants.TABLE_NAME.CHILD, KipConstants.TABLE_NAME.MOTHER_TABLE_NAME));
+        tableMap.put(KipConstants.DrawerMenu.CHILD_CLIENTS, KipConstants.RegisterType.CHILD);
+        tableMap.put(KipConstants.DrawerMenu.ALL_CLIENTS, KipConstants.RegisterType.OPD);
     }
 
     @Override

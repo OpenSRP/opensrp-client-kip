@@ -2,7 +2,6 @@ package org.smartregister.kip.repository;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
@@ -21,6 +20,19 @@ import org.smartregister.immunization.repository.VaccineRepository;
 import org.smartregister.immunization.util.IMDatabaseUtils;
 import org.smartregister.kip.BuildConfig;
 import org.smartregister.kip.application.KipApplication;
+import org.smartregister.kip.util.KipConstants;
+import org.smartregister.opd.repository.OpdCheckInRepository;
+import org.smartregister.opd.repository.OpdDetailsRepository;
+import org.smartregister.opd.repository.OpdDiagnosisAndTreatmentFormRepository;
+import org.smartregister.opd.repository.OpdDiagnosisRepository;
+import org.smartregister.opd.repository.OpdServiceDetailRepository;
+import org.smartregister.opd.repository.OpdTestConductedRepository;
+import org.smartregister.opd.repository.OpdTreatmentRepository;
+import org.smartregister.opd.repository.OpdVisitRepository;
+import org.smartregister.reporting.ReportingLibrary;
+import org.smartregister.reporting.repository.DailyIndicatorCountRepository;
+import org.smartregister.reporting.repository.IndicatorQueryRepository;
+import org.smartregister.reporting.repository.IndicatorRepository;
 import org.smartregister.repository.AlertRepository;
 import org.smartregister.repository.EventClientRepository;
 import org.smartregister.repository.Hia2ReportRepository;
@@ -35,9 +47,14 @@ import timber.log.Timber;
 
 
 public class KipRepository extends Repository {
+
     protected SQLiteDatabase readableDatabase;
     protected SQLiteDatabase writableDatabase;
+
     private Context context;
+    private String indicatorsConfigFile = KipConstants.File.INDICATOR_CONFIG_FILE;
+    private String indicatorDataInitialisedPref = KipConstants.Pref.INDICATOR_DATA_INITIALISED;
+    private String appVersionCodePref = KipConstants.Pref.APP_VERSION_CODE;
 
     public KipRepository(@NonNull Context context, @NonNull org.smartregister.Context openSRPContext) {
         super(context, AllConstants.DATABASE_NAME, BuildConfig.DATABASE_VERSION, openSRPContext.session(),
@@ -55,13 +72,46 @@ public class KipRepository extends Repository {
                 .createTable(database, EventClientRepository.Table.event, EventClientRepository.event_column.values());
         ConfigurableViewsRepository.createTable(database);
         UniqueIdRepository.createTable(database);
+
         SettingsRepository.onUpgrade(database);
         WeightRepository.createTable(database);
         HeightRepository.createTable(database);
         VaccineRepository.createTable(database);
+
+        OpdVisitRepository.createTable(database);
+        OpdCheckInRepository.createTable(database);
+        OpdDetailsRepository.createTable(database);
+        OpdDiagnosisAndTreatmentFormRepository.createTable(database);
+        OpdDiagnosisRepository.createTable(database);
+        OpdTreatmentRepository.createTable(database);
+        OpdTestConductedRepository.createTable(database);
+        OpdServiceDetailRepository.createTable(database);
+        ClientRegisterTypeRepository.createTable(database);
+
+        //reporting
+        IndicatorRepository.createTable(database);
+        IndicatorQueryRepository.createTable(database);
+        DailyIndicatorCountRepository.createTable(database);
+        MonthlyTalliesRepository.createTable(database);
+
+        EventClientRepository.createTable(database, Hia2ReportRepository.Table.hia2_report, Hia2ReportRepository.report_column.values());
+
         runLegacyUpgrades(database);
 
-        onUpgrade(database, 8, BuildConfig.DATABASE_VERSION);
+        onUpgrade(database, 9, BuildConfig.DATABASE_VERSION);
+
+        // initialize from yml file
+        ReportingLibrary reportingLibraryInstance = ReportingLibrary.getInstance();
+        // Check if indicator data initialised
+        boolean indicatorDataInitialised = Boolean.parseBoolean(reportingLibraryInstance.getContext()
+                .allSharedPreferences().getPreference(indicatorDataInitialisedPref));
+        boolean isUpdated = checkIfAppUpdated();
+        if (!indicatorDataInitialised || isUpdated) {
+            Timber.d("Initialising indicator repositories!!");
+            reportingLibraryInstance.initIndicatorData(indicatorsConfigFile, database); // This will persist the data in the DB
+            reportingLibraryInstance.getContext().allSharedPreferences().savePreference(indicatorDataInitialisedPref, "true");
+            reportingLibraryInstance.getContext().allSharedPreferences().savePreference(appVersionCodePref, String.valueOf(BuildConfig.VERSION_CODE));
+        }
     }
 
 
@@ -93,11 +143,17 @@ public class KipRepository extends Repository {
                 case 8:
                     upgradeToVersion8AddServiceGroupColumn(db);
                     break;
+                case 9:
+                    upgradeToVersion9(db);
+                    break;
                 default:
                     break;
             }
             upgradeTo++;
         }
+
+        DailyIndicatorCountRepository.performMigrations(db);
+        IndicatorQueryRepository.performMigrations(db);
     }
 
     @Override
@@ -172,6 +228,20 @@ public class KipRepository extends Repository {
         upgradeToVersion7VaccineRecurringServiceRecordChange(database);
         upgradeToVersion7WeightHeightVaccineRecurringServiceChange(database);
         upgradeToVersion7RemoveUnnecessaryTables(database);
+        upgradeToVersion9(database);
+    }
+
+    /**
+     * Version 16 added service_group column
+     *
+     * @param database
+     */
+    private void upgradeToVersion8AddServiceGroupColumn(@NonNull SQLiteDatabase database) {
+        try {
+            database.execSQL(RecurringServiceTypeRepository.ADD_SERVICE_GROUP_COLUMN);
+        } catch (Exception e) {
+            Timber.e(e, "upgradeToVersion8AddServiceGroupColumn");
+        }
     }
 
     /**
@@ -190,7 +260,7 @@ public class KipRepository extends Repository {
             DatabaseMigrationUtils.addFieldsToFTSTable(database, commonFtsObject, Utils.metadata().childRegister.tableName,
                     newlyAddedFields);
         } catch (Exception e) {
-            Timber.e("upgradeToVersion2 %s", Log.getStackTraceString(e));
+            Timber.e(e, "upgradeToVersion2");
         }
     }
 
@@ -209,7 +279,7 @@ public class KipRepository extends Repository {
             db.execSQL(HeightRepository.UPDATE_TABLE_ADD_FORMSUBMISSION_ID_COL);
             db.execSQL(HeightRepository.FORMSUBMISSION_INDEX);
         } catch (Exception e) {
-            Timber.e("upgradeToVersion3 %s", Log.getStackTraceString(e));
+            Timber.e(e, "upgradeToVersion3");
         }
     }
 
@@ -218,7 +288,7 @@ public class KipRepository extends Repository {
             db.execSQL(AlertRepository.ALTER_ADD_OFFLINE_COLUMN);
             db.execSQL(AlertRepository.OFFLINE_INDEX);
         } catch (Exception e) {
-            Timber.e("upgradeToVersion4 %s", Log.getStackTraceString(e));
+            Timber.e(e, "upgradeToVersion4");
         }
     }
 
@@ -231,7 +301,7 @@ public class KipRepository extends Repository {
                     .recurringServiceTypeRepository();
             IMDatabaseUtils.populateRecurringServices(context, db, recurringServiceTypeRepository);
         } catch (Exception e) {
-            Timber.e("upgradeToVersion5 %s", Log.getStackTraceString(e));
+            Timber.e(e, "upgradeToVersion5");
         }
     }
 
@@ -243,7 +313,7 @@ public class KipRepository extends Repository {
             HeightZScoreRepository.createTable(db);
             db.execSQL(HeightRepository.ALTER_ADD_Z_SCORE_COLUMN);
         } catch (Exception e) {
-            Timber.e("upgradeToVersion6 %s", Log.getStackTraceString(e));
+            Timber.e(e, "upgradeToVersion6");
         }
     }
 
@@ -258,7 +328,7 @@ public class KipRepository extends Repository {
             db.execSQL(VaccineRepository.UPDATE_TABLE_ADD_HIA2_STATUS_COL);
 
         } catch (Exception e) {
-            Timber.e("upgradeToVersion7 %s", Log.getStackTraceString(e));
+            Timber.e(e,"upgradeToVersion7");
         }
     }
 
@@ -271,7 +341,7 @@ public class KipRepository extends Repository {
             IMDatabaseUtils.populateRecurringServices(context, db, recurringServiceTypeRepository);
 
         } catch (Exception e) {
-            Timber.e("upgradeToVersion7RecurringServiceUpdate %s", Log.getStackTraceString(e));
+            Timber.e(e, "upgradeToVersion7RecurringServiceUpdate");
         }
     }
 
@@ -293,7 +363,7 @@ public class KipRepository extends Repository {
             RecurringServiceRecordRepository.migrateCreatedAt(db);
 
         } catch (Exception e) {
-            Timber.e("upgradeToVersion7EventWeightHeightVaccineRecurringChange %s", Log.getStackTraceString(e));
+            Timber.e(e, "upgradeToVersion7EventWeightHeightVaccineRecurringChange");
         }
     }
 
@@ -305,7 +375,7 @@ public class KipRepository extends Repository {
             db.execSQL(RecurringServiceRecordRepository.UPDATE_TABLE_ADD_TEAM_ID_COL);
             db.execSQL(RecurringServiceRecordRepository.UPDATE_TABLE_ADD_TEAM_COL);
         } catch (Exception e) {
-            Timber.e("upgradeToVersion7VaccineRecurringServiceRecordChange %s", Log.getStackTraceString(e));
+            Timber.e(e,"upgradeToVersion7VaccineRecurringServiceRecordChange");
         }
     }
 
@@ -325,7 +395,7 @@ public class KipRepository extends Repository {
 
             db.execSQL(RecurringServiceRecordRepository.UPDATE_TABLE_ADD_CHILD_LOCATION_ID_COL);
         } catch (Exception e) {
-            Timber.e("upgradeToVersion7WeightHeightVaccineRecurringServiceChange %s", Log.getStackTraceString(e));
+            Timber.e(e, "upgradeToVersion7WeightHeightVaccineRecurringServiceChange");
         }
     }
 
@@ -342,20 +412,25 @@ public class KipRepository extends Repository {
 
 
         } catch (Exception e) {
-            Timber.e("upgradeToVersion7RemoveUnnecessaryTables( %s", Log.getStackTraceString(e));
+            Timber.e(e, "upgradeToVersion7RemoveUnnecessaryTables");
         }
     }
 
-    /**
-     * Version 16 added service_group column
-     *
-     * @param database
-     */
-    private void upgradeToVersion8AddServiceGroupColumn(@NonNull SQLiteDatabase database) {
+    private void upgradeToVersion9(SQLiteDatabase database) {
         try {
-            database.execSQL(RecurringServiceTypeRepository.ADD_SERVICE_GROUP_COLUMN);
+            KipLocationRepository.createLocationsTable(database);
         } catch (Exception e) {
-            Timber.e(e, "upgradeToVersion8AddServiceGroupColumn");
+            Timber.e(e, " --> upgradeToVersion9 ");
+        }
+    }
+
+    private boolean checkIfAppUpdated() {
+        String savedAppVersion = ReportingLibrary.getInstance().getContext().allSharedPreferences().getPreference(appVersionCodePref);
+        if (savedAppVersion.isEmpty()) {
+            return true;
+        } else {
+            int savedVersion = Integer.parseInt(savedAppVersion);
+            return (BuildConfig.VERSION_CODE > savedVersion);
         }
     }
 }

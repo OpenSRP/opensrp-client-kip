@@ -32,6 +32,7 @@ import org.smartregister.kip.event.LoginEvent;
 import org.smartregister.kip.fragment.AdvancedSearchFragment;
 import org.smartregister.kip.fragment.ChildRegisterFragment;
 import org.smartregister.kip.fragment.MeFragment;
+import org.smartregister.kip.presenter.ChildRegisterPresenter;
 import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.kip.util.KipConstants;
 import org.smartregister.kip.util.KipJsonFormUtils;
@@ -158,7 +159,7 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
 
     @Override
     protected void initializePresenter() {
-        presenter = new BaseChildRegisterPresenter(this, new BaseChildRegisterModel());
+        presenter = new ChildRegisterPresenter(this, new BaseChildRegisterModel());
     }
 
     @Override
@@ -210,7 +211,8 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
     @Override
     public void startFormActivity(JSONObject jsonForm) {
         Intent intent = new Intent(this, Utils.metadata().childFormActivity);
-        if (jsonForm.has(KipConstants.KEY.ENCOUNTER_TYPE) && jsonForm.optString(KipConstants.KEY.ENCOUNTER_TYPE).equals(KipConstants.KEY.BIRTH_REGISTRATION)) {
+        if (jsonForm.has(KipConstants.KEY.ENCOUNTER_TYPE) && jsonForm.optString(KipConstants.KEY.ENCOUNTER_TYPE).equals(
+                KipConstants.KEY.BIRTH_REGISTRATION)) {
             Context context = org.smartregister.login.task.RemoteLoginTask.getOpenSRPContext();
             KipLocationUtility.addChildRegLocHierarchyQuestions(jsonForm, context);
             KipJsonFormUtils.addRelationshipTypesQuestions(jsonForm);

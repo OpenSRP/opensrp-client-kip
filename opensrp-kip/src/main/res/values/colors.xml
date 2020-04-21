@@ -58,4 +58,5 @@
 
     <color name="light_green">#225A3F</color>
     <color name="dark_green">#082F1A</color>
+    <color name="list_view_divider_black">@color/black</color>
 </resources>
