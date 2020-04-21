@@ -16,7 +16,6 @@ public class Tally implements Serializable {
     private long id;
     @JsonProperty
     private String value;
-    private MohIndicator mohIndicator;
     private String providerId;
     private Date updatedAt;
 
@@ -44,13 +43,6 @@ public class Tally implements Serializable {
         this.indicator = indicator;
     }
 
-    public MohIndicator getMohIndicator() {
-        return mohIndicator;
-    }
-
-    public void setMohIndicator(MohIndicator mohIndicator) {
-        this.mohIndicator = mohIndicator;
-    }
 
     public String getProviderId() {
         return providerId;

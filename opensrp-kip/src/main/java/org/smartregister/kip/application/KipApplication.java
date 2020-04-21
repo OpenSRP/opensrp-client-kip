@@ -47,7 +47,6 @@ import org.smartregister.kip.configuration.KipOpdRegisterSwitcher;
 import org.smartregister.kip.configuration.OpdRegisterQueryProvider;
 import org.smartregister.kip.job.KipJobCreator;
 import org.smartregister.kip.processor.KipProcessorForJava;
-import org.smartregister.kip.processor.KipUpdateActionsTask;
 import org.smartregister.kip.processor.TripleResultProcessor;
 import org.smartregister.kip.repository.ClientRegisterTypeRepository;
 import org.smartregister.kip.repository.DailyTalliesRepository;
@@ -55,9 +54,6 @@ import org.smartregister.kip.repository.HIA2IndicatorsRepository;
 import org.smartregister.kip.repository.KipChildRegisterQueryProvider;
 import org.smartregister.kip.repository.KipLocationRepository;
 import org.smartregister.kip.repository.KipRepository;
-import org.smartregister.kip.repository.Moh710DailyTalliesRepository;
-import org.smartregister.kip.repository.Moh710IndicatorsRepository;
-import org.smartregister.kip.repository.Moh710MonthlyTalliesRepository;
 import org.smartregister.kip.repository.MonthlyTalliesRepository;
 import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.kip.util.KipConstants;
@@ -108,10 +104,6 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
     private MonthlyTalliesRepository monthlyTalliesRepository;
     private Hia2ReportRepository hia2ReportRepository;
 
-//    moh reporting
-    private Moh710IndicatorsRepository moh710IndicatorsRepository;
-    private Moh710DailyTalliesRepository moh710DailyTalliesRepository;
-    private Moh710MonthlyTalliesRepository moh710MonthlyTalliesRepository;
 
     public static JsonSpecHelper getJsonSpecHelper() {
         return jsonSpecHelper;
@@ -293,8 +285,6 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
         //init Job Manager
         JobManager.create(this).addJobCreator(new KipJobCreator());
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-
-        KipUpdateActionsTask.setAlarms(this);
 
     }
 
@@ -518,31 +508,6 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
         }
         return locationRepository;
     }
-
-//    moh
-    public Moh710MonthlyTalliesRepository moh710MonthlyTalliesRepository() {
-        if (moh710MonthlyTalliesRepository == null) {
-            moh710MonthlyTalliesRepository = new Moh710MonthlyTalliesRepository();
-        }
-
-        return moh710MonthlyTalliesRepository;
-    }
-
-    public Moh710DailyTalliesRepository moh710DailyTalliesRepository() {
-        if (moh710DailyTalliesRepository == null) {
-            moh710DailyTalliesRepository = new Moh710DailyTalliesRepository();
-        }
-        return moh710DailyTalliesRepository;
-    }
-
-    public Moh710IndicatorsRepository moh710IndicatorsRepository(){
-        if (moh710IndicatorsRepository == null){
-            moh710IndicatorsRepository = new Moh710IndicatorsRepository();
-        }
-
-        return moh710IndicatorsRepository;
-    }
-
 
     @VisibleForTesting
     public void setVaccineGroups(List<VaccineGroup> vaccines) {

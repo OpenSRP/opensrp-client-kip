@@ -28,7 +28,6 @@ import com.github.ybq.android.spinkit.style.FadingCircle;
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.domain.FetchStatus;
 import org.smartregister.kip.R;
-import org.smartregister.kip.activity.Moh710ReportActivity;
 import org.smartregister.kip.activity.ReportRegisterActivity;
 import org.smartregister.kip.adapter.NavigationAdapter;
 import org.smartregister.kip.application.KipApplication;

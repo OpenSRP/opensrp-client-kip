@@ -1,29 +1,19 @@
 package org.smartregister.kip.repository;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 
-import net.sqlcipher.database.SQLiteDatabase;
-
-import org.smartregister.kip.application.KipApplication;
-import org.smartregister.kip.domain.DailyTally;
-import org.smartregister.kip.domain.MohIndicator;
 import org.smartregister.reporting.util.Constants;
 import org.smartregister.repository.BaseRepository;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import timber.log.Timber;
 
