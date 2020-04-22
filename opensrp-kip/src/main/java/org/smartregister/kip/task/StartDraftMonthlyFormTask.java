@@ -69,7 +69,7 @@ public class StartDraftMonthlyFormTask extends AsyncTask<Void, Void, Intent> {
             }
 
             JSONObject step1 = form.getJSONObject("step1");
-            String title = MonthlyTalliesRepository.DF_YYYYMM.format(date).concat(" Draft");
+            String title = MonthlyTalliesRepository.DF_YYYYMM.format(date).concat(" MOH710 Report");
             step1.put(KipConstants.KEY.TITLE, title);
 
             JSONArray fieldsArray = step1.getJSONArray(KipConstants.KEY.FIELDS);
@@ -131,7 +131,7 @@ public class StartDraftMonthlyFormTask extends AsyncTask<Void, Void, Intent> {
 
         jsonObject.put(JsonFormConstants.KEY, key);
         jsonObject.put(JsonFormConstants.TYPE, "edit_text");
-        jsonObject.put(JsonFormConstants.READ_ONLY, false);
+        jsonObject.put(JsonFormConstants.READ_ONLY, true);
         jsonObject.put(JsonFormConstants.HINT, label);
         jsonObject.put(JsonFormConstants.VALUE, monthlyTally.getValue());
 

@@ -18,6 +18,8 @@ import org.smartregister.kip.domain.Tally;
 import org.smartregister.kip.util.KipReportUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import timber.log.Timber;
 
@@ -80,6 +82,8 @@ import static org.smartregister.kip.service.Moh710CustomeService.MOH_Rota_2;
 public class IndicatorCategoryView extends LinearLayout {
     private Context context;
     private TableLayout indicatorTable;
+    private View mohView;
+    private View ageView;
     private ArrayList<Tally> tallies;
 
     public IndicatorCategoryView(Context context) {
@@ -109,6 +113,8 @@ public class IndicatorCategoryView extends LinearLayout {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         layoutInflater.inflate(R.layout.view_indicator_category, this, true);
         indicatorTable = findViewById(R.id.indicator_table);
+       mohView = layoutInflater.inflate(R.layout.moh710_item, this, true);
+       ageView = layoutInflater.inflate(R.layout.moh710_item_age_value, this, true);
     }
 
     public void setTallies(ArrayList<Tally> tallies) {
@@ -119,6 +125,28 @@ public class IndicatorCategoryView extends LinearLayout {
     private void refreshIndicatorTable() {
         if (tallies != null) {
             for (Tally curTally : tallies) {
+
+//                String antigen = indicatorName(curTally.getIndicator());
+//                TextView antigenTextView = (TextView) mohView.findViewById(R.id.antigen);
+//                antigenTextView.setText(antigen);
+//
+//                LinearLayout ageValueLayout = (LinearLayout) mohView.findViewById(R.id.age_value_layout);
+//                ageValueLayout.removeAllViews();
+//
+//                View divider = ageView.findViewById(R.id.adapter_divider_bottom);
+//
+//                String age = indicatorAge(curTally.getIndicator());
+//                TextView agetxtView = (TextView) ageView.findViewById(R.id.age);
+//
+//                agetxtView.setText(age);
+//
+//                TextView valueView = (TextView) ageView.findViewById(R.id.value);
+//                valueView.setText(curTally.getValue());
+//
+//                ageValueLayout.addView(ageView);
+
+
+
                 TableRow dividerRow = new TableRow(context);
                 View divider = new View(context);
                 TableRow.LayoutParams params = (TableRow.LayoutParams) divider.getLayoutParams();
