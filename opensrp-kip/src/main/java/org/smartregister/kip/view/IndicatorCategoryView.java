@@ -15,65 +15,10 @@ import android.widget.TextView;
 
 import org.smartregister.kip.R;
 import org.smartregister.kip.domain.Tally;
+import org.smartregister.kip.service.Moh710CustomeService;
 import org.smartregister.kip.util.KipReportUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import timber.log.Timber;
-
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_BCG;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_BCG_OV;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_BCG_UN;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_IPV;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_IPV_OV;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_IPV_UN;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_MR_1;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_MR_1_OV;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_MR_1_UN;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_OPV_0;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_OPV_1;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_OPV_1_OV;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_OPV_1_UN;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_OPV_2;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_OPV_2_OV;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_OPV_2_UN;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_OPV_3;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_OPV_3_OV;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_OPV_3_UN;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_OPV_OV;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_OPV_UN;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_PCV_1;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_PCV_1_OV;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_PCV_1_UN;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_PCV_2;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_PCV_2_OV;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_PCV_2_UN;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_PENTA_1_OV;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_PENTA_1_UN;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_PENTA_2_OV;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_PENTA_2_UN;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_PENTA_3_OV;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_PENTA_3_UN;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_Penta_1;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_Penta_2;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_Penta_3;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_ROTA_1_OV;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_ROTA_1_UN;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_ROTA_2_OV;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_ROTA_2_UN;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_RTSS_1;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_RTSS_1_OV;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_RTSS_1_UN;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_RTSS_2;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_RTSS_2_OV;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_RTSS_2_UN;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_RTSS_3;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_RTSS_3_OV;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_RTSS_3_UN;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_Rota_1;
-import static org.smartregister.kip.service.Moh710CustomeService.MOH_Rota_2;
 
 /**
  * Created by Ephraim Kigamba - ekigamba@ona.io on 2019-07-11
@@ -82,8 +27,6 @@ import static org.smartregister.kip.service.Moh710CustomeService.MOH_Rota_2;
 public class IndicatorCategoryView extends LinearLayout {
     private Context context;
     private TableLayout indicatorTable;
-    private View mohView;
-    private View ageView;
     private ArrayList<Tally> tallies;
 
     public IndicatorCategoryView(Context context) {
@@ -113,8 +56,6 @@ public class IndicatorCategoryView extends LinearLayout {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         layoutInflater.inflate(R.layout.view_indicator_category, this, true);
         indicatorTable = findViewById(R.id.indicator_table);
-       mohView = layoutInflater.inflate(R.layout.moh710_item, this, true);
-       ageView = layoutInflater.inflate(R.layout.moh710_item_age_value, this, true);
     }
 
     public void setTallies(ArrayList<Tally> tallies) {
@@ -125,27 +66,6 @@ public class IndicatorCategoryView extends LinearLayout {
     private void refreshIndicatorTable() {
         if (tallies != null) {
             for (Tally curTally : tallies) {
-
-//                String antigen = indicatorName(curTally.getIndicator());
-//                TextView antigenTextView = (TextView) mohView.findViewById(R.id.antigen);
-//                antigenTextView.setText(antigen);
-//
-//                LinearLayout ageValueLayout = (LinearLayout) mohView.findViewById(R.id.age_value_layout);
-//                ageValueLayout.removeAllViews();
-//
-//                View divider = ageView.findViewById(R.id.adapter_divider_bottom);
-//
-//                String age = indicatorAge(curTally.getIndicator());
-//                TextView agetxtView = (TextView) ageView.findViewById(R.id.age);
-//
-//                agetxtView.setText(age);
-//
-//                TextView valueView = (TextView) ageView.findViewById(R.id.value);
-//                valueView.setText(curTally.getValue());
-//
-//                ageValueLayout.addView(ageView);
-
-
 
                 TableRow dividerRow = new TableRow(context);
                 View divider = new View(context);
@@ -172,7 +92,7 @@ public class IndicatorCategoryView extends LinearLayout {
                         getResources().getDimensionPixelSize(R.dimen.table_contents_text_v_margin));
                 int resourceId = this.getResources().getIdentifier(KipReportUtils.getStringIdentifier(
                         curTally.getIndicator()), "string", getContext().getPackageName());
-                String name = indicatorName(curTally.getIndicator());
+                String name = Moh710CustomeService.indicatorName(curTally.getIndicator());
                 nameTextView.setText(name);
                 nameTextView.setTextColor(getResources().getColor(R.color.client_list_grey));
                 curRow.addView(nameTextView);
@@ -188,9 +108,7 @@ public class IndicatorCategoryView extends LinearLayout {
                         getResources().getDimensionPixelSize(R.dimen.table_contents_text_v_margin),
                         getResources().getDimensionPixelSize(R.dimen.table_row_middle_margin),
                         getResources().getDimensionPixelSize(R.dimen.table_contents_text_v_margin));
-//                int resourceId = this.getResources().getIdentifier(KipReportUtils.getStringIdentifier(
-//                        curTally.getIndicator()), "string", getContext().getPackageName());
-                String age = indicatorAge(curTally.getIndicator());
+                String age = Moh710CustomeService.indicatorAge(curTally.getIndicator());
                 ageTextView.setText(age);
                 ageTextView.setTextColor(getResources().getColor(R.color.client_list_grey));
                 curRow.addView(ageTextView);
@@ -205,8 +123,6 @@ public class IndicatorCategoryView extends LinearLayout {
                         getResources().getDimensionPixelSize(R.dimen.table_row_side_margin),
                         getResources().getDimensionPixelSize(R.dimen.table_contents_text_v_margin));
                 valueTextView.setTextColor(getResources().getColor(R.color.client_list_grey));
-//                String indi = resourceId != 0 ? getResources().getString(resourceId) : curTally.getIndicator();
-//                valueTextView.setText(indi);
                 valueTextView.setText(curTally.getValue());
 
                 curRow.addView(valueTextView);
@@ -216,96 +132,5 @@ public class IndicatorCategoryView extends LinearLayout {
             }
         }
 
-    private String indicatorAge(String age) {
-        String name = null;
-
-        if (age.contains("Under_1")) {
-            name = "Under 1 Year";
-        }
-        if (age.contains("Over_1")) {
-            name = "Over 1 Year";
-        }
-
-        return name;
-    }
-
-    private String indicatorName(String indicators){
-
-        String bcgName = null;
-        if (indicators.equals(MOH_BCG_UN) || indicators.equals(MOH_BCG_OV)){
-            bcgName = MOH_BCG;
-        }
-
-        if (indicators.equals(MOH_OPV_UN) || indicators.equals(MOH_OPV_OV)){
-            bcgName = MOH_OPV_0;
-        }
-
-        if (indicators.equals(MOH_OPV_1_OV) || indicators.equals(MOH_OPV_1_UN)){
-            bcgName = MOH_OPV_1;
-        }
-
-        if (indicators.equals(MOH_OPV_2_OV) || indicators.equals(MOH_OPV_2_UN)){
-            bcgName = MOH_OPV_2;
-        }
-
-        if (indicators.equals(MOH_OPV_3_OV) || indicators.equals(MOH_OPV_3_UN)){
-            bcgName = MOH_OPV_3;
-        }
-
-        if (indicators.equals(MOH_PENTA_1_OV) || indicators.equals(MOH_PENTA_1_UN)){
-            bcgName = MOH_Penta_1;
-        }
-
-        if (indicators.equals(MOH_PENTA_2_OV) || indicators.equals(MOH_PENTA_2_UN)){
-            bcgName = MOH_Penta_2;
-        }
-
-        if (indicators.equals(MOH_PENTA_1_OV) || indicators.equals(MOH_PENTA_1_UN)){
-            bcgName = MOH_Penta_1;
-        }
-
-        if (indicators.equals(MOH_PENTA_3_OV) || indicators.equals(MOH_PENTA_3_UN)){
-            bcgName = MOH_Penta_3;
-        }
-
-        if (indicators.equals(MOH_PCV_1_OV) || indicators.equals(MOH_PCV_1_UN)){
-            bcgName = MOH_PCV_1;
-        }
-        if (indicators.equals(MOH_PCV_2_OV) || indicators.equals(MOH_PCV_2_UN)){
-            bcgName = MOH_PCV_2;
-        }
-
-        if (indicators.equals(MOH_ROTA_1_OV) || indicators.equals(MOH_ROTA_1_UN)){
-            bcgName = MOH_Rota_1;
-        }
-
-        if (indicators.equals(MOH_ROTA_2_OV)  || indicators.equals(MOH_ROTA_2_UN)){
-            bcgName = MOH_Rota_2;
-        }
-
-        if (indicators.equals(MOH_RTSS_1_OV)  || indicators.equals(MOH_RTSS_1_UN)){
-            bcgName = MOH_RTSS_1;
-        }
-
-        if (indicators.equals(MOH_RTSS_2_OV)  || indicators.equals(MOH_RTSS_2_UN)){
-            bcgName = MOH_RTSS_2;
-        }
-
-        if (indicators.equals(MOH_RTSS_3_OV)  || indicators.equals(MOH_RTSS_3_UN)){
-            bcgName = MOH_RTSS_3;
-        }
-
-        if (indicators.equals(MOH_MR_1_OV)  || indicators.equals(MOH_MR_1_UN)){
-            bcgName = MOH_MR_1;
-        }
-
-        if (indicators.equals(MOH_IPV_OV)  || indicators.equals(MOH_IPV_UN)){
-            bcgName = MOH_IPV;
-        }
-
-
-
-        return bcgName;
-    }
 }
 

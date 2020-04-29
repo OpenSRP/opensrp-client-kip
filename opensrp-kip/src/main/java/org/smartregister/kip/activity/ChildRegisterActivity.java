@@ -150,7 +150,7 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
     }
 
     public boolean isLibraryItemEnabled() {
-        return false;
+        return true;
     }
 
     public boolean isAdvancedSearchEnabled() {

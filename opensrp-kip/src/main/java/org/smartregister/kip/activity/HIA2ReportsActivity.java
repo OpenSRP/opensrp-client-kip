@@ -228,7 +228,7 @@ public class HIA2ReportsActivity extends AppCompatActivity {
                         Snackbar.make(tabLayout, R.string.all_changes_saved, Snackbar.LENGTH_LONG).show();
                     }
                 } else {
-                    saveClicked = true;
+                    saveClicked = false;
                 }
                 KipApplication.getInstance().monthlyTalliesRepository().save(result, month);
                 if (saveClicked && !skipValidationSet) {

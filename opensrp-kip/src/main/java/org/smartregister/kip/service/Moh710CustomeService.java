@@ -61,5 +61,97 @@ public class Moh710CustomeService {
     public static final String MOH_IPV_OV = "ME_Vaccines_Age_ipv_Over_1";
     public static final String MOH_IPV_UN = "ME_Vaccines_Age_ipv_Under_1";
 
+    public static String indicatorAge(String age) {
+        String name = null;
+
+        if (age.contains("Under_1")) {
+            name = "Under 1 Year";
+        }
+        if (age.contains("Over_1")) {
+            name = "Over 1 Year";
+        }
+
+        return name;
+    }
+
+    public static String indicatorName(String indicators){
+
+        String bcgName = null;
+        if (indicators.equals(MOH_BCG_UN) || indicators.equals(MOH_BCG_OV)){
+            bcgName = MOH_BCG;
+        }
+
+        if (indicators.equals(MOH_OPV_UN) || indicators.equals(MOH_OPV_OV)){
+            bcgName = MOH_OPV_0;
+        }
+
+        if (indicators.equals(MOH_OPV_1_OV) || indicators.equals(MOH_OPV_1_UN)){
+            bcgName = MOH_OPV_1;
+        }
+
+        if (indicators.equals(MOH_OPV_2_OV) || indicators.equals(MOH_OPV_2_UN)){
+            bcgName = MOH_OPV_2;
+        }
+
+        if (indicators.equals(MOH_OPV_3_OV) || indicators.equals(MOH_OPV_3_UN)){
+            bcgName = MOH_OPV_3;
+        }
+
+        if (indicators.equals(MOH_PENTA_1_OV) || indicators.equals(MOH_PENTA_1_UN)){
+            bcgName = MOH_Penta_1;
+        }
+
+        if (indicators.equals(MOH_PENTA_2_OV) || indicators.equals(MOH_PENTA_2_UN)){
+            bcgName = MOH_Penta_2;
+        }
+
+        if (indicators.equals(MOH_PENTA_1_OV) || indicators.equals(MOH_PENTA_1_UN)){
+            bcgName = MOH_Penta_1;
+        }
+
+        if (indicators.equals(MOH_PENTA_3_OV) || indicators.equals(MOH_PENTA_3_UN)){
+            bcgName = MOH_Penta_3;
+        }
+
+        if (indicators.equals(MOH_PCV_1_OV) || indicators.equals(MOH_PCV_1_UN)){
+            bcgName = MOH_PCV_1;
+        }
+        if (indicators.equals(MOH_PCV_2_OV) || indicators.equals(MOH_PCV_2_UN)){
+            bcgName = MOH_PCV_2;
+        }
+
+        if (indicators.equals(MOH_ROTA_1_OV) || indicators.equals(MOH_ROTA_1_UN)){
+            bcgName = MOH_Rota_1;
+        }
+
+        if (indicators.equals(MOH_ROTA_2_OV)  || indicators.equals(MOH_ROTA_2_UN)){
+            bcgName = MOH_Rota_2;
+        }
+
+        if (indicators.equals(MOH_RTSS_1_OV)  || indicators.equals(MOH_RTSS_1_UN)){
+            bcgName = MOH_RTSS_1;
+        }
+
+        if (indicators.equals(MOH_RTSS_2_OV)  || indicators.equals(MOH_RTSS_2_UN)){
+            bcgName = MOH_RTSS_2;
+        }
+
+        if (indicators.equals(MOH_RTSS_3_OV)  || indicators.equals(MOH_RTSS_3_UN)){
+            bcgName = MOH_RTSS_3;
+        }
+
+        if (indicators.equals(MOH_MR_1_OV)  || indicators.equals(MOH_MR_1_UN)){
+            bcgName = MOH_MR_1;
+        }
+
+        if (indicators.equals(MOH_IPV_OV)  || indicators.equals(MOH_IPV_UN)){
+            bcgName = MOH_IPV;
+        }
+
+
+
+        return bcgName;
+    }
+
 
 }
