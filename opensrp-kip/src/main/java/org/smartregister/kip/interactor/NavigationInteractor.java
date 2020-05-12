@@ -58,33 +58,37 @@ public class NavigationInteractor implements NavigationContract.Interactor {
         }
     }
 
-    private int getCount(String tableName) {
+    private int getCount(String tempRegisterType) {
+        String registerType = tempRegisterType;
         int count = 0;
         Cursor cursor = null;
-        String mainCondition = "";
-        if (tableName.equalsIgnoreCase(KipConstants.TABLE_NAME.CHILD)) {
-            mainCondition = String.format(" where %s is null AND %s", KipConstants.KEY.DATE_REMOVED,
-                    KipChildUtils.childAgeLimitFilter());
-        } else if (tableName.equalsIgnoreCase(KipConstants.TABLE_NAME.MOTHER_TABLE_NAME)) {
-            mainCondition = "WHERE next_contact IS NOT NULL";
+        if (KipConstants.RegisterType.OPD.equals(registerType)){
+            registerType = "'"+KipConstants.RegisterType.OPD+"'," + "'"+KipConstants.RegisterType.ANC+"'," + "'"+KipConstants.RegisterType.CHILD+"'";
+        } else {
+            registerType = "'"+registerType+"'";
+
         }
 
-        if (StringUtils.isNoneEmpty(mainCondition)) {
-            try {
-                SmartRegisterQueryBuilder smartRegisterQueryBuilder = new SmartRegisterQueryBuilder();
-                String query = MessageFormat.format("select count(*) from {0} {1}", tableName, mainCondition);
-                query = smartRegisterQueryBuilder.Endquery(query);
-                Timber.i("2%s", query);
-                cursor = commonRepository(tableName).rawCustomQueryForAdapter(query);
-                if (cursor.moveToFirst()) {
-                    count = cursor.getInt(0);
-                }
-            } catch (Exception e) {
-                Timber.e(e, "NavigationInteractor --> getCount");
-            } finally {
-                if (cursor != null) {
-                    cursor.close();
-                }
+        String mainCondition = String.format(" where %s is null AND register_type IN (%s) ", KipConstants.TABLE_NAME.ALL_CLIENTS+"."+KipConstants.KEY.DATE_REMOVED, registerType);
+
+        if (registerType.contains(KipConstants.RegisterType.CHILD)) {
+            mainCondition += " AND ( " + Constants.KEY.DOD + " is NULL OR " + Constants.KEY.DOD + " = '' ) ";
+        }
+
+        try {
+            SmartRegisterQueryBuilder smartRegisterQueryBuilder = new SmartRegisterQueryBuilder();
+            String query = MessageFormat.format("select count(*) from {0} inner join client_register_type on ec_client.id=client_register_type.base_entity_id {1}", KipConstants.TABLE_NAME.ALL_CLIENTS, mainCondition);
+            query = smartRegisterQueryBuilder.Endquery(query);
+            Timber.i("2%s", query);
+            cursor = commonRepository(KipConstants.TABLE_NAME.ALL_CLIENTS).rawCustomQueryForAdapter(query);
+            if (cursor.moveToFirst()) {
+                count = cursor.getInt(0);
+            }
+        } catch (Exception e) {
+            Timber.e(e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
             }
         }
 
@@ -101,8 +105,9 @@ public class NavigationInteractor implements NavigationContract.Interactor {
         try {
             syncDate = new Date(getLastCheckTimeStamp());
         } catch (Exception e) {
-            Timber.e(e, "NavigationInteractor --> sync");
+            Timber.e(e);
         }
+
         return syncDate;
     }
 
