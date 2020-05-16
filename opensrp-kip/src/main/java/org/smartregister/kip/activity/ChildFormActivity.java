@@ -12,8 +12,8 @@ public class ChildFormActivity extends BaseChildFormActivity {
     }
 
     protected void initializeFormFragmentCore() {
-        KipChildFormFragment gizChildFormFragment = KipChildFormFragment.getFormFragment(JsonFormConstants.FIRST_STEP_NAME);
-        getSupportFragmentManager().beginTransaction().add(com.vijay.jsonwizard.R.id.container, gizChildFormFragment).commit();
+        KipChildFormFragment kipChildFormFragment = KipChildFormFragment.getFormFragment(JsonFormConstants.FIRST_STEP_NAME);
+        getSupportFragmentManager().beginTransaction().add(com.vijay.jsonwizard.R.id.container, kipChildFormFragment).commit();
     }
 
 }

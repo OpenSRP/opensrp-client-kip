@@ -59,7 +59,7 @@
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+2y"
+              "offset": "+5y"
             }
           ]
         }
@@ -96,7 +96,7 @@
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+2y"
+              "offset": "+5y"
             }
           ]
         }
@@ -126,7 +126,7 @@
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+2y"
+              "offset": "+5y"
             }
           ]
         }
@@ -156,7 +156,7 @@
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+2y"
+              "offset": "+5y"
             }
           ]
         }
@@ -186,7 +186,7 @@
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+2y"
+              "offset": "+5y"
             }
           ]
         }
@@ -224,7 +224,7 @@
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+2y"
+              "offset": "+5y"
             }
           ]
         }
@@ -255,7 +255,7 @@
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+2y"
+              "offset": "+5y"
             }
           ]
         }
@@ -286,7 +286,7 @@
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+2y"
+              "offset": "+5y"
             }
           ]
         }
@@ -317,7 +317,7 @@
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+2y"
+              "offset": "+5y"
             }
           ]
         }
@@ -355,7 +355,7 @@
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+2y"
+              "offset": "+5y"
             }
           ]
         }
@@ -386,7 +386,7 @@
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+2y"
+              "offset": "+5y"
             }
           ]
         }
@@ -417,7 +417,7 @@
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+2y"
+              "offset": "+5y"
             }
           ]
         }
@@ -447,7 +447,7 @@
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+2y"
+              "offset": "+5y"
             }
           ]
         }
@@ -479,42 +479,6 @@
               "reference": "dob",
               "offset": "+6m",
               "window": "+14d"
-            }
-          ],
-          "expiry": [
-            {
-              "reference": "dob",
-              "offset": "+2y"
-            }
-          ]
-        }
-      },
-      {
-        "name": "MR - CE",
-        "type": "MR",
-        "openmrs_date": {
-          "parent_entity": "162586AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-          "entity": "concept",
-          "entity_id": "1410AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-        },
-        "openmrs_calculate": {
-          "parent_entity": "162586AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-          "entity": "concept",
-          "entity_id": "1418AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-          "calculation": 6
-        },
-        "schedule": {
-          "due": [
-            {
-              "reference": "dob",
-              "offset": "+6m",
-              "window": "+14d"
-            }
-          ],
-          "conditions": [
-            {
-              "attribute": "pmtct_status",
-              "value": "Exposed (CE)"
             }
           ],
           "expiry": [
@@ -558,7 +522,7 @@
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+2y"
+              "offset": "+5y"
             }
           ]
         }
@@ -626,7 +590,7 @@
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+2y"
+              "offset": "+5y"
             }
           ]
         }
@@ -710,7 +674,7 @@
           "expiry": [
             {
               "reference": "dob",
-              "offset": "+3y"
+              "offset": "+5y"
             }
           ]
         }

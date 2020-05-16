@@ -16,19 +16,34 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/table_contents_text_height"
+                android:layout_width="260dp"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="0dp"
                 android:layout_marginRight="0dp"
                 android:gravity="start|center_vertical"
                 android:maxWidth="80dp"
                 android:minWidth="80dp"
-                android:textStyle="bold"
                 android:paddingStart="@dimen/table_row_side_margin"
                 android:paddingEnd="@dimen/table_row_middle_margin"
-                android:text="@string/indicator"
+                android:text="@string/moh_indicator"
                 android:textColor="@color/client_list_grey"
-                android:textSize="@dimen/indicator_table_contents_text_size" />
+                android:textSize="@dimen/indicator_table_contents_text_size"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/table_contents_text_height"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="0dp"
+                android:gravity="center|center_vertical"
+                android:maxWidth="20dp"
+                android:minWidth="80dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="@dimen/table_row_middle_margin"
+                android:text="@string/age"
+                android:textColor="@color/client_list_grey"
+                android:textSize="@dimen/indicator_table_contents_text_size"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"

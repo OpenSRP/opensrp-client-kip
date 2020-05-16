@@ -156,7 +156,7 @@ public class DraftMonthlyFragment extends ReportFragment {
             builder.setCancelable(true);
 
             CustomFontTextView title = new CustomFontTextView(getActivity());
-            title.setText(getString(R.string.reports_available));
+            title.setText(getString(R.string.report_month));
             title.setGravity(Gravity.START);
             title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
             title.setFontVariant(FontVariant.BOLD);

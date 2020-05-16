@@ -26,6 +26,15 @@ public class DailyTalliesRepository extends BaseRepository {
     private static final SimpleDateFormat DAY_FORMAT = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
     private static final String TABLE_NAME = Constants.DailyIndicatorCountRepository.INDICATOR_DAILY_TALLY_TABLE;
     private static final String COLUMN_DAY = Constants.DailyIndicatorCountRepository.DAY;
+    private static final String COLUMN_ID = "_id";
+    private static final String COLUMN_PROVIDER_ID = "provider_id";
+    private static final String COLUMN_INDICATOR_ID = "indicator_id";
+    private static final String COLUMN_VALUE = "value";
+    private static final String COLUMN_UPDATED_AT = "updated_at";
+    private static final String[] TABLE_COLUMNS = {
+            COLUMN_ID, COLUMN_INDICATOR_ID, COLUMN_PROVIDER_ID,
+            COLUMN_VALUE, COLUMN_DAY, COLUMN_UPDATED_AT
+    };
 
 
     /**
@@ -109,4 +118,11 @@ public class DailyTalliesRepository extends BaseRepository {
 
         return months;
     }
+
+    private String getDayBetweenDatesSelection(Date startDate, Date endDate) {
+        return COLUMN_DAY + " >= " + String.valueOf(startDate.getTime()) +
+                " AND " + COLUMN_DAY + " <= " + String.valueOf(endDate.getTime());
+    }
+    
+
 }

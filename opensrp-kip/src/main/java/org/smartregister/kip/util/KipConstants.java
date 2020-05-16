@@ -309,4 +309,10 @@ public class KipConstants {
     public interface File {
         String INDICATOR_CONFIG_FILE = "config/indicator-definitions.yml";
     }
+
+    public static final class ServiceType {
+        public static final int DAILY_TALLIES_GENERATION = 2;
+        public static final int MONTHLY_TALLIES_GENERATION = 3;
+
+    }
 }

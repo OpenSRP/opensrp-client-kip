@@ -14,6 +14,10 @@ public class DailyTally extends Tally implements Serializable {
     @JsonProperty
     private Date day;
 
+    public DailyTally() {
+        super();
+    }
+
     public Date getDay() {
         return day;
     }

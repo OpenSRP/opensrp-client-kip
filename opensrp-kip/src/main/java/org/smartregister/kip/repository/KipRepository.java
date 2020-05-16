@@ -2,6 +2,7 @@ package org.smartregister.kip.repository;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
@@ -416,9 +417,9 @@ public class KipRepository extends Repository {
         }
     }
 
-    private void upgradeToVersion9(SQLiteDatabase database) {
+    private void upgradeToVersion9(@NonNull SQLiteDatabase db) {
         try {
-            KipLocationRepository.createLocationsTable(database);
+            KipLocationRepository.createLocationsTable(db);
         } catch (Exception e) {
             Timber.e(e, " --> upgradeToVersion9 ");
         }

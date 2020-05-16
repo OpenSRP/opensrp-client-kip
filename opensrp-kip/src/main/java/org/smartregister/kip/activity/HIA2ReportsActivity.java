@@ -32,6 +32,7 @@ import org.smartregister.kip.adapter.ReportsSectionsPagerAdapter;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.domain.MonthlyTally;
 import org.smartregister.kip.domain.ReportHia2Indicator;
+import org.smartregister.kip.fragment.CustomDateRangeDialogFragment;
 import org.smartregister.kip.fragment.DraftMonthlyFragment;
 import org.smartregister.kip.fragment.SendMonthlyDraftDialogFragment;
 import org.smartregister.kip.model.ReportGroupingModel;
@@ -72,12 +73,15 @@ import static org.smartregister.util.JsonFormUtils.VALUE;
 
 public class HIA2ReportsActivity extends AppCompatActivity {
 
+    private static final String DIALOG_TAG = HIA2ReportsActivity.class.getCanonicalName().concat("DIALOG_TAG");
+
     public static final int REQUEST_CODE_GET_JSON = 3432;
-    public static final int MONTH_SUGGESTION_LIMIT = 3;
+    public static final int MONTH_SUGGESTION_LIMIT = 11;
     public static final String FORM_KEY_CONFIRM = "confirm";
     public static final DateFormat yyyyMMdd = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 
     public static final String REPORT_NAME = "HIA2";
+
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -224,7 +228,7 @@ public class HIA2ReportsActivity extends AppCompatActivity {
                         Snackbar.make(tabLayout, R.string.all_changes_saved, Snackbar.LENGTH_LONG).show();
                     }
                 } else {
-                    saveClicked = true;
+                    saveClicked = false;
                 }
                 KipApplication.getInstance().monthlyTalliesRepository().save(result, month);
                 if (saveClicked && !skipValidationSet) {
@@ -470,4 +474,5 @@ public class HIA2ReportsActivity extends AppCompatActivity {
     public String getReportGrouping() {
         return reportGrouping;
     }
+
 }

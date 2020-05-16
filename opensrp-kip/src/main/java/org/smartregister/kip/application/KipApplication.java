@@ -104,6 +104,7 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
     private MonthlyTalliesRepository monthlyTalliesRepository;
     private Hia2ReportRepository hia2ReportRepository;
 
+
     public static JsonSpecHelper getJsonSpecHelper() {
         return jsonSpecHelper;
     }

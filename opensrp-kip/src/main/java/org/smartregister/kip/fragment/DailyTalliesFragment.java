@@ -113,7 +113,7 @@ public class DailyTalliesFragment extends ReportFragment {
                     Date date = (Date) tag;
                     String dayString = DAY_FORMAT.format(date);
 
-                    String title = String.format(getString(R.string.daily_tally_), dayString);
+                    String title = String.format(getString(R.string.moh_daily_tally_), dayString);
                     Intent intent = new Intent(getActivity(), ReportSummaryActivity.class);
                     intent.putExtra(ReportSummaryActivity.EXTRA_DAY, date);
                     intent.putExtra(ReportSummaryActivity.EXTRA_TITLE, title);

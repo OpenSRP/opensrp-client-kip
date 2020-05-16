@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import org.smartregister.kip.R;
 import org.smartregister.kip.domain.Tally;
+import org.smartregister.kip.service.Moh710CustomeService;
 import org.smartregister.kip.util.KipReportUtils;
 
 import java.util.ArrayList;
@@ -65,6 +66,7 @@ public class IndicatorCategoryView extends LinearLayout {
     private void refreshIndicatorTable() {
         if (tallies != null) {
             for (Tally curTally : tallies) {
+
                 TableRow dividerRow = new TableRow(context);
                 View divider = new View(context);
                 TableRow.LayoutParams params = (TableRow.LayoutParams) divider.getLayoutParams();
@@ -90,10 +92,26 @@ public class IndicatorCategoryView extends LinearLayout {
                         getResources().getDimensionPixelSize(R.dimen.table_contents_text_v_margin));
                 int resourceId = this.getResources().getIdentifier(KipReportUtils.getStringIdentifier(
                         curTally.getIndicator()), "string", getContext().getPackageName());
-                String name = resourceId != 0 ? getResources().getString(resourceId) : curTally.getIndicator();
+                String name = Moh710CustomeService.indicatorName(curTally.getIndicator());
                 nameTextView.setText(name);
                 nameTextView.setTextColor(getResources().getColor(R.color.client_list_grey));
                 curRow.addView(nameTextView);
+
+//                center
+
+                TextView ageTextView = new TextView(context);
+                ageTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                        getResources().getDimension(R.dimen.indicator_table_contents_text_size));
+                ageTextView.setGravity(Gravity.CENTER | Gravity.CENTER_VERTICAL);
+                ageTextView.setPadding(
+                        getResources().getDimensionPixelOffset(R.dimen.table_row_side_margin),
+                        getResources().getDimensionPixelSize(R.dimen.table_contents_text_v_margin),
+                        getResources().getDimensionPixelSize(R.dimen.table_row_middle_margin),
+                        getResources().getDimensionPixelSize(R.dimen.table_contents_text_v_margin));
+                String age = Moh710CustomeService.indicatorAge(curTally.getIndicator());
+                ageTextView.setText(age);
+                ageTextView.setTextColor(getResources().getColor(R.color.client_list_grey));
+                curRow.addView(ageTextView);
 
                 TextView valueTextView = new TextView(context);
                 valueTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
@@ -106,9 +124,13 @@ public class IndicatorCategoryView extends LinearLayout {
                         getResources().getDimensionPixelSize(R.dimen.table_contents_text_v_margin));
                 valueTextView.setTextColor(getResources().getColor(R.color.client_list_grey));
                 valueTextView.setText(curTally.getValue());
+
                 curRow.addView(valueTextView);
                 indicatorTable.addView(curRow);
+
+                }
             }
         }
-    }
+
 }
+

@@ -28,7 +28,7 @@ public class ReportRegisterActivity extends BaseActivity {
         TextView titleTv = findViewById(R.id.title);
 
         if (titleTv != null) {
-            titleTv.setText(R.string.dhis2_reports);
+            titleTv.setText(R.string.moh710_report);
         }
 
         final ArrayList<ReportGroupingModel.ReportGrouping> reportGroupings = getReportGroupings();
