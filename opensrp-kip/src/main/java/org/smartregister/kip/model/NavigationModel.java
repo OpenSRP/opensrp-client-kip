@@ -25,14 +25,6 @@ public class NavigationModel implements NavigationContract.Model {
     @Override
     public List<NavigationOption> getNavigationItems() {
         if (navigationOptions.size() == 0) {
-
-            NavigationOption allClientsOption = new NavigationOption(R.mipmap.sidemenu_children
-                , R.mipmap.sidemenu_children_active, R.string.all_clients, KipConstants.DrawerMenu.ALL_CLIENTS, 0, true);
-
-            if (allClientsOption.isEnabled()) {
-                navigationOptions.add(allClientsOption);
-            }
-
             NavigationOption childNavigationOption = new NavigationOption(R.mipmap.sidemenu_children,
                     R.mipmap.sidemenu_children_active, R.string.menu_child_clients, KipConstants.DrawerMenu.CHILD_CLIENTS,
                     0, true);
