@@ -600,7 +600,7 @@
   {
     "name": "18 Months",
     "id": "Eighteen_Months",
-    "days_after_birth_due": 456,
+    "days_after_birth_due": 548,
     "vaccines": [
       {
         "name": "MR 2",
@@ -621,8 +621,8 @@
             {
               "reference": "prerequisite",
               "prerequisite": "MR 1",
-              "offset": "+18m",
-              "window": "+35d"
+              "offset": "+9m",
+              "window": "+10d"
             }
           ],
           "expiry": [

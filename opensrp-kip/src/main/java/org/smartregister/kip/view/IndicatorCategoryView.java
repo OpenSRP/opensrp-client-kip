@@ -13,12 +13,17 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.smartregister.kip.R;
 import org.smartregister.kip.domain.Tally;
 import org.smartregister.kip.service.Moh710CustomeService;
 import org.smartregister.kip.util.KipReportUtils;
 
 import java.util.ArrayList;
+
+import timber.log.Timber;
 
 /**
  * Created by Ephraim Kigamba - ekigamba@ona.io on 2019-07-11
@@ -127,6 +132,7 @@ public class IndicatorCategoryView extends LinearLayout {
 
                 curRow.addView(valueTextView);
                 indicatorTable.addView(curRow);
+
 
                 }
             }

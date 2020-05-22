@@ -201,7 +201,7 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
                 }
                 populateAlertScheduleMap(vaccineList, map);
             } else {
-                map.put(vaccine.name, Pair.create(KipConstants.TABLE_NAME.CHILD, false));
+                map.put(vaccine.name, Pair.create("ec_child_details", false));
             }
     }
 

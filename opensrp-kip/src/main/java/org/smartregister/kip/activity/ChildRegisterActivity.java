@@ -77,9 +77,9 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
 
             bottomNavigationView.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
 
-            if (!isLibraryItemEnabled()) {
-                bottomNavigationView.getMenu().removeItem(R.id.action_library);
-            }
+//            if (!isLibraryItemEnabled()) {
+//                bottomNavigationView.getMenu().removeItem(R.id.action_library);
+//            }
 
             BottomNavigationListener bottomNavigationListener = new BottomNavigationListener(this);
             bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavigationListener);
@@ -194,7 +194,13 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
     public void showNfcNotInstalledDialog(LoginEvent event) {
         if (event != null) {
             KipChildUtils.removeStickyEvent(event);
-            new Handler(Looper.getMainLooper()).post(() -> showNfcDialog());
+
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    showNfcDialog();
+                }
+            });
         }
     }
 

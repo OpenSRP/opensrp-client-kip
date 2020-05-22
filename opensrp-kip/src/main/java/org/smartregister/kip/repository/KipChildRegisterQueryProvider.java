@@ -2,6 +2,8 @@ package org.smartregister.kip.repository;
 
 import org.smartregister.child.provider.RegisterQueryProvider;
 import org.smartregister.child.util.Constants;
+import org.smartregister.growthmonitoring.util.GrowthMonitoringConstants;
+import org.smartregister.kip.util.KipConstants;
 
 public class KipChildRegisterQueryProvider extends RegisterQueryProvider {
 
