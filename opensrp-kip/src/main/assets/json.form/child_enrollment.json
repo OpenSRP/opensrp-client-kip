@@ -78,6 +78,8 @@
         "type": "tree",
         "tree": [],
         "edit_type": "name",
+        "read_only": true,
+        "hidden": true,
         "hint": "Child Registration Facility"
       },
       {

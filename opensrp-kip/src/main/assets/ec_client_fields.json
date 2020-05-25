@@ -21,7 +21,7 @@
           "column_name":"zeir_id",
           "type":"Client",
           "json_mapping":{
-            "field":"identifiers.M_ZAIR_ID"
+            "field":"identifiers.M_KIP_ID"
           }
         },
         {

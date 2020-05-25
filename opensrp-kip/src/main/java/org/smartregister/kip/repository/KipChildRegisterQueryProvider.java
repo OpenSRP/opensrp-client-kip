@@ -8,7 +8,7 @@ import org.smartregister.kip.util.KipConstants;
 public class KipChildRegisterQueryProvider extends RegisterQueryProvider {
 
     @Override
-    public String[] getMainColumns() {
+    public String[] mainColumns() {
         return new String[]{
                 getDemographicTable() + "." + Constants.KEY.ID + " as _id",
                 getDemographicTable() + "." + Constants.KEY.RELATIONALID,
@@ -25,8 +25,17 @@ public class KipChildRegisterQueryProvider extends RegisterQueryProvider {
                 getMotherDetailsTable() + "." + Constants.KEY.NRC_NUMBER + " as mother_nrc_number",
                 getDemographicTable() + "." + Constants.KEY.CLIENT_REG_DATE,
                 getDemographicTable() + "." + Constants.KEY.LAST_INTERACTED_WITH,
-                getChildDetailsTable() + "." + Constants.KEY.INACTIVE,
+                getChildDetailsTable() + "." + "inactive",
                 getChildDetailsTable() + "." + Constants.KEY.LOST_TO_FOLLOW_UP,
+                getDemographicTable() + "." + "village",
+                getDemographicTable() + "." + "home_address",
+                getChildDetailsTable() + "." + Constants.SHOW_BCG_SCAR,
+                getChildDetailsTable() + "." + Constants.SHOW_BCG2_REMINDER,
+                getMotherDetailsTable() + "." + KipConstants.PROTECTED_AT_BIRTH,
+                getMotherDetailsTable() + "." + KipConstants.MOTHER_TDV_DOSES,
+                getMotherDetailsTable() + "." + KipConstants.MOTHER_HIV_STATUS,
+                getChildDetailsTable() + "." + KipConstants.BIRTH_REGISTRATION_NUMBER,
+                getChildDetailsTable() + "." + GrowthMonitoringConstants.PMTCT_STATUS
         };
     }
 

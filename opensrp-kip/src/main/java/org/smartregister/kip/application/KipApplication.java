@@ -48,6 +48,7 @@ import org.smartregister.kip.configuration.OpdRegisterQueryProvider;
 import org.smartregister.kip.job.KipJobCreator;
 import org.smartregister.kip.processor.KipProcessorForJava;
 import org.smartregister.kip.processor.TripleResultProcessor;
+import org.smartregister.kip.repository.ChildAlertUpdatedRepository;
 import org.smartregister.kip.repository.ClientRegisterTypeRepository;
 import org.smartregister.kip.repository.DailyTalliesRepository;
 import org.smartregister.kip.repository.HIA2IndicatorsRepository;
@@ -105,6 +106,7 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
     private MonthlyTalliesRepository monthlyTalliesRepository;
     private Hia2ReportRepository hia2ReportRepository;
     private AppExecutors appExecutors;
+    private ChildAlertUpdatedRepository childAlertUpdatedRepository;
 
 
     public static JsonSpecHelper getJsonSpecHelper() {
@@ -528,6 +530,13 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
             this.registerTypeRepository = new ClientRegisterTypeRepository();
         }
         return this.registerTypeRepository;
+    }
+
+    public ChildAlertUpdatedRepository alertUpdatedRepository() {
+        if (childAlertUpdatedRepository == null) {
+            this.childAlertUpdatedRepository = new ChildAlertUpdatedRepository();
+        }
+        return this.childAlertUpdatedRepository;
     }
 }
 

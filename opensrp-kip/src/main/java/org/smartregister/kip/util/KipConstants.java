@@ -232,6 +232,7 @@ public class KipConstants {
         public static final String ANC_MEMBER_LOG = "ec_anc_log";
         public static final String MALARIA_CONFIRMATION = "ec_malaria_confirmation";
         public static final String ANC_PREGNANCY_OUTCOME = "ec_pregnancy_outcome";
+        public static final String CHILD_UPDATED_ALERTS = "child_updated_alerts";
     }
 
     public static final class VACCINE {

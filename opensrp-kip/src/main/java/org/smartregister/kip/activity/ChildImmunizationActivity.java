@@ -15,9 +15,15 @@ import org.smartregister.child.toolbar.LocationSwitcherToolbar;
 import org.smartregister.child.util.Constants;
 import org.smartregister.child.util.Utils;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
+import org.smartregister.immunization.job.VaccineSchedulesUpdateJob;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.location.helper.LocationHelper;
+
+import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
+
+import timber.log.Timber;
 
 public class ChildImmunizationActivity extends BaseChildImmunizationActivity {
     @Override
@@ -33,13 +39,17 @@ public class ChildImmunizationActivity extends BaseChildImmunizationActivity {
         LocationSwitcherToolbar myToolbar = (LocationSwitcherToolbar) this.getToolbar();
 
         if (myToolbar != null) {
-            myToolbar.setNavigationOnClickListener(v -> finish());
+            myToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    finish();
+                }
+            });
         }
     }
 
     @Override
     protected void goToRegisterPage() {
-        Intent intent = new Intent(this, org.smartregister.kip.activity.ChildRegisterActivity.class);
+        Intent intent = new Intent(this, ChildRegisterActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
@@ -65,6 +75,7 @@ public class ChildImmunizationActivity extends BaseChildImmunizationActivity {
         bundle.putString(Constants.INTENT_KEY.LOCATION_ID,
                 Utils.context().allSharedPreferences().getPreference(AllConstants.CURRENT_LOCATION_ID));
         bundle.putSerializable(Constants.INTENT_KEY.EXTRA_CHILD_DETAILS, childDetails);
+        bundle.putSerializable(Constants.INTENT_KEY.BASE_ENTITY_ID, childDetails.getCaseId());
         bundle.putSerializable(Constants.INTENT_KEY.EXTRA_REGISTER_CLICKABLES, registerClickables);
         intent.putExtras(bundle);
 
@@ -114,5 +125,22 @@ public class ChildImmunizationActivity extends BaseChildImmunizationActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (data == null) return;
+    }
+
+    @Override
+    public void updateScheduleDate() {
+        try {
+            Calendar calendar = Calendar.getInstance();
+            if (calendar.get(Calendar.HOUR_OF_DAY) != 0 && calendar.get(Calendar.HOUR_OF_DAY) != 1) {
+                calendar.set(Calendar.HOUR_OF_DAY, 1);
+                long hoursSince1AM = (System.currentTimeMillis() - calendar.getTimeInMillis()) / TimeUnit.HOURS.toMillis(1);
+                if (VaccineSchedulesUpdateJob.isLastTimeRunLongerThan(hoursSince1AM) && !KipApplication.getInstance().alertUpdatedRepository().findOne(childDetails.entityId())) {
+                    super.updateScheduleDate();
+                    KipApplication.getInstance().alertUpdatedRepository().saveOrUpdate(childDetails.entityId());
+                }
+            }
+        } catch (Exception e) {
+            Timber.e(e);
+        }
     }
 }
