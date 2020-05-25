@@ -11,6 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -42,6 +43,7 @@ import org.smartregister.kip.task.StartDraftMonthlyFormTask;
 import org.smartregister.kip.util.AppExecutors;
 import org.smartregister.kip.util.KipConstants;
 import org.smartregister.kip.util.KipReportUtils;
+import org.smartregister.kip.view.NavigationMenu;
 import org.smartregister.reporting.domain.TallyStatus;
 import org.smartregister.reporting.event.IndicatorTallyEvent;
 import org.smartregister.reporting.util.ViewUtils;
@@ -345,7 +347,12 @@ public class HIA2ReportsActivity extends AppCompatActivity {
     public void onClickReport(View view) {
         switch (view.getId()) {
             case R.id.btn_back_to_home:
-                finish();
+
+                NavigationMenu navigationMenu = NavigationMenu.getInstance(this, null, null);
+                if (navigationMenu != null) {
+                    navigationMenu.getDrawer()
+                            .openDrawer(GravityCompat.START);
+                }
                 break;
             default:
                 break;

@@ -76,6 +76,7 @@ import org.smartregister.sync.DrishtiSyncScheduler;
 import org.smartregister.sync.helper.ECSyncHelper;
 import org.smartregister.view.activity.DrishtiApplication;
 import org.smartregister.view.receiver.TimeChangedBroadcastReceiver;
+import org.smartregister.kip.util.AppExecutors;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -103,6 +104,7 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
     private DailyTalliesRepository dailyTalliesRepository;
     private MonthlyTalliesRepository monthlyTalliesRepository;
     private Hia2ReportRepository hia2ReportRepository;
+    private AppExecutors appExecutors;
 
 
     public static JsonSpecHelper getJsonSpecHelper() {
@@ -507,6 +509,13 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
             locationRepository = new KipLocationRepository();
         }
         return locationRepository;
+    }
+
+    public AppExecutors getAppExecutors() {
+        if (appExecutors == null) {
+            appExecutors = new AppExecutors();
+        }
+        return appExecutors;
     }
 
     @VisibleForTesting

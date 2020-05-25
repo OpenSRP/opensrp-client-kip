@@ -1,43 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.StatsActivity">
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:openDrawer="start">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/toolbar_appbarlayout"
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/customAppThemeBlue">
+        android:background="@color/transparent_blue"
+        android:gravity="center_horizontal|center_vertical"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:text="Sync Status"
+        android:textAllCaps="false"
+        android:textColor="@color/text_black"
+        android:textSize="30sp" />
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/summary_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/customAppThemeBlue"
-            android:theme="@style/FamilyTheme.AppBarOverlay"
-            app:contentInsetEnd="0dp"
-            app:contentInsetLeft="0dp"
-            app:contentInsetRight="0dp"
-            app:contentInsetStart="0dp"
-            app:contentInsetStartWithNavigation="0dp">
 
-            <org.smartregister.view.customcontrols.CustomFontTextView
-                android:id="@+id/toolbar_title"
-                style="@style/CustomFontTextViewStyle.ClientList"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="0dp"
-                android:paddingEnd="0dp"
-                android:textColor="@color/white"
-                android:textSize="@dimen/register_member_title_size" />
+    <!--    <include layout="@layout/toolbar_hia2"></include>-->
 
-        </android.support.v7.widget.Toolbar>
+    <include layout="@layout/content_base_profile"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-    </android.support.design.widget.AppBarLayout>
-
-    <include layout="@layout/content_base_profile" />
-
-</android.support.design.widget.CoordinatorLayout>
+</LinearLayout>

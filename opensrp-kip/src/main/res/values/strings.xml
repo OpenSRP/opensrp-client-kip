@@ -560,5 +560,10 @@
 
     <string name="export_db_notification">Exporting Database</string>
 
+    <string name="return_to_register">Return</string>
+
+    <string name="sync_status_text">Sync Status</string>
+    <string name="summary_forms">Other Forms</string>
+
 
 </resources>
