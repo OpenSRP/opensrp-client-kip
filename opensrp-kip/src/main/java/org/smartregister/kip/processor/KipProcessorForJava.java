@@ -135,27 +135,17 @@ public class KipProcessorForJava extends ClientProcessorForJava {
                     }
                 } else if (eventType.equals(Constants.EventType.BITRH_REGISTRATION) || eventType
                         .equals(Constants.EventType.UPDATE_BITRH_REGISTRATION) || eventType
-                        .equals(Constants.EventType.NEW_WOMAN_REGISTRATION) || eventType.equals(OpdConstants.EventType.OPD_REGISTRATION)) {
+                        .equals(Constants.EventType.NEW_WOMAN_REGISTRATION)) {
 
 
-                    if (eventType.equals(OpdConstants.EventType.OPD_REGISTRATION) && eventClient.getClient() == null) {
-                        Timber.e(new Exception(), "Cannot find client corresponding to %s with base-entity-id %s", OpdConstants.EventType.OPD_REGISTRATION, event.getBaseEntityId());
+                    if (eventClient.getClient() == null) {
+                        Timber.e(new Exception(), "Cannot find client corresponding to with base-entity-id %s",event.getBaseEntityId());
                         continue;
-                    }
-
-                    if(eventType.equals(OpdConstants.EventType.OPD_REGISTRATION) && eventClient.getClient() != null){
-                        KipApplication.getInstance().registerTypeRepository().add(KipConstants.RegisterType.OPD, event.getBaseEntityId());
                     }
 
                     if(eventType.equals(Constants.EventType.BITRH_REGISTRATION) && eventClient.getClient() != null){
                         KipApplication.getInstance().registerTypeRepository().add(KipConstants.RegisterType.CHILD, event.getBaseEntityId());
                     }
-
-                    if(eventType.equals(Constants.EventType.NEW_WOMAN_REGISTRATION) && eventClient.getClient() != null){
-                        KipApplication.getInstance().registerTypeRepository().add(KipConstants.RegisterType.OPD, event.getBaseEntityId());
-                    }
-
-
                     if (clientClassification == null) {
                         continue;
                     }

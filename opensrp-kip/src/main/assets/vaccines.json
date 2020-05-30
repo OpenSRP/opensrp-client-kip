@@ -625,18 +625,10 @@
               "window": "+10d"
             }
           ],
-          "expiry": [
-            {
-              "reference": "dob",
-              "offset": "+5y"
-            }
-          ],
           "conditions": [
             {
-              "type": "given",
-              "vaccine": "MR 1",
-              "comparison": "at_least",
-              "value": "+0d"
+              "type": "not_given",
+              "vaccine": "MR 2"
             }
           ]
         }
