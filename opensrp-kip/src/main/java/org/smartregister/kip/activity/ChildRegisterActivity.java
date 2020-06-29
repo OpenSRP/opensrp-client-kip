@@ -70,12 +70,12 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
         bottomNavigationView = findViewById(org.smartregister.R.id.bottom_navigation);
         this.bottomNavigationView.setVisibility(ChildLibrary.getInstance().getProperties().getPropertyBoolean("feature.bottom.navigation.enabled") ? View.VISIBLE : View.GONE);
         if (bottomNavigationView != null) {
-            if (isMeItemEnabled()) {
-                bottomNavigationView.getMenu().add(Menu.NONE, org.smartregister.R.string.action_me, Menu.NONE, org.smartregister.R.string.me).setIcon(
-                        bottomNavigationHelper.writeOnDrawable(org.smartregister.R.drawable.bottom_bar_initials_background, userInitials, getResources()));
-            }
-
-            bottomNavigationView.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
+//            if (isMeItemEnabled()) {
+//                bottomNavigationView.getMenu().add(Menu.NONE, org.smartregister.R.string.action_me, Menu.NONE, org.smartregister.R.string.me).setIcon(
+//                        bottomNavigationHelper.writeOnDrawable(org.smartregister.R.drawable.bottom_bar_initials_background, userInitials, getResources()));
+//            }
+//
+//            bottomNavigationView.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
 
 //            if (!isLibraryItemEnabled()) {
 //                bottomNavigationView.getMenu().removeItem(R.id.action_library);
@@ -96,9 +96,9 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
             fragments[BaseRegisterActivity.ADVANCED_SEARCH_POSITION - 1] = new AdvancedSearchFragment();
         }
 
-        if (isMeItemEnabled()) {
-            fragments[BaseRegisterActivity.ME_POSITION - 1] = new MeFragment();
-        }
+//        if (isMeItemEnabled()) {
+//            fragments[BaseRegisterActivity.ME_POSITION - 1] = new MeFragment();
+//        }
 
         return fragments;
     }
@@ -109,9 +109,9 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
             BaseRegisterActivity.ADVANCED_SEARCH_POSITION = ++positionCounter;
         }
 
-        if (isMeItemEnabled()) {
-            BaseRegisterActivity.ME_POSITION = ++positionCounter;
-        }
+//        if (isMeItemEnabled()) {
+//            BaseRegisterActivity.ME_POSITION = ++positionCounter;
+//        }
         return positionCounter;
     }
 
@@ -135,19 +135,10 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
     public void startNFCCardScanner() {
         // Todo
     }
-
-    @NotNull
-    private Form getForm() {
-        Form form = new Form();
-        form.setWizard(false);
-        form.setHideSaveLabel(true);
-        form.setNextLabel("");
-        return form;
-    }
-
-    public boolean isMeItemEnabled() {
-        return true;
-    }
+//
+//    public boolean isMeItemEnabled() {
+//        return true;
+//    }
 
     public boolean isLibraryItemEnabled() {
         return true;
@@ -226,7 +217,13 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
 
         }
         intent.putExtra(Constants.INTENT_KEY.JSON, jsonForm.toString());
-        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, getForm());
+
+        Form form = new Form();
+        form.setWizard(false);
+        form.setHideSaveLabel(true);
+        form.setNextLabel("");
+
+        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, form);
         startActivityForResult(intent, JsonFormUtils.REQUEST_CODE_GET_JSON);
     }
 

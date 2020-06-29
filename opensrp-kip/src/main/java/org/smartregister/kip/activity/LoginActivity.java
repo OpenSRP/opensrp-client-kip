@@ -60,12 +60,12 @@ public class LoginActivity extends BaseLoginActivity implements BaseLoginContrac
         }
 
         LoginResponse loginResponse = SUCCESS;
-        String jsonPayload = new Gson().toJson(loginResponse.getRawData());
+//        String jsonPayload = new Gson().toJson(loginResponse.getRawData());
 
         Intent intent = new Intent(this, ChildRegisterActivity.class);
         intent.putExtra(KipConstants.IntentKeyUtil.IS_REMOTE_LOGIN, remote);
 
-        Timber.d("---------------> Kipresponse String: %s", jsonPayload);
+        Timber.d("---------------> Kipresponse String: %s", loginResponse.payload());
 
 
 

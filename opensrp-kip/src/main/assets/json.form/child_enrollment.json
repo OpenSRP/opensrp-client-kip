@@ -336,8 +336,8 @@
           "err": "Number must begin with 07 and must be a total of 10 digits in length"
         },
         "v_regex": {
-          "value": "(07[0-9]{8})|\s*",
-          "err": "Number must begin with 07 and must be a total of 10 digits in length"
+          "value": "([0][0-9]{9})|\s*",
+          "err": "Number must begin with 0 and must be a total of 10 digits in length"
         }
       },
       {
