@@ -41,10 +41,6 @@ import org.smartregister.kip.activity.ChildFormActivity;
 import org.smartregister.kip.activity.ChildImmunizationActivity;
 import org.smartregister.kip.activity.ChildProfileActivity;
 import org.smartregister.kip.activity.LoginActivity;
-import org.smartregister.kip.activity.OpdFormActivity;
-import org.smartregister.kip.configuration.KipOpdRegisterRowOptions;
-import org.smartregister.kip.configuration.KipOpdRegisterSwitcher;
-import org.smartregister.kip.configuration.OpdRegisterQueryProvider;
 import org.smartregister.kip.job.KipJobCreator;
 import org.smartregister.kip.processor.KipProcessorForJava;
 import org.smartregister.kip.processor.TripleResultProcessor;
@@ -58,15 +54,8 @@ import org.smartregister.kip.repository.KipRepository;
 import org.smartregister.kip.repository.MonthlyTalliesRepository;
 import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.kip.util.KipConstants;
-import org.smartregister.kip.util.KipOpdRegisterProviderMetadata;
 import org.smartregister.kip.util.VaccineDuplicate;
 import org.smartregister.location.helper.LocationHelper;
-import org.smartregister.opd.OpdLibrary;
-import org.smartregister.opd.activity.BaseOpdProfileActivity;
-import org.smartregister.opd.configuration.OpdConfiguration;
-import org.smartregister.opd.pojo.OpdMetadata;
-import org.smartregister.opd.utils.OpdConstants;
-import org.smartregister.opd.utils.OpdDbConstants;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
 import org.smartregister.reporting.ReportingLibrary;
 import org.smartregister.repository.EventClientRepository;
@@ -127,49 +116,41 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
     }
 
     private static String[] getFtsTables() {
-        return new String[]{OpdDbConstants.KEY.TABLE, "ec_mother_details", DBConstants.RegisterTable.CHILD_DETAILS};
+        return new String[]{DBConstants.RegisterTable.CHILD_DETAILS, DBConstants.RegisterTable.MOTHER_DETAILS, DBConstants.RegisterTable.CLIENT};
     }
 
     private static String[] getFtsSearchFields(String tableName) {
-        if (tableName.equals(OpdDbConstants.KEY.TABLE)) {
-            return new String[]{OpdDbConstants.KEY.FIRST_NAME, OpdDbConstants.KEY.LAST_NAME,
-                    OpdDbConstants.KEY.OPENSRP_ID, DBConstants.KEY.ZEIR_ID};
-        } else if ("ec_mother_details".equals(tableName)) {
-            return new String[]{"next_contact"};
+        if (tableName.equals(DBConstants.RegisterTable.CLIENT)) {
+            return new String[]{DBConstants.KEY.ZEIR_ID, DBConstants.KEY.FIRST_NAME, DBConstants.KEY.LAST_NAME};
         } else if (tableName.equals(DBConstants.RegisterTable.CHILD_DETAILS)) {
             return new String[]{DBConstants.KEY.LOST_TO_FOLLOW_UP, DBConstants.KEY.INACTIVE};
+        } else if (tableName.equals(DBConstants.RegisterTable.MOTHER_DETAILS)) {
+            return new String[]{DBConstants.KEY.EPI_CARD_NUMBER};
         }
-
         return null;
     }
 
     private static String[] getFtsSortFields(String tableName, android.content.Context context) {
-        if (tableName.equals(KipConstants.TABLE_NAME.ALL_CLIENTS)) {
-            List<String> names = new ArrayList<>();
-            names.add(KipConstants.KEY.FIRST_NAME);
-            names.add(OpdDbConstants.KEY.LAST_NAME);
-            names.add(KipConstants.KEY.DOB);
-            names.add(KipConstants.KEY.ZEIR_ID);
-            names.add(KipConstants.KEY.LAST_INTERACTED_WITH);
-            names.add(KipConstants.KEY.DOD);
-            names.add(KipConstants.KEY.DATE_REMOVED);
-            return names.toArray(new String[names.size()]);
-        } else if (tableName.equals(DBConstants.RegisterTable.CHILD_DETAILS)) {
+        if (tableName.equals(DBConstants.RegisterTable.CHILD_DETAILS)) {
             List<VaccineGroup> vaccineList = VaccinatorUtils.getVaccineGroupsFromVaccineConfigFile(context, VaccinatorUtils.vaccines_file);
             List<String> names = new ArrayList<>();
-            names.add(DBConstants.KEY.INACTIVE);
-            names.add("relational_id");
-            names.add(DBConstants.KEY.LOST_TO_FOLLOW_UP);
-
             for (VaccineGroup vaccineGroup : vaccineList) {
                 populateAlertColumnNames(vaccineGroup.vaccines, names);
             }
 
             return names.toArray(new String[names.size()]);
 
+        } else if (tableName.equals(DBConstants.RegisterTable.CLIENT)) {
+            List<String> names = new ArrayList<>();
+            names.add(DBConstants.KEY.FIRST_NAME);
+            names.add(DBConstants.KEY.DOB);
+            names.add(DBConstants.KEY.ZEIR_ID);
+            names.add(DBConstants.KEY.LAST_INTERACTED_WITH);
+            names.add(DBConstants.KEY.DOD);
+            names.add(DBConstants.KEY.DATE_REMOVED);
+            return names.toArray(new String[names.size()]);
         }
         return null;
-
     }
 
     private static void populateAlertColumnNames(List<Vaccine> vaccines, List<String> names) {
@@ -263,19 +244,6 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
         // Init Reporting library
         ReportingLibrary.init(context, getRepository(), null, BuildConfig.VERSION_CODE, BuildConfig.DATABASE_VERSION);
         ReportingLibrary.getInstance().addMultiResultProcessor(new TripleResultProcessor());
-
-        OpdMetadata opdMetadata = new OpdMetadata(OpdConstants.JSON_FORM_KEY.NAME, OpdDbConstants.KEY.TABLE,
-                OpdConstants.EventType.OPD_REGISTRATION, OpdConstants.EventType.UPDATE_OPD_REGISTRATION,
-                OpdConstants.CONFIG, OpdFormActivity.class, BaseOpdProfileActivity.class, true);
-
-        OpdConfiguration opdConfiguration = new OpdConfiguration.Builder(OpdRegisterQueryProvider.class)
-                .setOpdMetadata(opdMetadata)
-                .setOpdRegisterProviderMetadata(KipOpdRegisterProviderMetadata.class)
-                .setOpdRegisterRowOptions(KipOpdRegisterRowOptions.class)
-                .setOpdRegisterSwitcher(KipOpdRegisterSwitcher.class)
-                .build();
-
-        OpdLibrary.init(context, getRepository(), opdConfiguration, BuildConfig.VERSION_CODE, BuildConfig.DATABASE_VERSION);
 
         Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
 

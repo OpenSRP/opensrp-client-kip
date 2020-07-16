@@ -2,7 +2,6 @@ package org.smartregister.kip.repository;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
@@ -23,14 +22,6 @@ import org.smartregister.immunization.util.IMDatabaseUtils;
 import org.smartregister.kip.BuildConfig;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.util.KipConstants;
-import org.smartregister.opd.repository.OpdCheckInRepository;
-import org.smartregister.opd.repository.OpdDetailsRepository;
-import org.smartregister.opd.repository.OpdDiagnosisAndTreatmentFormRepository;
-import org.smartregister.opd.repository.OpdDiagnosisRepository;
-import org.smartregister.opd.repository.OpdServiceDetailRepository;
-import org.smartregister.opd.repository.OpdTestConductedRepository;
-import org.smartregister.opd.repository.OpdTreatmentRepository;
-import org.smartregister.opd.repository.OpdVisitRepository;
 import org.smartregister.reporting.ReportingLibrary;
 import org.smartregister.reporting.repository.DailyIndicatorCountRepository;
 import org.smartregister.reporting.repository.IndicatorQueryRepository;
@@ -80,14 +71,6 @@ public class KipRepository extends Repository {
         HeightRepository.createTable(database);
         VaccineRepository.createTable(database);
 
-        OpdVisitRepository.createTable(database);
-        OpdCheckInRepository.createTable(database);
-        OpdDetailsRepository.createTable(database);
-        OpdDiagnosisAndTreatmentFormRepository.createTable(database);
-        OpdDiagnosisRepository.createTable(database);
-        OpdTreatmentRepository.createTable(database);
-        OpdTestConductedRepository.createTable(database);
-        OpdServiceDetailRepository.createTable(database);
         ClientRegisterTypeRepository.createTable(database);
 
         //reporting
@@ -159,7 +142,7 @@ public class KipRepository extends Repository {
         }
 
         ChildDbMigrations.addShowBcg2ReminderAndBcgScarColumnsToEcChildDetails(db);
-
+//
 //        DailyIndicatorCountRepository.performMigrations(db);
         IndicatorQueryRepository.performMigrations(db);
     }
