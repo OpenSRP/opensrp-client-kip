@@ -5,6 +5,7 @@ import com.vijay.jsonwizard.interactors.JsonFormInteractor;
 
 import org.smartregister.child.widgets.ChildEditTextFactory;
 import org.smartregister.kip.widget.AdverseEffectDatePickerFactory;
+import org.smartregister.kip.widget.KipSpinnerFactory;
 
 public class ChildFormInteractor extends JsonFormInteractor {
 
@@ -23,5 +24,6 @@ public class ChildFormInteractor extends JsonFormInteractor {
         super.registerWidgets();
         map.put(JsonFormConstants.EDIT_TEXT, new ChildEditTextFactory());
         map.put(JsonFormConstants.DATE_PICKER, new AdverseEffectDatePickerFactory());
+        map.put(JsonFormConstants.SPINNER, new KipSpinnerFactory());
     }
 }

@@ -111,7 +111,7 @@ public class KipSpinnerFactory extends SpinnerFactory {
                                     locs = new String[]{"Other"};
                                 }
 
-                                adapter = new ArrayAdapter<>(context, com.vijay.jsonwizard.R.layout.native_form_simple_list_item_1, locs);
+                                adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, locs);
                                 childSpinner.setAdapter(adapter);
                                 if (indexToSelect != -1) {
                                     childSpinner.setSelection(indexToSelect);

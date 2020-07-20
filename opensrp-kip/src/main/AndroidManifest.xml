@@ -98,6 +98,12 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name="com.vijay.jsonwizard.activities.JsonFormActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
@@ -107,23 +113,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/captured_images_path" />
         </provider>
-        <!-- OPD ACTIVITIES -->
-        <activity
-            android:name=".activity.OpdRegisterActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/ChildTheme.NoActionBar" />
-        <activity
-            android:name=".activity.OpdFormActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/ChildTheme.NoActionBar" />
-        <activity
-            android:name="org.smartregister.opd.activity.BaseOpdProfileActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/ChildTheme.NoActionBar" />
-        <!-- END OF OPD ACTIVITIES -->
 
         <service android:name="org.smartregister.immunization.service.intent.VaccineIntentService" />
         <service android:name="org.smartregister.immunization.service.intent.RecurringIntentService" />
