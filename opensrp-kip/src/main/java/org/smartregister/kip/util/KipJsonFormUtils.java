@@ -50,7 +50,8 @@ public class KipJsonFormUtils extends JsonFormUtils {
             JSONObject birthRegistrationForm = FormUtils.getInstance(context)
                     .getFormJson(Utils.metadata().childRegister.formName);
             updateRegistrationEventType(birthRegistrationForm);
-            JsonFormUtils.addChildRegLocHierarchyQuestions(birthRegistrationForm);
+            JsonFormUtils.addChildRegLocHierarchyQuestions(birthRegistrationForm, KipConstants.KEY.REGISTRATION_HOME_ADDRESS,
+                    LocationHierarchy.ENTIRE_TREE);
             KipLocationUtility.addChildRegLocHierarchyQuestions(birthRegistrationForm, getOpenSRPContext());
             KipJsonFormUtils.addRelationshipTypesQuestions(birthRegistrationForm);
 

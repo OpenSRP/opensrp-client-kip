@@ -70,16 +70,16 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
         bottomNavigationView = findViewById(org.smartregister.R.id.bottom_navigation);
         this.bottomNavigationView.setVisibility(ChildLibrary.getInstance().getProperties().getPropertyBoolean("feature.bottom.navigation.enabled") ? View.VISIBLE : View.GONE);
         if (bottomNavigationView != null) {
-//            if (isMeItemEnabled()) {
-//                bottomNavigationView.getMenu().add(Menu.NONE, org.smartregister.R.string.action_me, Menu.NONE, org.smartregister.R.string.me).setIcon(
-//                        bottomNavigationHelper.writeOnDrawable(org.smartregister.R.drawable.bottom_bar_initials_background, userInitials, getResources()));
-//            }
-//
-//            bottomNavigationView.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
+            if (isMeItemEnabled()) {
+                bottomNavigationView.getMenu().add(Menu.NONE, org.smartregister.R.string.action_me, Menu.NONE, org.smartregister.R.string.me).setIcon(
+                        bottomNavigationHelper.writeOnDrawable(org.smartregister.R.drawable.bottom_bar_initials_background, userInitials, getResources()));
+            }
 
-//            if (!isLibraryItemEnabled()) {
-//                bottomNavigationView.getMenu().removeItem(R.id.action_library);
-//            }
+            bottomNavigationView.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
+
+            if (!isLibraryItemEnabled()) {
+                bottomNavigationView.getMenu().removeItem(R.id.action_library);
+            }
 
             BottomNavigationListener bottomNavigationListener = new BottomNavigationListener(this);
             bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavigationListener);
@@ -96,9 +96,9 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
             fragments[BaseRegisterActivity.ADVANCED_SEARCH_POSITION - 1] = new AdvancedSearchFragment();
         }
 
-//        if (isMeItemEnabled()) {
-//            fragments[BaseRegisterActivity.ME_POSITION - 1] = new MeFragment();
-//        }
+        if (isMeItemEnabled()) {
+            fragments[BaseRegisterActivity.ME_POSITION - 1] = new MeFragment();
+        }
 
         return fragments;
     }
@@ -109,9 +109,9 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
             BaseRegisterActivity.ADVANCED_SEARCH_POSITION = ++positionCounter;
         }
 
-//        if (isMeItemEnabled()) {
-//            BaseRegisterActivity.ME_POSITION = ++positionCounter;
-//        }
+        if (isMeItemEnabled()) {
+            BaseRegisterActivity.ME_POSITION = ++positionCounter;
+        }
         return positionCounter;
     }
 
@@ -135,13 +135,22 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
     public void startNFCCardScanner() {
         // Todo
     }
-//
-//    public boolean isMeItemEnabled() {
-//        return true;
-//    }
+
+    @NotNull
+    private Form getForm() {
+        Form form = new Form();
+        form.setWizard(false);
+        form.setHideSaveLabel(true);
+        form.setNextLabel("");
+        return form;
+    }
+
+    public boolean isMeItemEnabled() {
+        return true;
+    }
 
     public boolean isLibraryItemEnabled() {
-        return true;
+        return false;
     }
 
     public boolean isAdvancedSearchEnabled() {
@@ -150,7 +159,7 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
 
     @Override
     protected void initializePresenter() {
-        presenter = new ChildRegisterPresenter(this, new BaseChildRegisterModel());
+        presenter = new BaseChildRegisterPresenter(this, new BaseChildRegisterModel());
     }
 
     @Override
@@ -185,13 +194,7 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
     public void showNfcNotInstalledDialog(LoginEvent event) {
         if (event != null) {
             KipChildUtils.removeStickyEvent(event);
-
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    showNfcDialog();
-                }
-            });
+            new Handler(Looper.getMainLooper()).post(() -> showNfcDialog());
         }
     }
 
@@ -208,22 +211,13 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
     @Override
     public void startFormActivity(JSONObject jsonForm) {
         Intent intent = new Intent(this, Utils.metadata().childFormActivity);
-        if (jsonForm.has(KipConstants.KEY.ENCOUNTER_TYPE) && jsonForm.optString(KipConstants.KEY.ENCOUNTER_TYPE).equals(
-                KipConstants.KEY.BIRTH_REGISTRATION)) {
+        if (jsonForm.has(KipConstants.KEY.ENCOUNTER_TYPE) && jsonForm.optString(KipConstants.KEY.ENCOUNTER_TYPE).equals(KipConstants.KEY.BIRTH_REGISTRATION)) {
             Context context = org.smartregister.login.task.RemoteLoginTask.getOpenSRPContext();
             KipLocationUtility.addChildRegLocHierarchyQuestions(jsonForm, context);
-            KipJsonFormUtils.addRelationshipTypesQuestions(jsonForm);
-
 
         }
         intent.putExtra(Constants.INTENT_KEY.JSON, jsonForm.toString());
-
-        Form form = new Form();
-        form.setWizard(false);
-        form.setHideSaveLabel(true);
-        form.setNextLabel("");
-
-        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, form);
+        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, getForm());
         startActivityForResult(intent, JsonFormUtils.REQUEST_CODE_GET_JSON);
     }
 

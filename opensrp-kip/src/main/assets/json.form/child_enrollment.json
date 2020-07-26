@@ -149,7 +149,7 @@
       {
         "key": "Permanent_Register_Number",
         "openmrs_entity_parent": "",
-        "openmrs_entity": "person_identifier",
+        "openmrs_entity": "person_attribute",
         "openmrs_entity_id": "PERMANENT_REGISTER_NUMBER",
         "type": "edit_text",
         "hint": "Permanent register number",
@@ -163,17 +163,23 @@
         "type": "barcode",
         "barcode_type": "qrcode",
         "hint": "Child's KIP ID",
+        "label_info_text": "Write this number down on the child's health passport.",
         "scanButtonText": "Scan QR Code",
         "value": "0",
+        "read_only": true,
+        "v_numeric": {
+          "value": "true",
+          "err": "Please enter a valid ID"
+        },
         "v_required": {
           "value": "true",
-          "err": "Please enter the Child's KIP ID"
+          "err": "Please enter the Child's MER ID"
         }
       },
       {
         "key": "National_Unique_Patient_Identifier",
         "openmrs_entity_parent": "",
-        "openmrs_entity": "person_identifier",
+        "openmrs_entity": "person_attribute",
         "openmrs_entity_id": "NATIONAL_UNIQUE_PATIENT_IDENTIFIER",
         "type": "edit_text",
         "hint": "NUPI"
@@ -181,7 +187,7 @@
       {
         "key": "CWC_Number",
         "openmrs_entity_parent": "",
-        "openmrs_entity": "person_identifier",
+        "openmrs_entity": "person_attribute",
         "openmrs_entity_id": "CWC_NUMBER",
         "type": "edit_text",
         "hint": "CWC Number"
@@ -189,7 +195,7 @@
       {
         "key": "HDSS_Number",
         "openmrs_entity_parent": "",
-        "openmrs_entity": "person_identifier",
+        "openmrs_entity": "person_attribute",
         "openmrs_entity_id": "HDSS_NUMBER",
         "type": "edit_text",
         "hint": "HDSS Number"
@@ -294,8 +300,13 @@
         "duration": {
           "label": "Age"
         },
-        "min_date": "01-01-1900",
-        "max_date": "today-10y"
+        "default": "01-01-1960",
+        "min_date": "01-01-1960",
+        "max_date": "today-10y",
+        "v_required": {
+          "value": "true",
+          "err": "Please enter the mother/guardian's birth date"
+        }
       },
       {
         "key": "Mother_Guardian_Relationship",
@@ -306,11 +317,16 @@
         "type": "spinner",
         "Value": "Parent/Child",
         "hint": "Relationship to child",
+        "value": "Parent/Child",
         "values": ["Doctor/Patient",
           "Sibling/Sibling",
           "Parent/Child",
           "Grandparent/Grandchild",
-          "Aunt/Uncle/Niece/Nephew"]
+          "Aunt/Uncle/Niece/Nephew"],
+        "v_required": {
+          "value": "true",
+          "err": "Please enter the mother/guardian's relationship to child"
+        }
       },
       {
         "key": "Mother_Guardian_ID",
@@ -390,7 +406,8 @@
         "duration": {
           "label": "Age"
         },
-        "min_date": "01-01-1900",
+        "default": "01-01-1960",
+        "min_date": "01-01-1960",
         "max_date": "today-10y",
         "relevance": {
           "step1:Father_Guardian_Name": {
@@ -407,6 +424,7 @@
         "entity_id": "guardian",
         "type": "spinner",
         "hint": "Relationship to child",
+        "value": "Parent/Child",
         "values": ["Doctor/Patient",
           "Sibling/Sibling",
           "Parent/Child",

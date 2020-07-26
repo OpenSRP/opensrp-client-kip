@@ -39,17 +39,13 @@ public class ChildImmunizationActivity extends BaseChildImmunizationActivity {
         LocationSwitcherToolbar myToolbar = (LocationSwitcherToolbar) this.getToolbar();
 
         if (myToolbar != null) {
-            myToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    finish();
-                }
-            });
+            myToolbar.setNavigationOnClickListener(v -> finish());
         }
     }
 
     @Override
     protected void goToRegisterPage() {
-        Intent intent = new Intent(this, ChildRegisterActivity.class);
+        Intent intent = new Intent(this, org.smartregister.kip.activity.ChildRegisterActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
@@ -73,9 +69,8 @@ public class ChildImmunizationActivity extends BaseChildImmunizationActivity {
         Intent intent = new Intent(fromContext, ChildDetailTabbedActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString(Constants.INTENT_KEY.LOCATION_ID,
-                Utils.context().allSharedPreferences().getPreference(AllConstants.CURRENT_LOCATION_ID));
+                LocationHelper.getInstance().getOpenMrsLocationId(getCurrentLocation()));
         bundle.putSerializable(Constants.INTENT_KEY.EXTRA_CHILD_DETAILS, childDetails);
-        bundle.putSerializable(Constants.INTENT_KEY.BASE_ENTITY_ID, childDetails.getCaseId());
         bundle.putSerializable(Constants.INTENT_KEY.EXTRA_REGISTER_CLICKABLES, registerClickables);
         intent.putExtras(bundle);
 
@@ -126,21 +121,5 @@ public class ChildImmunizationActivity extends BaseChildImmunizationActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (data == null) return;
     }
-
-    @Override
-    public void updateScheduleDate() {
-        try {
-            Calendar calendar = Calendar.getInstance();
-            if (calendar.get(Calendar.HOUR_OF_DAY) != 0 && calendar.get(Calendar.HOUR_OF_DAY) != 1) {
-                calendar.set(Calendar.HOUR_OF_DAY, 1);
-                long hoursSince1AM = (System.currentTimeMillis() - calendar.getTimeInMillis()) / TimeUnit.HOURS.toMillis(1);
-                if (VaccineSchedulesUpdateJob.isLastTimeRunLongerThan(hoursSince1AM) && !KipApplication.getInstance().alertUpdatedRepository().findOne(childDetails.entityId())) {
-                    super.updateScheduleDate();
-                    KipApplication.getInstance().alertUpdatedRepository().saveOrUpdate(childDetails.entityId());
-                }
-            }
-        } catch (Exception e) {
-            Timber.e(e);
-        }
-    }
 }
+

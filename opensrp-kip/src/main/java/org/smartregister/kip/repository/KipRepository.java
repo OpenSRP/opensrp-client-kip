@@ -7,7 +7,6 @@ import net.sqlcipher.database.SQLiteDatabase;
 
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.AllConstants;
-import org.smartregister.child.util.ChildDbMigrations;
 import org.smartregister.child.util.Utils;
 import org.smartregister.configurableviews.repository.ConfigurableViewsRepository;
 import org.smartregister.domain.db.Column;
@@ -129,10 +128,7 @@ public class KipRepository extends Repository {
                     upgradeToVersion8AddServiceGroupColumn(db);
                     break;
                 case 9:
-                    ChildDbMigrations.addShowBcg2ReminderAndBcgScarColumnsToEcChildDetails(db);
-                    break;
-                case 10:
-                    upgradeToVersion10(db);
+                    upgradeToVersion9(db);
                     break;
 
                 default:
@@ -140,10 +136,8 @@ public class KipRepository extends Repository {
             }
             upgradeTo++;
         }
-
-        ChildDbMigrations.addShowBcg2ReminderAndBcgScarColumnsToEcChildDetails(db);
 //
-//        DailyIndicatorCountRepository.performMigrations(db);
+        DailyIndicatorCountRepository.performMigrations(db);
         IndicatorQueryRepository.performMigrations(db);
     }
 
@@ -219,7 +213,7 @@ public class KipRepository extends Repository {
         upgradeToVersion7VaccineRecurringServiceRecordChange(database);
         upgradeToVersion7WeightHeightVaccineRecurringServiceChange(database);
         upgradeToVersion7RemoveUnnecessaryTables(database);
-        upgradeToVersion10(database);
+        upgradeToVersion9(database);
     }
 
     /**
@@ -407,7 +401,7 @@ public class KipRepository extends Repository {
         }
     }
 
-    private void upgradeToVersion10(@NonNull SQLiteDatabase db) {
+    private void upgradeToVersion9(@NonNull SQLiteDatabase db) {
         try {
             KipLocationRepository.createLocationsTable(db);
         } catch (Exception e) {
