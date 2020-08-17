@@ -621,7 +621,7 @@
             {
               "reference": "prerequisite",
               "prerequisite": "MR 1",
-              "offset": "+9m",
+              "offset": "+28",
               "window": "+10d"
             }
           ],
@@ -659,7 +659,7 @@
             {
               "reference": "prerequisite",
               "prerequisite": "MV 3",
-              "offset": "+28d",
+              "offset": "+15m",
               "window": "+14d"
             }
           ],

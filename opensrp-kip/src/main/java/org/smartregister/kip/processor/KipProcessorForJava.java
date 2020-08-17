@@ -114,6 +114,10 @@ public class KipProcessorForJava extends ClientProcessorForJava {
                     continue;
                 }
 
+                if (processOverOneYearChild(eventClient)){
+                    unsyncEvents.add(event);
+                }
+
                 if (eventType.equals(VaccineIntentService.EVENT_TYPE) || eventType
                         .equals(VaccineIntentService.EVENT_TYPE_OUT_OF_CATCHMENT)) {
                     processVaccinationEvent(vaccineTable, eventClient, event, eventType);
@@ -186,6 +190,13 @@ public class KipProcessorForJava extends ClientProcessorForJava {
             return KipChildUtils.updateChildDeath(eventClient);
         }
 
+        return false;
+    }
+
+    private boolean processOverOneYearChild(@NonNull EventClient eventClient){
+        if (eventClient.getEvent().getEntityType().equals(KipConstants.EntityType.CHILD)){
+            return KipChildUtils.updateChildOurOneyear(eventClient);
+        }
         return false;
     }
 

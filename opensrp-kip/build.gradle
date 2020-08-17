@@ -31,8 +31,8 @@ android {
         applicationId "org.smartregister.kip"
         minSdkVersion androidMinSdkVersion
         targetSdkVersion androidTargetSdkVersion
-        versionCode 15
-        versionName "2.0.1"
+        versionCode 17
+        versionName "2.1.0"
         multiDexEnabled true
         buildConfigField "long", "MAX_SERVER_TIME_DIFFERENCE", "1800000l"
         buildConfigField "boolean", "TIME_CHECK", "false"
@@ -88,7 +88,7 @@ android {
         }
 
         debug {
-            resValue "string", 'opensrp_url', '"https://kip.health.go.ke/opensrp/"'
+            resValue "string", 'opensrp_url', '"http://192.168.0.104:8080/opensrp/"'
             buildConfigField "int", "OPENMRS_UNIQUE_ID_INITIAL_BATCH_SIZE", '250'
             buildConfigField "int", "OPENMRS_UNIQUE_ID_BATCH_SIZE", '100'
             buildConfigField "int", "OPENMRS_UNIQUE_ID_SOURCE", '1'

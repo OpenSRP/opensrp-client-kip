@@ -172,6 +172,7 @@ public class KipConstants {
         public static final String KEY = "key";
         public static final String IS_VACCINE_GROUP = "is_vaccine_group";
         public static final String OPTIONS = "options";
+        public static final String AGE = "age";
     }
 
     public static final class DrawerMenu {

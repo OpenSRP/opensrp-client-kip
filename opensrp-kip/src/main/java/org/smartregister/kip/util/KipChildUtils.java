@@ -21,6 +21,9 @@ import com.vijay.jsonwizard.customviews.TreeViewDialog;
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.jetbrains.annotations.Nullable;
+import org.joda.time.LocalDate;
+import org.joda.time.Period;
+import org.joda.time.PeriodType;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.smartregister.child.util.Constants;
@@ -174,6 +177,37 @@ public class KipChildUtils extends Utils {
 
         return true;
     }
+
+    public static boolean updateChildOurOneyear(@NonNull EventClient eventClient) {
+        Client client = eventClient.getClient();
+        ContentValues values = new ContentValues();
+
+        if (client.getBirthdate() == null) {
+            Timber.e(new Exception(), "Birth event for %s cannot be processed because deathdate is NULL : %s"
+                    , client.getFirstName() + " " + client.getLastName(), new Gson().toJson(eventClient));
+            return false;
+        }
+
+        LocalDate now = new LocalDate();
+        LocalDate birthDate = new LocalDate(client.getBirthdate());
+
+        Period period = new Period(birthDate, now, PeriodType.yearMonthDay());
+        int age = period.getYears();
+
+        if (age > 1){
+        values.put(Constants.KEY.DOB, Utils.convertDateFormat(client.getBirthdate()));
+        values.put(Constants.KEY.DATE_REMOVED, Utils.convertDateFormat(client.getBirthdate().toDate(), Utils.DB_DF));
+        String tableName = Utils.metadata().childRegister.tableName;
+        AllCommonsRepository allCommonsRepository = KipApplication.getInstance().context().allCommonsRepositoryobjects(tableName);
+        if (allCommonsRepository != null) {
+            allCommonsRepository.update(tableName, values, client.getBaseEntityId());
+            allCommonsRepository.updateSearch(client.getBaseEntityId());
+        }
+        }
+
+        return true;
+    }
+
     @NonNull
     public static Locale getLocale(Context context){
         if (context == null) {
