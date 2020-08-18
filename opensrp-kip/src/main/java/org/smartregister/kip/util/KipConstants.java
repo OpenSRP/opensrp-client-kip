@@ -5,6 +5,11 @@ public class KipConstants {
     public static final String MOTHER_TDV_DOSES = "mother_tdv_doses";
     public static final String PROTECTED_AT_BIRTH = "protected_at_birth";
     public static final String REACTION_VACCINE = "Reaction_Vaccine";
+    public static final String FORM_CONFIG_LOCATION = "json.form/json.form.config.json";
+    public static final String NATIONAL_ID = "national_id";
+    public static final String BHT_MID = "bht_mid";
+    public static final String MOTHER_HIV_STATUS = "mother_hiv_status";
+    public static final String BIRTH_REGISTRATION_NUMBER = "birth_registration_number";
 
     public interface DateFormat {
         String HH_MM_AMPM = "h:mm a";

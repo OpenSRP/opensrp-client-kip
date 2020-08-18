@@ -25,8 +25,12 @@ public class NavigationModel implements NavigationContract.Model {
     @Override
     public List<NavigationOption> getNavigationItems() {
         if (navigationOptions.size() == 0) {
-            NavigationOption childNavigationOption = new NavigationOption(R.mipmap.sidemenu_children, R.mipmap.sidemenu_children_active, R.string.menu_child_clients, KipConstants.DrawerMenu.CHILD_CLIENTS, 0);
-            navigationOptions.addAll(Collections.singletonList(childNavigationOption));
+            NavigationOption childNavigationOption = new NavigationOption(R.mipmap.sidemenu_children,
+                    R.mipmap.sidemenu_children_active, R.string.menu_child_clients, KipConstants.DrawerMenu.CHILD_CLIENTS,
+                    0, true);
+            if (childNavigationOption.isEnabled()) {
+                navigationOptions.add(childNavigationOption);
+            }
         }
 
         return navigationOptions;
@@ -44,3 +48,4 @@ public class NavigationModel implements NavigationContract.Model {
         return prefferedName;
     }
 }
+
