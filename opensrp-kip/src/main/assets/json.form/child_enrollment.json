@@ -216,7 +216,7 @@
         },
         "v_required": {
           "value": "true",
-          "err": "Please enter the Child's MER ID"
+          "err": "Please enter the Child's KIP ID"
         }
       },
       {

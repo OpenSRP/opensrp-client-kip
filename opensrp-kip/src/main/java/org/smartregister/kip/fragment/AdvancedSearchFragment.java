@@ -2,6 +2,7 @@ package org.smartregister.kip.fragment;
 
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.EditText;
 
 import com.rengwuxian.materialedittext.MaterialEditText;
 
@@ -28,6 +29,7 @@ public class AdvancedSearchFragment extends BaseAdvancedSearchFragment {
     private AdvancedSearchPresenter presenter;
     private MaterialEditText firstName;
     private MaterialEditText lastName;
+    private MaterialEditText zeirId;
 
     @Override
     protected BaseChildAdvancedSearchPresenter getPresenter() {
@@ -177,6 +179,10 @@ public class AdvancedSearchFragment extends BaseAdvancedSearchFragment {
     @Override
     public void onClick(View view) {
         view.toString();
+    }
+
+    public EditText getZeirId() {
+        return this.zeirId;
     }
 }
 
