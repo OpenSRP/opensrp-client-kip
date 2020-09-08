@@ -50,14 +50,15 @@
     "title": "Record out of catchment area service",
     "fields": [
       {
-        "key": "KIP_ID",
+        "key": "OPENMRS_ID",
         "openmrs_entity_parent": "",
         "openmrs_entity": "",
         "openmrs_entity_id": "",
-        "type": "edit_text",
+        "type": "barcode",
         "barcode_type": "qrcode",
-        "hint": "KIP ID *",
+        "hint": "KIP ID ",
         "scanButtonText": "Scan QR Code",
+        "read_only": true,
         "value": "",
         "v_required": {
           "value": "true",

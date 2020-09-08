@@ -243,6 +243,7 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
         }
     }
 
+
     private void initializeCustomNavbarLIsteners() {
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 

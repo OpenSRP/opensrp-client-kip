@@ -325,7 +325,7 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
                 ChildImmunizationActivity.class, true, new KipChildRegisterQueryProvider());
         metadata.updateChildRegister(KipConstants.JSON_FORM.CHILD_ENROLLMENT, KipConstants.TABLE_NAME.ALL_CLIENTS,
                 KipConstants.TABLE_NAME.ALL_CLIENTS, KipConstants.EventType.CHILD_REGISTRATION,
-                KipConstants.EventType.UPDATE_CHILD_REGISTRATION, KipConstants.EventType.OUT_OF_CATCHMENT, KipConstants.CONFIGURATION.CHILD_REGISTER,
+                KipConstants.EventType.UPDATE_CHILD_REGISTRATION, KipConstants.EventType.OUT_OF_CATCHMENT_SERVICE, KipConstants.CONFIGURATION.CHILD_REGISTER,
                 KipConstants.RELATIONSHIP.MOTHER, KipConstants.JSON_FORM.OUT_OF_CATCHMENT_SERVICE);
         return metadata;
     }
