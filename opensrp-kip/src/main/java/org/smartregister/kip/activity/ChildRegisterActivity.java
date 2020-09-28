@@ -77,9 +77,9 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
 
             bottomNavigationView.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
 
-//            if (!isLibraryItemEnabled()) {
-//                bottomNavigationView.getMenu().removeItem(R.id.action_library);
-//            }
+            if (!isLibraryItemEnabled()) {
+                bottomNavigationView.getMenu().removeItem(R.id.action_library);
+            }
 
             BottomNavigationListener bottomNavigationListener = new BottomNavigationListener(this);
             bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavigationListener);
@@ -150,7 +150,7 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
     }
 
     public boolean isLibraryItemEnabled() {
-        return true;
+        return false;
     }
 
     public boolean isAdvancedSearchEnabled() {
@@ -159,7 +159,7 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
 
     @Override
     protected void initializePresenter() {
-        presenter = new ChildRegisterPresenter(this, new BaseChildRegisterModel());
+        presenter = new BaseChildRegisterPresenter(this, new BaseChildRegisterModel());
     }
 
     @Override
@@ -194,13 +194,7 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
     public void showNfcNotInstalledDialog(LoginEvent event) {
         if (event != null) {
             KipChildUtils.removeStickyEvent(event);
-
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    showNfcDialog();
-                }
-            });
+            new Handler(Looper.getMainLooper()).post(() -> showNfcDialog());
         }
     }
 
@@ -217,12 +211,9 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
     @Override
     public void startFormActivity(JSONObject jsonForm) {
         Intent intent = new Intent(this, Utils.metadata().childFormActivity);
-        if (jsonForm.has(KipConstants.KEY.ENCOUNTER_TYPE) && jsonForm.optString(KipConstants.KEY.ENCOUNTER_TYPE).equals(
-                KipConstants.KEY.BIRTH_REGISTRATION)) {
+        if (jsonForm.has(KipConstants.KEY.ENCOUNTER_TYPE) && jsonForm.optString(KipConstants.KEY.ENCOUNTER_TYPE).equals(KipConstants.KEY.BIRTH_REGISTRATION)) {
             Context context = org.smartregister.login.task.RemoteLoginTask.getOpenSRPContext();
             KipLocationUtility.addChildRegLocHierarchyQuestions(jsonForm, context);
-            KipJsonFormUtils.addRelationshipTypesQuestions(jsonForm);
-
 
         }
         intent.putExtra(Constants.INTENT_KEY.JSON, jsonForm.toString());

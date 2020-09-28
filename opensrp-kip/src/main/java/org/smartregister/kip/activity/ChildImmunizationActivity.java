@@ -15,9 +15,15 @@ import org.smartregister.child.toolbar.LocationSwitcherToolbar;
 import org.smartregister.child.util.Constants;
 import org.smartregister.child.util.Utils;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
+import org.smartregister.immunization.job.VaccineSchedulesUpdateJob;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.location.helper.LocationHelper;
+
+import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
+
+import timber.log.Timber;
 
 public class ChildImmunizationActivity extends BaseChildImmunizationActivity {
     @Override
@@ -63,7 +69,7 @@ public class ChildImmunizationActivity extends BaseChildImmunizationActivity {
         Intent intent = new Intent(fromContext, ChildDetailTabbedActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString(Constants.INTENT_KEY.LOCATION_ID,
-                Utils.context().allSharedPreferences().getPreference(AllConstants.CURRENT_LOCATION_ID));
+                LocationHelper.getInstance().getOpenMrsLocationId(getCurrentLocation()));
         bundle.putSerializable(Constants.INTENT_KEY.EXTRA_CHILD_DETAILS, childDetails);
         bundle.putSerializable(Constants.INTENT_KEY.EXTRA_REGISTER_CLICKABLES, registerClickables);
         intent.putExtras(bundle);
@@ -116,3 +122,4 @@ public class ChildImmunizationActivity extends BaseChildImmunizationActivity {
         if (data == null) return;
     }
 }
+

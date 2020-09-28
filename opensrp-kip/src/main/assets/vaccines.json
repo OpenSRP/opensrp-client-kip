@@ -621,22 +621,14 @@
             {
               "reference": "prerequisite",
               "prerequisite": "MR 1",
-              "offset": "+9m",
+              "offset": "+28",
               "window": "+10d"
-            }
-          ],
-          "expiry": [
-            {
-              "reference": "dob",
-              "offset": "+5y"
             }
           ],
           "conditions": [
             {
-              "type": "given",
-              "vaccine": "MR 1",
-              "comparison": "at_least",
-              "value": "+0d"
+              "type": "not_given",
+              "vaccine": "MR 2"
             }
           ]
         }
@@ -667,7 +659,7 @@
             {
               "reference": "prerequisite",
               "prerequisite": "MV 3",
-              "offset": "+28d",
+              "offset": "+15m",
               "window": "+14d"
             }
           ],

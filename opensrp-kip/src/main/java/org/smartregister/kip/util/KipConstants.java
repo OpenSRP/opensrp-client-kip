@@ -172,6 +172,7 @@ public class KipConstants {
         public static final String KEY = "key";
         public static final String IS_VACCINE_GROUP = "is_vaccine_group";
         public static final String OPTIONS = "options";
+        public static final String AGE = "age";
     }
 
     public static final class DrawerMenu {
@@ -232,6 +233,7 @@ public class KipConstants {
         public static final String ANC_MEMBER_LOG = "ec_anc_log";
         public static final String MALARIA_CONFIRMATION = "ec_malaria_confirmation";
         public static final String ANC_PREGNANCY_OUTCOME = "ec_pregnancy_outcome";
+        public static final String CHILD_UPDATED_ALERTS = "child_updated_alerts";
     }
 
     public static final class VACCINE {

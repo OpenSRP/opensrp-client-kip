@@ -133,7 +133,6 @@ public class IndicatorCategoryView extends LinearLayout {
                 curRow.addView(valueTextView);
                 indicatorTable.addView(curRow);
 
-
                 }
             }
         }

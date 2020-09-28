@@ -21,7 +21,7 @@
           "column_name":"zeir_id",
           "type":"Client",
           "json_mapping":{
-            "field":"identifiers.M_ZAIR_ID"
+            "field":"identifiers.M_KIP_ID"
           }
         },
         {
@@ -507,6 +507,34 @@
           "type": "Client",
           "json_mapping": {
             "field": "attributes.child_reg"
+          }
+        },
+        {
+          "column_name": "Permanent_Register_Number",
+          "type": "Client",
+          "json_mapping": {
+            "field": "attributes.PERMANENT_REGISTER_NUMBER"
+          }
+        },
+        {
+          "column_name": "National_Unique_Patient_Identifier",
+          "type": "Client",
+          "json_mapping": {
+            "field": "attributes.National_Unique_Patient_Identifier"
+          }
+        },
+        {
+          "column_name": "CWC_Number",
+          "type": "Client",
+          "json_mapping": {
+            "field": "attributes.CWC_Number"
+          }
+        },
+        {
+          "column_name": "HDSS_Number",
+          "type": "Client",
+          "json_mapping": {
+            "field": "attributes.HDSS_Number"
           }
         }
       ]

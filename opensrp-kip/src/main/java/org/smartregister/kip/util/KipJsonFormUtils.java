@@ -88,10 +88,10 @@ public class KipJsonFormUtils extends JsonFormUtils {
 
             if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase(Constants.KEY.PHOTO)) {
                 processPhoto(childDetails.get(Constants.KEY.BASE_ENTITY_ID), jsonObject);
-            } else if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase(Constants.JSON_FORM_KEY.DOB_UNKNOWN)) {
+            } else if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase("dob_unknown")) {
                 getDobUnknown(childDetails, jsonObject);
             } else if (jsonObject.getString(JsonFormUtils.KEY).equalsIgnoreCase(Constants.JSON_FORM_KEY.AGE)) {
-                processAge(Utils.getValue(childDetails, Constants.JSON_FORM_KEY.DOB, false), jsonObject);
+                processAge(Utils.getValue(childDetails, "dob", false), jsonObject);
             } else if (jsonObject.getString(JsonFormConstants.TYPE).equalsIgnoreCase(JsonFormConstants.DATE_PICKER)) {
                 processDate(childDetails, prefix, jsonObject);
             } else if (jsonObject.getString(JsonFormUtils.OPENMRS_ENTITY).equalsIgnoreCase(JsonFormUtils.PERSON_INDENTIFIER)) {
@@ -127,7 +127,7 @@ public class KipJsonFormUtils extends JsonFormUtils {
     private static void getDobUnknown(Map<String, String> childDetails, JSONObject jsonObject) throws JSONException {
         JSONObject optionsObject = jsonObject.getJSONArray(Constants.JSON_FORM_KEY.OPTIONS).getJSONObject(0);
         optionsObject.put(JsonFormUtils.VALUE,
-                Utils.getValue(childDetails, Constants.JSON_FORM_KEY.DOB_UNKNOWN, false));
+                Utils.getValue(childDetails, "dob_unknown", false));
     }
 
     @NotNull

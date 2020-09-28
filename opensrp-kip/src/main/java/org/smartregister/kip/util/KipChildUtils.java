@@ -10,9 +10,7 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
-import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
@@ -21,6 +19,10 @@ import com.vijay.jsonwizard.customviews.TreeViewDialog;
 import org.apache.commons.lang3.StringUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.jetbrains.annotations.Nullable;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.Period;
+import org.joda.time.PeriodType;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.smartregister.child.util.Constants;
@@ -38,17 +40,11 @@ import org.smartregister.location.helper.LocationHelper;
 import org.smartregister.repository.AllSharedPreferences;
 import org.smartregister.util.AssetHandler;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import timber.log.Timber;
 
@@ -174,6 +170,37 @@ public class KipChildUtils extends Utils {
 
         return true;
     }
+
+    public static boolean updateChildOverOneyear(@NonNull EventClient eventClient) {
+        Client client = eventClient.getClient();
+        ContentValues values = new ContentValues();
+
+        if (client.getBirthdate() == null) {
+            Timber.e(new Exception(), "Birth event for %s cannot be processed because deathdate is NULL : %s"
+                    , client.getFirstName() + " " + client.getLastName(), new Gson().toJson(eventClient));
+            return false;
+        }
+
+        DateTime birthDate = client.getBirthdate();
+        LocalDate now = new LocalDate();
+        LocalDate ChildbirthDate = new LocalDate(birthDate);
+
+        Period period = new Period(ChildbirthDate, now, PeriodType.yearMonthDay());
+        int age = period.getYears();
+
+        if (age >= 1) {
+            values.put(Constants.KEY.DOB, Utils.convertDateFormat(birthDate));
+            values.put(Constants.KEY.DATE_REMOVED, Utils.convertDateFormat(client.getBirthdate().toDate(), Utils.DB_DF));
+            String tableName = Utils.metadata().childRegister.tableName;
+            AllCommonsRepository allCommonsRepository = KipApplication.getInstance().context().allCommonsRepositoryobjects(tableName);
+            if (allCommonsRepository != null) {
+                allCommonsRepository.update(tableName, values, client.getBaseEntityId());
+                allCommonsRepository.updateSearch(client.getBaseEntityId());
+            }
+        }
+        return true;
+    }
+
     @NonNull
     public static Locale getLocale(Context context){
         if (context == null) {

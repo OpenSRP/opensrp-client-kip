@@ -8,10 +8,10 @@ public class Moh710CustomeService {
     public static final String MOH_BCG = "BCG";
     public static final String MOH_IPV = "IPV";
     public static final String MOH_MR_1 = "MR 1";
-    public static final String MOH_RTSS_1 = "RTSS 1";
-    public static final String MOH_RTSS_2 = "RTSS 2";
-    public static final String MOH_RTSS_3 = "RTSS 3";
-    public static final String MOH_RTSS_4 = "RTSS 4";
+    public static final String MOH_RTSS_1 = "Malaria Vaccine 1";
+    public static final String MOH_RTSS_2 = "Malaria Vaccine 2";
+    public static final String MOH_RTSS_3 = "Malaria Vaccine 3";
+    public static final String MOH_RTSS_4 = "Malaria Vaccine 4";
     public static final String MOH_OPV_0 = "OPV 0";
     public static final String MOH_OPV_1 = "OPV 1";
     public static final String MOH_OPV_2 = "OPV 2";

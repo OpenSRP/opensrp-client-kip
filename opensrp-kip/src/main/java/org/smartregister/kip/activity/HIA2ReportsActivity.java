@@ -298,28 +298,28 @@ public class HIA2ReportsActivity extends AppCompatActivity {
     public void refreshDraftMonthlyTitle() {
         Utils.startAsyncTask(new FetchEditedMonthlyTalliesTask(reportGrouping,
                 new FetchEditedMonthlyTalliesTask.TaskListener() {
-            @Override
-            public void onPostExecute(final List<MonthlyTally> monthlyTallies) {
-                tabLayout.post(new Runnable() {
                     @Override
-                    public void run() {
-                        try {
-                            for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
-                                TabLayout.Tab tab = tabLayout.getTabAt(i);
-                                if (tab != null && tab.getText() != null && tab.getText().toString()
-                                        .contains(getString(R.string.hia2_draft_monthly))) {
-                                    tab.setText(String.format(
-                                            getString(R.string.hia2_draft_monthly_with_count),
-                                            monthlyTallies == null ? 0 : monthlyTallies.size()));
+                    public void onPostExecute(final List<MonthlyTally> monthlyTallies) {
+                        tabLayout.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
+                                        TabLayout.Tab tab = tabLayout.getTabAt(i);
+                                        if (tab != null && tab.getText() != null && tab.getText().toString()
+                                                .contains(getString(R.string.hia2_draft_monthly))) {
+                                            tab.setText(String.format(
+                                                    getString(R.string.hia2_draft_monthly_with_count),
+                                                    monthlyTallies == null ? 0 : monthlyTallies.size()));
+                                        }
+                                    }
+                                } catch (Exception e){
+                                    Timber.e(e);
                                 }
                             }
-                        } catch (Exception e){
-                            Timber.e(e);
-                        }
+                        });
                     }
-                });
-            }
-        }), null);
+                }), null);
     }
 
 
@@ -347,12 +347,7 @@ public class HIA2ReportsActivity extends AppCompatActivity {
     public void onClickReport(View view) {
         switch (view.getId()) {
             case R.id.btn_back_to_home:
-
-                NavigationMenu navigationMenu = NavigationMenu.getInstance(this, null, null);
-                if (navigationMenu != null) {
-                    navigationMenu.getDrawer()
-                            .openDrawer(GravityCompat.START);
-                }
+                finish();
                 break;
             default:
                 break;
@@ -435,15 +430,15 @@ public class HIA2ReportsActivity extends AppCompatActivity {
                 refreshDraftMonthlyTitle();
                 org.smartregister.child.util.Utils.startAsyncTask(new FetchEditedMonthlyTalliesTask(reportGrouping,
                         new FetchEditedMonthlyTalliesTask.TaskListener() {
-                    @Override
-                    public void onPostExecute(List<MonthlyTally> monthlyTallies) {
-                        Fragment fragment = getSupportFragmentManager().findFragmentByTag(
-                                "android:switcher:" + R.id.container + ":" + mViewPager.getCurrentItem());
-                        if (fragment != null) {
-                            ((DraftMonthlyFragment) fragment).updateDraftsReportListView(monthlyTallies);
-                        }
-                    }
-                }), null);
+                            @Override
+                            public void onPostExecute(List<MonthlyTally> monthlyTallies) {
+                                Fragment fragment = getSupportFragmentManager().findFragmentByTag(
+                                        "android:switcher:" + R.id.container + ":" + mViewPager.getCurrentItem());
+                                if (fragment != null) {
+                                    ((DraftMonthlyFragment) fragment).updateDraftsReportListView(monthlyTallies);
+                                }
+                            }
+                        }), null);
             }
         } catch (Exception e) {
             Timber.e(e);

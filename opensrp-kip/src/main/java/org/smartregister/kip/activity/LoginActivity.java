@@ -12,6 +12,7 @@ import org.smartregister.domain.jsonmapping.LoginResponseData;
 import org.smartregister.domain.jsonmapping.util.LocationTree;
 import org.smartregister.kip.R;
 import org.smartregister.kip.presenter.LoginPresenter;
+import org.smartregister.kip.service.intent.LocationsIntentService;
 import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.kip.util.KipConstants;
 import org.smartregister.sync.helper.LocationServiceHelper;
@@ -60,16 +61,13 @@ public class LoginActivity extends BaseLoginActivity implements BaseLoginContrac
         }
 
         LoginResponse loginResponse = SUCCESS;
-        String jsonPayload = new Gson().toJson(loginResponse.getRawData());
+        String jsonPayload = new Gson().toJson(loginResponse.payload());
 
         Intent intent = new Intent(this, ChildRegisterActivity.class);
         intent.putExtra(KipConstants.IntentKeyUtil.IS_REMOTE_LOGIN, remote);
-
-        Timber.d("---------------> Kipresponse String: %s", jsonPayload);
-
-
-
-
+        Intent rIntent = new Intent(this, LocationsIntentService.class);
+        rIntent.putExtra("userInfo", jsonPayload);
+        startService(rIntent);
         startActivity(intent);
         finish();
     }

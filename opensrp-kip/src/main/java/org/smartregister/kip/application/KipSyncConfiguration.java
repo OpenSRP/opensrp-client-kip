@@ -55,14 +55,5 @@ public class KipSyncConfiguration extends SyncConfiguration {
         return true;
     }
 
-    @Override
-    public List<String> getSynchronizedLocationTags() {
-        return null;
-    }
-
-    @Override
-    public String getTopAllowedLocationLevel() {
-        return null;
-    }
 }
 

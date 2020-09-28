@@ -43,8 +43,6 @@ import org.smartregister.kip.activity.ChildImmunizationActivity;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.kip.util.KipConstants;
-import org.smartregister.opd.processor.OpdMiniClientProcessorForJava;
-import org.smartregister.opd.utils.OpdConstants;
 import org.smartregister.repository.DetailsRepository;
 import org.smartregister.repository.EventClientRepository;
 import org.smartregister.sync.ClientProcessorForJava;
@@ -72,10 +70,6 @@ public class KipProcessorForJava extends ClientProcessorForJava {
 
     private KipProcessorForJava(Context context) {
         super(context);
-//
-//        OpdMiniClientProcessorForJava opdMiniClientProcessorForJava = new OpdMiniClientProcessorForJava(context);
-//
-//        addMiniProcessors(opdMiniClientProcessorForJava);
     }
 
     protected void addMiniProcessors(MiniClientProcessorForJava... miniClientProcessorsForJava) {
@@ -120,6 +114,10 @@ public class KipProcessorForJava extends ClientProcessorForJava {
                     continue;
                 }
 
+                if (processOverOneYearChild(eventClient)){
+                    unsyncEvents.add(event);
+                }
+
                 if (eventType.equals(VaccineIntentService.EVENT_TYPE) || eventType
                         .equals(VaccineIntentService.EVENT_TYPE_OUT_OF_CATCHMENT)) {
                     processVaccinationEvent(vaccineTable, eventClient, event, eventType);
@@ -141,27 +139,17 @@ public class KipProcessorForJava extends ClientProcessorForJava {
                     }
                 } else if (eventType.equals(Constants.EventType.BITRH_REGISTRATION) || eventType
                         .equals(Constants.EventType.UPDATE_BITRH_REGISTRATION) || eventType
-                        .equals(Constants.EventType.NEW_WOMAN_REGISTRATION) || eventType.equals(OpdConstants.EventType.OPD_REGISTRATION)) {
+                        .equals(Constants.EventType.NEW_WOMAN_REGISTRATION)) {
 
 
-                    if (eventType.equals(OpdConstants.EventType.OPD_REGISTRATION) && eventClient.getClient() == null) {
-                        Timber.e(new Exception(), "Cannot find client corresponding to %s with base-entity-id %s", OpdConstants.EventType.OPD_REGISTRATION, event.getBaseEntityId());
+                    if (eventClient.getClient() == null) {
+                        Timber.e(new Exception(), "Cannot find client corresponding to with base-entity-id %s",event.getBaseEntityId());
                         continue;
-                    }
-
-                    if(eventType.equals(OpdConstants.EventType.OPD_REGISTRATION) && eventClient.getClient() != null){
-                        KipApplication.getInstance().registerTypeRepository().add(KipConstants.RegisterType.OPD, event.getBaseEntityId());
                     }
 
                     if(eventType.equals(Constants.EventType.BITRH_REGISTRATION) && eventClient.getClient() != null){
                         KipApplication.getInstance().registerTypeRepository().add(KipConstants.RegisterType.CHILD, event.getBaseEntityId());
                     }
-
-                    if(eventType.equals(Constants.EventType.NEW_WOMAN_REGISTRATION) && eventClient.getClient() != null){
-                        KipApplication.getInstance().registerTypeRepository().add(KipConstants.RegisterType.OPD, event.getBaseEntityId());
-                    }
-
-
                     if (clientClassification == null) {
                         continue;
                     }
@@ -202,6 +190,13 @@ public class KipProcessorForJava extends ClientProcessorForJava {
             return KipChildUtils.updateChildDeath(eventClient);
         }
 
+        return false;
+    }
+
+    private boolean processOverOneYearChild(@NonNull EventClient eventClient){
+        if (eventClient.getEvent().getEntityType().equals(KipConstants.EntityType.CHILD)){
+            return KipChildUtils.updateChildOurOneyear(eventClient);
+        }
         return false;
     }
 
