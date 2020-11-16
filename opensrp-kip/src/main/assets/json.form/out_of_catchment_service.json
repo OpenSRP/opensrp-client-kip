@@ -44,25 +44,25 @@
       "openmrs_data_type": "phonenumber",
       "openmrs_entity_id": "163152AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     },
-    "encounter_location": ""
+    "encounter_location":""
   },
   "step1": {
-    "title": "Enregistrer le service hors zone de chalandise",
+    "title": "Record out of catchment area service",
     "fields": [
       {
-        "key": "mer_id",
+        "key": "OPENMRS_ID",
         "openmrs_entity_parent": "",
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "barcode",
         "barcode_type": "qrcode",
-        "hint": "IZ ID ",
-        "scanButtonText": "Scannez le code QR",
+        "hint": "KIP ID ",
+        "scanButtonText": "Scan QR Code",
         "read_only": true,
         "value": "",
         "v_required": {
           "value": "true",
-          "err": "Entrez le numéro d'ID IZ de l'enfant"
+          "err": "Enter the child's KIP ID"
         }
       },
       {
@@ -71,12 +71,12 @@
         "openmrs_entity": "encounter",
         "openmrs_entity_id": "encounter_date",
         "type": "date_picker",
-        "hint": "Date du service rendu ",
+        "hint": "Service date *",
         "expanded": false,
         "max_date": "today",
         "v_required": {
           "value": "true",
-          "err": "Entrez la date de service"
+          "err": "Enter the service date"
         }
       },
       {
@@ -86,14 +86,14 @@
         "openmrs_entity_id": "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
         "openmrs_data_type": "text",
         "type": "edit_text",
-        "hint": "Poids de l'enfant (kg)",
+        "hint": "Child's weight (kg)",
         "v_min": {
           "value": "0.1",
-          "err": "Le poids doit être supérieur à 0"
+          "err": "Weight must be greater than 0"
         },
         "v_numeric": {
           "value": "true",
-          "err": "Entrez un poids valide"
+          "err": "Enter a valid weight"
         }
       }
     ]

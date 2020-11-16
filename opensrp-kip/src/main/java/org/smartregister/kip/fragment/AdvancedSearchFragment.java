@@ -6,8 +6,14 @@ import android.view.View;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import org.apache.commons.lang3.StringUtils;
+import org.smartregister.child.domain.RegisterClickables;
 import org.smartregister.child.fragment.BaseAdvancedSearchFragment;
 import org.smartregister.child.presenter.BaseChildAdvancedSearchPresenter;
+import org.smartregister.child.util.Constants;
+import org.smartregister.commonregistry.CommonPersonObjectClient;
+import org.smartregister.kip.R;
+import org.smartregister.kip.activity.ChildImmunizationActivity;
+import org.smartregister.kip.activity.ChildRegisterActivity;
 import org.smartregister.kip.presenter.AdvancedSearchPresenter;
 import org.smartregister.kip.util.DBQueryHelper;
 import org.smartregister.kip.util.KipConstants;
@@ -175,8 +181,54 @@ public class AdvancedSearchFragment extends BaseAdvancedSearchFragment {
     }
 
     @Override
-    public void onClick(View view) {
-        view.toString();
+    protected void onViewClicked(View view) {
+        super.onViewClicked(view);
+        RegisterClickables registerClickables = new RegisterClickables();
+        if (view.getTag(R.id.record_action) != null) {
+            registerClickables.setRecordWeight(
+                    Constants.RECORD_ACTION.GROWTH.equals(view.getTag(R.id.record_action)));
+            registerClickables.setRecordAll(
+                    Constants.RECORD_ACTION.VACCINATION.equals(view.getTag(R.id.record_action)));
+            registerClickables.setNextAppointmentDate(view.getTag(R.id.next_appointment_date) != null ? String
+                    .valueOf(view.getTag(R.id.next_appointment_date)) : "");
+        }
+
+        CommonPersonObjectClient client = null;
+        if (view.getTag() != null && view.getTag() instanceof CommonPersonObjectClient) {
+            client = (CommonPersonObjectClient) view.getTag();
+        }
+
+        switch (view.getId()) {
+            case R.id.global_search:
+                goBack();
+                break;
+            case R.id.child_profile_info_layout:
+                ChildImmunizationActivity.launchActivity(getActivity(), client, null);
+                break;
+            case R.id.record_growth:
+                if (client == null && view.getTag() != null && view.getTag() instanceof String) {
+                    String zeirId = view.getTag().toString();
+                    ((ChildRegisterActivity) getActivity()).startFormActivity("out_of_catchment_service", zeirId, null);
+                } else {
+                    registerClickables.setRecordWeight(true);
+                    ChildImmunizationActivity.launchActivity(getActivity(), client, registerClickables);
+                    registerClickables.setRecordAll(true);
+                    ChildImmunizationActivity.launchActivity(getActivity(), client, registerClickables);
+                }
+                break;
+
+            case R.id.record_vaccination:
+                if (client != null) {
+                    registerClickables.setRecordAll(true);
+                    ChildImmunizationActivity.launchActivity(getActivity(), client, registerClickables);
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }
 

@@ -210,7 +210,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         registerSettings(activity);
         registerReporting(activity);
 
-        registerSyncStatus(activity);
+//        registerSyncStatus(activity);
 
         // update all actions
         mPresenter.refreshLastSync();

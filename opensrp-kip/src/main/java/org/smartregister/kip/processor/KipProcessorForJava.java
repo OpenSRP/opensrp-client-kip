@@ -195,7 +195,7 @@ public class KipProcessorForJava extends ClientProcessorForJava {
 
     private boolean processOverOneYearChild(@NonNull EventClient eventClient){
         if (eventClient.getEvent().getEntityType().equals(KipConstants.EntityType.CHILD)){
-            return KipChildUtils.updateChildOurOneyear(eventClient);
+            return KipChildUtils.updateChildOverOneyear(eventClient);
         }
         return false;
     }

@@ -565,5 +565,7 @@
     <string name="sync_status_text">Sync Status</string>
     <string name="summary_forms">Other Forms</string>
 
+    <string name="kip_id">KIP ID</string>
+
 
 </resources>

@@ -36,6 +36,7 @@ public class KipConstants {
         public static final String EPI_CARD_NUMBER = "epi_card_number";
         public static final String MOTHER_LAST_NAME = "mother_last_name";
         public static final String ZEIR_ID = "zeir_id";
+        public static final String OPENMRS_ID = "OPENMRS_ID";
         public static final String LOST_TO_FOLLOW_UP = "lost_to_follow_up";
         public static final String GENDER = "gender";
         public static final String INACTIVE = "inactive";
@@ -206,6 +207,7 @@ public class KipConstants {
         public static final String CHILD_REGISTRATION = "Birth Registration";
         public static final String UPDATE_CHILD_REGISTRATION = "Update Birth Registration";
         public static final String OUT_OF_CATCHMENT = "Out of Catchment";
+        public static final String OUT_OF_CATCHMENT_SERVICE = "Out of Catchment Service";
 
         public static final String NEW_GUARDIAN_REGISTRATION = "New Guardian Registration" ;
     }
