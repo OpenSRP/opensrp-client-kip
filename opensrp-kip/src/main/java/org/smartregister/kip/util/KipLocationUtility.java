@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.api.domain.Location;
 import org.smartregister.kip.application.KipApplication;
+import org.smartregister.kip.domain.KipLocation;
 import org.smartregister.kip.repository.KipLocationRepository;
 import org.smartregister.location.helper.LocationHelper;
 import org.smartregister.util.JsonFormUtils;
@@ -80,7 +81,7 @@ public class KipLocationUtility extends JsonFormUtils {
     private static JSONArray generateLocationArray(String locationTag, org.smartregister.Context context, boolean withOtherOption, ArrayList<String> strings) throws JSONException {
         JSONArray jsonArray = new JSONArray();
         KipLocationRepository locationRepository = KipApplication.getInstance().kipLocationRepository();
-        List<Location> locations = locationRepository.getLocationsByTag(locationTag);
+        List<KipLocation> locations = locationRepository.getLocationsByTag(locationTag);
 
         if (locations != null && locations.size() > 0) {
             for (Location location : locations) {

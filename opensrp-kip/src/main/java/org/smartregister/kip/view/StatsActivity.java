@@ -6,15 +6,15 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 
-//import org.smartregister.family.adapter.ViewPagerAdapter;
 import org.smartregister.child.adapter.ViewPagerAdapter;
 import org.smartregister.kip.R;
 import org.smartregister.kip.contract.StatsContract;
 import org.smartregister.kip.fragment.StatsFragment;
+
+//import org.smartregister.family.adapter.ViewPagerAdapter;
 
 public class StatsActivity extends AppCompatActivity implements StatsContract.View {
     private ProgressDialog progressDialog;

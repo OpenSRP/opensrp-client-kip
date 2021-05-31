@@ -24,10 +24,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.ybq.android.spinkit.style.FadingCircle;
+import com.vijay.jsonwizard.constants.JsonFormConstants;
 
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONObject;
+import org.smartregister.child.util.Constants;
+import org.smartregister.child.util.JsonFormUtils;
+import org.smartregister.child.util.Utils;
+import org.smartregister.client.utils.domain.Form;
 import org.smartregister.domain.FetchStatus;
 import org.smartregister.kip.R;
+import org.smartregister.kip.activity.Covid19VaccineStockSettingsActivity;
 import org.smartregister.kip.activity.ReportRegisterActivity;
 import org.smartregister.kip.adapter.NavigationAdapter;
 import org.smartregister.kip.application.KipApplication;
@@ -36,9 +43,10 @@ import org.smartregister.kip.listener.OnLocationChangeListener;
 import org.smartregister.kip.model.NavigationOption;
 import org.smartregister.kip.presenter.NavigationPresenter;
 import org.smartregister.kip.util.KipChildUtils;
-
+import org.smartregister.kip.util.KipConstants;
 import org.smartregister.location.helper.LocationHelper;
 import org.smartregister.receiver.SyncStatusBroadcastReceiver;
+import org.smartregister.util.FormUtils;
 import org.smartregister.view.activity.BaseRegisterActivity;
 
 import java.lang.ref.WeakReference;
@@ -66,8 +74,8 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     private NavigationContract.Presenter mPresenter;
     private RelativeLayout settingsLayout;
     private TextView txtLocationSelected;
-    private  LinearLayout syncStatus;
-    private LinearLayout recordService;
+    private RelativeLayout covidStockUpdate;
+    private LinearLayout outOfAreaMenu;
 
     private View parentView;
     private LinearLayout reportView;
@@ -99,7 +107,8 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
             setParentView(activity, parentView);
             toolbar = myToolbar;
             parentView = myParentView;
-            mPresenter = new NavigationPresenter(this);
+            WeakReference<NavigationContract.View> weakReference = new WeakReference(this);
+            mPresenter = new NavigationPresenter(weakReference.get());
             prepareViews(activity);
             registerDrawer(activity);
         } catch (Exception e) {
@@ -166,9 +175,8 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         syncProgressBar = rootView.findViewById(R.id.pbSync);
         settingsLayout = rootView.findViewById(R.id.rlSettings);
         reportView = rootView.findViewById(R.id.report_view);
-        syncStatus = rootView.findViewById(R.id.sync_status);
-        recordService = rootView.findViewById(R.id.nav_record_vaccination_out_catchment);
-
+        covidStockUpdate = rootView.findViewById(R.id.covid19_vaccine_stock_section);
+        outOfAreaMenu = rootView.findViewById(R.id.out_of_area_menu);
 
         ImageView ivLogo = rootView.findViewById(R.id.ivLogo);
         LinearLayout locationLayout = rootView.findViewById(R.id.giz_location_layout);
@@ -209,11 +217,35 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
 
         registerSettings(activity);
         registerReporting(activity);
-
-//        registerSyncStatus(activity);
+        registerCovid19UpdateActivity(activity);
+        recordOutOfArea(activity);
 
         // update all actions
         mPresenter.refreshLastSync();
+    }
+
+    private void recordOutOfArea(final Activity parentActivity) {
+        outOfAreaMenu.setOnClickListener(v -> startFormActivity(parentActivity));
+    }
+
+    private void startFormActivity(Activity activity) {
+        try {
+            JSONObject formJson = new FormUtils(activity).getFormJson(KipConstants.JSON_FORM.OUT_OF_CATCHMENT_SERVICE);
+            JsonFormUtils.addAvailableVaccines(activity, formJson);
+
+            Form form = new Form();
+            form.setWizard(false);
+            form.setHideSaveLabel(true);
+            form.setNextLabel("");
+
+            Intent intent = new Intent(activity, Utils.metadata().childFormActivity);
+            intent.putExtra(Constants.INTENT_KEY.JSON, formJson.toString());
+            intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, form);
+            intent.putExtra(JsonFormConstants.PERFORM_FORM_TRANSLATION, true);
+            activity.startActivityForResult(intent, JsonFormUtils.REQUEST_CODE_GET_JSON);
+        } catch (Exception e) {
+            Timber.e(e);
+        }
     }
 
     private void registerReporting(@Nullable Activity parentActivity) {
@@ -237,22 +269,22 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         }
     }
 
-    private void registerSyncStatus(@Nullable Activity parentActivity){
-        syncStatus.setOnClickListener(new View.OnClickListener() {
+    private void registerCovid19UpdateActivity(@Nullable Activity parentActivity){
+        covidStockUpdate.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v) {
-                startStatsActivity(parentActivity);
-            }
+            public void onClick(View v){
+                startCovid19StockUpdateActivity(parentActivity);}
         });
     }
 
-    private void startStatsActivity(@Nullable Activity parentActivity) {
-        if (parentActivity instanceof StatsActivity) {
+    private void startCovid19StockUpdateActivity(@Nullable Activity parentActivity){
+        if (parentActivity instanceof Covid19VaccineStockSettingsActivity){
             drawer.closeDrawer(GravityCompat.START);
             return;
         }
-        if (parentActivity != null) {
-            Intent intent = new Intent(parentActivity, StatsActivity.class);
+
+        if (parentActivity != null){
+            Intent intent = new Intent(parentActivity, Covid19VaccineStockSettingsActivity.class);
             parentActivity.startActivity(intent);
         }
     }
@@ -272,19 +304,6 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
             });
         }
     }
-
-//    private void registerRecordService(@NonNull Activity parentActivity){
-//        recordService.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View v){
-//                startRecordService(parentActivity);
-//            }
-//        });
-//    }
-//
-//    private void startRecordService(@Nullable Activity parentActivity){
-//
-//    }
 
     private void registerNavigation(Activity parentActivity) {
         if (recyclerView != null) {
@@ -342,9 +361,12 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         if (SyncStatusBroadcastReceiver.getInstance().isSyncing()) {
             syncProgressBar.setVisibility(View.VISIBLE);
             ivSync.setVisibility(View.INVISIBLE);
+            KipChildUtils.updateSyncStatus(false);
+
         } else {
             syncProgressBar.setVisibility(View.INVISIBLE);
             ivSync.setVisibility(View.VISIBLE);
+            KipChildUtils.updateSyncStatus(true);
         }
     }
 
@@ -394,6 +416,19 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     public void onSyncStart() {
         // set the sync icon to be a rotating menu
         refreshSyncProgressSpinner();
+
+        try {
+            String alertUpdateExecutionTime = KipApplication.getInstance().context().allSharedPreferences().getPreference("alert_update_execution_time");
+            int fiveHours = 60 * 5;
+            if (StringUtils.isBlank(alertUpdateExecutionTime) || KipChildUtils.timeBetweenLastExecutionAndNow(fiveHours, alertUpdateExecutionTime)) {
+                KipApplication.getInstance().alertUpdatedRepository().deleteAll();
+                KipApplication.getInstance().context().allSharedPreferences().savePreference("alert_update_execution_time", String.valueOf(System.currentTimeMillis()));
+            }
+            Timber.d("updated alert");
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+
     }
 
     @Override

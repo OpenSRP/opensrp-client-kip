@@ -10,6 +10,21 @@ public class KipConstants {
     public static final String BHT_MID = "bht_mid";
     public static final String MOTHER_HIV_STATUS = "mother_hiv_status";
     public static final String BIRTH_REGISTRATION_NUMBER = "birth_registration_number";
+    public static final String AGE = "age";
+    public static final String VALUE = "value";
+    public static final String NONE = "none";
+    public static final String COVID_19_RISK_FACTOR = "covid19_risk_factor";
+    public static final String COVID_19_VACCINE_ELIGIBILITY = "covid19_vaccine_eligibility";
+    public static final String COVID_19_WAITING_LIST = "covid19_waiting_list";
+    public static final String COVID_19_VACCINE_GIVEN = "covid19_vaccine_given";
+    public static final String INFLUENZA_VACCINE_GIVEN = "influenza_vaccine_given";
+    public static final String COVID_19_VACCINE_NEXT_DATE = "covid19_vaccine_next_date";
+    public static final String AZ_OXFORD_VIALS_AMOUNT = "az_oxford_vials_amount";
+    public static final String SINOPHARM_VIALS_AMOUNT = "sinopharm_vials_amount";
+    public static final String SINOVAC_VIALS_AMOUNT = "sinovac_vials_amount";
+    public static final String PFIZER_VIALS_AMOUNT = "pfizer_vials_amount";
+    public static final String MODERNA_VIALS_AMOUNT = "moderna_vials_amount";
+    public static final String PHONE_NUMBER = "phone_number";
 
     public interface DateFormat {
         String HH_MM_AMPM = "h:mm a";
@@ -19,6 +34,7 @@ public class KipConstants {
         String ANC = "anc";
         String CHILD = "child";
         String OPD = "opd";
+        String ALL_CLIENTS = "all_clients";
     }
 
     public static final class KEY {
@@ -165,7 +181,7 @@ public class KipConstants {
         public static final String ATTRIBUTES = "attributes";
         public static final int FIVE_YEAR = 5;
         public static final String OPD_REGISTRATION = "Opd Registration";
-        public static final String PHOTO = "photo" ;
+        public static final String PHOTO = "photo";
         public static String FINGERPRINT_MESSAGE = "FINGERPRINT_MESSAGE";
         public static String SITE_CHARACTERISTICS = "site_characteristics";
 
@@ -174,19 +190,27 @@ public class KipConstants {
         public static final String IS_VACCINE_GROUP = "is_vaccine_group";
         public static final String OPTIONS = "options";
         public static final String AGE = "age";
+        public static final String FATHER_DOB = "father_dob";
+        public static final String FATHER_FIRST_NAME = "father_first_name";
+        public static final String FATHER_LAST_NAME = "father_last_name";
+        public static final String FATHER_PHONE = "father_phone";
+        public static final String FATHER_RELATIONAL_ID = "father_relational_id";
     }
 
     public static final class DrawerMenu {
         public static final String ALL_FAMILIES = "All Families";
         public static final String ALL_CLIENTS = "All Clients";
         public static final String ANC_CLIENTS = "ANC Clients";
-        public static final String CHILD_CLIENTS = "Child Clients";
+        public static final String CHILD_CLIENTS = "KEPI Clients";
+
         public static final String HIV_CLIENTS = "Hiv Clients";
         public static final String ANC = "ANC";
         public static final String LD = "L&D";
         public static final String PNC = "PNC";
         public static final String FAMILY_PLANNING = "Family Planning";
         public static final String MALARIA = "Malaria";
+
+        public static final String OPD_CLIENTS = "OPD Clients";
     }
 
     public static final class FormTitleUtil {
@@ -206,20 +230,41 @@ public class KipConstants {
     public static final class EventType {
         public static final String CHILD_REGISTRATION = "Birth Registration";
         public static final String UPDATE_CHILD_REGISTRATION = "Update Birth Registration";
-        public static final String OUT_OF_CATCHMENT = "Out of Catchment";
+        public static final String OUT_OF_CATCHMENT = "Out of Area Service";
         public static final String OUT_OF_CATCHMENT_SERVICE = "Out of Catchment Service";
+        public static final String REPORT_CREATION = "report_creation";
+        public static final String NEW_GUARDIAN_REGISTRATION = "New Guardian Registration";
+        public static final String OPD_CALCULATE_RISK_FACTOR = "OPD Calculate Risk Factor";
+        public static final String OPD_VACCINATION_ELIGIBILITY_CHECK = "OPD Vaccination Eligibility Check";
+        public static final String OPD_COVID19_WAITING_LIST = "OPD Covid19 Vaccine Waiting List";
+        public static final String OPD_COVID_19_VACCINE_ADMINISTRATION = "OPD Covid19 Vaccine Administration";
+        public static final String OPD_COVID_19_VACCINE_STOCK_TAKE = "OPD Covid19 Vaccine Stock Take";
+        public static final String OPD_SMS_REMINDER = "OPD SMS Reminder";
+        public static final String COVID_AEFI = "Covid AEFI";
+        public static final String OPD_COVID19_VACCINE_STOCK = "OPD Covid19 Vaccine Stock";
+        public static final String OPD_INFLUENZA_MEDIAL_CONDITION = "OPD Influenza Medical Condition Check";
+        public static final String OPD_INFLUENZA_VACCINE_ADMINISTRATION = "OPD Influenza Vaccine Administration";
+        public static final String INFLUENZA_VACCINE_AEFI = "INFLUENZA VACCINE AEFI";
 
-        public static final String NEW_GUARDIAN_REGISTRATION = "New Guardian Registration" ;
     }
 
     public static class JSON_FORM {
-        public static String CHILD_ENROLLMENT = "child_enrollment";
-        public static String OUT_OF_CATCHMENT_SERVICE = "out_of_catchment_service";
+        public static final String CHILD_ENROLLMENT = "child_enrollment";
+        public static final String OUT_OF_CATCHMENT_SERVICE = "out_of_catchment_service";
+        public static final String OPD_CALCULATE_RISK_FACTOR_FORM = "opd_calculate_risk_factor";
+        public static final String OPD_VACCINATION_ELIGIBILITY_CHECK_FORM = "opd_vaccination_eligibility_check";
+        public static final String OPD_COVID19_WAITING_LIST_FORM = "opd_covid19_waiting_list";
+        public static final String OPD_COVID19_VACCINE_ADMINISTRATION_FORM = "opd_covid19_vaccine_administration";
+        public static final String OPD_COVID_19_VACCINE_STOCK_TAKE_FORM = "opd_covid19_vaccine_stock_take";
+        public static final String OPD_SMS_REMINDER = "opd_sms_reminder";
+        public static final String OPD_INFLUENZA_MEDICAL_CONDITION = "opd_influenza_medical_condition";
+        public static final String OPD_INFLUENZA_VACCINE_ADMINISTRATION = "opd_influenza_vaccine_administration";
 
     }
 
     public static class RELATIONSHIP {
         public static final String MOTHER = "mother";
+        public static final String FATHER = "father";
 
     }
 
@@ -248,7 +293,7 @@ public class KipConstants {
 
     public static final class EC_CHILD_TABLE {
         public static final String BASE_ENTITY_ID = "baseEntityId";
-        public static final String ZEIR_ID="zeir_id";
+        public static final String ZEIR_ID = "zeir_id";
         public static final String DOB = "dob";
         public static final String DOD = "dod";
         public static final String REG_DATE = "client_reg_date";
@@ -298,7 +343,7 @@ public class KipConstants {
         public final static String OUT_OF_CATCHMENT = "out_of_catchment_service";
     }
 
-    public class IntentKeyUtil {
+    public class IntentKeyUtils {
         public static final String IS_REMOTE_LOGIN = "is_remote_login";
     }
 
@@ -324,4 +369,210 @@ public class KipConstants {
         public static final int MONTHLY_TALLIES_GENERATION = 3;
 
     }
+
+    public static final class KeyUtils {
+        public static final String ID = "_ID";
+        public static final String KEY = "key";
+        public static final String VALUE = "value";
+        public static final String DESCRIPTION = "description";
+        public static final String TYPE = "type";
+        public static final String ID_LOWER_CASE = "_id";
+        public static final String STEPNAME = "stepName";
+        public static final String NUMBER_PICKER = "number_picker";
+        public static final String FIRST_NAME = "first_name";
+        public static final String LAST_NAME = "last_name";
+        public static final String BASE_ENTITY_ID = "base_entity_id";
+        public static final String JSON = "json";
+        public static final String DOB = "dob";//Date Of Birth
+        public static final String DOB_UNKNOWN = "dob_unknown";
+        public static final String EDD = "edd";
+        public static final String GENDER = "gender";
+        public static final String ANC_ID = "register_id";
+        public static final String LAST_INTERACTED_WITH = "last_interacted_with";
+        public static final String DATE_REMOVED = "date_removed";
+        public static final String PHONE_NUMBER = "phone_number";
+        public static final String ALT_NAME = "alt_name";
+        public static final String ALT_PHONE_NUMBER = "alt_phone_number";
+        public static final String HOME_ADDRESS = "home_address";
+        public static final String AGE = "age";
+        public static final String REMINDERS = "reminders";
+        public static final String RED_FLAG_COUNT = "red_flag_count";
+        public static final String YELLOW_FLAG_COUNT = "yellow_flag_count";
+        public static final String CONTACT_STATUS = "contact_status";
+        public static final String PREVIOUS_CONTACT_STATUS = "previous_contact_status";
+        public static final String NEXT_CONTACT = "next_contact";
+        public static final String NEXT_CONTACT_DATE = "next_contact_date";
+        public static final String LAST_CONTACT_RECORD_DATE = "last_contact_record_date";
+        public static final String RELATIONAL_ID = "relationalid";
+        public static final String VISIT_START_DATE = "visit_start_date";
+        public static final String IS_FIRST_VISIT = "is_first_visit";
+    }
+
+    public interface Settings {
+        String VACCINE_STOCK_IDENTIFIER = "covid19_vaccine_stock";
+    }
+
+    public interface Properties {
+        String CAN_SAVE_SITE_INITIAL_SETTING = "CAN_SAVE_INITIAL_SITE_SETTING";
+    }
+
+    public interface TemplateUtils {
+        interface Settings {
+            String TEAM_ID = "teamId";
+            String TEAM = "team";
+            String LOCATION_ID = "locationId";
+            String PROVIDER_ID = "providerId";
+        }
+    }
+
+    public static class JsonFormKeyUtils {
+        public static final String ENTITY_ID = "entity_id";
+    }
+
+    public interface DbConstants {
+        interface Tables {
+            String CALCULATE_RISK_FACTOR_TABLE = "opd_calculate_risk_factor";
+            String OPD_VACCINATION_CONDITIONS_CHECK_TABLE = "opd_vaccination_eligibility_check";
+            String OPD_COVID_19_WAITING_LIST_TABLE = "opd_covid19_waiting_list";
+            String OPD_COVID_19_VACCINE_RECORD_TABLE = "opd_covid19_vaccine_administration";
+            String OPD_INFLUENZA_VACCINE_RECORD_TABLE = "opd_influenza_vaccine_administration";
+            String OPD_SMS_REMINDER = "opd_sms_reminder";
+            String OPD_COVD19_ADVERSE_REACTION = "covid_aefi";
+            String OPD_MEDICAL_CHECK__FORM = "opd_medical_check";
+        }
+
+        interface Columns {
+            interface CalculateRiskFactor {
+                String ID = "id";
+                String VISIT_ID = "visit_id";
+                String VISIT_DATE = "visit_date";
+                String BASE_ENTITY_ID = "base_entity_id";
+                String VISIT_TYPE = "visit_type";
+                String PRE_EXISTING_CONDITIONS = "pre_existing_conditions";
+                String OTHER_PRE_EXISTING_CONDITIONS = "other_pre_existing_conditions";
+                String OCCUPATION = "occupation";
+                String OTHER_OCCUPATION = "other_occupation";
+                String AGE = "age";
+                String DATE = "date";
+                String CREATED_AT = "created_at";
+            }
+
+            interface VaccinationEligibility {
+                String ID = "id";
+                String VISIT_ID = "visit_id";
+                String VISIT_DATE = "visit_date";
+                String BASE_ENTITY_ID = "base_entity_id";
+                String VISIT_TYPE = "visit_type";
+                String TEMPERATURE = "temperature";
+                String COVID_19_HISTORY = "covid_19_history";
+                String ORAL_CONFIRMATION = "oral_confirmation";
+                String RESPIRATORY_SYMPTOMS = "respiratory_symptoms";
+                String OTHER_RESPIRATORY_SYMPTOMS = "other_respiratory_symptoms";
+                String ALLERGIES = "allergies";
+                String OTHER_ALLERGIES = "other_allergies";
+                String AGE = "age";
+                String DATE = "date";
+                String CREATED_AT = "created_at";
+            }
+
+            interface WaitingList {
+                String ID = "id";
+                String VISIT_ID = "visit_id";
+                String VISIT_DATE = "visit_date";
+                String BASE_ENTITY_ID = "base_entity_id";
+                String VISIT_TYPE = "visit_type";
+                String WAITING_LIST = "waiting_list";
+                String AGE = "age";
+                String DATE = "date";
+                String CREATED_AT = "created_at";
+            }
+
+            interface VaccineRecord {
+                String ID = "id";
+                String VISIT_ID = "visit_id";
+                String VISIT_DATE = "visit_date";
+                String BASE_ENTITY_ID = "base_entity_id";
+                String VISIT_TYPE = "visit_type";
+                String COVID_19_ANTIGENS = "covid19_antigens";
+                String SITE_OF_ADMINISTRATION = "site_of_administration";
+                String ADMINISTRATION_DATE = "administration_date";
+                String ADMINISTRATION_ROUTE = "administration_route";
+                String LOT_NUMBER = "lot_number";
+                String VACCINE_EXPIRY = "vaccine_expiry";
+                String AGE = "age";
+                String DATE = "date";
+                String CREATED_AT = "created_at";
+            }
+
+            interface InfluenzaVaccineRecord {
+                String ID = "id";
+                String VISIT_ID = "visit_id";
+                String VISIT_DATE = "visit_date";
+                String BASE_ENTITY_ID = "base_entity_id";
+                String VISIT_TYPE = "visit_type";
+                String INFLUENZA_VACCINE = "influenza_vaccines";
+                String SITE_OF_ADMINISTRATION = "influenza_site_of_vaccine_administration";
+                String ADMINISTRATION_DATE = "influenza_administration_date";
+                String ADMINISTRATION_ROUTE = "influenza_vaccine_administration_route";
+                String LOT_NUMBER = "influenza_vaccine_lot_number";
+                String VACCINE_EXPIRY = "influenza_vaccine_expiry";
+                String AGE = "age";
+                String DATE = "date";
+                String CREATED_AT = "created_at";
+            }
+
+            interface SmsReminder {
+                String ID = "id";
+                String VISIT_ID = "visit_id";
+                String VISIT_DATE = "visit_date";
+                String BASE_ENTITY_ID = "base_entity_id";
+                String VISIT_TYPE = "visit_type";
+                String SMS_REMINDER = "sms_reminder";
+                String DATE = "date";
+                String CREATED_AT = "created_at";
+
+            }
+
+            interface Covid19Eafi {
+                String ID = "id";
+                String BASE_ENTITY_ID = "base_entity_id";
+                String VISIT_TYPE = "visit_type";
+                String SMS_REMINDER = "sms_reminder";
+                String DATE = "date";
+                String CREATED_AT = "created_at";
+
+            }
+
+            interface OpdMedicalCheck {
+                String ID = "id";
+                String VISIT_ID = "visit_id";
+                String VISIT_DATE = "visit_date";
+                String BASE_ENTITY_ID = "base_entity_id";
+                String VISIT_TYPE = "visit_type";
+                String TEMPERATURE = "influenza_temperature";
+                String PRE_EXISTING_CONDITIONS = "influenza_pre_existing_conditions";
+                String OTHER_PRE_EXISTING_CONDITIONS = "other_influenza_pre_existing_conditions";
+                String ALLERGIES = "influenza_allergies";
+                String OTHER_ALLERGIES = "other_influenza_allergies";
+                String AGE = "age";
+                String DATE = "date";
+                String CREATED_AT = "created_at";
+            }
+        }
+    }
+
+    public interface ReportKeys {
+        String REPORT_JSON = "reportJson";
+        String REPORT_DATE = "reportDate";
+        String GROUPING = "grouping";
+        String PROVIDER_ID = "providerId";
+        String DATE_CREATED = "dateCreated";
+        String HIA2_INDICATORS = "hia2Indicators";
+        String VALUE = "value";
+        String INDICATOR_CODE = "indicatorCode";
+    }
+
+    public static String TXT_SMS_REMINDER = "You have a scheduled appointment for covid 19 vaccine on ";
+
+    public static String KEPI_SMS_REMINDER = " is due for immunization on 25/05/2021. You are therefore, asked to visit ";
 }
