@@ -5,6 +5,7 @@ import org.smartregister.SyncFilter;
 import org.smartregister.kip.BuildConfig;
 import org.smartregister.repository.AllSharedPreferences;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class KipSyncConfiguration extends SyncConfiguration {
@@ -52,7 +53,17 @@ public class KipSyncConfiguration extends SyncConfiguration {
 
     @Override
     public boolean updateClientDetailsTable() {
-        return true;
+        return false;
+    }
+
+    @Override
+    public List<String> getSynchronizedLocationTags() {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public String getTopAllowedLocationLevel() {
+        return null;
     }
 
 }

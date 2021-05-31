@@ -41,6 +41,28 @@ public class Report {
     @JsonProperty
     private List<ReportHia2Indicator> hia2Indicators;
 
+    @JsonProperty
+    private DateTime dateCreated;
+
+    @JsonProperty
+    private String grouping;
+
+    public DateTime getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(DateTime dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    public String getGrouping() {
+        return grouping;
+    }
+
+    public void setGrouping(String grouping) {
+        this.grouping = grouping;
+    }
+
     public String getLocationId() {
         return locationId;
     }
