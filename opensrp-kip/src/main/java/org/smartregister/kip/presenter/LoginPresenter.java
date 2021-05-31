@@ -98,7 +98,7 @@ public class LoginPresenter extends BaseLoginPresenter implements BaseLoginContr
     @Override
     public boolean isServerSettingsSet() {
         try {
-            Setting setting = KipApplication.getInstance().getContext().allSettings().getSetting(KipConstants.KEY.SITE_CHARACTERISTICS);
+            Setting setting = KipApplication.getInstance().getContext().allSettings().getSetting(KipConstants.Settings.VACCINE_STOCK_IDENTIFIER);
             JSONObject jsonObject = setting != null ? new JSONObject(setting.getValue()) : null;
             JSONArray settingArray = jsonObject != null && jsonObject.has(AllConstants.SETTINGS) ?
                     jsonObject.getJSONArray(AllConstants.SETTINGS) : null;

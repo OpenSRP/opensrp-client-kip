@@ -7,6 +7,7 @@ import net.sqlcipher.database.SQLiteDatabase;
 
 import org.apache.commons.lang3.StringUtils;
 import org.smartregister.AllConstants;
+import org.smartregister.child.util.ChildDbMigrations;
 import org.smartregister.child.util.Utils;
 import org.smartregister.configurableviews.repository.ConfigurableViewsRepository;
 import org.smartregister.domain.db.Column;
@@ -21,10 +22,17 @@ import org.smartregister.immunization.util.IMDatabaseUtils;
 import org.smartregister.kip.BuildConfig;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.util.KipConstants;
+import org.smartregister.opd.repository.OpdDetailsRepository;
+import org.smartregister.opd.repository.OpdDiagnosisAndTreatmentFormRepository;
+import org.smartregister.opd.repository.OpdDiagnosisDetailRepository;
+import org.smartregister.opd.repository.OpdTestConductedRepository;
+import org.smartregister.opd.repository.OpdTreatmentDetailRepository;
+import org.smartregister.opd.repository.OpdVisitRepository;
 import org.smartregister.reporting.ReportingLibrary;
 import org.smartregister.reporting.repository.DailyIndicatorCountRepository;
 import org.smartregister.reporting.repository.IndicatorQueryRepository;
 import org.smartregister.reporting.repository.IndicatorRepository;
+import org.smartregister.reporting.util.ReportingUtils;
 import org.smartregister.repository.AlertRepository;
 import org.smartregister.repository.EventClientRepository;
 import org.smartregister.repository.Hia2ReportRepository;
@@ -34,6 +42,8 @@ import org.smartregister.repository.UniqueIdRepository;
 import org.smartregister.util.DatabaseMigrationUtils;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import timber.log.Timber;
 
@@ -70,7 +80,15 @@ public class KipRepository extends Repository {
         HeightRepository.createTable(database);
         VaccineRepository.createTable(database);
 
+        OpdVisitRepository.createTable(database);
+        OpdDetailsRepository.createTable(database);
+        OpdDiagnosisAndTreatmentFormRepository.createTable(database);
+        OpdDiagnosisDetailRepository.createTable(database);
+        OpdTreatmentDetailRepository.createTable(database);
+        OpdTestConductedRepository.createTable(database);
+
         ClientRegisterTypeRepository.createTable(database);
+        ChildAlertUpdatedRepository.createTable(database);
 
         //reporting
         IndicatorRepository.createTable(database);
@@ -130,15 +148,29 @@ public class KipRepository extends Repository {
                 case 9:
                     upgradeToVersion9(db);
                     break;
+                case 10:
+                    ChildDbMigrations.addShowBcg2ReminderAndBcgScarColumnsToEcChildDetails(db);
+                    break;
+                case 11:
+                    upgradeToVersion11CreateHia2IndicatorsRepository(db);
+                    break;
 
                 default:
                     break;
             }
             upgradeTo++;
         }
-//
-        DailyIndicatorCountRepository.performMigrations(db);
+        ChildDbMigrations.addShowBcg2ReminderAndBcgScarColumnsToEcChildDetails(db);
+////
+//        DailyIndicatorCountRepository.performMigrations(db);
         IndicatorQueryRepository.performMigrations(db);
+    }
+
+    private void upgradeToVersion11CreateHia2IndicatorsRepository(SQLiteDatabase db) {
+        if (!ReportingUtils.isTableExists(db, HIA2IndicatorsRepository.TABLE_NAME)) {
+            HIA2IndicatorsRepository.createTable(db);
+        }
+        dumpHIA2IndicatorsCSV(db);
     }
 
     @Override
@@ -404,6 +436,13 @@ public class KipRepository extends Repository {
     private void upgradeToVersion9(@NonNull SQLiteDatabase db) {
         try {
             KipLocationRepository.createLocationsTable(db);
+            OpdCovid19CalculateRiskRepository.updateIndex(db);
+            OpdCovid19VaccinationEligibilityRepository.updateIndex(db);
+            OpdCovid19VaccinationRepository.updateIndex(db);
+            OpdCovid19WaitingListRepository.updateIndex(db);
+            OpdSMSReminderFormRepository.updateIndex(db);
+            OpdMedicalCheckFormRepository.updateIndex(db);
+            OpdInfluenzaVaccineAdministrationFormRepository.updateIndex(db);
         } catch (Exception e) {
             Timber.e(e, " --> upgradeToVersion10 ");
         }
@@ -417,5 +456,15 @@ public class KipRepository extends Repository {
             int savedVersion = Integer.parseInt(savedAppVersion);
             return (BuildConfig.VERSION_CODE > savedVersion);
         }
+    }
+
+    private void dumpHIA2IndicatorsCSV(SQLiteDatabase db) {
+        List<Map<String, String>> csvData = Utils.populateTableFromCSV(
+                context,
+                HIA2IndicatorsRepository.INDICATORS_CSV_FILE,
+                HIA2IndicatorsRepository.CSV_COLUMN_MAPPING);
+        HIA2IndicatorsRepository hIA2IndicatorsRepository = KipApplication.getInstance()
+                .hIA2IndicatorsRepository();
+        hIA2IndicatorsRepository.save(db, csvData);
     }
 }

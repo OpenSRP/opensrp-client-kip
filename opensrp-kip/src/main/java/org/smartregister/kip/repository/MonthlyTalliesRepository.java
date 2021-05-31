@@ -5,13 +5,11 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 
 import net.sqlcipher.SQLException;
 import net.sqlcipher.database.SQLiteDatabase;
 
 import org.smartregister.kip.application.KipApplication;
-import org.smartregister.kip.domain.DailyTally;
 import org.smartregister.kip.domain.MonthlyTally;
 import org.smartregister.kip.domain.Tally;
 import org.smartregister.kip.util.DbConstants;
@@ -215,7 +213,6 @@ public class MonthlyTalliesRepository extends BaseRepository {
     }
 
 
-
     /**
      * Returns a list of all monthly tallies corresponding to the provided month
      *
@@ -267,7 +264,7 @@ public class MonthlyTalliesRepository extends BaseRepository {
             monthlyTally.setGrouping(indicatorTally.getGrouping());
         }
 
-        for (IndicatorTally dailyIndicatorTally : dailyTallies) {
+        for (IndicatorTally dailyIndicatorTally: dailyTallies) {
             try {
                 value += dailyIndicatorTally.getFloatCount();
             } catch (NumberFormatException e) {

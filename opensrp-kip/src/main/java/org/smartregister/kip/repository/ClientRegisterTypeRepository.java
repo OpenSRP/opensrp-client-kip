@@ -3,6 +3,7 @@ package org.smartregister.kip.repository;
 import android.content.ContentValues;
 import android.support.annotation.NonNull;
 
+import net.sqlcipher.Cursor;
 import net.sqlcipher.database.SQLiteDatabase;
 
 import org.smartregister.kip.util.KipConstants;
@@ -54,5 +55,46 @@ public class ClientRegisterTypeRepository extends BaseRepository implements Clie
         contentValues.put(KipConstants.Columns.RegisterType.DATE_CREATED, new Date().getTime());
         long result = database.insert(KipConstants.TABLE_NAME.REGISTER_TYPE, null, contentValues);
         return result != -1;
+    }
+
+    @Override
+    public boolean findByRegisterType(String baseEntityId, String registerType) {
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.query(KipConstants.TABLE_NAME.REGISTER_TYPE, new String[]{KipConstants.Columns.RegisterType.BASE_ENTITY_ID},
+                KipConstants.Columns.RegisterType.BASE_ENTITY_ID + " = ? and " + KipConstants.Columns.RegisterType.REGISTER_TYPE + " = ?",
+                new String[]{baseEntityId, registerType}, null, null, null);
+        if (cursor != null) {
+            boolean isType = cursor.getCount() > 0;
+            cursor.close();
+            return isType;
+        }
+        return false;
+    }
+
+    public boolean addUnique(String registerType, String baseEntityId) {
+        if (!hasRegisterType(baseEntityId)) {
+            SQLiteDatabase database = getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(KipConstants.Columns.RegisterType.BASE_ENTITY_ID, baseEntityId);
+            contentValues.put(KipConstants.Columns.RegisterType.REGISTER_TYPE, registerType);
+            contentValues.put(KipConstants.Columns.RegisterType.DATE_CREATED, new Date().getTime());
+            long result = database.insert(KipConstants.TABLE_NAME.REGISTER_TYPE, null, contentValues);
+            return result != -1;
+        }
+        return false;
+    }
+
+
+    public boolean hasRegisterType(String baseEntityId) {
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.query(KipConstants.TABLE_NAME.REGISTER_TYPE, new String[]{KipConstants.Columns.RegisterType.BASE_ENTITY_ID},
+                KipConstants.Columns.RegisterType.BASE_ENTITY_ID + " = ? ",
+                new String[]{baseEntityId}, null, null, null);
+        if (cursor != null) {
+            boolean hasType = cursor.getCount() > 0;
+            cursor.close();
+            return hasType;
+        }
+        return false;
     }
 }

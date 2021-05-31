@@ -3,26 +3,32 @@ package org.smartregister.kip.repository;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.support.annotation.Nullable;
 import android.util.Log;
+
 import net.sqlcipher.database.SQLiteDatabase;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.opensrp.api.domain.Location;
+import org.smartregister.kip.domain.KipLocation;
+import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.repository.BaseRepository;
-import org.smartregister.repository.LocationRepository;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import timber.log.Timber;
 
 public class KipLocationRepository extends BaseRepository {
-    private static final String TAG = LocationRepository.class.getCanonicalName();
+    public static final String LOCATIONS_CSV_FILE = "OpenMrsLocations.csv";
+    private static final String TAG = KipLocationRepository.class.getCanonicalName();
     private static final String LOCATIONS_SQL = "CREATE TABLE locations(_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, uuid VARCHAR NOT NULL UNIQUE, name VARCHAR NOT NULL UNIQUE, tag VARCHAR NOT NULL, parent_uuid VARCHAR NULL)";
     public static final String LOCATIONS_TABLE_NAME = "locations";
     public static final String ID_COLUMN = "_id";
@@ -36,9 +42,77 @@ public class KipLocationRepository extends BaseRepository {
         super();
     }
 
+
+
     protected static void createLocationsTable(SQLiteDatabase database) {
         database.execSQL(LOCATIONS_SQL);
         Timber.d("--> createLocationsTable: %s", LOCATIONS_SQL);
+    }
+
+    public static final Map<Integer, String> CSV_COLUMN_MAPPING;
+
+    static {
+        CSV_COLUMN_MAPPING = new HashMap<>();
+        CSV_COLUMN_MAPPING.put(0, KipLocationRepository.ID_COLUMN);
+        CSV_COLUMN_MAPPING.put(1, KipLocationRepository.NAME_COLUMN);
+        CSV_COLUMN_MAPPING.put(2, KipLocationRepository.PARENT_UUID_COLUMN);
+        CSV_COLUMN_MAPPING.put(3, KipLocationRepository.TAG_COLUMN);
+        CSV_COLUMN_MAPPING.put(4, KipLocationRepository.UUID_COLUMN);
+    }
+
+    public void save(@Nullable SQLiteDatabase database, @Nullable List<Map<String, String>> hia2Indicators) {
+        if (database != null && hia2Indicators != null && !hia2Indicators.isEmpty()) {
+            try {
+                database.beginTransaction();
+                for (Map<String, String> hia2Indicator : hia2Indicators) {
+                    ContentValues cv = new ContentValues();
+
+                    for (String column : hia2Indicator.keySet()) {
+
+                        String value = hia2Indicator.get(column);
+                        cv.put(column, value);
+
+                    }
+                    Long id = checkIfExists(database, cv.getAsString(UUID_COLUMN));
+
+                    if (id != null) {
+                        database.update(LOCATIONS_TABLE_NAME, cv, ID_COLUMN + " = ?", new String[]{id.toString()});
+
+                    } else {
+                        database.insert(LOCATIONS_TABLE_NAME, null, cv);
+                    }
+                }
+                database.setTransactionSuccessful();
+            } catch (SQLException e) {
+                Timber.e(e);
+            } finally {
+                database.endTransaction();
+            }
+        }
+    }
+
+    private Long checkIfExists(SQLiteDatabase db, String indicatorCode) {
+        Cursor mCursor = null;
+        Long exists = null;
+
+        try {
+            String query = "SELECT " + ID_COLUMN + " FROM " + LOCATIONS_TABLE_NAME + " WHERE " + UUID_COLUMN + " = '" + indicatorCode + "' COLLATE NOCASE ";
+            mCursor = db.rawQuery(query, null);
+            if (mCursor != null && mCursor.moveToFirst()) {
+
+                exists = mCursor.getLong(0);
+            }
+        } catch (Exception e) {
+            Timber.e(e);
+        } finally {
+            if (mCursor != null) mCursor.close();
+        }
+        return exists;
+    }
+
+    public void bulkSave(){
+        SQLiteDatabase database = getWritableDatabase();
+        KipChildUtils.saveOpenMrsLocation(database);
     }
 
     /**
@@ -46,7 +120,8 @@ public class KipLocationRepository extends BaseRepository {
      *
      * @param locations
      */
-    public void bulkInsertLocations(List<Location> locations) throws JSONException {
+
+    public void bulkInsertLocations(List<KipLocation> locations) throws JSONException {
         SQLiteDatabase database = getWritableDatabase();
 
         try {
@@ -83,12 +158,12 @@ public class KipLocationRepository extends BaseRepository {
         }
     }
 
-    public Location getLocationByName(String name) {
-        Location location = null;
+    public KipLocation getLocationByName(String name) {
+        KipLocation location = null;
         Cursor cursor = null;
         try {
             cursor = getReadableDatabase().query(LOCATIONS_TABLE_NAME, LOCATIONS_TABLE_COLUMNS, NAME_COLUMN + " = ?", new String[]{name}, null, null, " 1 ASC", "1");
-            List<Location> locations = readAll(cursor);
+            List<KipLocation> locations = readAll(cursor);
             location = locations.isEmpty() ? null : locations.get(0);
         } catch (Exception e) {
             Timber.e(e, "--> getLocationByName");
@@ -100,8 +175,12 @@ public class KipLocationRepository extends BaseRepository {
         return location;
     }
 
-    public List<Location> getChildLocations(String parentUuid) {
-        List<Location> locations = new ArrayList<>();
+    public Location getLocationWithNoParent(){
+        return null;
+    }
+
+    public List<KipLocation> getChildLocations(String parentUuid) {
+        List<KipLocation> locations = new ArrayList<>();
         Cursor cursor = null;
         try {
             cursor = getReadableDatabase().query(LOCATIONS_TABLE_NAME, LOCATIONS_TABLE_COLUMNS, PARENT_UUID_COLUMN + " = ?", new String[]{parentUuid}, null, null, " 1 ASC");
@@ -117,8 +196,8 @@ public class KipLocationRepository extends BaseRepository {
         return locations;
     }
 
-    public List<Location> getLocationsByTag(String tag) {
-        List<Location> locations = new ArrayList<>();
+    public List<KipLocation> getLocationsByTag(String tag) {
+        List<KipLocation> locations = new ArrayList<>();
         try (Cursor cursor = getReadableDatabase().query(LOCATIONS_TABLE_NAME, LOCATIONS_TABLE_COLUMNS, TAG_COLUMN + " = ?", new String[]{tag}, null, null, " 1 ASC")) {
             locations = readAll(cursor);
         } catch (Exception e) {
@@ -127,8 +206,8 @@ public class KipLocationRepository extends BaseRepository {
         return locations;
     }
 
-    private List<Location> readAll(Cursor cursor) {
-        List<Location> locations = new ArrayList<>();
+    private List<KipLocation> readAll(Cursor cursor) {
+        List<KipLocation> locations = new ArrayList<>();
         if (cursor != null && cursor.getCount() > 0 && cursor.moveToFirst()) {
             cursor.moveToFirst();
             while (cursor.getCount() > 0 && !cursor.isAfterLast()) {
@@ -140,11 +219,13 @@ public class KipLocationRepository extends BaseRepository {
     }
 
     @NotNull
-    private Location getLocation(Cursor cursor) {
-        Location location = new Location();
+    private KipLocation getLocation(Cursor cursor) {
+        KipLocation location = new KipLocation();
         location.setLocationId(cursor.getString(cursor.getColumnIndex(ID_COLUMN)));
         location.setName(cursor.getString(cursor.getColumnIndex(NAME_COLUMN)));
         location.setTags(getTags(cursor));
+        location.setUuid(cursor.getString(cursor.getColumnIndex(UUID_COLUMN)));
+        location.setParentUuid(cursor.getString(cursor.getColumnIndex(PARENT_UUID_COLUMN)));
         return location;
     }
 
