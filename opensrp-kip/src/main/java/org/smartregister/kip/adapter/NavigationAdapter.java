@@ -37,6 +37,10 @@ public class NavigationAdapter extends RecyclerView.Adapter<NavigationAdapter.My
         this.notifyDataSetChanged();
     }
 
+    public String getSelectedView() {
+        return selectedView;
+    }
+
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
