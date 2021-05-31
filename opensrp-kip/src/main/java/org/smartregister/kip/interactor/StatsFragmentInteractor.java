@@ -3,10 +3,10 @@ package org.smartregister.kip.interactor;
 import net.sqlcipher.Cursor;
 import net.sqlcipher.database.SQLiteDatabase;
 
-import org.smartregister.repository.BaseRepository;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.contract.StatsFragmentContract;
 import org.smartregister.kip.util.AppExecutors;
+import org.smartregister.repository.BaseRepository;
 
 import java.util.HashMap;
 import java.util.Map;

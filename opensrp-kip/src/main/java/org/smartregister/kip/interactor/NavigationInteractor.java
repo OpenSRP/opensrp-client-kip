@@ -1,16 +1,13 @@
 package org.smartregister.kip.interactor;
 
 import android.database.Cursor;
-import android.text.TextUtils;
 
-import org.apache.commons.lang3.StringUtils;
 import org.smartregister.child.util.Constants;
 import org.smartregister.commonregistry.CommonRepository;
 import org.smartregister.cursoradapter.SmartRegisterQueryBuilder;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.contract.NavigationContract;
 import org.smartregister.kip.util.AppExecutors;
-import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.kip.util.KipConstants;
 
 import java.text.MessageFormat;
@@ -62,14 +59,13 @@ public class NavigationInteractor implements NavigationContract.Interactor {
         String registerType = tempRegisterType;
         int count = 0;
         Cursor cursor = null;
-        if (KipConstants.RegisterType.OPD.equals(registerType)){
-            registerType = "'"+KipConstants.RegisterType.OPD+"'," + "'"+KipConstants.RegisterType.ANC+"'," + "'"+KipConstants.RegisterType.CHILD+"'";
+        if (KipConstants.RegisterType.ALL_CLIENTS.equals(registerType)) {
+            registerType = "'" + KipConstants.RegisterType.OPD + "'," + "'" + KipConstants.RegisterType.CHILD + "'";
         } else {
-            registerType = "'"+registerType+"'";
-
+            registerType = "'" + registerType + "'";
         }
 
-        String mainCondition = String.format(" where %s is null AND register_type IN (%s) ", KipConstants.TABLE_NAME.ALL_CLIENTS+"."+KipConstants.KEY.DATE_REMOVED, registerType);
+        String mainCondition = String.format(" where %s is null AND %s is null AND register_type IN (%s) ", KipConstants.TABLE_NAME.ALL_CLIENTS + "." + KipConstants.KEY.DATE_REMOVED, KipConstants.TABLE_NAME.REGISTER_TYPE + "." + KipConstants.KEY.DATE_REMOVED, registerType);
 
         if (registerType.contains(KipConstants.RegisterType.CHILD)) {
             mainCondition += " AND ( " + Constants.KEY.DOD + " is NULL OR " + Constants.KEY.DOD + " = '' ) ";
@@ -77,7 +73,7 @@ public class NavigationInteractor implements NavigationContract.Interactor {
 
         try {
             SmartRegisterQueryBuilder smartRegisterQueryBuilder = new SmartRegisterQueryBuilder();
-            String query = MessageFormat.format("select count(*) from {0} inner join client_register_type on ec_client.id=client_register_type.base_entity_id {1}", KipConstants.TABLE_NAME.ALL_CLIENTS, mainCondition);
+            String query = MessageFormat.format("select count(*) from {0} inner join client_register_type on ec_client.id = client_register_type.base_entity_id {1}", KipConstants.TABLE_NAME.ALL_CLIENTS, mainCondition);
             query = smartRegisterQueryBuilder.Endquery(query);
             Timber.i("2%s", query);
             cursor = commonRepository(KipConstants.TABLE_NAME.ALL_CLIENTS).rawCustomQueryForAdapter(query);
@@ -94,6 +90,7 @@ public class NavigationInteractor implements NavigationContract.Interactor {
 
         return count;
     }
+
 
     private CommonRepository commonRepository(String tableName) {
         return KipApplication.getInstance().getContext().commonrepository(tableName);

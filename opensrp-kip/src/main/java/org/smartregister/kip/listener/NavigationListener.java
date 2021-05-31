@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.view.View;
 
+import org.smartregister.kip.activity.AllClientsRegisterActivity;
 import org.smartregister.kip.activity.ChildRegisterActivity;
+import org.smartregister.kip.activity.KipOpdRegisterActivity;
 import org.smartregister.kip.adapter.NavigationAdapter;
 import org.smartregister.kip.util.KipConstants;
 import org.smartregister.kip.view.NavDrawerActivity;
@@ -27,8 +29,16 @@ public class NavigationListener implements View.OnClickListener {
             String tag = (String) v.getTag();
 
             switch (tag) {
+                case KipConstants.DrawerMenu.ALL_CLIENTS:
+                    navigateToActivity(AllClientsRegisterActivity.class);
+                    break;
+
                 case KipConstants.DrawerMenu.CHILD_CLIENTS:
                     navigateToActivity(ChildRegisterActivity.class);
+                    break;
+
+                case KipConstants.DrawerMenu.OPD_CLIENTS:
+                    navigateToActivity(KipOpdRegisterActivity.class);
                     break;
 
                 default:

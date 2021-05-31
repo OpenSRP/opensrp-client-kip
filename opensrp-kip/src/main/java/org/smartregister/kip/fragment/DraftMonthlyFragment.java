@@ -111,11 +111,11 @@ public class DraftMonthlyFragment extends ReportFragment {
     private void setupUneditedDraftsView() {
         Utils.startAsyncTask(new FetchUneditedMonthlyTalliesTask(reportGrouping,
                 new FetchUneditedMonthlyTalliesTask.TaskListener() {
-            @Override
-            public void onPostExecute(@NonNull List<Date> dates) {
-                updateStartNewReportButton(dates);
-            }
-        }), null);
+                    @Override
+                    public void onPostExecute(@NonNull List<Date> dates) {
+                        updateStartNewReportButton(dates);
+                    }
+                }), null);
     }
 
     private void setupEditedDraftsView() {

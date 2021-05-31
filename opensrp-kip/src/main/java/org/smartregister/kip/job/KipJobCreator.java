@@ -49,12 +49,11 @@ public class KipJobCreator implements JobCreator {
             case RecurringIndicatorGeneratingJob.TAG:
                 return new RecurringIndicatorGeneratingJob();
             case KipVaccineUpdateJob.TAG:
-                return new KipVaccineUpdateJob();
             case KipVaccineUpdateJob.SCHEDULE_ADHOC_TAG:
                 return new KipVaccineUpdateJob();
-
             case ImageUploadServiceJob.TAG:
                 return new ImageUploadServiceJob();
+
             default:
                 Log.w(KipJobCreator.class.getCanonicalName(), tag + " is not declared in Job Creator");
                 return null;
