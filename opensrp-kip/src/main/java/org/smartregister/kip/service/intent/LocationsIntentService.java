@@ -4,17 +4,8 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 
-import com.google.gson.Gson;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.opensrp.api.domain.Location;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.repository.KipLocationRepository;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by amosl on 6/13/17.
@@ -32,29 +23,31 @@ public class LocationsIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         Log.i(TAG, "OnHandleIntent..start");
 
-        String userInfo = intent.getExtras().getString("userInfo");
+        locationRepository.bulkSave();
 
-        List<Location> locations = new ArrayList<>();
-
-        try {
-            JSONObject userInfoJson = new JSONObject(userInfo);
-            JSONObject userLocationJson = userInfoJson.has("userLocations") ? userInfoJson.getJSONObject("userLocations") : null;
-            if(userLocationJson.has("userLocations")){
-                JSONArray userLocations = userLocationJson.getJSONArray("userLocations");
-                if(userLocations != null && userLocations.length() > 0){
-                    Location l;
-                    for (int i = 0; i < userLocations.length(); i++) {
-                        l = new Gson().fromJson(userLocations.getString(i), Location.class);
-                        locations.add(l);
-                    }
-                }
-            }
-
-            locationRepository.bulkInsertLocations(locations);
-        } catch (JSONException e) {
-            Log.e("LocationsTask", e.getMessage());
-            e.printStackTrace();
-        }
+//        String userInfo = intent.getExtras().getString("userInfo");
+//
+//        List<KipLocation> locations = new ArrayList<>();
+//
+//        try {
+//            JSONObject userInfoJson = new JSONObject(userInfo);
+//            JSONObject userLocationJson = userInfoJson.has("userLocations") ? userInfoJson.getJSONObject("userLocations") : null;
+//            if(userLocationJson.has("userLocations")){
+//                JSONArray userLocations = userLocationJson.getJSONArray("userLocations");
+//                if(userLocations != null && userLocations.length() > 0){
+//                    KipLocation l;
+//                    for (int i = 0; i < userLocations.length(); i++) {
+//                        l = new Gson().fromJson(userLocations.getString(i), KipLocation.class);
+//                        locations.add(l);
+//                    }
+//                }
+//            }
+//
+//            locationRepository.bulkSave();
+//        } catch (JSONException e) {
+//            Log.e("LocationsTask", e.getMessage());
+//            e.printStackTrace();
+//        }
 
         Log.i(TAG, "OnHandleIntent..end");
     }

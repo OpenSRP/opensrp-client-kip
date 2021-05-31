@@ -10,8 +10,8 @@ import com.vijay.jsonwizard.constants.JsonFormConstants;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.smartregister.kip.activity.KipJsonFormReportsActivity;
 import org.smartregister.kip.activity.HIA2ReportsActivity;
+import org.smartregister.kip.activity.KipJsonFormReportsActivity;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.domain.MonthlyTally;
 import org.smartregister.kip.repository.MonthlyTalliesRepository;
@@ -69,7 +69,7 @@ public class StartDraftMonthlyFormTask extends AsyncTask<Void, Void, Intent> {
             }
 
             JSONObject step1 = form.getJSONObject("step1");
-            String title = MonthlyTalliesRepository.DF_YYYYMM.format(date).concat(" MOH710 Monthly Report");
+            String title = MonthlyTalliesRepository.DF_YYYYMM.format(date).concat(" Monthly Draft Report");
             step1.put(KipConstants.KEY.TITLE, title);
 
             JSONArray fieldsArray = step1.getJSONArray(KipConstants.KEY.FIELDS);
@@ -91,9 +91,9 @@ public class StartDraftMonthlyFormTask extends AsyncTask<Void, Void, Intent> {
             }
 
             // Add the confirm button
-//            JSONObject buttonObject = createFormConfirmButton();
-//
-//            fieldsArray.put(buttonObject);
+            JSONObject buttonObject = createFormConfirmButton();
+
+            fieldsArray.put(buttonObject);
 
             form.put(JsonFormConstants.REPORT_MONTH, HIA2ReportsActivity.yyyyMMdd.format(date));
             form.put("identifier", "HIA2ReportForm");
@@ -151,21 +151,21 @@ public class StartDraftMonthlyFormTask extends AsyncTask<Void, Void, Intent> {
         return jsonObject;
     }
 
-//    @NonNull
-//    private JSONObject createFormConfirmButton() throws JSONException {
-//        JSONObject buttonObject = new JSONObject();
-//        buttonObject.put(JsonFormConstants.KEY, HIA2ReportsActivity.FORM_KEY_CONFIRM);
-//        buttonObject.put(JsonFormConstants.VALUE, "false");
-//        buttonObject.put(JsonFormConstants.TYPE, "button");
-//        buttonObject.put(JsonFormConstants.HINT, "Confirm");
-//        buttonObject.put(JsonFormConstants.OPENMRS_ENTITY_PARENT, "");
-//        buttonObject.put(JsonFormConstants.OPENMRS_ENTITY, "");
-//        buttonObject.put(JsonFormConstants.OPENMRS_ENTITY_ID, "");
-//        JSONObject action = new JSONObject();
-//        action.put(JsonFormConstants.BEHAVIOUR, "finish_form");
-//        buttonObject.put(JsonFormConstants.ACTION, action);
-//        return buttonObject;
-//    }
+    @NonNull
+    private JSONObject createFormConfirmButton() throws JSONException {
+        JSONObject buttonObject = new JSONObject();
+        buttonObject.put(JsonFormConstants.KEY, HIA2ReportsActivity.FORM_KEY_CONFIRM);
+        buttonObject.put(JsonFormConstants.VALUE, "false");
+        buttonObject.put(JsonFormConstants.TYPE, "button");
+        buttonObject.put(JsonFormConstants.HINT, "Confirm");
+        buttonObject.put(JsonFormConstants.OPENMRS_ENTITY_PARENT, "");
+        buttonObject.put(JsonFormConstants.OPENMRS_ENTITY, "");
+        buttonObject.put(JsonFormConstants.OPENMRS_ENTITY_ID, "");
+        JSONObject action = new JSONObject();
+        action.put(JsonFormConstants.BEHAVIOUR, "finish_form");
+        buttonObject.put(JsonFormConstants.ACTION, action);
+        return buttonObject;
+    }
 
     @Override
     protected void onPostExecute(Intent intent) {
