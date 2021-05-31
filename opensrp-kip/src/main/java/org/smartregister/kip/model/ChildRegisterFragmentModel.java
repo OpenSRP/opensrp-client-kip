@@ -3,7 +3,6 @@ package org.smartregister.kip.model;
 import org.smartregister.child.cursor.AdvancedMatrixCursor;
 import org.smartregister.child.model.BaseChildRegisterFragmentModel;
 import org.smartregister.domain.Response;
-import org.smartregister.kip.util.KipConstants;
 
 /**
  * Created by ndegwamartin on 2019-05-27.

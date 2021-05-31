@@ -15,7 +15,7 @@ public class ReportGroupingModel {
 
     private ArrayList<ReportGrouping> groupings = new ArrayList<>();
     private Context context;
-    
+
     public ReportGroupingModel(@NonNull Context context) {
         this.context = context;
     }
@@ -24,7 +24,8 @@ public class ReportGroupingModel {
     public ArrayList<ReportGrouping> getReportGroupings() {
         if (groupings.isEmpty()) {
             groupings.add(new ReportGrouping(context.getString(R.string.child_report_grouping_title), "child"));
-//            groupings.add(new ReportGrouping(context.getString(R.string.anc_report_grouping_title), "anc"));
+            groupings.add(new ReportGrouping(context.getString(R.string.opd_covid_report_grouping_title), "opd"));
+            groupings.add(new ReportGrouping(context.getString(R.string.opd_influenza_report_grouping_title), "opd_influenza"));
         }
 
         return groupings;

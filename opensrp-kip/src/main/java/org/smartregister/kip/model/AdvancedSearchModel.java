@@ -1,17 +1,22 @@
 package org.smartregister.kip.model;
 
+import android.util.Log;
+
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.Nullable;
+import org.joda.time.LocalDateTime;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.smartregister.child.cursor.AdvancedMatrixCursor;
 import org.smartregister.child.model.BaseChildAdvancedSearchModel;
+import org.smartregister.child.util.Constants;
+import org.smartregister.child.util.Utils;
+import org.smartregister.clientandeventmodel.DateUtil;
 import org.smartregister.domain.Response;
-import org.smartregister.kip.util.KipConstants;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -19,21 +24,29 @@ import java.util.Map;
  * Created by ndegwamartin on 2019-05-27.
  */
 public class AdvancedSearchModel extends BaseChildAdvancedSearchModel {
+    private static final String MOTHER_BASE_ENTITY_ID = "mother_base_entity_id";
+    private static final String MOTHER_GUARDIAN_FIRST_NAME = "mother_first_name";
+    private static final String MOTHER_GUARDIAN_LAST_NAME = "mother_last_name";
+
     @Override
     public Map<String, String> createEditMap(Map<String, String> editMap) {
         return editMap;
     }
 
     @Override
+    public String[] getColumns() {
+        return new String[0];
+    }
+
+
+    protected String[] mainColumns() {
+        return Utils.metadata().getRegisterQueryProvider().mainColumns();
+    }
+
+    @Override
     public AdvancedMatrixCursor createMatrixCursor(Response<String> response) {
 
-        String[] columns = new String[]{KipConstants.KEY.ID_LOWER_CASE, KipConstants.KEY.RELATIONALID,
-                KipConstants.KEY.FIRST_NAME, KipConstants.KEY.MIDDLE_NAME, KipConstants.KEY.LAST_NAME,
-                KipConstants.KEY.GENDER, KipConstants.KEY.DOB, KipConstants.KEY.ZEIR_ID,
-                KipConstants.KEY.MOTHER_BASE_ENTITY_ID, KipConstants.KEY.MOTHER_FIRST_NAME,
-                KipConstants.KEY.MOTHER_FIRST_NAME, KipConstants.KEY.INACTIVE,
-                KipConstants.KEY.LOST_TO_FOLLOW_UP};
-
+        String[] columns = new String[]{Constants.KEY.ID_LOWER_CASE, Constants.KEY.RELATIONALID, Constants.KEY.FIRST_NAME, "middle_name", Constants.KEY.LAST_NAME, Constants.KEY.GENDER, Constants.KEY.DOB, Constants.KEY.ZEIR_ID, Constants.KEY.EPI_CARD_NUMBER, Constants.KEY.NFC_CARD_IDENTIFIER, MOTHER_BASE_ENTITY_ID, MOTHER_GUARDIAN_FIRST_NAME, MOTHER_GUARDIAN_LAST_NAME, org.smartregister.child.util.Constants.CHILD_STATUS.INACTIVE, org.smartregister.child.util.Constants.CHILD_STATUS.LOST_TO_FOLLOW_UP};
         AdvancedMatrixCursor matrixCursor = new AdvancedMatrixCursor(columns);
 
         if (response == null || response.isFailure() || StringUtils.isBlank(response.payload())) {
@@ -48,34 +61,99 @@ public class AdvancedSearchModel extends BaseChildAdvancedSearchModel {
                 jsonValues.add(getJsonObject(jsonArray, i));
             }
 
-            sortValues(jsonValues);
+            Collections.sort(jsonValues, new Comparator<JSONObject>() {
+                @Override
+                public int compare(JSONObject lhs, JSONObject rhs) {
+
+                    if (!lhs.has("child") || !rhs.has("child")) {
+                        return 0;
+                    }
+
+                    JSONObject lhsChild = getJsonObject(lhs, "child");
+                    JSONObject rhsChild = getJsonObject(rhs, "child");
+
+                    String lhsZeirId = getJsonString(getJsonObject(lhsChild, "identifiers"), Constants.KEY.ZEIR_ID.toUpperCase());
+                    String rhsZeirId = getJsonString(getJsonObject(rhsChild, "identifiers"), Constants.KEY.ZEIR_ID.toUpperCase());
+
+                    return lhsZeirId.compareTo(rhsZeirId);
+
+                }
+            });
 
             for (JSONObject client : jsonValues) {
+                String entityId = "";
+                String firstName = "";
+                String middleName = "";
+                String lastName = "";
+                String gender = "";
+                String dob = "";
+                String zeirId = "";
+                String epiCardNumber = "";
+                String inactive = "";
+                String lostToFollowUp = "";
+                String nfcCardId = "";
 
                 if (client == null) {
                     continue;
                 }
 
-                CheckChildDetailsModel checkChildDetails = new CheckChildDetailsModel(client).invoke();
-                if (checkChildDetails.is())
-                    continue;
-                String entityId = checkChildDetails.getEntityId();
-                String firstName = checkChildDetails.getFirstName();
-                String middleName = checkChildDetails.getMiddleName();
-                String lastName = checkChildDetails.getLastName();
-                String gender = checkChildDetails.getGender();
-                String dob = checkChildDetails.getDob();
-                String zeirId = checkChildDetails.getZeirId();
-                String inactive = checkChildDetails.getInactive();
-                String lostToFollowUp = checkChildDetails.getLostToFollowUp();
+                if (client.has("child")) {
+                    JSONObject child = getJsonObject(client, "child");
+
+                    // Skip deceased children
+                    if (StringUtils.isNotBlank(getJsonString(child, "deathdate"))) {
+                        continue;
+                    }
+
+                    entityId = getJsonString(child, "baseEntityId");
+                    firstName = getJsonString(child, "firstName");
+                    middleName = getJsonString(child, "middleName");
+                    lastName = getJsonString(child, "lastName");
+
+                    gender = getJsonString(child, "gender");
+                    dob = getJsonString(child, "birthdate");
+                    if (StringUtils.isNotBlank(dob) && StringUtils.isNumeric(dob)) {
+                        try {
+                            Long dobLong = Long.valueOf(dob);
+                            Date date = new Date(dobLong);
+                            dob = DateUtil.yyyyMMddTHHmmssSSSZ.format(date);
+                        } catch (Exception e) {
+                            Log.e(getClass().getName(), e.toString(), e);
+                        }
+                    } else if (dob.startsWith("{")) {
+
+                        Date date = processJsonFormatLocalDate(dob);
+                        if (date != null) {
+                            dob = DateUtil.yyyyMMddTHHmmssSSSZ.format(date);
+                        }
+                    }
+
+                    zeirId = getJsonString(getJsonObject(child, "identifiers"), Constants.KEY.ZEIR_ID.toUpperCase());
+                    if (StringUtils.isNotBlank(zeirId)) {
+                        zeirId = zeirId.replace("-", "");
+                    }
+
+                    epiCardNumber = getJsonString(getJsonObject(child, "attributes"), "Child_Register_Card_Number");
+
+                    inactive = getJsonString(getJsonObject(child, "attributes"), "inactive");
+                    lostToFollowUp = getJsonString(getJsonObject(child, "attributes"), "lost_to_follow_up");
+                    nfcCardId = getJsonString(getJsonObject(child, "attributes"), Constants.KEY.NFC_CARD_IDENTIFIER);
+
+                }
 
 
-                CheckMotherDetailsModel checkMotherDetails = new CheckMotherDetailsModel(client).invoke();
-                String motherBaseEntityId = checkMotherDetails.getMotherBaseEntityId();
-                String motherFirstName = checkMotherDetails.getMotherFirstName();
-                String motherLastName = checkMotherDetails.getMotherLastName();
+                String motherBaseEntityId = "";
+                String motherFirstName = "";
+                String motherLastName = "";
 
-                matrixCursor.addRow(new Object[]{entityId, null, firstName, middleName, lastName, gender, dob, zeirId, motherBaseEntityId, motherFirstName, motherLastName, inactive, lostToFollowUp});
+                if (client.has("mother")) {
+                    JSONObject mother = getJsonObject(client, "mother");
+                    motherFirstName = getJsonString(mother, "firstName");
+                    motherLastName = getJsonString(mother, "lastName");
+                    motherBaseEntityId = getJsonString(mother, "baseEntityId");
+                }
+
+                matrixCursor.addRow(new Object[]{entityId, null, firstName, middleName, lastName, gender, dob, zeirId, epiCardNumber, nfcCardId, motherBaseEntityId, motherFirstName, motherLastName, inactive, lostToFollowUp});
             }
 
             return matrixCursor;
@@ -84,51 +162,17 @@ public class AdvancedSearchModel extends BaseChildAdvancedSearchModel {
         }
     }
 
-    private void sortValues(List<JSONObject> jsonValues) {
-        Collections.sort(jsonValues, new Comparator<JSONObject>() {
-            @Override
-            public int compare(JSONObject lhs, JSONObject rhs) {
+    private Date processJsonFormatLocalDate(String dateString) {
+        Date date = null;
+        try {
 
-                if (!lhs.has(KipConstants.KEY.CHILD) || !rhs.has(KipConstants.KEY.CHILD)) {
-                    return 0;
-                }
+            JSONObject jsonObject = new JSONObject(dateString);
+            date = (new LocalDateTime(jsonObject.getInt(Constants.LOCAL_DATE_TIME.YEAR), jsonObject.getInt(Constants.LOCAL_DATE_TIME.MONTH_OF_YEAR), jsonObject.getInt(Constants.LOCAL_DATE_TIME.DAY_OF_MONTH), jsonObject.getInt(Constants.LOCAL_DATE_TIME.HOUR_OF_DAY), jsonObject.getInt(Constants.LOCAL_DATE_TIME.MINUTE_OF_HOUR), jsonObject.getInt(Constants.LOCAL_DATE_TIME.SECOND_OF_MINUTE))).toDate();
 
-                JSONObject lhsChild = getJsonObject(lhs, KipConstants.KEY.CHILD);
-                JSONObject rhsChild = getJsonObject(rhs, KipConstants.KEY.CHILD);
+        } catch (Exception e) {
 
-                String lhsInactive = getJsonString(getJsonObject(lhsChild, KipConstants.KEY.ATTRIBUTES), KipConstants.KEY.INACTIVE);
-                String rhsInactive = getJsonString(getJsonObject(rhsChild, KipConstants.KEY.ATTRIBUTES), KipConstants.KEY.INACTIVE);
-
-                int aComp = 0;
-                if (lhsInactive.equalsIgnoreCase(Boolean.TRUE.toString()) && !rhsInactive.equalsIgnoreCase(Boolean.TRUE.toString())) {
-                    aComp = 1;
-                } else if (!lhsInactive.equalsIgnoreCase(Boolean.TRUE.toString()) && rhsInactive.equalsIgnoreCase(Boolean.TRUE.toString())) {
-                    aComp = -1;
-                }
-
-                if (aComp != 0) {
-                    return aComp;
-                } else {
-                    Integer lostToFollowUp = getLostToFollowUp(lhsChild, rhsChild);
-                    if (lostToFollowUp != null) return lostToFollowUp;
-                }
-
-                return 0;
-
-            }
-        });
-    }
-
-    @Nullable
-    private Integer getLostToFollowUp(JSONObject lhsChild, JSONObject rhsChild) {
-        String lhsLostToFollowUp = getJsonString(getJsonObject(lhsChild, KipConstants.KEY.ATTRIBUTES), KipConstants.KEY.LOST_TO_FOLLOW_UP);
-        String rhsLostToFollowUp = getJsonString(getJsonObject(rhsChild, KipConstants.KEY.ATTRIBUTES), KipConstants.KEY.LOST_TO_FOLLOW_UP);
-        if (lhsLostToFollowUp.equalsIgnoreCase(Boolean.TRUE.toString()) && !rhsLostToFollowUp.equalsIgnoreCase(Boolean.TRUE.toString())) {
-            return 1;
-        } else if (!lhsLostToFollowUp.equalsIgnoreCase(Boolean.TRUE.toString()) && rhsLostToFollowUp.equalsIgnoreCase(Boolean.TRUE.toString())) {
-            return -1;
+            Log.e(getClass().getName(), e.toString(), e);
         }
-        return null;
+        return date;
     }
-
 }

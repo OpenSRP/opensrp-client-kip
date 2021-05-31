@@ -6,7 +6,6 @@ import org.smartregister.kip.util.KipConstants;
 import org.smartregister.util.Utils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import timber.log.Timber;
@@ -25,11 +24,26 @@ public class NavigationModel implements NavigationContract.Model {
     @Override
     public List<NavigationOption> getNavigationItems() {
         if (navigationOptions.size() == 0) {
+
+            NavigationOption allClientsOption = new NavigationOption(R.mipmap.sidemenu_families
+                    , R.mipmap.sidemenu_families_active, R.string.all_clients, KipConstants.DrawerMenu.ALL_CLIENTS, 0, true);
+
+            if (allClientsOption.isEnabled()) {
+                navigationOptions.add(allClientsOption);
+            }
+
             NavigationOption childNavigationOption = new NavigationOption(R.mipmap.sidemenu_children,
                     R.mipmap.sidemenu_children_active, R.string.menu_child_clients, KipConstants.DrawerMenu.CHILD_CLIENTS,
                     0, true);
             if (childNavigationOption.isEnabled()) {
                 navigationOptions.add(childNavigationOption);
+            }
+
+            NavigationOption opdNavigationOption = new NavigationOption(R.mipmap.sidemenu_families,
+                    R.mipmap.sidemenu_families_active, R.string.menu_opd_clients, KipConstants.DrawerMenu.OPD_CLIENTS,
+                    0, true);
+            if (opdNavigationOption.isEnabled()) {
+                navigationOptions.add(opdNavigationOption);
             }
         }
 
