@@ -67,7 +67,7 @@ public class ReportSummaryActivity extends BaseActivity {
             Serializable tallyDaySerializable = extras.getSerializable(EXTRA_DAY);
             reportGrouping = extras.getString(EXTRA_REPORT_GROUPING);
 
-            if (talliesSerializable != null && talliesSerializable instanceof ArrayList) {
+            if (talliesSerializable != null && talliesSerializable instanceof  ArrayList) {
                 ArrayList<MonthlyTally> tallies = (ArrayList<MonthlyTally>) talliesSerializable;
                 setTallies(tallies, false);
             }

@@ -11,7 +11,6 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -23,17 +22,17 @@ import com.vijay.jsonwizard.constants.JsonFormConstants;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.smartregister.child.util.JsonFormUtils;
 import org.smartregister.domain.Response;
 import org.smartregister.kip.R;
 import org.smartregister.kip.adapter.ReportsSectionsPagerAdapter;
 import org.smartregister.kip.application.KipApplication;
+import org.smartregister.kip.domain.Hia2Indicator;
 import org.smartregister.kip.domain.MonthlyTally;
 import org.smartregister.kip.domain.ReportHia2Indicator;
-import org.smartregister.kip.fragment.CustomDateRangeDialogFragment;
 import org.smartregister.kip.fragment.DraftMonthlyFragment;
 import org.smartregister.kip.fragment.SendMonthlyDraftDialogFragment;
 import org.smartregister.kip.model.ReportGroupingModel;
@@ -43,13 +42,13 @@ import org.smartregister.kip.task.StartDraftMonthlyFormTask;
 import org.smartregister.kip.util.AppExecutors;
 import org.smartregister.kip.util.KipConstants;
 import org.smartregister.kip.util.KipReportUtils;
-import org.smartregister.kip.view.NavigationMenu;
 import org.smartregister.reporting.domain.TallyStatus;
 import org.smartregister.reporting.event.IndicatorTallyEvent;
 import org.smartregister.reporting.util.ViewUtils;
 import org.smartregister.reporting.view.ReportingProcessingSnackbar;
 import org.smartregister.repository.Hia2ReportRepository;
 import org.smartregister.service.HTTPAgent;
+import org.smartregister.util.JsonFormUtils;
 import org.smartregister.util.Utils;
 
 import java.text.DateFormat;
@@ -75,15 +74,10 @@ import static org.smartregister.util.JsonFormUtils.VALUE;
 
 public class HIA2ReportsActivity extends AppCompatActivity {
 
-    private static final String DIALOG_TAG = HIA2ReportsActivity.class.getCanonicalName().concat("DIALOG_TAG");
-
     public static final int REQUEST_CODE_GET_JSON = 3432;
-    public static final int MONTH_SUGGESTION_LIMIT = 11;
+    public static final int MONTH_SUGGESTION_LIMIT = 6;
     public static final String FORM_KEY_CONFIRM = "confirm";
     public static final DateFormat yyyyMMdd = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-
-    public static final String REPORT_NAME = "HIA2";
-
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -104,7 +98,7 @@ public class HIA2ReportsActivity extends AppCompatActivity {
 
     private ReportingProcessingSnackbar reportingProcessingSnackbar;
     private ArrayList<FragmentRefreshListener> fragmentRefreshListeners = new ArrayList<>();
-
+    private HashMap<String, String> groupingReportMap = new HashMap<>();
     @Nullable
     private String reportGrouping;
 
@@ -113,6 +107,8 @@ public class HIA2ReportsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hia2_reports);
         tabLayout = findViewById(R.id.tabs);
+
+        initGroupingReportMap();
 
         ImageView backBtnImg = findViewById(R.id.back_button);
         if (backBtnImg != null) {
@@ -141,7 +137,7 @@ public class HIA2ReportsActivity extends AppCompatActivity {
 
             String humanReadableTitle = null;
 
-            for (ReportGroupingModel.ReportGrouping reportGroupingObj: registerModels) {
+            for (ReportGroupingModel.ReportGrouping reportGroupingObj : registerModels) {
                 if (reportGrouping.equals(reportGroupingObj.getGrouping())) {
                     humanReadableTitle = reportGroupingObj.getDisplayName();
                 }
@@ -151,9 +147,23 @@ public class HIA2ReportsActivity extends AppCompatActivity {
                 titleTv.setText(humanReadableTitle + " " + getString(R.string.reports));
             }
         }
+        ImageView reportSyncBtn = findViewById(R.id.report_sync_btn);
+        if (reportSyncBtn != null) {
+            reportSyncBtn.setVisibility(View.GONE);
+        }
 
         // Update Draft Monthly Title
         refreshDraftMonthlyTitle();
+    }
+
+    private void initGroupingReportMap() {
+        groupingReportMap.put("child", "KEPI Vaccination Performance and Disease Surveillance (NEW)");
+        groupingReportMap.put("opd", "Covid 19 Vaccination Performance");
+        groupingReportMap.put("opd_influenza", "Influenza Vaccination Performance");
+    }
+
+    public ReportsSectionsPagerAdapter getmSectionsPagerAdapter() {
+        return mSectionsPagerAdapter;
     }
 
     @Override
@@ -230,7 +240,7 @@ public class HIA2ReportsActivity extends AppCompatActivity {
                         Snackbar.make(tabLayout, R.string.all_changes_saved, Snackbar.LENGTH_LONG).show();
                     }
                 } else {
-                    saveClicked = false;
+                    saveClicked = true;
                 }
                 KipApplication.getInstance().monthlyTalliesRepository().save(result, month);
                 if (saveClicked && !skipValidationSet) {
@@ -296,30 +306,29 @@ public class HIA2ReportsActivity extends AppCompatActivity {
     }
 
     public void refreshDraftMonthlyTitle() {
-        Utils.startAsyncTask(new FetchEditedMonthlyTalliesTask(reportGrouping,
-                new FetchEditedMonthlyTalliesTask.TaskListener() {
+        Utils.startAsyncTask(new FetchEditedMonthlyTalliesTask(reportGrouping, new FetchEditedMonthlyTalliesTask.TaskListener() {
+            @Override
+            public void onPostExecute(final List<MonthlyTally> monthlyTallies) {
+                tabLayout.post(new Runnable() {
                     @Override
-                    public void onPostExecute(final List<MonthlyTally> monthlyTallies) {
-                        tabLayout.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
-                                        TabLayout.Tab tab = tabLayout.getTabAt(i);
-                                        if (tab != null && tab.getText() != null && tab.getText().toString()
-                                                .contains(getString(R.string.hia2_draft_monthly))) {
-                                            tab.setText(String.format(
-                                                    getString(R.string.hia2_draft_monthly_with_count),
-                                                    monthlyTallies == null ? 0 : monthlyTallies.size()));
-                                        }
-                                    }
-                                } catch (Exception e){
-                                    Timber.e(e);
+                    public void run() {
+                        try {
+                            for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
+                                TabLayout.Tab tab = tabLayout.getTabAt(i);
+                                if (tab != null && tab.getText() != null && tab.getText().toString()
+                                        .contains(getString(R.string.hia2_draft_monthly))) {
+                                    tab.setText(String.format(
+                                            getString(R.string.hia2_draft_monthly_with_count),
+                                            monthlyTallies == null ? 0 : monthlyTallies.size()));
                                 }
                             }
-                        });
+                        } catch (Exception e) {
+                            Timber.e(e);
+                        }
                     }
-                }), null);
+                });
+            }
+        }), null);
     }
 
 
@@ -360,6 +369,8 @@ public class HIA2ReportsActivity extends AppCompatActivity {
             if (month != null) {
                 List<MonthlyTally> tallies = monthlyTalliesRepository
                         .find(MonthlyTalliesRepository.DF_YYYYMM.format(month), reportGrouping);
+
+                HashMap<String, Hia2Indicator> hia2IndicatorHashMap = KipApplication.getInstance().hIA2IndicatorsRepository().findAllByGrouping(getReportGrouping());
                 if (tallies != null) {
                     List<ReportHia2Indicator> reportHia2Indicators = new ArrayList<>();
                     for (MonthlyTally curTally : tallies) {
@@ -369,13 +380,26 @@ public class HIA2ReportsActivity extends AppCompatActivity {
                                 , "Immunization"
                                 , curTally.getValue());
 
+                        Hia2Indicator hia2Indicator = hia2IndicatorHashMap.get(reportHia2Indicator.getIndicatorCode());
+                        if (hia2Indicator != null) {
+                            reportHia2Indicator.setDhisId(hia2Indicator.getDhisId());
+                            reportHia2Indicator.setCategoryOptionCombo(hia2Indicator.getCategoryOptionCombo());
+                        } else {
+                            // This enables the server to skip this indicator tally and not crash
+                            // when it tries to compare NULL to "unknown" and throws an NPE
+                            // The server is equipped to handle unknowns and ignore them
+                            reportHia2Indicator.setDhisId("unknown");
+                        }
+
                         reportHia2Indicators.add(reportHia2Indicator);
                     }
 
-                    KipReportUtils.createReportAndSaveReport(reportHia2Indicators, month, REPORT_NAME);
+
+                    DateTime dateSent = new DateTime();
+                    KipReportUtils.createReportAndSaveReport(reportHia2Indicators, month, groupingReportMap.get(getReportGrouping()), getReportGrouping(), dateSent);
 
                     for (MonthlyTally curTally : tallies) {
-                        curTally.setDateSent(Calendar.getInstance().getTime());
+                        curTally.setDateSent(dateSent.toDate());
                         monthlyTalliesRepository.save(curTally);
                     }
                 } else {
@@ -388,7 +412,7 @@ public class HIA2ReportsActivity extends AppCompatActivity {
     }
 
     private void pushUnsentReportsToServer() {
-        final String REPORTS_SYNC_PATH = "/rest/report/add";
+        final String REPORTS_SYNC_PATH = "rest/report/add";
         final Context context = KipApplication.getInstance().context().applicationContext();
         HTTPAgent httpAgent = KipApplication.getInstance().context().getHttpAgent();
         Hia2ReportRepository hia2ReportRepository = KipApplication.getInstance().hia2ReportRepository();
@@ -428,17 +452,22 @@ public class HIA2ReportsActivity extends AppCompatActivity {
 
                 // update drafts view
                 refreshDraftMonthlyTitle();
-                org.smartregister.child.util.Utils.startAsyncTask(new FetchEditedMonthlyTalliesTask(reportGrouping,
-                        new FetchEditedMonthlyTalliesTask.TaskListener() {
-                            @Override
-                            public void onPostExecute(List<MonthlyTally> monthlyTallies) {
-                                Fragment fragment = getSupportFragmentManager().findFragmentByTag(
-                                        "android:switcher:" + R.id.container + ":" + mViewPager.getCurrentItem());
-                                if (fragment != null) {
-                                    ((DraftMonthlyFragment) fragment).updateDraftsReportListView(monthlyTallies);
-                                }
-                            }
-                        }), null);
+                org.smartregister.child.util.Utils.startAsyncTask(new FetchEditedMonthlyTalliesTask(reportGrouping, new FetchEditedMonthlyTalliesTask.TaskListener() {
+                    @Override
+                    public void onPostExecute(List<MonthlyTally> monthlyTallies) {
+                        Fragment fragment = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.container + ":" + mViewPager.getCurrentItem());
+                        if (fragment != null) {
+                            ((DraftMonthlyFragment) fragment).updateDraftsReportListView(monthlyTallies);
+                        }
+
+                    }
+                }), null);
+
+                try {
+                    mSectionsPagerAdapter.getSentMonthlyFragment().refreshData();
+                } catch (Exception e) {
+                    Timber.e(e);
+                }
             }
         } catch (Exception e) {
             Timber.e(e);
@@ -476,5 +505,4 @@ public class HIA2ReportsActivity extends AppCompatActivity {
     public String getReportGrouping() {
         return reportGrouping;
     }
-
 }

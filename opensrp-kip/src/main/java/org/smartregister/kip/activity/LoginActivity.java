@@ -1,34 +1,26 @@
 package org.smartregister.kip.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Base64;
 
 import com.google.gson.Gson;
 
-import org.apache.commons.io.IOUtils;
 import org.smartregister.domain.LoginResponse;
-import org.smartregister.domain.jsonmapping.LoginResponseData;
-import org.smartregister.domain.jsonmapping.util.LocationTree;
 import org.smartregister.kip.R;
+import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.presenter.LoginPresenter;
 import org.smartregister.kip.service.intent.LocationsIntentService;
 import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.kip.util.KipConstants;
-import org.smartregister.sync.helper.LocationServiceHelper;
 import org.smartregister.task.SaveTeamLocationsTask;
 import org.smartregister.view.activity.BaseLoginActivity;
 import org.smartregister.view.contract.BaseLoginContract;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-
-import timber.log.Timber;
-
 import static org.smartregister.domain.LoginResponse.SUCCESS;
 
 public class LoginActivity extends BaseLoginActivity implements BaseLoginContract.View {
+    Context context = KipApplication.getInstance().getApplicationContext();
 
     @Override
     protected void onCreate(Bundle savedInstance) {
@@ -59,12 +51,15 @@ public class LoginActivity extends BaseLoginActivity implements BaseLoginContrac
         if (remote) {
             org.smartregister.util.Utils.startAsyncTask(new SaveTeamLocationsTask(), null);
         }
+        gotToHomeRegister(remote);
+        finish();
+    }
 
+    private void gotToHomeRegister(boolean remote) {
         LoginResponse loginResponse = SUCCESS;
         String jsonPayload = new Gson().toJson(loginResponse.payload());
-
         Intent intent = new Intent(this, ChildRegisterActivity.class);
-        intent.putExtra(KipConstants.IntentKeyUtil.IS_REMOTE_LOGIN, remote);
+        intent.putExtra(KipConstants.IntentKeyUtils.IS_REMOTE_LOGIN, remote);
         Intent rIntent = new Intent(this, LocationsIntentService.class);
         rIntent.putExtra("userInfo", jsonPayload);
         startService(rIntent);
@@ -75,7 +70,7 @@ public class LoginActivity extends BaseLoginActivity implements BaseLoginContrac
 
 
     @Override
-    protected void attachBaseContext(android.content.Context base) {
+    protected void attachBaseContext(Context base) {
         // get language from prefs
         String lang = KipChildUtils.getLanguage(base.getApplicationContext());
         super.attachBaseContext(KipChildUtils.setAppLocale(base, lang));

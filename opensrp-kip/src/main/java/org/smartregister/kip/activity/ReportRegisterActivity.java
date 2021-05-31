@@ -5,20 +5,25 @@ import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import org.apache.commons.lang3.tuple.Triple;
 import org.smartregister.child.activity.BaseActivity;
 import org.smartregister.child.toolbar.LocationSwitcherToolbar;
+import org.smartregister.domain.FetchStatus;
 import org.smartregister.kip.R;
 import org.smartregister.kip.model.ReportGroupingModel;
+import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.kip.util.KipConstants;
 import org.smartregister.kip.view.NavigationMenu;
 
 import java.util.ArrayList;
 
 public class ReportRegisterActivity extends BaseActivity {
+
+    private ImageView reportSyncBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +33,11 @@ public class ReportRegisterActivity extends BaseActivity {
         TextView titleTv = findViewById(R.id.title);
 
         if (titleTv != null) {
-            titleTv.setText(R.string.moh710_report);
+            titleTv.setText(R.string.dhis2_reports);
         }
+
+        reportSyncBtn = findViewById(R.id.report_sync_btn);
+        reportSyncBtn.setOnClickListener(v -> KipChildUtils.startReportJob(getApplicationContext()));
 
         final ArrayList<ReportGroupingModel.ReportGrouping> reportGroupings = getReportGroupings();
         listView.setAdapter(new ArrayAdapter<>(this, R.layout.report_grouping_list_item, reportGroupings));
@@ -38,6 +46,12 @@ public class ReportRegisterActivity extends BaseActivity {
             intent.putExtra(KipConstants.IntentKey.REPORT_GROUPING, reportGroupings.get(position).getGrouping());
             startActivity(intent);
         });
+
+        if (KipChildUtils.getSyncStatus()) {
+            reportSyncBtn.setVisibility(View.VISIBLE);
+        } else {
+            reportSyncBtn.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -96,9 +110,48 @@ public class ReportRegisterActivity extends BaseActivity {
     }
 
     @Override
+    public void onSyncInProgress(FetchStatus fetchStatus) {
+        super.onSyncInProgress(fetchStatus);
+        toggleReportSyncButton();
+    }
+
+    private void toggleReportSyncButton() {
+        if (reportSyncBtn != null) {
+            reportSyncBtn.setVisibility(View.GONE);
+        }
+        KipChildUtils.updateSyncStatus(false);
+    }
+
+    @Override
+    public void onSyncComplete(FetchStatus fetchStatus) {
+        super.onSyncComplete(fetchStatus);
+        toggleReportSyncButton();
+    }
+
+
+    @Override
+    public void onSyncStart() {
+        super.onSyncStart();
+        if (reportSyncBtn != null) {
+            reportSyncBtn.setVisibility(View.GONE);
+        }
+        KipChildUtils.updateSyncStatus(false);
+
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         createDrawer();
+
+        if (reportSyncBtn == null)
+            return;
+
+        if (KipChildUtils.getSyncStatus()) {
+            reportSyncBtn.setVisibility(View.VISIBLE);
+        } else {
+            reportSyncBtn.setVisibility(View.GONE);
+        }
     }
 
     public void createDrawer() {
@@ -108,5 +161,4 @@ public class ReportRegisterActivity extends BaseActivity {
             navigationMenu.runRegisterCount();
         }
     }
-
 }

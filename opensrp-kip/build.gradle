@@ -2,7 +2,8 @@ buildscript {
     repositories {
         google()
         jcenter()
-        maven { url 'https://maven.fabric.io/public' }
+        maven { url 'https://maven.fabric.io/public'}
+        maven { url "https://plugins.gradle.org/m2/"}
 
     }
     dependencies {
@@ -45,6 +46,7 @@ android {
 
         javaCompileOptions {
             annotationProcessorOptions {
+                includeCompileClasspath true
                 arguments = [eventBusIndex: 'org.smartregister.kip.KipEventBusIndex']
             }
         }
@@ -69,7 +71,7 @@ android {
             minifyEnabled false
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rule.pro'
-            resValue "string", 'opensrp_url', '"http://197.254.67.146:8080/opensrp/"'
+            resValue "string", 'opensrp_url', '"http://197.254.67.146:9090/opensrp"'
             buildConfigField "int", "OPENMRS_UNIQUE_ID_INITIAL_BATCH_SIZE", '250'
             buildConfigField "int", "OPENMRS_UNIQUE_ID_BATCH_SIZE", '100'
             buildConfigField "int", "OPENMRS_UNIQUE_ID_SOURCE", '1'
@@ -88,7 +90,7 @@ android {
         }
 
         debug {
-            resValue "string", 'opensrp_url', '"http://197.254.67.146:8080/opensrp/"'
+            resValue "string", 'opensrp_url', '"http://197.254.67.146:9090/opensrp"'
             buildConfigField "int", "OPENMRS_UNIQUE_ID_INITIAL_BATCH_SIZE", '250'
             buildConfigField "int", "OPENMRS_UNIQUE_ID_BATCH_SIZE", '100'
             buildConfigField "int", "OPENMRS_UNIQUE_ID_SOURCE", '1'
@@ -143,7 +145,15 @@ dependencies {
     implementation 'com.evrencoskun.library:tableview:0.8.8'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.15'
 
-    implementation('org.smartregister:opensrp-client-child:0.2.9r5-GIZ-0.2.8r1-SNAPSHOT@aar') {
+    implementation('org.smartregister:opensrp-client-opd:0.0.16-SNAPSHOT@aar') {
+        transitive = true
+        exclude group: 'org.smartregister', module: 'opensrp-client-core'
+        exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
+        exclude group: 'org.smartregister', module: 'opensrp-client-configurable-views'
+        exclude group: 'com.android.support', module: 'appcompat-v7'
+    }
+
+    implementation('org.smartregister:opensrp-client-child:0.3.4-00-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'id.zelory', module: 'compressor'
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
@@ -154,7 +164,7 @@ dependencies {
     }
 
 
-    implementation('org.smartregister:opensrp-client-core:1.8.2600-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-core:1.12.0-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'id.zelory', module: 'compressor'
         exclude group: 'com.github.bmelnychuk', module: 'atv'
@@ -168,7 +178,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'design'
     }
 
-    implementation('org.smartregister:opensrp-client-native-form:1.7.20-GIZ-0.2.7-r1-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-native-form:2.0.2-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'id.zelory', module: 'compressor'
         exclude group: 'com.android.support', module: 'recyclerview-v7'
@@ -181,7 +191,7 @@ dependencies {
         exclude group: 'io.ona.rdt-capture', module: 'lib'
     }
 
-    api('org.smartregister:opensrp-client-immunization:1.4.42r4-GIZ-0.2.8r1-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-immunization:1.4.43-SNAPSHOT@aar') {
         //api (project(':opensrp-immunization')) {
         transitive = true
         exclude group: 'id.zelory', module: 'compressor'
@@ -192,7 +202,7 @@ dependencies {
     }
 
 
-    implementation('org.smartregister:opensrp-client-configurable-views:1.1.4-SNAPSHOT@aar') {
+    implementation('org.smartregister:opensrp-client-configurable-views:1.1.5-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'id.zelory', module: 'compressor'
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
@@ -203,7 +213,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-v4'
     }
 
-    api('org.smartregister:opensrp-client-growth-monitoring:1.1.23-PREVIEW-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-growth-monitoring:1.1.22-SNAPSHOT@aar') {
 
         transitive = true
 
@@ -248,7 +258,7 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:2.2.15'
     implementation 'com.evernote:android-job:1.2.6'
     implementation 'com.github.lecho:hellocharts-android:v1.5.8'
-    implementation 'id.zelory:compressor:2.1.0'
+    implementation 'id.zelory:compressor:2.1.1'
     implementation('com.android.support:design:28.0.0') {
         exclude group: 'com.android.support', module: 'recyclerview-v7'
         exclude group: 'com.android.support', module: 'cardview-v7'

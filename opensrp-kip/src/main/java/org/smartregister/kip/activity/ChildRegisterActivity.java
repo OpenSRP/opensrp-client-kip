@@ -35,10 +35,8 @@ import org.smartregister.kip.event.LoginEvent;
 import org.smartregister.kip.fragment.AdvancedSearchFragment;
 import org.smartregister.kip.fragment.ChildRegisterFragment;
 import org.smartregister.kip.fragment.MeFragment;
-import org.smartregister.kip.presenter.ChildRegisterPresenter;
 import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.kip.util.KipConstants;
-import org.smartregister.kip.util.KipJsonFormUtils;
 import org.smartregister.kip.util.KipLocationUtility;
 import org.smartregister.kip.view.NavDrawerActivity;
 import org.smartregister.kip.view.NavigationMenu;
@@ -65,6 +63,11 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //check if from opd
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null && bundle.getBoolean("from_opd", false)) {
+            startRegistration();
+        }
     }
 
     @Override
@@ -181,11 +184,10 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
     }
 
     private void createDrawer() {
-        navigationMenu = NavigationMenu.getInstance(this, null, null);
-        if (navigationMenu != null) {
-            navigationMenu.getNavigationAdapter().setSelectedView(KipConstants.DrawerMenu.CHILD_CLIENTS);
-            navigationMenu.runRegisterCount();
-        }
+        WeakReference<ChildRegisterActivity> childRegisterActivityWeakReference = new WeakReference<>(this);
+        navigationMenu = NavigationMenu.getInstance(childRegisterActivityWeakReference.get(), null, null);
+        navigationMenu.getNavigationAdapter().setSelectedView(KipConstants.DrawerMenu.CHILD_CLIENTS);
+        navigationMenu.runRegisterCount();
     }
 
     @Override
@@ -256,5 +258,5 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
 
             }
         });
-}
+    }
 }

@@ -1,7 +1,10 @@
 package org.smartregister.kip.activity;
 
+import android.Manifest;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,10 +19,15 @@ import org.smartregister.AllConstants;
 import org.smartregister.child.activity.BaseChildDetailTabbedActivity;
 import org.smartregister.child.fragment.StatusEditDialogFragment;
 import org.smartregister.child.task.LoadAsyncTask;
+import org.smartregister.child.util.ChildDbUtils;
 import org.smartregister.kip.R;
 import org.smartregister.kip.fragment.ChildRegistrationDataFragment;
+import org.smartregister.kip.repository.KipOpdDetailsRepository;
 import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.kip.util.KipJsonFormUtils;
+import org.smartregister.location.helper.LocationHelper;
+import org.smartregister.opd.utils.OpdDbConstants;
+import org.smartregister.opd.utils.OpdUtils;
 import org.smartregister.util.FormUtils;
 import org.smartregister.util.JsonFormUtils;
 import org.smartregister.util.Utils;
@@ -33,13 +41,14 @@ import java.util.Locale;
 import timber.log.Timber;
 
 import static org.smartregister.kip.util.KipChildUtils.setAppLocale;
+import static org.smartregister.kip.util.KipConstants.KEPI_SMS_REMINDER;
 
 
 /**
  * Created by ndegwamartin on 06/03/2019.
  */
 public class ChildDetailTabbedActivity extends BaseChildDetailTabbedActivity {
-    private static List<String> nonEditableFields = Arrays.asList("Date_Birth", "Sex", "zeir_id", "Birth_Weight", "Birth_Height", "Birth_Facility_Name");
+    private static List<String> nonEditableFields = Arrays.asList("Sex", "zeir_id", "Birth_Weight", "Birth_Height");
 
     @Override
     protected void attachBaseContext(android.content.Context base) {
@@ -49,8 +58,8 @@ public class ChildDetailTabbedActivity extends BaseChildDetailTabbedActivity {
     }
 
     @Override
-    public void onUniqueIdFetched(Triple<String, String, String> triple, String entityId) {
-        // Todo
+    public void onUniqueIdFetched(Triple<String, String, String> triple, String s) {
+
     }
 
     @Override
@@ -73,7 +82,9 @@ public class ChildDetailTabbedActivity extends BaseChildDetailTabbedActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
-        detailsMap = getChildDetails().getColumnmaps();
+        detailsMap = ChildDbUtils.fetchChildDetails(getChildDetails().entityId());
+        detailsMap.putAll(ChildDbUtils.fetchChildFirstGrowthAndMonitoring(getChildDetails().entityId()));
+
         switch (item.getItemId()) {
             case R.id.registration_data:
                 String populatedForm = KipJsonFormUtils.getMetadataForEditForm(this, detailsMap, nonEditableFields);
@@ -130,12 +141,103 @@ public class ChildDetailTabbedActivity extends BaseChildDetailTabbedActivity {
                 return true;
             case R.id.report_adverse_event:
                 return launchAdverseEventForm();
+            case R.id.send_sms_reminder_event:{
+                sendReminderSms();
+            }
 
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void sendReminderSms(){
+        KipOpdProfileActivity sentSms = new KipOpdProfileActivity();
+
+        String phoneNumber = getPhoneNumber();
+        String client = getMother();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+
+            if (checkSelfPermission(Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED){
+                if (checkReminderValidity() && getDateDifference()){
+                String message = reminderMessage().trim();
+                String phone = phoneNumber.trim();
+                sentSms.sendSmsReminder(message,phone);
+                    KipOpdDetailsRepository.updateKepiSmsReminder(getBaseEntityId(),calculateSmsSentDateDate());
+                org.smartregister.child.util.Utils.showToast(this, "Reminder Message Successfully Sent to "+ client);}
+            } else {
+                requestPermissions(new String[]{Manifest.permission.SEND_SMS}, 0);
+            }
+        }
+    }
+
+    private String getBaseEntityId(){
+
+        return Utils.getValue(childDetails.getColumnmaps(), "_id", true);
+    }
+
+    private String getPhoneNumber(){
+        String phoneNumber = Utils.getValue(childDetails.getColumnmaps(), "phone_number", true);
+        return phoneNumber;
+    }
+
+    private String getMother(){
+        String firstName = Utils.getValue(childDetails.getColumnmaps(), "mother_first_name", true);
+        String lastName = Utils.getValue(childDetails.getColumnmaps(), "mother_last_name", true);
+
+        return firstName + " " + lastName;
+    }
+
+    private String reminderMessage(){
+        String guardianName = getMother();
+        String firstName = Utils.getValue(childDetails.getColumnmaps(), "first_name", true);
+        String facility = LocationHelper.getInstance().getOpenMrsReadableName(KipChildUtils.getCurrentLocality());
+        return "Dear "+" " + guardianName + ", "+ firstName + KEPI_SMS_REMINDER + facility + " for their " + " immunization";
+    }
+
+    private Boolean checkReminderValidity(){
+        Boolean isValid = false;
+        if (getPhoneNumber().length() !=0){
+            isValid = true;
+        }
+        return isValid;
+    }
+
+    private Boolean getDateDifference(){
+
+        Boolean comparedValue = false;
+
+        try {
+            SimpleDateFormat dates = new SimpleDateFormat("dd/MM/yyyy");
+            String appointmentDate = "31/05/2021";
+            Date apptDate;
+            Date toDay = new Date();
+            apptDate = dates.parse(appointmentDate);
+            long differenceDates = Math.abs(toDay.getTime() - apptDate.getTime());
+            long difference = differenceDates / (24 * 60 * 60 * 1000);
+
+            if (difference < 365){
+                comparedValue = true;
+            }
+
+        } catch (Exception e){
+            Timber.d("--> getDateDifference %s", e.getMessage());
+        }
+
+        return comparedValue;
+    }
+
+    private String calculateSmsSentDateDate() {
+        String date = "";
+        try {
+            Date adminDate = new Date();
+
+            date = OpdUtils.convertDate(adminDate, OpdDbConstants.DATE_FORMAT);
+        } catch (Exception exception) {
+            Timber.e(exception);
+        }
+        return date;
     }
 
     @Override
@@ -146,10 +248,24 @@ public class ChildDetailTabbedActivity extends BaseChildDetailTabbedActivity {
 
     @Override
     protected void navigateToRegisterActivity() {
-        Intent intent = new Intent(getApplicationContext(), org.smartregister.kip.activity.ChildRegisterActivity.class);
+        Intent intent = new Intent(getApplicationContext(), ChildRegisterActivity.class);
         intent.putExtra(AllConstants.INTENT_KEY.IS_REMOTE_LOGIN, false);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void startFormActivity(String formData) {
+        Form formParam = new Form();
+        formParam.setWizard(false);
+        formParam.setHideSaveLabel(true);
+        formParam.setNextLabel("");
+
+        Intent intent = new Intent(getApplicationContext(), org.smartregister.child.util.Utils.metadata().childFormActivity);
+        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, formParam);
+        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.JSON, formData);
+
+        startActivityForResult(intent, REQUEST_CODE_GET_JSON);
     }
 
     @Override
@@ -182,19 +298,5 @@ public class ChildDetailTabbedActivity extends BaseChildDetailTabbedActivity {
             Timber.e(e);
         }
         return "";
-    }
-
-    @Override
-    public void startFormActivity(String formData) {
-        Form formParam = new Form();
-        formParam.setWizard(false);
-        formParam.setHideSaveLabel(true);
-        formParam.setNextLabel("");
-
-        Intent intent = new Intent(getApplicationContext(), org.smartregister.child.util.Utils.metadata().childFormActivity);
-        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, formParam);
-        intent.putExtra(JsonFormConstants.JSON_FORM_KEY.JSON, formData);
-
-        startActivityForResult(intent, REQUEST_CODE_GET_JSON);
     }
 }
