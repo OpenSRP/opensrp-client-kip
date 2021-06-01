@@ -4,12 +4,11 @@
   "mother": {
     "encounter_type": "New Woman Registration"
   },
-  "guardian": {
-    "encounter_type": "New Guardian Registration"
+  "father": {
+    "encounter_type": "Father Registration"
   },
   "entity_id": "",
   "relational_id": "",
-  "g_relational_id": "",
   "metadata": {
     "start": {
       "openmrs_entity_parent": "",
@@ -318,6 +317,7 @@
         "openmrs_entity": "person",
         "openmrs_entity_id": "gender",
         "entity_id": "mother",
+        "look_up": "true",
         "type": "spinner",
         "hint": "Mother/guardian gender",
         "value": "Female",
@@ -357,6 +357,7 @@
         "openmrs_entity": "relationship",
         "openmrs_entity_id": "relationship",
         "entity_id": "mother",
+        "look_up": "true",
         "type": "spinner",
         "Value": "Parent/Child",
         "hint": "Relationship to child",
@@ -376,6 +377,8 @@
         "openmrs_entity_parent": "",
         "openmrs_entity": "concept",
         "openmrs_entity_id": "163084AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "entity_id": "mother",
+        "look_up": "true",
         "type": "edit_text",
         "hint": "Mother/guardian ID number",
         "v_regex": {
@@ -384,15 +387,17 @@
         }
       },
       {
-        "key": "Mother_Guardian_Number",
+        "key": "phone_number",
         "openmrs_entity_parent": "",
-        "openmrs_entity": "concept",
-        "openmrs_entity_id": "159635AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "openmrs_entity": "person_attribute",
+        "openmrs_entity_id": "phone_number",
+        "entity_id": "mother",
+        "look_up": "true",
         "type": "edit_text",
         "hint": "Mother/guardian phone number",
         "v_numeric": {
           "value": "true",
-          "err": "Number must begin with 07 and must be a total of 10 digits in length"
+          "err": "Number must begin with 0 and must be a total of 10 digits in length"
         },
         "v_regex": {
           "value": "([0][0-9]{9})|\s*",
@@ -400,49 +405,80 @@
         }
       },
       {
-        "key": "Father_Guardian_Name",
+        "key": "include_father_details",
         "openmrs_entity_parent": "",
         "openmrs_entity": "person",
-        "openmrs_entity_id": "full_name",
-        "entity_id": "guardian",
-        "type": "edit_text",
-        "hint": "Father/guardian full name",
-        "edit_type": "name",
-        "v_regex": {
-          "value": "(^$)|(^[A-Za-z\\.\\-]+(?:\\s[A-Za-z\\.\\-]+)+$)",
-          "err": "Please enter a valid name e.g. John Doe"
-        }
+        "openmrs_entity_id": "include_father_details",
+        "type": "check_box",
+        "label": "",
+        "options": [
+          {
+            "key": "include_father_details",
+            "text": "Enter father details",
+            "text_size": "24px",
+            "value": "false"
+          }
+        ]
       },
       {
-        "key": "Father_Guardian_Gender",
+        "key": "father_last_name",
         "openmrs_entity_parent": "",
         "openmrs_entity": "person",
-        "openmrs_entity_id": "gender",
-        "entity_id": "guardian",
-        "type": "spinner",
-        "hint": "Father/guardian gender",
-        "value": "Male",
-        "values": [
-          "Male",
-          "Female"
-        ],
+        "openmrs_entity_id": "last_name",
+        "entity_id": "father",
+        "look_up": "true",
+        "type": "edit_text",
+        "hint": "Father/guardian last name",
+        "edit_type": "name",
         "v_required": {
           "value": "true",
-          "err": "Please enter the father/guardian's gender"
+          "err": "Father/guardian's last name"
+        },
+        "v_regex": {
+          "value": "[A-Za-z\\s\\.\\-]*",
+          "err": "Please enter a valid name"
         },
         "relevance": {
-          "step1:Father_Guardian_Name": {
-            "type": "string",
-            "ex": "regex(., \"^(?=\\s*\\S).*$\")"
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "child_register_registration_relevance_rules.yml"
+            }
           }
         }
       },
       {
-        "key": "Father_Guardian_Date_Birth",
+        "key": "father_first_name",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "person",
+        "openmrs_entity_id": "first_name",
+        "entity_id": "father",
+        "look_up": "true",
+        "type": "edit_text",
+        "hint": "Father/guardian first name",
+        "edit_type": "name",
+        "v_required": {
+          "value": "true",
+          "err": "Please enter the father/guardian's first name"
+        },
+        "v_regex": {
+          "value": "[A-Za-z\\s\\.\\-]*",
+          "err": "Please enter a valid name"
+        },
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "child_register_registration_relevance_rules.yml"
+            }
+          }
+        }
+      },
+      {
+        "key": "father_dob",
         "openmrs_entity_parent": "",
         "openmrs_entity": "person",
         "openmrs_entity_id": "birthdate",
-        "entity_id": "guardian",
+        "entity_id": "father",
+        "look_up": "true",
         "type": "date_picker",
         "hint": "Father/guardian DOB",
         "expanded": false,
@@ -450,87 +486,73 @@
           "label": "Age"
         },
         "default": "01-01-1960",
-        "min_date": "01-01-1960",
         "max_date": "today-10y",
-        "relevance": {
-          "step1:Father_Guardian_Name": {
-            "type": "string",
-            "ex": "regex(., \"^(?=\\s*\\S).*$\")"
-          }
-        }
-      },
-      {
-        "key": "Father_Guardian_Relationship",
-        "openmrs_entity_parent": "",
-        "openmrs_entity": "relationship",
-        "openmrs_entity_id": "relationship",
-        "entity_id": "guardian",
-        "type": "spinner",
-        "hint": "Relationship to child",
-        "value": "Parent/Child",
-        "values": ["Doctor/Patient",
-          "Sibling/Sibling",
-          "Parent/Child",
-          "Grandparent/Grandchild",
-          "Aunt/Uncle/Niece/Nephew"],
-        "relevance": {
-          "step1:Father_Guardian_Name": {
-            "type": "string",
-            "ex": "regex(., \"^(?=\\s*\\S).*$\")"
-          }
-        }
-      },
-      {
-        "key": "Father_Guardian_ID",
-        "openmrs_entity_parent": "",
-        "openmrs_entity": "concept",
-        "openmrs_entity_id": "163084AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-        "type": "edit_text",
-        "hint": "Father/guardian ID number",
-        "v_regex": {
-          "value": "([0-9]{7,8})|\s*",
-          "err": "Number must take the format of ########"
+        "v_required": {
+          "value": "true",
+          "err": "Please enter the Father's birth/guardian date"
         },
         "relevance": {
-          "step1:Father_Guardian_Name": {
-            "type": "string",
-            "ex": "regex(., \"^(?=\\s*\\S).*$\")"
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "child_register_registration_relevance_rules.yml"
+            }
+          }
+        }
+      },
+      {
+        "key": "father_phone",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "person_attribute",
+        "openmrs_entity_id": "father_phone",
+        "entity_id": "father",
+        "look_up": "true",
+        "type": "edit_text",
+        "hint": "Please Enter Father's Phone number",
+        "v_regex": {
+          "value": "([0-9]{10})|\\s*",
+          "err": "Number must begin with 0 and must be a total of 10 digits in length"
+        },
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "child_register_registration_relevance_rules.yml"
+            }
           }
         }
       },
       {
         "key": "Ce_County",
-        "openmrs_entity_parent": "usual_residence",
+        "openmrs_entity_parent": "",
         "openmrs_entity": "person_address",
         "openmrs_entity_id": "stateProvince",
         "openmrs_data_type": "text",
+        "look_up": "true",
         "type": "spinner",
         "hint": "County",
         "values": [],
         "v_required": {
           "value": true,
           "err": "Please enter the child's county"
-        },
-        "look_up": "true"
+        }
       },
       {
         "key": "Ce_Sub_County",
-        "openmrs_entity_parent": "usual_residence",
+        "openmrs_entity_parent": "",
         "openmrs_entity": "person_address",
         "openmrs_entity_id": "countyDistrict",
         "openmrs_data_type": "text",
+        "look_up": "true",
         "type": "spinner",
         "hint": "Sub County",
         "values": [],
         "v_required": {
           "value": true,
           "err": "Please enter the child's sub county"
-        },
-        "look_up": "true"
+        }
       },
       {
         "key": "Ce_Ward",
-        "openmrs_entity_parent": "usual_residence",
+        "openmrs_entity_parent": "",
         "openmrs_entity": "person_address",
         "openmrs_entity_id": "cityVillage",
         "openmrs_data_type": "text",
@@ -545,7 +567,7 @@
       },
       {
         "key": "Ce_Sub_Location",
-        "openmrs_entity_parent": "usual_residence",
+        "openmrs_entity_parent": "",
         "openmrs_entity": "person_address",
         "openmrs_entity_id": "address4",
         "openmrs_data_type": "text",
@@ -559,7 +581,7 @@
       },
       {
         "key": "Ce_Village",
-        "openmrs_entity_parent": "usual_residence",
+        "openmrs_entity_parent": "",
         "openmrs_entity": "person_address",
         "openmrs_entity_id": "address3",
         "openmrs_data_type": "text",
@@ -573,7 +595,7 @@
       },
       {
         "key": "Ce_Landmark",
-        "openmrs_entity_parent": "usual_residence",
+        "openmrs_entity_parent": "",
         "openmrs_entity": "person_address",
         "openmrs_entity_id": "address2",
         "type": "edit_text",
@@ -582,7 +604,7 @@
       },
       {
         "key": "Ce_Address",
-        "openmrs_entity_parent": "usual_residence",
+        "openmrs_entity_parent": "",
         "openmrs_entity": "person_address",
         "openmrs_entity_id": "address1",
         "openmrs_data_type": "text",
@@ -615,8 +637,8 @@
           "err": "Number must begin with 07 and must be a total of 10 digits in length"
         },
         "v_regex": {
-          "value": "(07[0-9]{8})|\s*",
-          "err": "Number must begin with 07 and must be a total of 10 digits in length"
+          "value": "([0][0-9]{9})|\\s*",
+          "err": "Number must begin with 0 and must be a total of 10 digits in length"
         }
       },
       {
@@ -636,6 +658,14 @@
           "Unkown (MSU)": "1067AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
           "Not Exposed (CNE)": "664AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
         }
+      },
+      {
+        "key": "covid19_risk_factor",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "person_attribute",
+        "openmrs_entity_id": "covid19_risk_factor",
+        "type": "hidden",
+        "value": ""
       }
     ]
   }

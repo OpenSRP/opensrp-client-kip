@@ -1,0 +1,168 @@
+---
+sub_group: "{visit_date}"
+fields:
+  - template: "{test_type_label}: {test_type}"
+    relevance: "test_type != ''"
+    isHtml: true
+
+  - template: "{tests_label}: {tests}"
+    relevance: "tests != ''"
+    isHtml: true
+
+  - template: "{diagnosis_label}: {diagnosis}"
+    relevance: "diagnosis != ''"
+
+  - template: "{diagnosis_type_label}: {diagnosis_type}"
+    relevance: "diagnosis_type != ''"
+
+  - template: "{disease_code_label}: {disease_code}"
+    relevance: "disease_code != ''"
+
+  - template: "{diagnosis_same_label}: {diagnosis_same}"
+    relevance: "diagnosis_same != ''"
+
+  - template: "{treatment_type_label}: {treatment_type}"
+    relevance: "treatment_type != ''"
+    isHtml: true
+
+  - template: "{treatment_type_specify_label}: {treatment_type_specify}"
+    relevance: "treatment_type_specify != ''"
+    isHtml: true
+
+  - template: "{treatment_label}: {treatment}"
+    relevance: "treatment != ''"
+    isHtml: true
+
+  - template: "{discharged_alive_label}: {discharged_alive}"
+    relevance: "discharged_alive != ''"
+    isHtml: true
+
+  - template: "{discharged_home_label}: {discharged_home}"
+    relevance: "discharged_home != ''"
+    isHtml: true
+
+  - template: "{referral_label}: {referral}"
+    relevance: "referral != ''"
+    isHtml: true
+
+  - template: "{referral_location_label}: {referral_location}"
+    relevance: "referral_location != ''"
+    isHtml: true
+
+  - template: "{referral_location_label}: {referral_location_specify}"
+    relevance: "referral_location_specify != ''"
+    isHtml: true
+
+  - template: "{pre_existing_conditions_label}: {pre_existing_conditions}"
+    relevance: "pre_existing_conditions != ''"
+    isHtml: true
+
+  - template: "{other_pre_existing_conditions_label}: {other_pre_existing_conditions}"
+    relevance: "other_pre_existing_conditions != ''"
+    isHtml: true
+
+  - template: "{occupation_label}: {occupation}"
+    relevance: "occupation != ''"
+    isHtml: true
+
+  - template: "{other_occupation_label}: {other_occupation}"
+    relevance: "other_occupation != ''"
+    isHtml: true
+
+  - template: "{temperature_label}: {temperature}"
+    relevance: "temperature != ''"
+    isHtml: true
+
+  - template: "{covid_19_history_label}: {covid_19_history}"
+    relevance: "covid_19_history != ''"
+    isHtml: true
+
+  - template: "{oral_confirmation_label}: {oral_confirmation}"
+    relevance: "oral_confirmation != ''"
+    isHtml: true
+
+  - template: "{respiratory_symptoms_label}: {respiratory_symptoms}"
+    relevance: "respiratory_symptoms != ''"
+    isHtml: true
+
+  - template: "{other_respiratory_symptoms_label}: {other_respiratory_symptoms}"
+    relevance: "other_respiratory_symptoms != ''"
+    isHtml: true
+
+  - template: "{allergies_label}: {allergies}"
+    relevance: "allergies != ''"
+    isHtml: true
+
+  - template: "{other_allergies_label}: {other_allergies}"
+    relevance: "other_allergies != ''"
+    isHtml: true
+
+  - template: "{covid19_antigens_label}: {covid19_antigens}"
+    relevance: "covid19_antigens != ''"
+    isHtml: true
+
+  - template: "{administration_date_label}: {administration_date}"
+    relevance: "administration_date != ''"
+    isHtml: true
+
+  - template: "{site_of_administration_label}: {site_of_administration}"
+    relevance: "site_of_administration != ''"
+    isHtml: true
+
+  - template: "{administration_route_label}: {administration_route}"
+    relevance: "administration_route != ''"
+    isHtml: true
+
+  - template: "{lot_number_label}: {lot_number}"
+    relevance: "lot_number != ''"
+    isHtml: true
+
+  - template: "{vaccine_expiry_label}: {vaccine_expiry}"
+    relevance: "vaccine_expiry != ''"
+    isHtml: true
+
+  - template: "{covid19_vaccine_next_date_label}: {covid19_vaccine_next_date}"
+    relevance: "covid19_vaccine_next_date != ''"
+    isHtml: true
+
+  - template: "{influenza_pre_existing_conditions_label}: {influenza_pre_existing_conditions}, {other_influenza_pre_existing_conditions}"
+    relevance: "influenza_pre_existing_conditions != null && !influenza_pre_existing_conditions.isEmpty()"
+    isHtml: true
+
+  - template: "{influenza_allergies_label}: {influenza_allergies}, {other_influenza_allergies}"
+    relevance: "influenza_allergies != null && !influenza_allergies.isEmpty()"
+    isHtml: true
+
+  - template: "Influenza Temperature Check: {influenza_temperature}"
+    relevance: "influenza_temperature != null && !influenza_temperature.isEmpty()"
+    isHtml: true
+
+  - template: "Influenza Vaccination Status: {influenza_vaccine_given}"
+    relevance: "influenza_vaccine_given != ''"
+    isHtml: true
+
+  - template: "{influenza_vaccines_label}: {influenza_vaccines}"
+    relevance: "influenza_vaccines != ''"
+    isHtml: true
+
+  - template: "{influenza_site_of_vaccine_administration_label}: {influenza_site_of_administration}"
+    relevance: "influenza_site_of_administration != ''"
+    isHtml: true
+
+  - template: "{influenza_administration_date_label}: {influenza_administration_date}"
+    relevance: "influenza_administration_date != ''"
+    isHtml: true
+
+  - template: "{influenza_vaccine_administration_route_label}: {influenza_vaccine_administration_route}"
+    relevance: "influenza_vaccine_administration_route != ''"
+    isHtml: true
+
+  - template: "{influenza_vaccine_lot_number_label}: {influenza_vaccine_lot_number}"
+    relevance: "influenza_vaccine_lot_number != ''"
+    isHtml: true
+
+  - template: "{influenza_vaccine_expiry_label}: {influenza_vaccine_expiry}"
+    relevance: "influenza_vaccine_expiry != ''"
+    isHtml: true
+
+

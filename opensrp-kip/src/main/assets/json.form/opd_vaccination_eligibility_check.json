@@ -1,0 +1,343 @@
+{
+  "count": "1",
+  "encounter_type": "OPD Vaccination Eligibility Check",
+  "entity_id": "",
+  "relational_id": "",
+  "validate_on_submit": true,
+  "show_errors_on_submit": true,
+  "metadata": {
+    "start": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "start",
+      "openmrs_entity_id": "163137AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "end": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "end",
+      "openmrs_entity_id": "163138AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "today": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "encounter",
+      "openmrs_entity_id": "encounter_date"
+    },
+    "deviceid": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "deviceid",
+      "openmrs_entity_id": "163149AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "subscriberid": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "subscriberid",
+      "openmrs_entity_id": "163150AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "simserial": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "simserial",
+      "openmrs_entity_id": "163151AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "phonenumber": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "phonenumber",
+      "openmrs_entity_id": "163152AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "encounter_location": "",
+    "look_up": {
+      "entity_id": "",
+      "value": ""
+    }
+  },
+  "step1": {
+    "title": "OPD Vaccination Eligibility Check",
+    "fields": [
+      {
+        "key": "age",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "hidden",
+        "hint": "Patient age",
+        "edit_type": "number",
+        "read_only": true
+      },
+      {
+        "key": "temperature",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "edit_text",
+        "edit_type": "number",
+        "hint": "Client temperature (degrees celsius)",
+        "v_required": {
+          "value": true,
+          "err": "Client temperature (degrees celsius)"
+        }
+      },
+      {
+        "key": "covid_19_history",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "",
+        "openmrs_data_type": "select one",
+        "type": "spinner",
+        "hint": "Has the patient had Covid 19 in the past 6 months",
+        "options": [
+          {
+            "key": "yes",
+            "text": "Yes",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "no",
+            "text": "No",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          }
+        ],
+        "v_required": {
+          "value": true,
+          "err": "Please select one"
+        }
+      },
+      {
+        "key": "oral_confirmation",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "",
+        "openmrs_data_type": "select one",
+        "type": "spinner",
+        "hint": "Does the client orally agree to receive the covid vaccine",
+        "options": [
+          {
+            "key": "yes",
+            "text": "Yes",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "no",
+            "text": "No",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          }
+        ],
+        "v_required": {
+          "value": true,
+          "err": "Please select one"
+        }
+      },
+      {
+        "key": "respiratory_symptoms",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "openmrs_data_type": "",
+        "type": "check_box",
+        "label": "Select any respiratory symptoms",
+        "label_text_style": "bold",
+        "exclusive": [
+          "none"
+        ],
+        "options": [
+          {
+            "key": "none",
+            "text": "None",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "fever",
+            "text": "Fever",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "cough",
+            "text": "Cough",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "shortness_of_breath",
+            "text": "Shortness of breath",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "infection",
+            "text": "Infections (Pneumonia, Severe Acute respiratory Syndrome)",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "other",
+            "text": "Other (specify)",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          }
+        ],
+        "v_required": {
+          "value": true,
+          "err": "Please select any respiratory symptoms"
+        }
+      },
+      {
+        "key": "other_respiratory_symptoms",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "openmrs_data_type": "text",
+        "type": "edit_text",
+        "hint": "Other respiratory symptoms",
+        "v_required": {
+          "value": true,
+          "err": "Please enter any respiratory symptoms"
+        },
+        "relevance": {
+          "step1:respiratory_symptoms": {
+            "ex-checkbox": [
+              {
+                "or": [
+                  "other"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "key": "allergies",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "openmrs_data_type": "",
+        "type": "check_box",
+        "label": "Select any allergy",
+        "label_text_style": "bold",
+        "exclusive": [
+          "none"
+        ],
+        "options": [
+          {
+            "key": "none",
+            "text": "None",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "eggs",
+            "text": "Eggs",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "chicken",
+            "text": "Chicken",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "other",
+            "text": "Other (specify)",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          }
+        ],
+        "v_required": {
+          "value": true,
+          "err": "Please select at least one choice"
+        }
+      },
+      {
+        "key": "other_allergies",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "openmrs_data_type": "text",
+        "type": "edit_text",
+        "hint": "Other allergies",
+        "v_required": {
+          "value": true,
+          "err": "Please enter an allergy"
+        },
+        "relevance": {
+          "step1:allergies": {
+            "ex-checkbox": [
+              {
+                "or": [
+                  "other"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "key": "not_eligible",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "type": "toaster_notes",
+        "text": "Not eligible for the Covid 19 vaccine",
+        "toaster_type": "warning",
+        "text_color": "#000000",
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "opd/opd_vaccination_conditions_check_relevance.yml"
+            }
+          }
+        }
+      },
+      {
+        "key": "eligible",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "type": "toaster_notes",
+        "text": "Eligible for the Covid 19 Vaccine",
+        "toaster_type": "positive",
+        "text_color": "#000000",
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "opd/opd_vaccination_conditions_check_relevance.yml"
+            }
+          }
+        }
+      },
+      {
+        "key": "eligibility",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "type": "hidden",
+        "hint": "Eligibility flag",
+        "calculation": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "opd/opd_vaccination_conditions_check_calculation.yml"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

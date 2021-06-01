@@ -1,0 +1,315 @@
+{
+  "count": "1",
+  "encounter_type": "OPD Influenza Vaccine Administration",
+  "entity_id": "",
+  "relational_id": "",
+  "validate_on_submit": true,
+  "show_errors_on_submit": true,
+  "metadata": {
+    "start": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "start",
+      "openmrs_entity_id": "163137AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "end": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "end",
+      "openmrs_entity_id": "163138AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "today": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "encounter",
+      "openmrs_entity_id": "encounter_date"
+    },
+    "deviceid": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "deviceid",
+      "openmrs_entity_id": "163149AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "subscriberid": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "subscriberid",
+      "openmrs_entity_id": "163150AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "simserial": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "simserial",
+      "openmrs_entity_id": "163151AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "phonenumber": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "phonenumber",
+      "openmrs_entity_id": "163152AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "encounter_location": "",
+    "look_up": {
+      "entity_id": "",
+      "value": ""
+    }
+  },
+  "step1": {
+    "title": "Influenza Vaccine Administration",
+    "fields": [
+      {
+        "key": "age",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "hidden",
+        "edit_type": "number",
+        "hint": "Patient age",
+        "read_only": true
+      },
+      {
+        "key": "influenza_vaccines",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "",
+        "openmrs_data_type": "select one",
+        "type": "spinner",
+        "hint": "Select one Vaccine",
+        "options": [
+          {
+            "key": "flue_shot",
+            "text": "Flue Shot",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "Quadrivalent_flu_vaccine",
+            "text": "Quadrivalent flu vaccines",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "high_dose_flu_vaccine",
+            "text": "High-Dose Flu Vaccine",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "cell_based_flue_vaccine",
+            "text": "Cell-Based Flu Vaccines",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "nasal_spray_flu-vaccine",
+            "text": "Nasal Spray Flu Vaccine",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "flu_vaccination_by_jet_injector",
+            "text": "Flu Vaccination By Jet Injector",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "adjuvanted_vaccine",
+            "text": "Adjuvanted Vaccine",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "recombinant_flu_vaccine",
+            "text": "Recombinant Flu Vaccines",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          }
+        ],
+        "v_required": {
+          "value": true,
+          "err": "Please select one"
+        }
+      },
+      {
+        "key": "influenza_administration_date",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "date_picker",
+        "max_date": "today",
+        "hint": "Please add the administration date",
+        "v_required": {
+          "value": true,
+          "err": "Enter the administration date"
+        }
+      },
+      {
+        "key": "influenza_site_of_vaccine_administration",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "openmrs_data_type": "",
+        "type": "native_radio",
+        "label": "Please select the site of Administration",
+        "hint": "Please select the site of Administration",
+        "label_text_style": "bold",
+        "options": [
+          {
+            "key": "left_upper_arm",
+            "text": "Left upper arm",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "right_upper_arm",
+            "text": "Right upper arm",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "left_thigh",
+            "text": "Left Thigh",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "right_thigh",
+            "text": "Right Thigh",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "gluteus",
+            "text": "Gluteus",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "other",
+            "text": "Other (specify)",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          }
+        ],
+        "v_required": {
+          "value": true,
+          "err": "Please select at least one of the choices"
+        }
+      },
+      {
+        "key": "other_influenza_site_of_vaccine_administration",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "openmrs_data_type": "text",
+        "type": "edit_text",
+        "hint": "Please enter the site of Administration",
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "opd/opd_covid19_vaccine_record_relevance.yml"
+            }
+          }
+        }
+      },
+      {
+        "key": "influenza_vaccine_administration_route",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "openmrs_data_type": "",
+        "type": "native_radio",
+        "label": "Please select the administration route",
+        "hint": "Please select the administration route",
+        "label_text_style": "bold",
+        "options": [
+          {
+            "key": "im",
+            "text": "Intramuscular (IM)",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "id",
+            "text": "Intradermal (ID)",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "sc",
+            "text": "Subcutaneous (SC)",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "orally",
+            "text": "Orally",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "other",
+            "text": "Other (specify)",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          }
+        ],
+        "v_required": {
+          "value": true,
+          "err": "Please select at least one of the choices"
+        }
+      },
+      {
+        "key": "other_influenza_vaccine_administration_route",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "openmrs_data_type": "text",
+        "type": "edit_text",
+        "hint": "Please enter the administration route",
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "opd/opd_covid19_vaccine_record_relevance.yml"
+            }
+          }
+        }
+      },
+      {
+        "key": "influenza_vaccine_lot_number",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "edit_text",
+        "edit_type": "number",
+        "hint": "Vaccine Lot number",
+        "v_required": {
+          "value": true,
+          "err": "Enter the lot number"
+        }
+      },
+      {
+        "key": "influenza_vaccine_expiry",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "date_picker",
+        "hint": "Please add the expiry date",
+        "v_required": {
+          "value": true,
+          "err": "Please add the expiry date"
+        }
+      }
+    ]
+  }
+}

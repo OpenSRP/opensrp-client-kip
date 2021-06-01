@@ -1,0 +1,355 @@
+{
+  "count": "1",
+  "encounter_type": "OPD Influenza Medical Condition Check",
+  "entity_id": "",
+  "relational_id": "",
+  "display_scroll_bars": true,
+  "metadata": {
+    "start": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "start",
+      "openmrs_entity_id": "163137AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "end": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "end",
+      "openmrs_entity_id": "163138AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "today": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "encounter",
+      "openmrs_entity_id": "encounter_date"
+    },
+    "deviceid": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "deviceid",
+      "openmrs_entity_id": "163149AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "subscriberid": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "subscriberid",
+      "openmrs_entity_id": "163150AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "simserial": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "simserial",
+      "openmrs_entity_id": "163151AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "phonenumber": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "phonenumber",
+      "openmrs_entity_id": "163152AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "encounter_location": "",
+    "look_up": {
+      "entity_id": "",
+      "value": ""
+    }
+  },
+  "step1": {
+    "title": "OPD Medical Condition And Allergy Check",
+    "fields": [
+      {
+        "key": "age",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "hidden",
+        "hint": "Patient age",
+        "edit_type": "number",
+        "read_only": true
+      },
+      {
+        "key": "influenza_temperature",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "edit_text",
+        "edit_type": "number",
+        "hint": "Client temperature (degrees celsius)",
+        "v_required": {
+          "value": true,
+          "err": "Client temperature (degrees celsius)"
+        }
+      },
+      {
+        "key": "influenza_pre_existing_conditions",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "openmrs_data_type": "",
+        "type": "check_box",
+        "label": "Select a pre-existing condition",
+        "hint": "Select a pre-existing condition",
+        "label_text_style": "bold",
+        "exclusive": [
+          "none"
+        ],
+        "options": [
+          {
+            "key": "none",
+            "text": "None",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "cancer",
+            "text": "Cancer",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "chronic_kidney_disease",
+            "text": "Chronic kidney disease",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "chronic_obstructive_pulmonary_disease",
+            "text": "Chronic obstructive pulmonary disease",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "down_syndrome",
+            "text": "Down syndrome",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "heart_conditions",
+            "text": "Heart conditions",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "obesity",
+            "text": "Obesity",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "pregnancy",
+            "text": "Pregnancy",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "sickle_cell_disease ",
+            "text": "Sickle cell disease",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "asthma",
+            "text": "Asthma",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "hypertension",
+            "text": "Hypertension",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "hiv",
+            "text": "HIV",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "liver_disease",
+            "text": "Liver disease",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "hypertension",
+            "text": "Hypertension",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "cystic_fibrosis",
+            "text": "Cystic fibrosis",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "other",
+            "text": "Other (specify)",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          }
+        ],
+        "v_required": {
+          "value": true,
+          "err": "Please select at least one of the choices"
+        }
+      },
+      {
+        "key": "other_influenza_pre_existing_conditions",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "openmrs_data_type": "text",
+        "type": "edit_text",
+        "hint": "Other pre-existing conditions",
+        "relevance": {
+          "step1:pre_existing_conditions": {
+            "ex-checkbox": [
+              {
+                "or": [
+                  "other"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "key": "influenza_allergies",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "openmrs_data_type": "",
+        "type": "check_box",
+        "label": "Select any allergy",
+        "label_text_style": "bold",
+        "exclusive": [
+          "none"
+        ],
+        "options": [
+          {
+            "key": "none",
+            "text": "None",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "eggs",
+            "text": "Eggs",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "chicken",
+            "text": "Chicken",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "other",
+            "text": "Other (specify)",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          }
+        ],
+        "v_required": {
+          "value": true,
+          "err": "Please select at least one choice"
+        }
+      },
+      {
+        "key": "other_influenza_allergies",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "openmrs_data_type": "text",
+        "type": "edit_text",
+        "hint": "Other allergies",
+        "v_required": {
+          "value": true,
+          "err": "Please enter an allergy"
+        },
+        "relevance": {
+          "step1:allergies": {
+            "ex-checkbox": [
+              {
+                "or": [
+                  "other"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "key": "not_eligible",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "type": "toaster_notes",
+        "text": "Not eligible for the Influenza vaccine",
+        "toaster_type": "warning",
+        "text_color": "#000000",
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "opd/opd_vaccination_conditions_check_relevance.yml"
+            }
+          }
+        }
+      },
+      {
+        "key": "eligible",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "type": "toaster_notes",
+        "text": "Eligible for the Influenza Vaccine",
+        "toaster_type": "positive",
+        "text_color": "#000000",
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "opd/opd_vaccination_conditions_check_relevance.yml"
+            }
+          }
+        }
+      },
+      {
+        "key": "eligibility",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "type": "hidden",
+        "hint": "Eligibility flag",
+        "calculation": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "opd/opd_vaccination_conditions_check_calculation.yml"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

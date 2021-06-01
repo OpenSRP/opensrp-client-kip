@@ -1,0 +1,369 @@
+{
+  "count": "1",
+  "encounter_type": "OPD Calculate Risk Factor",
+  "entity_id": "",
+  "relational_id": "",
+  "validate_on_submit": true,
+  "show_errors_on_submit": true,
+  "metadata": {
+    "start": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "start",
+      "openmrs_entity_id": "163137AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "end": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "end",
+      "openmrs_entity_id": "163138AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "today": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "encounter",
+      "openmrs_entity_id": "encounter_date"
+    },
+    "deviceid": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "deviceid",
+      "openmrs_entity_id": "163149AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "subscriberid": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "subscriberid",
+      "openmrs_entity_id": "163150AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "simserial": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "simserial",
+      "openmrs_entity_id": "163151AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "phonenumber": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "phonenumber",
+      "openmrs_entity_id": "163152AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "encounter_location": "",
+    "look_up": {
+      "entity_id": "",
+      "value": ""
+    }
+  },
+  "step1": {
+    "title": "Assess Risk Factors",
+    "fields": [
+      {
+        "key": "age",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "hidden",
+        "hint": "Patient age",
+        "read_only": true
+      },
+      {
+        "key": "pre_existing_conditions",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "openmrs_data_type": "",
+        "type": "check_box",
+        "label": "Select a pre-existing condition",
+        "hint": "Select a pre-existing condition",
+        "label_text_style": "bold",
+        "exclusive": [
+          "none"
+        ],
+        "options": [
+          {
+            "key": "none",
+            "text": "None",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "cancer",
+            "text": "Cancer",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "chronic_kidney_disease",
+            "text": "Chronic kidney disease",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "chronic_obstructive_pulmonary_disease",
+            "text": "Chronic obstructive pulmonary disease",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "down_syndrome",
+            "text": "Down syndrome",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "heart_conditions",
+            "text": "Heart conditions",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "obesity",
+            "text": "Obesity",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "pregnancy",
+            "text": "Pregnancy",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "sickle_cell_disease ",
+            "text": "Sickle cell disease",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "asthma",
+            "text": "Asthma",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "hypertension",
+            "text": "Hypertension",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "hiv",
+            "text": "HIV",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "liver_disease",
+            "text": "Liver disease",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "hypertension",
+            "text": "Hypertension",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "covid",
+            "text": "Covid",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "cystic_fibrosis",
+            "text": "Cystic fibrosis",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "smoking",
+            "text": "Smoking ( Risky lifestyle not a medical condition)",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "other",
+            "text": "Other (specify)",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          }
+        ],
+        "v_required": {
+          "value": true,
+          "err": "Please select at least one of the choices"
+        }
+      },
+      {
+        "key": "other_pre_existing_conditions",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "openmrs_data_type": "text",
+        "type": "edit_text",
+        "hint": "Other pre-existing conditions",
+        "relevance": {
+          "step1:pre_existing_conditions": {
+            "ex-checkbox": [
+              {
+                "or": [
+                  "other"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "key": "occupation",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "openmrs_data_type": "",
+        "type": "native_radio",
+        "label": "Select Occupation",
+        "hint": "Select Occupation",
+        "label_text_style": "bold",
+        "options": [
+          {
+            "key": "none",
+            "text": "None",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "health_care_workers",
+            "text": "Health Care Workers",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "teachers",
+            "text": "Teachers",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "disciplined_forces",
+            "text": "Disciplined forces",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "religious_leaders",
+            "text": "Religious Leaders",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "shopping_attendants",
+            "text": "Shopping attendants",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "other",
+            "text": "Other (specify)",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          }
+        ],
+        "v_required": {
+          "value": true,
+          "err": "Please select at least one of the choices"
+        }
+      },
+      {
+        "key": "other_occupation",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "openmrs_data_type": "text",
+        "type": "edit_text",
+        "hint": "Other occupation",
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "opd/opd_calculate_risk_factor_relevance.yml"
+            }
+          }
+        }
+      },
+      {
+        "key": "high_risk_toaster",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "type": "toaster_notes",
+        "text": "Covid 19 High infection Risk",
+        "toaster_type": "problem",
+        "text_color": "#CF0800",
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "opd/opd_calculate_risk_factor_relevance.yml"
+            }
+          }
+        }
+      },
+      {
+        "key": "medium_risk_toaster",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "type": "toaster_notes",
+        "text": "Covid 19 Medium infection Risk",
+        "toaster_type": "warning",
+        "text_color": "#000000",
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "opd/opd_calculate_risk_factor_relevance.yml"
+            }
+          }
+        }
+      },
+      {
+        "key": "low_risk_toaster",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "type": "toaster_notes",
+        "text": "Covid 19 low infection Risk",
+        "toaster_type": "info",
+        "text_color": "#000000",
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "opd/opd_calculate_risk_factor_relevance.yml"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

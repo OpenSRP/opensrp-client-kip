@@ -5,4 +5,10 @@
         <item>Français</item>
         <item>عربى</item>
     </string-array>
+
+
+    <string-array name="check_in">
+        <item>OPD Work Flow</item>
+        <item>Covid 19 Risk Factor Check</item>
+    </string-array>
 </resources>

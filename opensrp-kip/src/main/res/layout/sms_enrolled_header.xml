@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sms_enrolled_header_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/client_list_header_dark_grey"
+    android:orientation="horizontal">
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <org.smartregister.view.customcontrols.CustomFontTextView
+            android:id="@+id/client_phone_number_header"
+            style="@style/CustomFontTextViewStyle.ClientList.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Phone Number"
+            android:textAllCaps="true"
+            android:textColor="@color/client_list_grey"
+            android:textSize="16sp" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="20dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2.4">
+
+        <org.smartregister.view.customcontrols.CustomFontTextView
+            android:id="@+id/client_full_name_header"
+            style="@style/CustomFontTextViewStyle.ClientList.Medium"
+            android:layout_width="127dp"
+            android:layout_height="match_parent"
+            android:text="Full name"
+            android:textAllCaps="true"
+            android:textColor="@color/client_list_grey"
+            android:textSize="16sp" />
+    </RelativeLayout>
+</LinearLayout>

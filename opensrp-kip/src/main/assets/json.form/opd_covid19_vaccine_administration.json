@@ -1,0 +1,376 @@
+{
+  "count": "1",
+  "encounter_type": "OPD Covid19 Vaccine Administration",
+  "entity_id": "",
+  "relational_id": "",
+  "validate_on_submit": true,
+  "show_errors_on_submit": true,
+  "metadata": {
+    "start": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "start",
+      "openmrs_entity_id": "163137AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "end": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "end",
+      "openmrs_entity_id": "163138AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "today": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "encounter",
+      "openmrs_entity_id": "encounter_date"
+    },
+    "deviceid": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "deviceid",
+      "openmrs_entity_id": "163149AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "subscriberid": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "subscriberid",
+      "openmrs_entity_id": "163150AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "simserial": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "simserial",
+      "openmrs_entity_id": "163151AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "phonenumber": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "phonenumber",
+      "openmrs_entity_id": "163152AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "encounter_location": "",
+    "look_up": {
+      "entity_id": "",
+      "value": ""
+    }
+  },
+  "step1": {
+    "title": "Covid19 Vaccine Administration",
+    "fields": [
+      {
+        "key": "age",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "hidden",
+        "edit_type": "number",
+        "hint": "Patient age",
+        "read_only": true
+      },
+      {
+        "key": "covid19_antigens",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "",
+        "openmrs_data_type": "select one",
+        "type": "spinner",
+        "hint": "Select one antigen",
+        "options": [
+          {
+            "key": "az_oxford",
+            "text": "AZ/Oxford",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "sinopharm",
+            "text": "Sinopharm",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "sinovac",
+            "text": "Sinovac",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "Pfizer",
+            "text": "pfizer",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "moderna",
+            "text": "Moderna",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          }
+        ],
+        "v_required": {
+          "value": true,
+          "err": "Please select one"
+        }
+      },
+      {
+        "key": "az_oxford_vials_amount",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "type": "edit_text",
+        "read_only": true,
+        "hint": "Number of AZ oxford vials"
+      },
+      {
+        "key": "sinopharm_vials_amount",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "type": "edit_text",
+        "read_only": true,
+        "hint": "Number sinopharm vials"
+      },
+      {
+        "key": "sinovac_vials_amount",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "type": "edit_text",
+        "read_only": true,
+        "hint": "Number sinovac vials"
+      },
+      {
+        "key": "pfizer_vials_amount",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "type": "edit_text",
+        "read_only": true,
+        "hint": "Number Pfizer vials"
+      },
+      {
+        "key": "moderna_vials_amount",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "type": "edit_text",
+        "read_only": true,
+        "hint": "Number Moderna vials"
+      },
+      {
+        "key": "re_order_alert",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "type": "toaster_notes",
+        "text": "Please order more vaccines vials for the select antigen",
+        "toaster_type": "warning",
+        "text_color": "#000000",
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "opd/opd_covid19_vaccine_record_relevance.yml"
+            }
+          }
+        }
+      },
+      {
+        "key": "must_re_order_alert",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "type": "toaster_notes",
+        "text": "Please order more vaccines vials for the select antigen",
+        "toaster_type": "problem",
+        "text_color": "#000000",
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "opd/opd_covid19_vaccine_record_relevance.yml"
+            }
+          }
+        }
+      },
+      {
+        "key": "administration_date",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "date_picker",
+        "max_date": "today",
+        "hint": "Please add the administration date",
+        "v_required": {
+          "value": true,
+          "err": "Enter the administration date"
+        }
+      },
+      {
+        "key": "site_of_administration",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "openmrs_data_type": "",
+        "type": "native_radio",
+        "label": "Please select the site of Administration",
+        "hint": "Please select the site of Administration",
+        "label_text_style": "bold",
+        "options": [
+          {
+            "key": "left_upper_arm",
+            "text": "Left upper arm",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "right_upper_arm",
+            "text": "Right upper arm",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "left_thigh",
+            "text": "Left Thigh",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "right_thigh",
+            "text": "Right Thigh",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "gluteus",
+            "text": "Gluteus",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "other",
+            "text": "Other (specify)",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          }
+        ],
+        "v_required": {
+          "value": true,
+          "err": "Please select at least one of the choices"
+        }
+      },
+      {
+        "key": "other_site_of_administration",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "openmrs_data_type": "text",
+        "type": "edit_text",
+        "hint": "Please enter the site of Administration",
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "opd/opd_covid19_vaccine_record_relevance.yml"
+            }
+          }
+        }
+      },
+      {
+        "key": "administration_route",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "openmrs_data_type": "",
+        "type": "native_radio",
+        "label": "Please select the administration route",
+        "hint": "Please select the administration route",
+        "label_text_style": "bold",
+        "options": [
+          {
+            "key": "im",
+            "text": "Intramuscular (IM)",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "id",
+            "text": "Intradermal (ID)",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "sc",
+            "text": "Subcutaneous (SC)",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "orally",
+            "text": "Orally",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "other",
+            "text": "Other (specify)",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          }
+        ],
+        "v_required": {
+          "value": true,
+          "err": "Please select at least one of the choices"
+        }
+      },
+      {
+        "key": "other_administration_route",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "openmrs_data_type": "text",
+        "type": "edit_text",
+        "hint": "Please enter the administration route",
+        "relevance": {
+          "rules-engine": {
+            "ex-rules": {
+              "rules-file": "opd/opd_covid19_vaccine_record_relevance.yml"
+            }
+          }
+        }
+      },
+      {
+        "key": "lot_number",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "edit_text",
+        "edit_type": "number",
+        "hint": "Vaccine Lot number",
+        "v_required": {
+          "value": true,
+          "err": "Enter the lot number"
+        }
+      },
+      {
+        "key": "vaccine_expiry",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "",
+        "openmrs_entity_id": "",
+        "type": "date_picker",
+        "hint": "Please add the expiry date",
+        "v_required": {
+          "value": true,
+          "err": "Please add the expiry date"
+        }
+      }
+    ]
+  }
+}

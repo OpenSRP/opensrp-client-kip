@@ -1,0 +1,134 @@
+---
+group:
+sub_group: pregnancy_status
+fields:
+  - template: "Status: {pregnancy_status}"
+    relevance: "pregnancy_status != ''"
+
+---
+sub_group: hiv_details
+fields:
+  - template: "Testing done before?: {is_previously_tested_hiv}"
+    relevance: "is_previously_tested_hiv != ''"
+
+  - template: "Prev. test results: {previous_hiv_status}"
+    relevance: "previous_hiv_status != ''"
+
+  - template: "Status: {hiv_status}"
+    relevance: "hiv_status != ''"
+    isRedFont: "hiv_status == 'positive' || hiv_status == 'Positive'"
+
+  - template: "Current results: {current_hiv_status}"
+    relevance: "current_hiv_status != ''"
+    isRedFont: "current_hiv_status == 'positive' || current_hiv_status == 'Positive'"
+
+  - template: "Taking ART?: {patient_on_art}"
+    relevance: "patient_on_art != ''"
+
+---
+sub_group: current_visit
+fields:
+  - template: "Visit Type: {visit_type}"
+    relevance: "visit_type != ''"
+
+  - template: "Scheduled?: {previous_appointment}"
+    relevance: "previous_appointment != ''"
+
+  - template: "Appt. due date: {date_of_appointment}"
+    relevance: "date_of_appointment != ''"
+
+---
+sub_group: Covid19_Risk_Factor
+fields:
+  - template: "Risk Factor: {covid19_risk_factor}"
+    relevance: "covid19_risk_factor != ''"
+
+  - template: "Pre-Existing Conditions: {pre_existing_conditions}, {other_pre_existing_conditions}"
+    relevance: "pre_existing_conditions != null && !pre_existing_conditions.isEmpty()"
+
+  - template: "Occupation: {occupation}, {other_occupation}"
+    relevance: "occupation != null && !occupation.isEmpty()"
+
+---
+sub_group: Covid19_Vaccine_Eligibility
+fields:
+  - template: "Eligibility Status: {covid19_vaccine_eligibility}"
+    relevance: "covid19_vaccine_eligibility != ''"
+
+  - template: "Temperature: {temperature}"
+    relevance: "temperature != ''"
+
+  - template: "Covid 19 History: {covid_19_history}"
+    relevance: "covid_19_history != ''"
+
+  - template: "Respiratory Symptoms: {respiratory_symptoms}, {other_respiratory_symptoms}"
+    relevance: "respiratory_symptoms != null && !respiratory_symptoms.isEmpty()"
+
+  - template: "allergies: {allergies}, {other_allergies}"
+    relevance: "allergies != null && !allergies.isEmpty()"
+
+  - template: "Oral Confirmation: {oral_confirmation}"
+    relevance: "oral_confirmation != null && !oral_confirmation.isEmpty()"
+
+---
+sub_group: Covid19_Vaccine_Record
+fields:
+  - template: "Vaccination Status: {covid19_vaccine_given}"
+    relevance: "covid19_vaccine_given != ''"
+
+  - template: "Next Vaccination Date: {covid19_vaccine_next_date}"
+    relevance: "covid19_vaccine_next_date != ''"
+
+  - template: "Covid 19 Antigen: {covid19_antigens}"
+    relevance: "covid19_antigens != ''"
+
+  - template: "Site of Administration: {site_of_administration}"
+    relevance: "site_of_administration != ''"
+
+  - template: "Administration Date: {administration_date}"
+    relevance: "administration_date != ''"
+
+  - template: "Administration Route: {administration_route}"
+    relevance: "administration_route != ''"
+
+  - template: "Lot Number: {lot_number}"
+    relevance: "lot_number != ''"
+
+  - template: "Vaccine Expiry: {vaccine_expiry}"
+    relevance: "vaccine_expiry != ''"
+
+---
+sub_group: Medical_And_Allergy_Check
+fields:
+  - template: "Medical Conditions: {influenza_pre_existing_conditions}, {other_influenza_pre_existing_conditions}"
+    relevance: "influenza_pre_existing_conditions != null && !influenza_pre_existing_conditions.isEmpty()"
+
+  - template: "Influenza Allergies Check: {influenza_allergies}, {other_influenza_allergies}"
+    relevance: "influenza_allergies != null && !influenza_allergies.isEmpty()"
+
+  - template: "Influenza Temperature Check: {influenza_temperature}"
+    relevance: "influenza_temperature != null && !influenza_temperature.isEmpty()"
+
+---
+sub_group: Influenza_Vaccine_Record
+fields:
+  - template: "Influenza Vaccination Status: {influenza_vaccine_given}"
+    relevance: "influenza_vaccine_given != ''"
+
+  - template: "Influenza Antigen: {influenza_vaccines}"
+    relevance: "influenza_vaccines != ''"
+
+  - template: "Site of Administration: {influenza_site_of_administration}"
+    relevance: "influenza_site_of_administration != ''"
+
+  - template: "Administration Date: {influenza_administration_date}"
+    relevance: "influenza_administration_date != ''"
+
+  - template: "Administration Route: {influenza_vaccine_administration_route}"
+    relevance: "influenza_vaccine_administration_route != ''"
+
+  - template: "Lot Number: {influenza_vaccine_lot_number}"
+    relevance: "influenza_vaccine_lot_number != ''"
+
+  - template: "Vaccine Expiry: {influenza_vaccine_expiry}"
+    relevance: "influenza_vaccine_expiry != ''"

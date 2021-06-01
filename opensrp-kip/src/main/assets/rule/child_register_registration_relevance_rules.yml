@@ -19,3 +19,34 @@ priority: 1
 condition: "step1_age != '' && step1_age < 2"
 actions:
   - "isRelevant = true"
+
+---
+name: step1_father_phone
+description: step1_father_phone
+priority: 1
+condition: "step1_include_father_details.contains('include_father_details')"
+actions:
+  - "isRelevant = true"
+
+---
+name: step1_father_first_name
+description: step1_father_first_name
+priority: 1
+condition: "step1_include_father_details.contains('include_father_details')"
+actions:
+  - "isRelevant = true"
+---
+name: step1_father_last_name
+description: step1_father_last_name
+priority: 1
+condition: "step1_include_father_details.contains('include_father_details')"
+actions:
+  - "isRelevant = true"
+
+---
+name: step1_father_dob
+description: step1_father_dob
+priority: 1
+condition: "step1_include_father_details.contains('include_father_details')"
+actions:
+  - "isRelevant = true"

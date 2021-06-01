@@ -1,0 +1,28 @@
+---
+name: step1_high_risk_toaster
+description: opd_client_risk_status
+priority: 1
+condition: "((!step1_pre_existing_conditions.isEmpty() && !step1_pre_existing_conditions.contains('none')) || (step1_occupation != '' && step1_occupation != 'none')) && (!step1_age.equals('') && step1_age > 55)"
+actions:
+  - "isRelevant = true"
+---
+name: step1_medium_risk_toaster
+description: opd_client_risk_status
+priority: 1
+condition: "(((!step1_pre_existing_conditions.isEmpty() && !step1_pre_existing_conditions.contains('none')) || (step1_occupation != '' && step1_occupation != 'none')) && (!step1_age.equals('') && step1_age < 55)) || (((!step1_pre_existing_conditions.isEmpty() && step1_pre_existing_conditions.contains('none')) && (step1_occupation != '' && step1_occupation == 'none')) && (!step1_age.equals('') && step1_age > 55))"
+actions:
+  - "isRelevant = true"
+---
+name: step1_low_risk_toaster
+description: opd_client_risk_status
+priority: 1
+condition: "((step1_pre_existing_conditions.isEmpty() || step1_pre_existing_conditions.contains('none')) && (step1_occupation == '' || step1_occupation == 'none') && (step1_age.equals('') || step1_age < 55))"
+actions:
+  - "isRelevant = true"
+---
+name: step1_other_occupation
+description: other_occupation
+priority: 1
+condition: "step1_occupation != '' && step1_occupation == 'other'"
+actions:
+  - "isRelevant = true"

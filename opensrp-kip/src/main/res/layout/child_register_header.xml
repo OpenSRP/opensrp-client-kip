@@ -90,14 +90,14 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="1dp"
         android:layout_marginRight="1dp"
-        android:layout_weight="1.5">
+        android:layout_weight="1.8">
 
         <org.smartregister.view.customcontrols.CustomFontTextView
             android:id="@+id/child_next_appointment_header"
             style="@style/CustomFontTextViewStyle.ClientList.Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/next_visit"
+            android:text="Appointment"
             android:textAllCaps="true"
             android:textColor="@color/client_list_grey"
             android:textSize="16sp" />
@@ -107,7 +107,7 @@
     <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="2.4">
+        android:layout_weight="2.0">
 
         <org.smartregister.view.customcontrols.CustomFontTextView
             android:id="@+id/child_due_header"

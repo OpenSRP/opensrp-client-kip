@@ -54,6 +54,13 @@
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:text="@string/side_nav_moh710" />
+            <ImageView
+                android:id="@+id/report_sync_btn"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_action_sync" />
 
             <View
                 android:id="@+id/separator_v"

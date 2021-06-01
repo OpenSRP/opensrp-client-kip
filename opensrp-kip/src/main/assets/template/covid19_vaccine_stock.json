@@ -1,0 +1,36 @@
+{
+  "identifier": "covid19_vaccine_stock",
+  "settings": [
+    {
+      "description": "12346-001:2022-02-01",
+      "label": "AZ oxford Stock Details",
+      "type": "SettingConfiguration",
+      "key": "az_oxford_vials_amount"
+    },
+    {
+      "description": "12346-020:2022-02-01",
+      "label": "Sinopharm Stock Details",
+      "type": "SettingConfiguration",
+      "key": "sinopharm_vials_amount"
+    },
+    {
+      "description": "978676-001:2022-02-01",
+      "label": "Sinovac Stock Details",
+      "type": "SettingConfiguration",
+      "key": "sinovac_vials_amount"
+    },
+    {
+      "description": "978676-001:2022-02-01",
+      "label": "Moderna Stock Details",
+      "type": "SettingConfiguration",
+      "key": "moderna_vials_amount"
+    },
+    {
+      "description": "978676-001:2022-02-01",
+      "label": "Pfizer Stock Details",
+      "type": "SettingConfiguration",
+      "key": "pfizer_vials_amount"
+    }
+  ],
+  "type": "SettingConfiguration"
+}

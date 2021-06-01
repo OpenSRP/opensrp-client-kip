@@ -1,0 +1,267 @@
+{
+  "count": "5",
+  "encounter_type": "OPD Covid19 Vaccine Stock Take",
+  "entity_id": "",
+  "relational_id": "",
+  "validate_on_submit": true,
+  "show_errors_on_submit": true,
+  "metadata": {
+    "start": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "start",
+      "openmrs_entity_id": "163137AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "end": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "end",
+      "openmrs_entity_id": "163138AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "today": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "encounter",
+      "openmrs_entity_id": "encounter_date"
+    },
+    "deviceid": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "deviceid",
+      "openmrs_entity_id": "163149AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "subscriberid": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "subscriberid",
+      "openmrs_entity_id": "163150AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "simserial": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "simserial",
+      "openmrs_entity_id": "163151AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "phonenumber": {
+      "openmrs_entity_parent": "",
+      "openmrs_entity": "concept",
+      "openmrs_data_type": "phonenumber",
+      "openmrs_entity_id": "163152AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "encounter_location": "",
+    "look_up": {
+      "entity_id": "",
+      "value": ""
+    }
+  },
+  "step1": {
+    "title": "AZ Oxford Vaccine Stock Take",
+    "next": "step2",
+    "fields": [
+      {
+        "key": "az_oxford_vials_amount",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "type": "edit_text",
+        "edit_type": "number",
+        "hint": "Number of AZ oxford vials",
+        "v_required": {
+          "value": true,
+          "err": "Enter the number of AZ Oxford vials"
+        }
+      },
+      {
+        "key": "az_oxford_vials_lot_number",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "type": "edit_text",
+        "hint": "Enter the AZ oxford vials lot number",
+        "v_required": {
+          "value": true,
+          "err": "Enter the number of AZ Oxford vials lot number"
+        }
+      },
+      {
+        "key": "az_oxford_vials_expiry",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "hint": "Enter the AZ oxford vials Expiry Date",
+        "type": "date_picker",
+        "v_required": {
+          "value": true,
+          "err": "Enter the AZ oxford vials Expiry Date"
+        }
+      }
+    ]
+  },
+  "step2": {
+    "title": "Sinopharm Vaccine Stock Take",
+    "next": "step3",
+    "fields": [
+      {
+        "key": "sinopharm_vials_amount",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "type": "edit_text",
+        "edit_type": "number",
+        "hint": "Number sinopharm vials",
+        "v_required": {
+          "value": true,
+          "err": "Enter the number of sinopharm vials"
+        }
+      },
+      {
+        "key": "sinopharm_vials_lot_number",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "type": "edit_text",
+        "hint": "Enter the sinopharm vials lot number",
+        "v_required": {
+          "value": true,
+          "err": "Enter the number of sinopharm vials lot number"
+        }
+      },
+      {
+        "key": "sinopharm_vials_expiry",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "hint": "Enter the  sinopharm vials Expiry Date",
+        "type": "date_picker",
+        "v_required": {
+          "value": true,
+          "err": "Enter the sinopharm vials Expiry Date"
+        }
+      }
+    ]
+  },
+  "step3": {
+    "title": "Sinovac Vaccine Stock Take",
+    "next": "step4",
+    "fields": [
+      {
+        "key": "sinovac_vials_amount",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "type": "edit_text",
+        "hint": "Number sinovac vials",
+        "v_required": {
+          "value": true,
+          "err": "Enter the number of sinovac vials"
+        }
+      },
+      {
+        "key": "sinovac_vials_lot_number",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "type": "edit_text",
+        "hint": "Enter the sinovac vials lot number",
+        "v_required": {
+          "value": true,
+          "err": "Enter the number of sinovac vials lot number"
+        }
+      },
+      {
+        "key": "sinovac_vials_expiry",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "hint": "Enter the sinovac vials Expiry Date",
+        "type": "date_picker",
+        "v_required": {
+          "value": true,
+          "err": "Enter the sinovac vials Expiry Date"
+        }
+      }
+    ]
+  },
+  "step4": {
+    "title": "Pfizer Vaccine Stock Take",
+    "next": "step5",
+    "fields": [
+      {
+        "key": "pfizer_vials_amount",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "type": "edit_text",
+        "hint": "Number Pfizer vials",
+        "v_required": {
+          "value": true,
+          "err": "Enter the number of Pfizer vials"
+        }
+      },
+      {
+        "key": "pfizer_vials_lot_number",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "type": "edit_text",
+        "hint": "Enter the Pfizer vials lot number",
+        "v_required": {
+          "value": true,
+          "err": "Enter the number of Pfizer vials lot number"
+        }
+      },
+      {
+        "key": "pfizer_vials_expiry",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "hint": "Enter the Pfizer vials Expiry Date",
+        "type": "date_picker",
+        "v_required": {
+          "value": true,
+          "err": "Enter the Pfizer vials Expiry Date"
+        }
+      }
+    ]
+  },
+  "step5": {
+    "title": "Moderna Vaccine Stock Take",
+    "fields": [
+      {
+        "key": "moderna_vials_amount",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "type": "edit_text",
+        "hint": "Number Moderna vials",
+        "v_required": {
+          "value": true,
+          "err": "Enter the number of Moderna vials"
+        }
+      },
+      {
+        "key": "moderna_vials_lot_number",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "type": "edit_text",
+        "hint": "Enter the Moderna vials lot number",
+        "v_required": {
+          "value": true,
+          "err": "Enter the number of Moderna vials lot number"
+        }
+      },
+      {
+        "key": "moderna_vials_expiry",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "hint": "Enter the Moderna vials Expiry Date",
+        "type": "date_picker",
+        "v_required": {
+          "value": true,
+          "err": "Enter the Moderna vials Expiry Date"
+        }
+      }
+    ]
+  }
+}

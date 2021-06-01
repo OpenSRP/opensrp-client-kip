@@ -1,0 +1,7 @@
+---
+name: step1_other_influenza_aefi_action_taken
+description: other_influenza_aefi_action_taken
+priority: 1
+condition: "step1_influenza_aefi_action_taken != '' && step1_influenza_aefi_action_taken == 'other'"
+actions:
+  - "isRelevant = true"

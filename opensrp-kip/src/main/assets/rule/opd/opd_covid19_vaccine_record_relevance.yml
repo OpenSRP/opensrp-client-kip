@@ -1,0 +1,28 @@
+---
+name: step1_re_order_alert
+description: re_order_alert
+priority: 1
+condition: "((step1_az_oxford_vials_amount != '' && step1_az_oxford_vials_amount > 5 && step1_az_oxford_vials_amount < 10) || (step1_sinopharm != '' && step1_sinopharm > 5 && step1_sinopharm < 10) || (step1_sinovac != '' && step1_sinovac > 5 && step1_sinovac < 10))"
+actions:
+  - "isRelevant = true"
+---
+name: step1_must_re_order_alert
+description: must_re_order_alert
+priority: 1
+condition: "((step1_az_oxford_vials_amount != '' && step1_az_oxford_vials_amount < 5) || (step1_sinopharm != '' && step1_sinopharm < 5) || (step1_sinovac != '' && step1_sinovac < 5))"
+actions:
+  - "isRelevant = true"
+---
+name: step1_other_administration_route
+description: other_administration_route
+priority: 1
+condition: "step1_administration_route != '' && step1_administration_route == 'other'"
+actions:
+  - "isRelevant = true"
+---
+name: step1_other_site_of_administration
+description: other_site_of_administration
+priority: 1
+condition: "step1_site_of_administration != '' && step1_site_of_administration == 'other'"
+actions:
+  - "isRelevant = true"

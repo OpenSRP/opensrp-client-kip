@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <item
+        android:id="@+id/opd_menu_item_enrol_child"
+        android:visible="false"
+        android:title="Enrol Child Register"
+        app:showAsAction="never"
+        tools:ignore="HardcodedText" />
+
+    <item
+        android:id="@+id/opd_menu_item_adverse_event"
+        android:enabled="false"
+        android:title="@string/opd_adverse_event_text"
+        app:showAsAction="never"
+        tools:ignore="HardcodedText" />
+
+    <item
+        android:id="@+id/opd_menu_item_influenza_adverse_event"
+        android:enabled="false"
+        android:title="@string/opd_influenza_adverse_event_text"
+        app:showAsAction="never"
+        tools:ignore="HardcodedText" />
+
+    <item
+        android:id="@+id/opd_menu_item_close_client"
+        android:enabled="false"
+        android:title="@string/opd_close"
+        app:showAsAction="never"
+        tools:ignore="HardcodedText" />
+
+    <item
+        android:id="@+id/opd_menu_item_send_sms"
+        android:enabled="false"
+        android:title="@string/opd_send_sms"
+        app:showAsAction="never"
+        tools:ignore="HardcodedText" />
+</menu>

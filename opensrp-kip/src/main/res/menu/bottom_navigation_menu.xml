@@ -4,8 +4,8 @@
 	<item
 			android:id="@+id/action_clients"
 			android:enabled="true"
-			android:icon="@mipmap/sidemenu_children"
-			android:title="@string/menu_child_clients"
+			android:icon="@mipmap/ic_home"
+			android:title="@string/home"
 			app:showAsAction="ifRoom"/>
 	<item
 		android:id="@+id/action_register"
@@ -22,7 +22,7 @@
 	<item
 			android:id="@+id/action_library"
 			android:enabled="true"
-			android:icon="@drawable/ic_icon_open_book"
-			android:title="@string/library_menu"
-			app:showAsAction="ifRoom"/>
+			android:icon="@drawable/ic_sms"
+			android:title="@string/send_advocacy_sms"
+			app:showAsAction="always"/>
 </menu>

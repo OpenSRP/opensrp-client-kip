@@ -4,7 +4,7 @@
     <string name="sync" translatable="false">Sync</string>
     <string name="action_log_out">Logging Out</string>
     <string name="powered_by" translatable="false">Powered by</string>
-    <string name="malawi_app_name">Kenya Immunization Platform (KIP)</string>
+    <string name="app_name_full">Kenya Immunization Platform (KIP)</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="done">Done</string>
@@ -14,6 +14,8 @@
     <string name="side_nav_add">Add new child</string>
     <string name="scan_card">Card Scanner</string>
     <string name="side_nav_out_of_catchment">Record out of catchment vaccination</string>
+
+    <string name="out_of_catchment">Record out of catchment vaccination</string>
     <string name="nav_register">Register</string>
     <string name="attribution_text">Powered by OpenSRP</string>
     <string name="show_password_text">Show password</string>
@@ -21,13 +23,16 @@
     <string name="login_text">Log In</string>
     <string name="log_out_text">Log Out</string>
 
+    <string name="send_kepi_sms_reminder">Send SMS Reminder</string>
+    <string name="send_advocacy_sms">Send Advocacy SMS</string>
+
     <string name="english" translatable="false">English</string>
     <string name="french" translatable="false">Français</string>
     <string name="arabic" translatable="false">عربى</string>
     <string name="zeir_id" translatable="false">KIP ID</string>
     <string name="iz_id_hint">KIP ID number</string>
 
-    <string name="nav_logo" translatable="false">Kenya Immunization Platform (KIP)</string>
+    <string name="nav_logo" translatable="false">Kenya Immunization Platform(KIP)</string>
     <string name="title_activity_child_immunization" translatable="false">ChildImmunizationActivity</string>
 
     <!-- Nfc-->
@@ -101,7 +106,7 @@
     <string name="device_to_device_sync">Device-to-device Sync</string>
     <string name="action_start_sync">Sync Started</string>
     <string name="all_registers">All Registers</string>
-    <string name="menu_child_clients">Child Clients</string>
+    <string name="menu_child_clients">KEPI Clients</string>
 
     <string name="vit_a_1">Vit A 1</string>
     <string name="vit_a_2">Vit A 2</string>
@@ -143,7 +148,7 @@
 
     <string name="loading">Loading</string>
     <string name="please_wait_message">Please wait</string>
-    <string name="reports">MohReports</string>
+    <string name="reports">Reports</string>
 
     <!-- In App Reporting -->
     <!-- Daily Tallies -->
@@ -324,11 +329,11 @@
     <!-- START OF INDICATOR LABELS. DO NOT CHANGE MANUALLY OR MIX WITH OTHER LABELS -->
     <!-- THIS IS AUTOMATICALLY GENERATED -->
 
-<!--    <string name="me_pab_gender_female">Under 2 Female Children Protected At Birth</string>-->
-<!--    <string name="me_pab_gender_male">Under 2 Male Children Protected At Birth</string>-->
-<!--    <string name="me_pab_age_over_1">Over 1 Children Protected At Birth</string>-->
-<!--    <string name="me_pab_age_under_1">Under 1 Children Protected At Birth</string>-->
-<!--    <string name="me_pab_age_total">Children Protected At Birth</string>-->
+    <string name="me_pab_gender_female">Under 2 Female Children Protected At Birth</string>
+    <string name="me_pab_gender_male">Under 2 Male Children Protected At Birth</string>
+    <string name="me_pab_age_over_1">Over 1 Children Protected At Birth</string>
+    <string name="me_pab_age_under_1">Under 1 Children Protected At Birth</string>
+    <string name="me_pab_age_total">Children Protected At Birth</string>
     <string name="me_vaccines_gender_bcg_female">BCG Female</string>
     <string name="me_vaccines_gender_bcg_male">BCG Male</string>
     <string name="me_vaccines_gender_hepb_female">Hepatitis B Female</string>
@@ -371,40 +376,57 @@
     <string name="me_vaccines_gender_measles_2__mr_2_female">MR 2 Female</string>
     <string name="me_vaccines_gender_ipv_male">IPV Male</string>
     <string name="me_vaccines_gender_ipv_female">IPV Female</string>
-    <string name="me_vaccines_age_bcg_over_1">BCG Over 1</string>
-    <string name="me_vaccines_age_bcg_under_1">BCG Under 1</string>
-    <string name="me_vaccines_age_opv_0_over_1">OPV 0 Over 1</string>
-    <string name="me_vaccines_age_opv_0_under_1">OPV 0 Under 1</string>
-    <string name="me_vaccines_age_opv_1_over_1">OPV 1 Over 1</string>
-    <string name="me_vaccines_age_opv_1_under_1">OPV 1 Under 1</string>
-    <string name="me_vaccines_age_opv_2_over_1">OPV 2  Over 1</string>
-    <string name="me_vaccines_age_opv_2_under_1">OPV 2 Under 1</string>
-    <string name="me_vaccines_age_opv_3_over_1">OPV 3  Over 1</string>
-    <string name="me_vaccines_age_opv_3_under_1">OPV 3 Under 1</string>
-    <string name="me_vaccines_age_penta_1_over_1">Penta 1 Over 1</string>
-    <string name="me_vaccines_age_penta_1_under_1">Penta 1 Under 1</string>
-    <string name="me_vaccines_age_penta_2_over_1">Penta 2 Over 1</string>
-    <string name="me_vaccines_age_penta_2_under_1">Penta 2 Under 1</string>
-    <string name="me_vaccines_age_penta_3_over_1">Penta 3 Over 1</string>
-    <string name="me_vaccines_age_penta_3_under_1">Penta 3 Under 1</string>
-    <string name="me_vaccines_age_pcv_1_over_1">PCV 1 Over 1</string>
-    <string name="me_vaccines_age_pcv_1_under_1">PCV 1 Under 1</string>
-    <string name="me_vaccines_age_pcv_2_over_1">PCV 2 Over 1</string>
-    <string name="me_vaccines_age_pcv_2_under_1">PCV 2 Under 1</string>
-    <string name="me_vaccines_age_rota_1_over_1">Rota 1 Over 1</string>
-    <string name="me_vaccines_age_rota_1_under_1">Rota 1 Under 1</string>
-    <string name="me_vaccines_age_rota_2_over_1">Rota 2 Over 1</string>
-    <string name="me_vaccines_age_rota_2_under_1">Rota 2 Under 1</string>
-    <string name="me_vaccines_age_mv_1_over_1">Malaria Vaccine 1 Over 1</string>
-    <string name="me_vaccines_age_mv_1_under_1">Malaria Vaccine 1 Under 1</string>
-    <string name="me_vaccines_age_mv_2_over_1">Malaria Vaccine 2 Over 1</string>
-    <string name="me_vaccines_age_mv_2_under_1">Malaria Vaccine 2 Under 1</string>
-    <string name="me_vaccines_age_mv_3_over_1">Malaria Vaccine 3 Over 1</string>
-    <string name="me_vaccines_age_mv_3_under_1">Malaria Vaccine 3 Under 1</string>
-    <string name="me_vaccines_age_measles_1__mr_1_over_1">MR 1 Over 1</string>
-    <string name="me_vaccines_age_measles_1__mr_1_under_1">MR 1 Under 1</string>
-    <string name="me_vaccines_age_ipv_over_1">IPV Over 1</string>
-    <string name="me_vaccines_age_ipv_under_1">IPV  Under 1</string>
+    <string name="me_vaccines_age_bcg_over_1">MOH710 BCG doses Administered > 1 Years</string>
+    <string name="me_vaccines_age_bcg_under_1">MOH710 BCG doses Administered &lt;1 Years</string>
+    <string name="me_vaccines_age_opv_0_over_1">MOH710 OPV Birth doses Administered >1 Years</string>
+    <string name="me_vaccines_age_opv_0_under_1">MOH710 OPV Birth doses Administered &lt;1 Years</string>
+    <string name="me_vaccines_age_opv_1_over_1">MOH710 OPV1 doses Administered >1 Years</string>
+    <string name="me_vaccines_age_opv_1_under_1">MOH710 OPV1 doses Administered &lt;1 Years</string>
+    <string name="me_vaccines_age_opv_2_over_1">MOH710 OPV2 doses Administered >1 Years</string>
+    <string name="me_vaccines_age_opv_2_under_1">MOH710 OPV2 doses Administered &lt;1 Years</string>
+    <string name="me_vaccines_age_opv_3_over_1">MOH710 OPV3 doses Administered >1 Years</string>
+    <string name="me_vaccines_age_opv_3_under_1">MOH710 OPV3 doses Administered &lt;1 Years</string>
+    <string name="me_vaccines_age_penta_1_over_1">MOH710 DPT/Hep+HiB1 doses Administered >1 Years</string>
+    <string name="me_vaccines_age_penta_1_under_1">MOH710 DPT/Hep+HiB1 doses Administered &lt;1 Years</string>
+    <string name="me_vaccines_age_penta_2_over_1">MOH710 DPT/Hep+HiB2 doses Administered >1 Years</string>
+    <string name="me_vaccines_age_penta_2_under_1">MOH710 DPT/Hep+HiB1 doses Administered &lt;1 Years</string>
+    <string name="me_vaccines_age_penta_3_over_1">MOH710 DPT/Hep+HiB3 doses Administered >1 Years</string>
+    <string name="me_vaccines_age_penta_3_under_1">MOH710 DPT/Hep+HiB3 doses Administered &lt;1 Years</string>
+    <string name="me_vaccines_age_pcv_1_over_1">MOH710 Pneumococal 1 doses Administered >1 Years</string>
+    <string name="me_vaccines_age_pcv_1_under_1">MOH710 Pneumococal 1 doses Administered &lt;1 Years</string>
+    <string name="me_vaccines_age_pcv_2_over_1">MOH710 Pneumococal 2 doses Administered >1 Years</string>
+    <string name="me_vaccines_age_pcv_2_under_1">MOH710 Pneumococal 2 doses Administered &lt;1 Years</string>
+    <string name="me_vaccines_age_pcv_3_over_1">MOH710 Pneumococal 3 doses Administered >1 Years</string>
+    <string name="me_vaccines_age_pcv_3_under_1">MOH710 Pneumococal 3 doses Administered &lt;1 Years</string>
+    <string name="me_vaccines_age_rota_1_over_1">MOH710 Rotavirus 1 doses Administered >1  Years</string>
+    <string name="me_vaccines_age_rota_1_under_1">MOH710 Rotavirus 1 doses Administered &lt;1  Years</string>
+    <string name="me_vaccines_age_rota_2_over_1">MOH710 Rotavirus 2 doses Administered >1  Years</string>
+    <string name="me_vaccines_age_rota_2_under_1">MOH710 Rotavirus 2 doses Administered &lt;1  Years</string>
+    <string name="me_vaccines_age_mv_1_over_1">NVIP Malaria Vaccine Dose 1 >1 Years</string>
+    <string name="me_vaccines_age_mv_1_under_1">NVIP Malaria Vaccine Dose 1 &lt;1 Years</string>
+    <string name="me_vaccines_age_mv_2_over_1">NVIP Malaria Vaccine Dose 2 >1 Years</string>
+    <string name="me_vaccines_age_mv_2_under_1">NVIP Malaria Vaccine Dose 2 &lt;1 Years</string>
+    <string name="me_vaccines_age_mv_3_over_1">NVIP Malaria Vaccine Dose 3 >1 Years</string>
+    <string name="me_vaccines_age_mv_3_under_1">NVIP Malaria Vaccine Dose 3 &lt;1 Years</string>
+    <string name="me_vaccines_age_mv_4_over_1">NVIP Malaria Vaccine Dose 4 >1 Years</string>
+    <string name="me_vaccines_age_measles_1__mr_1_over_1">MOH710 Measles-Rubella 1 doses Administered >1 Years</string>
+    <string name="me_vaccines_age_measles_1__mr_1_under_1">MOH710 Measles-Rubella 1 doses Administered &lt;1 Years</string>
+    <string name="me_vaccines_age_ipv_over_1">MOH710 IPV doses Administered >1 Years</string>
+    <string name="me_vaccines_age_ipv_under_1">MOH710 IPV doses Administered &lt;1 Years</string>
+
+    <string name="me_fully_immunized_static_monthly_target">MOH710 Fully Immunized monthly target</string>
+    <string name="me_fully_immunized_outreach_under_1">CHD EPI Fully Immunized children Static Under 1</string>
+    <string name="me_fully_immunized_static_under_1">MOH710 Fully Immunized Children(FIC) under 1 year &lt;1  Years</string>
+    <string name="me_fully_immunized_static_over_1">MOH710 Fully Immunized Children(FIC) over 1 year >1  Years</string>
+    <string name="me_fully_immunized_outreach_over_2">MOH710 Fully Immunized Child(FIC)above 2 years</string>
+
+    <string name="me_vita_age_static_vit_a_1_under_1_male"><![CDATA[MOH710 Vitamin A Supplemental Above1 Year(200,000IU)]]></string>
+    <string name="me_vita_age_static_vit_a_1_under_1_female"><![CDATA[MOH710 Vitamin A at 6 - 11 months(100,000 IU) >1  Years]]></string>
+
+
+    <string name="me_vita_age_static_vit_a_1_over_1_male"><![CDATA[CHD EPI Vitamin A suplemented 12 - 59 Months (1st Dose) Male Static]]></string>
+    <string name="me_vita_age_static_vit_a_1_over_1_female"><![CDATA[CHD EPI Vitamin A suplemented 12 - 59 Months (1st Dose) Female Static]]></string>
+
     <string name="me_vaccines_under2_bcg">BCG Under 2</string>
     <string name="me_vaccines_under2_opv_0">OPV 0 Under 2</string>
     <string name="me_vaccines_under2_opv_1">OPV 1 Under 2</string>
@@ -500,8 +522,8 @@
     <string name="me_height_under2_age_gender_severe_over_1_male">Severe Height Male Over 1</string>
     <string name="me_height_under2_age_gender_stunted_under_1_female">Stunted Height Female Under 1</string>
     <string name="me_height_under2_age_gender_stunted_under_1_male">Stunted Height Male Under 1</string>
-<!--    <string name="me_child_total">Total Children Born</string>-->
-    <string name="moh_indicator">Antigen</string>
+    <string name="me_child_total">Total Children Born</string>
+    <string name="moh_indicator">Indicator</string>
     <string name="indicator">Indicator</string>
     <string name="value">Value</string>
 
@@ -517,12 +539,411 @@
     <string name="tap_to_view">Tap to view</string>
     <string name="mother_guardian_matches">\" mother/guardian match(es).\"</string>
     <string name="dhis2_reports">DHIS2 Reports</string>
-    <string name="child_report_grouping_title">Child</string>
-    <string name="anc_report_grouping_title">ANC</string>
+    <string name="child_report_grouping_title">KEPI</string>
+    <string name="opd_influenza_report_grouping_title">OPD INFLUENZA</string>
+    <string name="opd_covid_report_grouping_title">OPD COVID 19</string>
+    <!-- Start OPD reports labels -->
+    <!--    <string name="me_malaria_cases_confirmed_over_5"> Malaria Cases Confirmed Over 5</string>-->
+    <!--    <string name="me_malaria_cases_confirmed_under_5"> Malaria Cases Confirmed Under 5</string>-->
+    <!--    <string name="me_malaria_cases_presumed_over_5"> Malaria Cases Presumed Over 5</string>-->
+    <!--    <string name="me_malaria_cases_presumed_under_5"> Malaria Cases Presumed Under 5</string>-->
+    <!--    <string name="me_total_malaria_case_over_5"> Total Malaria Case Over 5</string>-->
+    <!--    <string name="me_total_malaria_case_under_5"> Total Malaria Case Under 5</string>-->
+    <!--    <string name="me_anti_malaria_treatment_confirmed_over_5"> Anti Malaria Treatment Confirmed Over 5</string>-->
+    <!--    <string name="me_anti_malaria_treatment_confirmed_under_5"> Anti Malaria Treatment Confirmed Under 5</string>-->
+    <!--    <string name="me_anti_malaria_treatment_presumed_over_5"> Anti Malaria Treatment Presumed Over 5</string>-->
+    <!--    <string name="me_anti_malaria_treatment_presumed_under_5"> Anti Malaria Treatment Presumed Under 5</string>-->
+    <!--    <string name="me_malaria_test_mrdt_over_5"> Malaria Test Malaria - MRDT Over 5</string>-->
+    <!--    <string name="me_malaria_test_mrdt_under_5"> Malaria Test Malaria - MRDT Under 5</string>-->
+    <!--    <string name="me_malaria_test_microscopy_over_5"> Malaria Test Malaria - Microscopy Over 5</string>-->
+    <!--    <string name="me_malaria_test_microscopy_under_5"> Malaria Test Malaria - Microscopy Under 5</string>-->
+    <!--    <string name="me_positive_malaria_cases_mRDT_over_5"> Positive Malaria Cases Malaria - MRDT Over 5</string>-->
+    <!--    <string name="me_positive_malaria_cases_mRDT_under_5"> Positive Malaria Cases Malaria - MRDT Under 5</string>-->
+    <!--    <string name="me_positive_malaria_cases_microscopy_over_5"> Positive Malaria Cases Malaria - Microscopy Over 5</string>-->
+    <!--    <string name="me_positive_malaria_cases_microscopy_under_5"> Positive Malaria Cases Malaria - Microscopy Under 5</string>-->
+    <!--    <string name="me_total_suspected_malaria"> Total Suspected Malaria</string>-->
+
+
+    <string name="me_vaccines_age_az_oxford_over_50">AZ/Oxford Over 50</string>
+    <string name="me_vaccines_age_az_oxford_under_50">AZ/Oxford Under 50</string>
+    <string name="me_vaccines_age_sinopharm_over_50">Sinopharm Over 50</string>
+    <string name="me_vaccines_age_sinopharm_under_50">Sinopharm Under 50</string>
+    <string name="me_vaccines_age_sinovac_over_50">Sinovac Over 50</string>
+    <string name="me_vaccines_age_sinovac_under_50">Sinovac Under 50</string>
+    <!-- ME CHILD Reports -->
+    <!--    <string name="me_overall_view_chd_epi_annual_total_population">CHD EPI Annual total population default</string>-->
+    <!--    <string name="me_overall_view_chd_epi_live_births">CHD EPI Live births default</string>-->
+    <!--    <string name="me_overall_view_chd_epi_surviving_infants">CHD EPI Surviving infants default</string>-->
+    <!--    <string name="me_overall_view_chd_epi_pregnant_women">CHD EPI Pregnant women default</string>-->
+    <!--    <string name="me_overall_view_chd_epi_9_years_old_girls">CHD EPI 9 years old girls default</string>-->
+    <!--    <string name="me_a_chd_epi_immunization_sessions_planned_static">CHD EPI Immunization sessions planned Static</string>-->
+    <!--    <string name="me_a_chd_epi_immunization_sessions_cancelled_static">CHD EPI Immunization sessions cancelled Static</string>-->
+    <!--    <string name="me_a_chd_epi_immunization_sessions_planned_outreach">CHD EPI Immunization sessions planned Outreach</string>-->
+    <!--    <string name="me_a_chd_epi_immunization_sessions_cancelled_outreach">CHD EPI Immunization sessions cancelled Outreach</string>-->
+    <!--    <string name="me_a_chd_epi_reasons_for_cancellation">CHD EPI Reasons for cancellation</string>-->
+    <!--    <string name="me_vacc_target_chd_epi_bcg_and_opv_0_monthly_target">CHD EPI BCG and OPV 0 monthly target</string>-->
+    <!--    <string name="me_vaccines_age_static_bcg_under_1">CHD EPI BCG Childhood Vaccination Static Under 1</string>-->
+    <!--    <string name="me_vaccines_age_outreach_bcg_under_1">CHD EPI BCG Childhood Vaccination Outreach Under 1</string>-->
+    <!--    <string name="me_vaccines_age_static_bcg_over_1">CHD EPI BCG Childhood Vaccination Static Over 1</string>-->
+    <!--    <string name="me_vaccines_age_outreach_bcg_over_1">CHD EPI BCG Childhood Vaccination Outreach Over 1</string>-->
+    <!--    <string name="me_vaccines_age_static_opv_0_under_1">CHD EPI OPV 0 Childhood Vaccination Static Under 1 </string>-->
+    <!--    <string name="me_vaccines_age_outreach_opv_0_under_1">CHD EPI OPV 0 Childhood Vaccination Outreach</string>-->
+    <!--    <string name="me_vacc_target_chd_epi_mr1_monthly_target_surviving_infant">CHD EPI MR1 monthly target surviving infant</string>-->
+    <!--    <string name="me_vaccines_age_static_mr_1_under_1">CHD EPI MR1 Childhood Vaccination Static Under 1</string>-->
+    <!--    <string name="me_vaccines_age_outreach_mr_1_under_1">CHD EPI MR1 Childhood Vaccination Outreach Under 1</string>-->
+    <!--    <string name="me_vaccines_age_static_mr_1_over_1">CHD EPI MR1 Childhood Vaccination Static Over 1</string>-->
+    <!--    <string name="me_vaccines_age_outreach_mr_1_over_1">CHD EPI MR1 Childhood Vaccination Outreach Over 1</string>-->
+    <!--    <string name="me_vacc_target_chd_epi_mr2_monthly_target_surviving_infants">CHD EPI MR2 monthly target surviving infants</string>-->
+    <!--    <string name="me_vaccines_age_static_mr_2_over_1">CHD EPI MR2 Childhood Vaccination Static Over 1</string>-->
+    <!--    <string name="me_vaccines_age_outreach_mr_2_over_1">CHD EPI MR2 Childhood Vaccination Outreach Over 1</string>-->
+    <!--    <string name="me_vacc_target_chd_epi_opv_1_to_opv_3_monthly_target_surviving_infants"><![CDATA[CHD EPI OPV 1 - OPV 3 monthly target surviving infants]]></string>-->
+    <!--    <string name="me_vaccines_age_static_opv_1_under_1">CHD EPI OPV1 Childhood Vaccination Static Under 1</string>-->
+    <!--    <string name="me_vaccines_age_outreach_opv_1_under_1">CHD EPI OPV1 Childhood Vaccination Outreach Under 1</string>-->
+    <!--    <string name="me_vaccines_age_static_opv_1_over_1">CHD EPI OPV1 Childhood Vaccination Static Over 1</string>-->
+    <!--    <string name="me_vaccines_age_outreach_opv_1_over_1">CHD EPI OPV1 Childhood Vaccination Outreach Over 1</string>-->
+    <!--    <string name="me_vaccines_age_static_opv_2_under_1">CHD EPI OPV2 Childhood Vaccination Static Under 1</string>-->
+    <!--    <string name="me_vaccines_age_outreach_opv_2_under_1">CHD EPI OPV2 Childhood Vaccination Outreach Under 1</string>-->
+    <!--    <string name="me_vaccines_age_static_opv_2_over_1">CHD EPI OPV2 Childhood Vaccination Static Over 1</string>-->
+    <!--    <string name="me_vaccines_age_outreach_opv_2_over_1">CHD EPI OPV2 Childhood Vaccination Outreach Over 1</string>-->
+    <!--    <string name="me_vaccines_age_static_opv_3_under_1">CHD EPI OPV3 Childhood Vaccination Static Under 1</string>-->
+    <!--    <string name="me_vaccines_age_outreach_opv_3_under_1">CHD EPI OPV3 Childhood Vaccination Outreach Under 1</string>-->
+    <!--    <string name="me_vaccines_age_static_opv_3_over_1">CHD EPI OPV3 Childhood Vaccination Static Over 1</string>-->
+    <!--    <string name="me_vaccines_age_outreach_opv_3_over_1">CHD EPI OPV3 Childhood Vaccination Outreach Over 1</string>-->
+    <!--    <string name="me_vaccines_age_static_ipv_under_1">CHD EPI IPV Childhood Vaccination Static Under 1</string>-->
+    <!--    <string name="me_vaccines_age_outreach_ipv_under_1">CHD EPI IPV Childhood Vaccination Outreach Under 1</string>-->
+    <!--    <string name="me_vaccines_age_static_ipv_over_1">CHD EPI IPV Childhood Vaccination Static Over 1</string>-->
+    <!--    <string name="me_vaccines_age_outreach_ipv_over_1">CHD EPI IPV Childhood Vaccination Outreach Over 1</string>-->
+    <!--    <string name="me_vacc_target_chd_epi_dpthepbhib_1_to_3_monthly_target_surviving_infants"><![CDATA[CHD EPI DPT-HepB-Hib 1 - 3 monthly target surviving infants]]></string>-->
+    <!--    <string name="me_vaccines_age_static_penta_1_under_1"><![CDATA[CHD EPI DPT-HepB-Hib1 Childhood Vaccination Static Under 1]]></string>-->
+    <!--    <string name="me_vaccines_age_outreach_penta_1_under_1"><![CDATA[CHD EPI DPT-HepB-Hib1 Childhood Vaccination Outreach Under 1]]></string>-->
+    <!--    <string name="me_vaccines_age_static_penta_1_over_1"><![CDATA[CHD EPI DPT-HepB-Hib1 Childhood Vaccination Static Over 1]]></string>-->
+    <!--    <string name="me_vaccines_age_outreach_penta_1_over_1"><![CDATA[CHD EPI DPT-HepB-Hib1 Childhood Vaccination Outreach Over 1]]></string>-->
+    <!--    <string name="me_vaccines_age_static_penta_2_under_1"><![CDATA[CHD EPI DPT-HepB-Hib2 Childhood Vaccination Static Under 1]]></string>-->
+    <!--    <string name="me_vaccines_age_outreach_penta_2_under_1"><![CDATA[CHD EPI DPT-HepB-Hib2 Childhood Vaccination Outreach Under 1]]></string>-->
+    <!--    <string name="me_vaccines_age_static_penta_2_over_1"><![CDATA[CHD EPI DPT-HepB-Hib2 Childhood Vaccination Static Over 1]]></string>-->
+    <!--    <string name="me_vaccines_age_outreach_penta_2_over_1"><![CDATA[CHD EPI DPT-HepB-Hib2 Childhood Vaccination Outreach Over 1]]></string>-->
+    <!--    <string name="me_vaccines_age_static_penta_3_under_1"><![CDATA[CHD EPI DPT-HepB-Hib3 Childhood Vaccination Static Under 1]]></string>-->
+    <!--    <string name="me_vaccines_age_outreach_penta_3_under_1"><![CDATA[CHD EPI DPT-HepB-Hib3 Childhood Vaccination Outreach Under 1]]></string>-->
+    <!--    <string name="me_vaccines_age_static_penta_3_over_1"><![CDATA[CHD EPI DPT-HepB-Hib3 Childhood Vaccination Static Over 1]]></string>-->
+    <!--    <string name="me_vaccines_age_outreach_penta_3_over_1"><![CDATA[CHD EPI DPT-HepB-Hib3 Childhood Vaccination Outreach Over 1]]></string>-->
+    <!--    <string name="me_vacc_target_chd_epi_pcv1_to_pcv3_monthly_target_surviving_infants"><![CDATA[CHD EPI PCV1 - PCV3 monthly target surviving infants]]></string>-->
+    <!--    <string name="me_vaccines_age_static_pcv_1_under_1">CHD EPI PCV1 Childhood Vaccination Static Under 1</string>-->
+    <!--    <string name="me_vaccines_age_outreach_pcv_1_under_1">CHD EPI PCV1 Childhood Vaccination Outreach Under 1</string>-->
+    <!--    <string name="me_vaccines_age_static_pcv_1_over_1">CHD EPI PCV1 Childhood Vaccination Static Over 1</string>-->
+    <!--    <string name="me_vaccines_age_outreach_pcv_1_over_1">CHD EPI PCV1 Childhood Vaccination Outreach Over 1</string>-->
+    <!--    <string name="me_vaccines_age_static_pcv_2_under_1">CHD EPI PCV2 Childhood Vaccination Static Under 1</string>-->
+    <!--    <string name="me_vaccines_age_outreach_pcv_2_under_1">CHD EPI PCV2 Childhood Vaccination Outreach Under 1</string>-->
+    <!--    <string name="me_vaccines_age_static_pcv_2_over_1">CHD EPI PCV2 Childhood Vaccination Static Over 1</string>-->
+    <!--    <string name="me_vaccines_age_outreach_pcv_2_over_1">CHD EPI PCV2 Childhood Vaccination Outreach Over 1</string>-->
+    <!--    <string name="me_vaccines_age_static_pcv_3_under_1">CHD EPI PCV3 Childhood Vaccination Static Under 1</string>-->
+    <!--    <string name="me_vaccines_age_outreach_pcv_3_under_1">CHD EPI PCV3 Childhood Vaccination Outreach Under 1</string>-->
+    <!--    <string name="me_vaccines_age_static_pcv_3_over_1">CHD EPI PCV3 Childhood Vaccination Static Over 1</string>-->
+    <!--    <string name="me_vaccines_age_outreach_pcv_3_over_1">CHD EPI PCV3 Childhood Vaccination Outreach Over 1</string>-->
+    <!--    <string name="me_vacc_target_chd_epi_rota_1_and_2_monthly_target">CHD EPI ROTA 1 and 2 monthly target</string>-->
+    <!--    <string name="me_vaccines_age_static_rota_1_under_1">CHD EPI ROTA 1 Childhood Vaccination Static Under 1</string>-->
+    <!--    <string name="me_vaccines_age_outreach_rota_1_under_1">CHD EPI ROTA 1 Childhood Vaccination Outreach Under 1</string>-->
+    <!--    <string name="me_vaccines_age_static_rota_2_under_1">CHD EPI ROTA 2 Childhood Vaccination Static Under 1</string>-->
+    <!--    <string name="me_vaccines_age_outreach_rota_2_under_1">CHD EPI ROTA 2 Childhood Vaccination Outreach Under 1</string>-->
+    <!--    <string name="me_vacc_target_chd_epi_malaria_vaccines_monthly_target_under_1"><![CDATA[CHD EPI Malaria Vaccines (1-4) monthly target Under 1]]></string>-->
+    <!--    <string name="me_vacc_target_chd_epi_malaria_vaccine_4_monthly_target"><![CDATA[CHD EPI Malaria Vaccine 4 monthly target (22 - 36 months)]]></string>-->
+    <!--    <string name="me_vaccines_age_static_mv_1_under_1">CHD EPI Malaria Vaccine 1 Childhood Vaccination Static Under 1</string>-->
+    <!--    <string name="me_vaccines_age_outreach_mv_1_under_1">CHD EPI Malaria Vaccine 1 Childhood Vaccination Outreach Under 1</string>-->
+    <!--    <string name="me_vaccines_age_static_mv_2_under_1">CHD EPI Malaria Vaccine 2 Childhood Vaccination Static Under 1</string>-->
+    <!--    <string name="me_vaccines_age_outreach_mv_2_under_1">CHD EPI Malaria Vaccine 2 Childhood Vaccination Outreach Under 1</string>-->
+    <!--    <string name="me_vaccines_age_static_mv_3_under_1">CHD EPI Malaria Vaccine 3 Childhood Vaccination Static Under 1</string>-->
+    <!--    <string name="me_vaccines_age_outreach_mv_3_under_1">CHD EPI Malaria Vaccine 3 Childhood Vaccination Outreach Under 1</string>-->
+    <!--    <string name="me_vaccines_age_static_mv_4_over_1"><![CDATA[CHD EPI Malaria Vaccine 4 Childhood Vaccination Static > 24-27 Months]]></string>-->
+    <!--    <string name="me_vaccines_age_outreach_mv_4_over_1"><![CDATA[CHD EPI Malaria Vaccine 4 Childhood Vaccination Outreach > 24-27 Months]]></string>-->
+    <!--    <string name="me_pab_static_target">CHD EPI Children Protection At Birth (PAB) monthly target</string>-->
+    <!--    <string name="me_pab_static_yes">CHD EPI Protection At Birth (PAB) Childhood Vaccination Static Under 1</string>-->
+    <!--    <string name="me_pab_outreach_yes">CHD EPI Protection At Birth (PAB) Childhood Vaccination Outreach Under 1</string>-->
+    <!--    <string name="me_hpv_hpv_target">CHD EPI HPV monthly target</string>-->
+    <!--    <string name="me_hpv_hpv1_static">CHD EPI HPV1 Childhood Vaccination Static</string>-->
+    <!--    <string name="me_hpv_hpv1_outreach">CHD EPI HPV1 Childhood Vaccination Outreach</string>-->
+    <!--    <string name="me_hpv_hpv1_school">CHD EPI HPV1 Childhood Vaccination School</string>-->
+    <!--    <string name="me_hpv_hpv2_static">CHD EPI HPV2 Childhood Vaccination Static</string>-->
+    <!--    <string name="me_hpv_hpv2_outreach">CHD EPI HPV2 Childhood Vaccination Outreach</string>-->
+    <!--    <string name="me_hpv_hpv2_school">CHD EPI HPV2 Childhood Vaccination School</string>-->
+    <!--    <string name="me_fully_immunized_static_monthly_target">CHD EPI Fully Immunized monthly target</string>-->
+    <!--    <string name="me_fully_immunized_outreach_under_1">CHD EPI Fully Immunized children Static Under 1</string>-->
+    <!--    <string name="me_fully_immunized_static_under_1">CHD EPI Fully Immunized children Outreach Under 1</string>-->
+    <!--    <string name="me_fully_immunized_static_over_1">CHD EPI Fully Immunized children Static Over 1</string>-->
+    <!--    <string name="me_fully_immunized_outreach_over_1">CHD EPI Fully Immunized children Outreach Over 1</string>-->
+    <!--    <string name="me_tetanus_diphtheria_vaccinations_monthly_target_pregnant_women_td1">CHD EPI Td for women of child bearing age (CBA) monthly target Pregnant women Td1</string>-->
+    <!--    <string name="me_tetanus_diphtheria_vaccinations_monthly_target_pregnant_women_td2">CHD EPI Td for women of child bearing age (CBA) monthly target Pregnant women Td2</string>-->
+    <!--    <string name="me_tetanus_diphtheria_vaccinations_monthly_target_pregnant_women_td3">CHD EPI Td for women of child bearing age (CBA) monthly target Pregnant women Td3</string>-->
+    <!--    <string name="me_tetanus_diphtheria_vaccinations_monthly_target_pregnant_women_td4">CHD EPI Td for women of child bearing age (CBA) monthly target Pregnant women Td4</string>-->
+    <!--    <string name="me_tetanus_diphtheria_vaccinations_monthly_target_pregnant_women_td5">CHD EPI Td for women of child bearing age (CBA) monthly target Pregnant women Td5</string>-->
+    <!--    <string name="me_tetanus_diphtheria_vaccinations_pregnant_women_static_td1">CHD EPI Td for women of child bearing age (CBA) Pregnant women Static Td1</string>-->
+    <!--    <string name="me_tetanus_diphtheria_vaccinations_pregnant_women_static_td2">CHD EPI Td for women of child bearing age (CBA) Pregnant women Static Td2</string>-->
+    <!--    <string name="me_tetanus_diphtheria_vaccinations_pregnant_women_static_td3">CHD EPI Td for women of child bearing age (CBA) Pregnant women Static Td3</string>-->
+    <!--    <string name="me_tetanus_diphtheria_vaccinations_pregnant_women_static_td4">CHD EPI Td for women of child bearing age (CBA) Pregnant women Static Td4</string>-->
+    <!--    <string name="me_tetanus_diphtheria_vaccinations_pregnant_women_static_td5">CHD EPI Td for women of child bearing age (CBA) Pregnant women Static Td5</string>-->
+    <!--    <string name="me_tetanus_diphtheria_vaccinations_pregnant_women_outreach_td1">CHD EPI Td for women of child bearing age (CBA) Pregnant women Outreach Td1</string>-->
+    <!--    <string name="me_tetanus_diphtheria_vaccinations_pregnant_women_outreach_td2">CHD EPI Td for women of child bearing age (CBA) Pregnant women Outreach Td2</string>-->
+    <!--    <string name="me_tetanus_diphtheria_vaccinations_pregnant_women_outreach_td3">CHD EPI Td for women of child bearing age (CBA) Pregnant women Outreach Td3</string>-->
+    <!--    <string name="me_tetanus_diphtheria_vaccinations_pregnant_women_outreach_td4">CHD EPI Td for women of child bearing age (CBA) Pregnant women Outreach Td4</string>-->
+    <!--    <string name="me_tetanus_diphtheria_vaccinations_pregnant_women_outreach_td5">CHD EPI Td for women of child bearing age (CBA) Pregnant women Outreach Td5</string>-->
+    <!--    <string name="me_tetanus_diphtheria_vaccinations_monthly_target_non_pregnant_women_td1"><![CDATA[CHD EPI Td for women of child bearing age (CBA) monthly target Non-pregnant women of CBA Td1]]></string>-->
+    <!--    <string name="me_tetanus_diphtheria_vaccinations_monthly_target_non_pregnant_women_td2"><![CDATA[CHD EPI Td for women of child bearing age (CBA) monthly target Non-pregnant women of CBA Td2]]></string>-->
+    <!--    <string name="me_tetanus_diphtheria_vaccinations_monthly_target_non_pregnant_women_td3"><![CDATA[CHD EPI Td for women of child bearing age (CBA) monthly target Non-pregnant women of CBA Td3]]></string>-->
+    <!--    <string name="me_tetanus_diphtheria_vaccinations_monthly_target_non_pregnant_women_td4"><![CDATA[CHD EPI Td for women of child bearing age (CBA) monthly target Non-pregnant women of CBA Td4]]></string>-->
+    <!--    <string name="me_tetanus_diphtheria_vaccinations_monthly_target_non_pregnant_women_td5"><![CDATA[CHD EPI Td for women of child bearing age (CBA) monthly target Non-pregnant women of CBA Td5]]></string>-->
+    <!--    <string name="me_tetanus_diphtheria_vaccinations_non_pregnant_women_static_td1"><![CDATA[CHD EPI Td for women of child bearing age (CBA) Non-pregnant women of CBA Static Td1]]></string>-->
+    <!--    <string name="me_tetanus_diphtheria_vaccinations_non_pregnant_women_static_td2"><![CDATA[CHD EPI Td for women of child bearing age (CBA) Non-pregnant women of CBA Static Td2]]></string>-->
+    <!--    <string name="me_tetanus_diphtheria_vaccinations_non_pregnant_women_static_td3"><![CDATA[CHD EPI Td for women of child bearing age (CBA)Non-pregnant women of CBA Static Td3]]></string>-->
+    <!--    <string name="me_tetanus_diphtheria_vaccinations_non_pregnant_women_static_td4"><![CDATA[CHD EPI Td for women of child bearing age (CBA) Non-pregnant women of CBA Static Td4]]></string>-->
+    <!--    <string name="me_tetanus_diphtheria_vaccinations_non_pregnant_women_static_td5"><![CDATA[CHD EPI Td for women of child bearing age (CBA) Non-pregnant women of CBA Static Td5]]></string>-->
+    <!--    <string name="me_tetanus_diphtheria_vaccinations_non_pregnant_women_outreach_td1"><![CDATA[CHD EPI Td for women of child bearing age (CBA) Non-pregnant women of CBA Outreach Td1]]></string>-->
+    <!--    <string name="me_tetanus_diphtheria_vaccinations_non_pregnant_women_outreach_td2"><![CDATA[CHD EPI Td for women of child bearing age (CBA) Non-pregnant women of CBA Outreach Td2]]></string>-->
+    <!--    <string name="me_tetanus_diphtheria_vaccinations_non_pregnant_women_outreach_td3"><![CDATA[CHD EPI Td for women of child bearing age (CBA) Non-pregnant women of CBA Outreach Td3]]></string>-->
+    <!--    <string name="me_tetanus_diphtheria_vaccinations_non_pregnant_women_outreach_td4"><![CDATA[CHD EPI Td for women of child bearing age (CBA) Non-pregnant women of CBA Outreach Td4]]></string>-->
+    <!--    <string name="me_tetanus_diphtheria_vaccinations_non_pregnant_women_outreach_td5"><![CDATA[CHD EPI Td for women of child bearing age (CBA) Non-pregnant women of CBA Outreach Td5]]></string>-->
+    <!--    <string name="me_wastage_chd_epi_bcg_doses_used_and_wasted_a_static"><![CDATA[CHD EPI BCG doses used and wasted (A) - Static]]></string>-->
+    <!--    <string name="me_wastage_chd_epi_bcg_doses_used_and_wasted_a_outreach"><![CDATA[CHD EPI BCG doses used and wasted (A) - Outreach]]></string>-->
+    <!--    <string name="me_wastage_chd_epi_opv_doses_used_and_wasted_a_static"><![CDATA[CHD EPI OPV doses used and wasted (A) - Static]]></string>-->
+    <!--    <string name="me_wastage_chd_epi_opv_doses_used_and_wasted_a_outreach"><![CDATA[CHD EPI OPV doses used and wasted (A - Outreach]]></string>-->
+    <!--    <string name="me_wastage_chd_epi_mr_doses_used_and_wasted_a_static"><![CDATA[CHD EPI MR doses used and wasted (A) - Static]]></string>-->
+    <!--    <string name="me_wastage_chd_epi_mr_doses_used_and_wasted_a_outreach"><![CDATA[CHD EPI MR doses used and wasted (A) - Outreach]]></string>-->
+    <!--    <string name="me_wastage_chd_epi_dpt_hepb_hib_doses_used_a_static"><![CDATA[CHD EPI DPT-HepB-Hib doses used (A) - Static]]></string>-->
+    <!--    <string name="me_wastage_chd_epi_dpt_hepb_hib_doses_used_a_outreach"><![CDATA[CHD EPI DPT-HepB-Hib doses used (A - Outreach]]></string>-->
+    <!--    <string name="me_wastage_chd_epi_dpt_hepb_hib_doses_discarded_b_static"><![CDATA[CHD EPI DPT-HepB-Hib doses discarded (B) - Static]]></string>-->
+    <!--    <string name="me_wastage_chd_epi_dpt_hepb_hib_doses_discarded_b_outreach"><![CDATA[CHD EPI DPT-HepB-Hib doses discarded (B) - Outreach]]></string>-->
+    <!--    <string name="me_wastage_chd_epi_pcv_doses_used_a_static"><![CDATA[CHD EPI PCV doses used (A) - Static]]></string>-->
+    <!--    <string name="me_wastage_chd_epi_pcv_doses_used_a_outreach"><![CDATA[CHD EPI PCV doses used (A) - Outreach]]></string>-->
+    <!--    <string name="me_wastage_chd_epi_pcv_doses_discarded_b_static"><![CDATA[CHD EPI PCV doses discarded (B) - Static]]></string>-->
+    <!--    <string name="me_wastage_chd_epi_pcv_doses_discarded_b_outreach"><![CDATA[CHD EPI PCV doses discarded (B) - Outreach]]></string>-->
+    <!--    <string name="me_wastage_chd_epi_rota_doses_used_a_static"><![CDATA[CHD EPI ROTA doses used (A) - Static]]></string>-->
+    <!--    <string name="me_wastage_chd_epi_rota_doses_used_a_outreach"><![CDATA[CHD EPI ROTA doses used (A) - Outreach]]></string>-->
+    <!--    <string name="me_wastage_chd_epi_rota_doses_discarded_b_static"><![CDATA[CHD EPI ROTA doses discarded (B) - Static]]></string>-->
+    <!--    <string name="me_wastage_chd_epi_rota_doses_discarded_b_outreach"><![CDATA[CHD EPI ROTA doses discarded (B) - Outreach]]></string>-->
+    <!--    <string name="me_wastage_chd_epi_malaria_vaccine_doses_used_a_static"><![CDATA[CHD EPI Malaria Vaccine doses used (A) - Static]]></string>-->
+    <!--    <string name="me_wastage_chd_epi_malaria_vaccine_doses_used_a_outreach"><![CDATA[CHD EPI Malaria Vaccine doses used (A) - Outreach]]></string>-->
+    <!--    <string name="me_wastage_chd_epi_malaria_vaccine_doses_discarded_b_static"><![CDATA[CHD EPI Malaria Vaccine doses discarded (B) - Static]]></string>-->
+    <!--    <string name="me_wastage_chd_epi_malaria_vaccine_doses_discarded_b_outreach"><![CDATA[CHD EPI Malaria Vaccine doses discarded (B) - Outreach]]></string>-->
+    <!--    <string name="me_wastage_chd_epi_td_doses_used_a_static"><![CDATA[CHD EPI Td doses used (A) - Static]]></string>-->
+    <!--    <string name="me_wastage_chd_epi_td_doses_used_a_outreach"><![CDATA[CHD EPI Td doses used (A - Outreach]]></string>-->
+    <!--    <string name="me_wastage_chd_epi_td_doses_discarded_b_static"><![CDATA[CHD EPI Td doses discarded (B) - Static]]></string>-->
+    <!--    <string name="me_wastage_chd_epi_td_doses_discarded_b_outreach"><![CDATA[CHD EPI Td doses discarded (B - Outreach]]></string>-->
+    <!--    <string name="me_wastage_chd_epi_hpv_doses_used_a_static"><![CDATA[CHD EPI HPV doses used (A) - Static]]></string>-->
+    <!--    <string name="me_wastage_chd_epi_hpv_doses_used_a_outreach"><![CDATA[CHD EPI HPV doses used (A) - Outreach]]></string>-->
+    <!--    <string name="me_wastage_chd_epi_hpv_doses_discarded_b_static"><![CDATA[CHD EPI HPV doses discarded (B) - Static]]></string>-->
+    <!--    <string name="me_wastage_chd_epi_hpv_doses_discarded_b_outreach"><![CDATA[CHD EPI HPV doses discarded (B) - Outreach]]></string>-->
+    <!--    <string name="me_recur_targets_vitamin_a_monthly_target_6_to_11_months_static"><![CDATA[CHD EPI Vitamin A suplementation monthly target 6 - 11 Months Static]]></string>-->
+    <!--    <string name="me_recur_targets_vitamin_a_monthly_target_6_to_11_months_outreach"><![CDATA[CHD EPI Vitamin A suplementation monthly target 6 - 11 Months Outreach]]></string>-->
+    <!--    <string name="me_vita_age_static_vit_a_1_under_1_male"><![CDATA[CHD EPI Vitamin A suplemented 6 - 11 Months Male Static]]></string>-->
+    <!--    <string name="me_vita_age_static_vit_a_1_under_1_female"><![CDATA[CHD EPI Vitamin A suplemented 6 - 11 Months Female Static]]></string>-->
+    <!--    <string name="me_vita_age_outreach_vit_a_1_under_1_male"><![CDATA[CHD EPI Vitamin A suplemented 6 - 11 Months Male Outreach]]></string>-->
+    <!--    <string name="me_vita_age_outreach_vit_a_1_under_1_female"><![CDATA[CHD EPI Vitamin A suplemented 6 - 11 Months Female Outreach]]></string>-->
+    <!--    <string name="me_recur_targets_vitamin_a_monthly_target_12_to_59_months_1st_dose_static"><![CDATA[CHD EPI Vitamin A suplementation monthly target 12 - 59 Months (1st Dose) Static]]></string>-->
+    <!--    <string name="me_recur_targets_vitamin_a_monthly_target_12_to_59_months_1st_dose_outreach"><![CDATA[CHD EPI Vitamin A suplementation monthly target 12 - 59 Months (1st Dose) Outreach]]></string>-->
+    <!--    <string name="me_vita_age_static_vit_a_1_over_1_male"><![CDATA[CHD EPI Vitamin A suplemented 12 - 59 Months (1st Dose) Male Static]]></string>-->
+    <!--    <string name="me_vita_age_static_vit_a_1_over_1_female"><![CDATA[CHD EPI Vitamin A suplemented 12 - 59 Months (1st Dose) Female Static]]></string>-->
+    <!--    <string name="me_vita_age_outreach_vit_a_1_over_1_male"><![CDATA[CHD EPI Vitamin A suplemented 12 - 59 Months (1st Dose) Male Outreach]]></string>-->
+    <!--    <string name="me_vita_age_outreach_vit_a_1_over_1_female"><![CDATA[CHD EPI Vitamin A suplemented 12 - 59 Months (1st Dose) Female Outreach]]></string>-->
+    <!--    <string name="me_recur_targets_vitamin_a_monthly_target_13_to_59_months_2nd_dose_static"><![CDATA[CHD EPI Vitamin A suplementation monthly target 13 - 59 Months (2nd Dose) Static]]></string>-->
+    <!--    <string name="me_recur_targets_vitamin_a_monthly_target_13_to_59_months_2nd_dose_outreach"><![CDATA[CHD EPI Vitamin A suplementation monthly target 13 - 59 Months (2nd Dose) Outreach]]></string>-->
+    <!--    <string name="me_vita_age_static_vit_a_2_over_1_male"><![CDATA[CHD EPI Vitamin A suplemented 13 - 59 Months (2nd Dose) Male Static]]></string>-->
+    <!--    <string name="me_vita_age_static_vit_a_2_over_1_female"><![CDATA[CHD EPI Vitamin A suplemented 13 - 59 Months (2nd Dose) Female Static]]></string>-->
+    <!--    <string name="me_vita_age_outreach_vit_a_2_over_1_male"><![CDATA[CHD EPI Vitamin A suplemented 13 - 59 Months (2nd Dose) Male Outreach]]></string>-->
+    <!--    <string name="me_vita_age_outreach_vit_a_2_over_1_female"><![CDATA[CHD EPI Vitamin A suplemented 13 - 59 Months (2nd Dose) Female Outreach]]></string>-->
+    <!--    <string name="me_postnatal_monthly_target_postnatal_mothers_static">CHD EPI Vitamin A suplementation monthly target Postnatal Mothers Static</string>-->
+    <!--    <string name="me_postnatal_monthly_target_postnatal_mothers_outreach">CHD EPI Vitamin A suplementation monthly target Postnatal Mothers Outreach</string>-->
+    <!--    <string name="me_postnatal_postnatal_mothers_female_static">CHD EPI Vitamin A suplemented Postnatal Mothers Female Static</string>-->
+    <!--    <string name="me_postnatal_postnatal_mothers_female_outreach">CHD EPI Vitamin A suplemented Postnatal Mothers Female Outreach</string>-->
+    <!--    <string name="me_recur_targets_deworming_monthly_target_12_to_23_months_1st_dose_static"><![CDATA[CHD EPI Deworming monthly target 12 - 23 Months  (1st Dose) Static]]></string>-->
+    <!--    <string name="me_recur_targets_deworming_monthly_target_12_to_23_months_1st_dose_outreach"><![CDATA[CHD EPI Deworming monthly target 12 - 23 Months  (1st Dose) Outreach]]></string>-->
+    <!--    <string name="me_deworm_age_static_deworming_over_1_male"><![CDATA[CHD EPI Number dewormed 12 - 23 Months Male Static]]></string>-->
+    <!--    <string name="me_deworm_age_static_deworming_over_1_female"><![CDATA[CHD EPI Number dewormed 12 - 23 Months Female Static]]></string>-->
+    <!--    <string name="me_deworm_age_outreach_deworming_over_1_male"><![CDATA[CHD EPI Number dewormed 12 - 23 Months Male Outreach]]></string>-->
+    <!--    <string name="me_deworm_age_outreach_deworming_over_1_female"><![CDATA[CHD EPI Number dewormed 12 - 23 Months Female Outreach]]></string>-->
+    <!--    <string name="me_recurring_age_static_deworming_over_2_male"><![CDATA[CHD EPI Number dewormed 24 - 59 Months Male Static]]></string>-->
+    <!--    <string name="me_recurring_age_static_deworming_over_2_female"><![CDATA[CHD EPI Number dewormed 24 - 59 Months Female Static]]></string>-->
+    <!--    <string name="me_deworm_age_outreach_deworming_over_2_male"><![CDATA[CHD EPI Number dewormed 24 - 59 Months Male Outreach]]></string>-->
+    <!--    <string name="me_deworm_age_outreach_deworming_over_2_female"><![CDATA[CHD EPI Number dewormed 24 - 59 Months Female Outreach]]></string>-->
+    <!--    <string name="me_recur_targets_deworming_monthly_target_24_to_59_months_1st_dose_static"><![CDATA[CHD EPI Deworming monthly target 24 - 59 Months  (1st Dose) Static]]></string>-->
+    <!--    <string name="me_recur_targets_deworming_monthly_target_24_to_59_months_1st_dose_outreach"><![CDATA[CHD EPI Deworming monthly target 24 - 59 Months  (1st Dose) Outreach]]></string>-->
+    <!--    <string name="me_g_recur_vitamin_a_doses_received_a_vitamin_a_100_000_ius_static">CHD EPI Vitamin A doses received (A) Vitamin A (100 000 ius) Static</string>-->
+    <!--    <string name="me_g_recur_vitamin_a_doses_received_a_vitamin_a_100_000_ius_outreach">CHD EPI Vitamin A doses received (A) Vitamin A (100 000 ius) Outreach</string>-->
+    <!--    <string name="me_g_recur_vitamin_a_doses_used_b_vitamin_a_100_000_ius_static">CHD EPI Vitamin A doses used (B) Vitamin A (100 000 ius) Static</string>-->
+    <!--    <string name="me_g_recur_vitamin_a_doses_used_b_vitamin_a_100_000_ius_outreach">CHD EPI Vitamin A doses used (B) Vitamin A (100 000 ius) Outreach</string>-->
+    <!--    <string name="me_g_recur_vitamin_a_doses_discarded_c_vitamin_a_100_000_ius_static">CHD EPI Vitamin A doses discarded (C) Vitamin A (100 000 ius) Static</string>-->
+    <!--    <string name="me_g_recur_vitamin_a_doses_discarded_c_vitamin_a_100_000_ius_outreach">CHD EPI Vitamin A doses discarded (C) Vitamin A (100 000 ius) Outreach</string>-->
+    <!--    <string name="me_g_recur_vitamin_a_doses_received_a_vitamin_a_200_000_ius_static">CHD EPI Vitamin A doses received (A) Vitamin A (200 000 ius) Static</string>-->
+    <!--    <string name="me_g_recur_vitamin_a_doses_received_a_vitamin_a_200_000_ius_outreach">CHD EPI Vitamin A doses received (A) Vitamin A (200 000 ius) Outreach</string>-->
+    <!--    <string name="me_g_recur_vitamin_a_doses_used_b_vitamin_a_200_000_ius_static">CHD EPI Vitamin A doses used (B) Vitamin A (200 000 ius) Static</string>-->
+    <!--    <string name="me_g_recur_vitamin_a_doses_used_b_vitamin_a_200_000_ius_outreach">CHD EPI Vitamin A doses used (B) Vitamin A (200 000 ius) Outreach</string>-->
+    <!--    <string name="me_g_recur_vitamin_a_doses_discarded_c_vitamin_a_200_000_ius_static">CHD EPI Vitamin A doses discarded (C) Vitamin A (200 000 ius) Static</string>-->
+    <!--    <string name="me_g_recur_vitamin_a_doses_discarded_c_vitamin_a_200_000_ius_outreach">CHD EPI Vitamin A doses discarded (C) Vitamin A (200 000 ius) Outreach</string>-->
+    <!--    <string name="me_g_recur_deworming_doses_received_a_static">CHD EPI Deworming doses received (A) Static</string>-->
+    <!--    <string name="me_g_recur_deworming_doses_received_a_outreach">CHD EPI Deworming doses received (A) Outreach</string>-->
+    <!--    <string name="me_g_recur_deworming_doses_used_b_static">CHD EPI Deworming doses used (B) Static</string>-->
+    <!--    <string name="me_g_recur_deworming_doses_used_b_outreach">CHD EPI Deworming doses used (B) Outreach</string>-->
+    <!--    <string name="me_g_recur_deworming_doses_discarded_c_static">CHD EPI Deworming doses discarded (C) Static</string>-->
+    <!--    <string name="me_g_recur_deworming_doses_discarded_c_outreach">CHD EPI Deworming doses discarded (C) Outreach</string>-->
+    <!--    <string name="me_aefi_bacterial_abscesses_bcg">KEPI Minor AEFIs BCG Bacterial Abscesses</string>-->
+    <!--    <string name="me_aefi_severe_local_reaction_bcg">KEPI Minor AEFIs BCG Severe local reaction</string>-->
+    <!--    <string name="me_aefi_lymphadenitis_bcg">KEPI Minor AEFIs BCG Lymphadenitis</string>-->
+    <!--    <string name="me_aefi_sepsis_bcg">KEPI Minor AEFIs BCG Sepsis</string>-->
+    <!--    <string name="me_aefi_fever_bcg"><![CDATA[KEPI Serious AEFIs BCG High fever > 38 degrees celcius]]></string>-->
+    <!--    <string name="me_aefi_death_bcg">KEPI Serious AEFIs BCG Death</string>-->
+    <!--    <string name="me_aefi_encephalopathy_bcg">KEPI Serious AEFIs BCG Encephalopathy</string>-->
+    <!--    <string name="me_aefi_seizures_bcg">KEPI Serious AEFIs BCG Seizures</string>-->
+    <!--    <string name="me_aefi_paralysis_bcg">KEPI Serious AEFIs BCG Paralysis</string>-->
+    <!--    <string name="me_aefi_significant_disability_bcg">KEPI Serious AEFIs BCG Significant disability</string>-->
+    <!--    <string name="me_aefi_birth_defect_bcg">KEPI Serious AEFIs BCG Birth defect</string>-->
+    <!--    <string name="me_aefi_toxic_shock_syndrome_bcg">KEPI Serious AEFIs BCG Toxic shock syndrome</string>-->
+    <!--    <string name="me_aefi_bacterial_abscesses_opv">KEPI Minor AEFIs OPV Bacterial Abscesses</string>-->
+    <!--    <string name="me_aefi_severe_local_reaction_opv">KEPI Minor AEFIs OPV Severe local reaction</string>-->
+    <!--    <string name="me_aefi_lymphadenitis_opv">KEPI Minor AEFIs OPV Lymphadenitis</string>-->
+    <!--    <string name="me_aefi_sepsis_opv">KEPI Minor AEFIs OPV Sepsis</string>-->
+    <!--    <string name="me_aefi_fever_opv"><![CDATA[KEPI Serious AEFIs OPV High fever > 38 degrees celcius]]></string>-->
+    <!--    <string name="me_aefi_death_opv">KEPI Serious AEFIs OPV Death</string>-->
+    <!--    <string name="me_aefi_encephalopathy_opv">KEPI Serious AEFIs OPV Encephalopathy</string>-->
+    <!--    <string name="me_aefi_seizures_opv">KEPI Serious AEFIs OPV Seizures</string>-->
+    <!--    <string name="me_aefi_paralysis_opv">KEPI Serious AEFIs OPV Paralysis</string>-->
+    <!--    <string name="me_aefi_significant_disability_opv">KEPI Serious AEFIs OPV Significant disability</string>-->
+    <!--    <string name="me_aefi_birth_defect_opv">KEPI Serious AEFIs OPV Birth defect</string>-->
+    <!--    <string name="me_aefi_toxic_shock_syndrome_opv">KEPI Serious AEFIs OPV Toxic shock syndrome</string>-->
+    <!--    <string name="me_aefi_bacterial_abscesses_ipv">KEPI Minor AEFIs IPV Bacterial Abscesses</string>-->
+    <!--    <string name="me_aefi_severe_local_reaction_ipv">KEPI Minor AEFIs IPV Severe local reaction</string>-->
+    <!--    <string name="me_aefi_lymphadenitis_ipv">KEPI Minor AEFIs IPV Lymphadenitis</string>-->
+    <!--    <string name="me_aefi_sepsis_ipv">KEPI Minor AEFIs IPV Sepsis</string>-->
+    <!--    <string name="me_aefi_fever_ipv"><![CDATA[KEPI Serious AEFIs IPV High fever > 38 degrees celcius]]></string>-->
+    <!--    <string name="me_aefi_death_ipv">KEPI Serious AEFIs IPV Death</string>-->
+    <!--    <string name="me_aefi_encephalopathy_ipv">KEPI Serious AEFIs IPV Encephalopathy</string>-->
+    <!--    <string name="me_aefi_seizures_ipv">KEPI Serious AEFIs IPV Seizures</string>-->
+    <!--    <string name="me_aefi_paralysis_ipv">KEPI Serious AEFIs IPV Paralysis</string>-->
+    <!--    <string name="me_aefi_significant_disability_ipv">KEPI Serious AEFIs IPV Significant disability</string>-->
+    <!--    <string name="me_aefi_birth_defect_ipv">KEPI Serious AEFIs IPV Birth defect</string>-->
+    <!--    <string name="me_aefi_toxic_shock_syndrome_ipv">KEPI Serious AEFIs IPV Toxic shock syndrome</string>-->
+    <!--    <string name="me_aefi_bacterial_abscesses_penta"><![CDATA[KEPI Minor AEFIs DPT-HepB-Hib Bacterial Abscesses]]></string>-->
+    <!--    <string name="me_aefi_severe_local_reaction_penta"><![CDATA[KEPI Minor AEFIs DPT-HepB-Hib Severe local reaction]]></string>-->
+    <!--    <string name="me_aefi_lymphadenitis_penta"><![CDATA[KEPI Minor AEFIs DPT-HepB-Hib Lymphadenitis]]></string>-->
+    <!--    <string name="me_aefi_sepsis_penta"><![CDATA[KEPI Minor AEFIs DPT-HepB-Hib Sepsis]]></string>-->
+    <!--    <string name="me_aefi_fever_penta"><![CDATA[KPI Serious AEFIs DPT-HepB-Hib High fever > 38 degrees celcius]]></string>-->
+    <!--    <string name="me_aefi_death_penta"><![CDATA[KEPI Serious AEFIs DPT-HepB-Hib Death]]></string>-->
+    <!--    <string name="me_aefi_encephalopathy_penta"><![CDATA[KEPI Serious AEFIs DPT-HepB-Hib Encephalopathy]]></string>-->
+    <!--    <string name="me_aefi_seizures_penta"><![CDATA[KEPI Serious AEFIs DPT-HepB-Hib Seizures]]></string>-->
+    <!--    <string name="me_aefi_paralysis_penta"><![CDATA[KEPI Serious AEFIs DPT-HepB-Hib Paralysis]]></string>-->
+    <!--    <string name="me_aefi_significant_disability_penta"><![CDATA[KEPI Serious AEFIs DPT-HepB-Hib Significant disability]]></string>-->
+    <!--    <string name="me_aefi_birth_defect_penta"><![CDATA[KEPI Serious AEFIs DPT-HepB-Hib Birth defect]]></string>-->
+    <!--    <string name="me_aefi_toxic_shock_syndrome_penta"><![CDATA[KEPI Serious AEFIs DPT-HepB-Hib Toxic shock syndrome]]></string>-->
+    <!--    <string name="me_aefi_bacterial_abscesses_pcv">KEPI Minor AEFIs PCV Bacterial Abscesses</string>-->
+    <!--    <string name="me_aefi_severe_local_reaction_pcv">KEPI Minor AEFIs PCV Severe local reaction</string>-->
+    <!--    <string name="me_aefi_lymphadenitis_pcv">KEPI Minor AEFIs PCV Lymphadenitis</string>-->
+    <!--    <string name="me_aefi_sepsis_pcv">KEPI Minor AEFIs PCV Sepsis</string>-->
+    <!--    <string name="me_aefi_fever_pcv"><![CDATA[KEPI Serious AEFIs PCV High fever > 38 degrees celcius]]></string>-->
+    <!--    <string name="me_aefi_death_pcv">KEPI Serious AEFIs PCV Death</string>-->
+    <!--    <string name="me_aefi_encephalopathy_pcv">KEPI Serious AEFIs PCV Encephalopathy</string>-->
+    <!--    <string name="me_aefi_seizures_pcv">KEPI Serious AEFIs PCV Seizures</string>-->
+    <!--    <string name="me_aefi_paralysis_pcv">KEPI Serious AEFIs PCV Paralysis</string>-->
+    <!--    <string name="me_aefi_significant_disability_pcv">KEPI Serious AEFIs PCV Significant disability</string>-->
+    <!--    <string name="me_aefi_birth_defect_pcv">KEPI Serious AEFIs PCV Birth defect</string>-->
+    <!--    <string name="me_aefi_toxic_shock_syndrome_pcv">KEPI Serious AEFIs PCV Toxic shock syndrome</string>-->
+    <!--    <string name="me_aefi_bacterial_abscesses_rota">KEPI Minor AEFIs ROTA Bacterial Abscesses</string>-->
+    <!--    <string name="me_aefi_severe_local_reaction_rota">KEPI Minor AEFIs ROTA Severe local reaction</string>-->
+    <!--    <string name="me_aefi_lymphadenitis_rota">KEPI Minor AEFIs ROTA Lymphadenitis</string>-->
+    <!--    <string name="me_aefi_sepsis_rota">KEPI Minor AEFIs ROTA Sepsis</string>-->
+    <!--    <string name="me_aefi_fever_rota"><![CDATA[KEPI Serious AEFIs ROTA High fever > 38 degrees celcius]]></string>-->
+    <!--    <string name="me_aefi_death_rota">KEPI Serious AEFIs ROTA Death</string>-->
+    <!--    <string name="me_aefi_encephalopathy_rota">KEPI Serious AEFIs ROTA Encephalopathy</string>-->
+    <!--    <string name="me_aefi_seizures_rota">KEPI Serious AEFIs ROTA Seizures</string>-->
+    <!--    <string name="me_aefi_paralysis_rota">KEPI Serious AEFIs ROTA Paralysis</string>-->
+    <!--    <string name="me_aefi_significant_disability_rota">KEPI Serious AEFIs ROTA Significant disability</string>-->
+    <!--    <string name="me_aefi_birth_defect_rota">KEPI Serious AEFIs ROTA Birth defect</string>-->
+    <!--    <string name="me_aefi_toxic_shock_syndrome_rota">KEPI Serious AEFIs ROTA Toxic shock syndrome</string>-->
+    <!--    <string name="me_aefi_bacterial_abscesses_measles">KEPI Minor AEFIs Measles/MR Bacterial Abscesses</string>-->
+    <!--    <string name="me_aefi_severe_local_reaction_measles">KEPI Minor AEFIs Measles/MR Severe local reaction</string>-->
+    <!--    <string name="me_aefi_lymphadenitis_measles">KEPI Minor AEFIs Measles/MR Lymphadenitis</string>-->
+    <!--    <string name="me_aefi_sepsis_measles">KEPI Minor AEFIs Measles/MR Sepsis</string>-->
+    <!--    <string name="me_aefi_fever_measles"><![CDATA[KEPI Serious AEFIs Measles/MR High fever > 38 degrees celcius]]></string>-->
+    <!--    <string name="me_aefi_death_measles">KEPI Serious AEFIs Measles/MR Death</string>-->
+    <!--    <string name="me_aefi_encephalopathy_measles">KEPI Serious AEFIs Measles/MR Encephalopathy</string>-->
+    <!--    <string name="me_aefi_seizures_measles">KEPI Serious AEFIs Measles/MR Seizures</string>-->
+    <!--    <string name="me_aefi_paralysis_measles">KEPI Serious AEFIs Measles/MR Paralysis</string>-->
+    <!--    <string name="me_aefi_significant_disability_measles">KEPI Serious AEFIs Measles/MR Significant disability</string>-->
+    <!--    <string name="me_aefi_birth_defect_measles">KEPI Serious AEFIs Measles/MR Birth defect</string>-->
+    <!--    <string name="me_aefi_toxic_shock_syndrome_measles">KEPI Serious AEFIs Measles/MR Toxic shock syndrome</string>-->
+    <!--    <string name="me_aefi_tt_hpv_minor_aefis_tttd_bacterial_abscesses">CHD EPI Minor AEFIs TT/Td Bacterial Abscesses</string>-->
+    <!--    <string name="me_aefi_tt_hpv_minor_aefis_tttd_severe_local_reaction">CHD EPI Minor AEFIs TT/Td Severe local reaction</string>-->
+    <!--    <string name="me_aefi_tt_hpv_minor_aefis_tttd_lymphadenitis">CHD EPI Minor AEFIs TT/Td Lymphadenitis</string>-->
+    <!--    <string name="me_aefi_tt_hpv_minor_aefis_tttd_sepsis">CHD EPI Minor AEFIs TT/Td Sepsis</string>-->
+    <!--    <string name="me_aefi_tt_hpv_serious_aefis_tttd_high_fever"><![CDATA[CHD EPI Serious AEFIs TT/Td High fever > 38 degrees celcius]]></string>-->
+    <!--    <string name="me_aefi_tt_hpv_serious_aefis_tttd_death">CHD EPI Serious AEFIs TT/Td Death</string>-->
+    <!--    <string name="me_aefi_tt_hpv_serious_aefis_tttd_encephalopathy">CHD EPI Serious AEFIs TT/Td Encephalopathy</string>-->
+    <!--    <string name="me_aefi_tt_hpv_serious_aefis_tttd_seizures">CHD EPI Serious AEFIs TT/Td Seizures</string>-->
+    <!--    <string name="me_aefi_tt_hpv_serious_aefis_tttd_paralysis">CHD EPI Serious AEFIs TT/Td Paralysis</string>-->
+    <!--    <string name="me_aefi_tt_hpv_serious_aefis_tttd_significant_disability">CHD EPI Serious AEFIs TT/Td Significant disability</string>-->
+    <!--    <string name="me_aefi_tt_hpv_serious_aefis_tttd_birth_defect">CHD EPI Serious AEFIs TT/Td Birth defect</string>-->
+    <!--    <string name="me_aefi_tt_hpv_serious_aefis_tttd_toxic_shock_syndrome">CHD EPI Serious AEFIs TT/Td Toxic shock syndrome</string>-->
+    <!--    <string name="me_aefi_bacterial_abscesses_malaria">KEPI Minor AEFIs Malaria Vaccine Bacterial Abscesses</string>-->
+    <!--    <string name="me_aefi_severe_local_reaction_malaria">KEPI Minor AEFIs Malaria Vaccine Severe local reaction</string>-->
+    <!--    <string name="me_aefi_lymphadenitis_malaria">KEPI Minor AEFIs Malaria Vaccine Lymphadenitis</string>-->
+    <!--    <string name="me_aefi_sepsis_malaria">KEPI Minor AEFIs Malaria Vaccine Sepsis</string>-->
+    <!--    <string name="me_aefi_fever_malaria"><![CDATA[KEPI Serious AEFIs Malaria Vaccine High fever > 38 degrees celcius]]></string>-->
+    <!--    <string name="me_aefi_death_malaria">KEPI Serious AEFIs Malaria Vaccine Death</string>-->
+    <!--    <string name="me_aefi_encephalopathy_malaria">KEPI Serious AEFIs Malaria Vaccine Encephalopathy</string>-->
+    <!--    <string name="me_aefi_seizures_malaria">KEPI Serious AEFIs Malaria Vaccine Seizures</string>-->
+    <!--    <string name="me_aefi_paralysis_malaria">KEPI Serious AEFIs Malaria Vaccine Paralysis</string>-->
+    <!--    <string name="me_aefi_significant_disability_malaria">KEPI Serious AEFIs Malaria Vaccine Significant disability</string>-->
+    <!--    <string name="me_aefi_birth_defect_malaria">KEPI Serious AEFIs Malaria Vaccine Birth defect</string>-->
+    <!--    <string name="me_aefi_toxic_shock_syndrome_malaria">KEPI Serious AEFIs Malaria Vaccine Toxic shock syndrome</string>-->
+    <!--    <string name="me_aefi_tt_hpv_minor_aefis_hpv_bacterial_abscesses">CHD EPI Minor AEFIs HPV Bacterial Abscesses</string>-->
+    <!--    <string name="me_aefi_tt_hpv_minor_aefis_hpv_severe_local_reaction">CHD EPI Minor AEFIs HPV Severe local reaction</string>-->
+    <!--    <string name="me_aefi_tt_hpv_minor_aefis_hpv_lymphadenitis">CHD EPI Minor AEFIs HPV Lymphadenitis</string>-->
+    <!--    <string name="me_aefi_tt_hpv_minor_aefis_hpv_sepsis">CHD EPI Minor AEFIs HPV Sepsis</string>-->
+    <!--    <string name="me_aefi_tt_hpv_serious_aefis_hpv_high_fever"><![CDATA[CHD EPI Serious AEFIs HPV High fever > 38 degrees celcius]]></string>-->
+    <!--    <string name="me_aefi_tt_hpv_serious_aefis_hpv_death">CHD EPI Serious AEFIs HPV Death</string>-->
+    <!--    <string name="me_aefi_tt_hpv_serious_aefis_hpv_encephalopathy">CHD EPI Serious AEFIs HPV Encephalopathy</string>-->
+    <!--    <string name="me_aefi_tt_hpv_serious_aefis_hpv_seizures">CHD EPI Serious AEFIs HPV Seizures</string>-->
+    <!--    <string name="me_aefi_tt_hpv_serious_aefis_hpv_paralysis">CHD EPI Serious AEFIs HPV Paralysis</string>-->
+    <!--    <string name="me_aefi_tt_hpv_serious_aefis_hpv_significant_disability">CHD EPI Serious AEFIs HPV Significant disability</string>-->
+    <!--    <string name="me_aefi_tt_hpv_serious_aefis_hpv_birth_defect">CHD EPI Serious AEFIs HPV Birth defect</string>-->
+    <!--    <string name="me_aefi_tt_hpv_serious_aefis_hpv_toxic_shock_syndrome">CHD EPI Serious AEFIs HPV Toxic shock syndrome</string>-->
+    <!--    <string name="me_i_ds_suspected_measles_cases_reported">CHD EPI Suspected measles cases reported default</string>-->
+    <!--    <string name="me_i_ds_suspected_measles_cases_investigated">CHD EPI Suspected measles cases investigated default</string>-->
+    <!--    <string name="me_i_ds_deaths_due_to_measles">CHD EPI Deaths due to measles default</string>-->
+    <!--    <string name="me_i_ds_acute_flaccid_paralysis_afp_cases_reported">CHD EPI Acute Flaccid Paralysis (AFP) cases reported default</string>-->
+    <!--    <string name="me_i_ds_acute_flaccid_paralysis_afp_cases_investigated">CHD EPI Acute Flaccid Paralysis (AFP) cases investigated default</string>-->
+    <!--    <string name="me_i_ds_neonatal_tetanus_nnt_cases_reported">CHD EPI Neonatal Tetanus (NNT) cases reported default</string>-->
+    <!--    <string name="me_i_ds_neonatal_tetanus_nnt_cases_investigated">CHD EPI Neonatal Tetanus (NNT) cases investigated default</string>-->
+    <!-- END OF CHILD INDICATOR LABELS -->
+    <!-- Start OPD reports labels -->
+    <string name="me_waiting_list_over_50"> Clients on Waiting List Over 50</string>
+    <string name="me_waiting_list_under_50"> Clients on Waiting List Under 50</string>
+    <string name="me_malaria_cases_presumed_over_5"> Malaria Cases Presumed Over 5</string>
+    <string name="me_malaria_cases_presumed_under_5"> Malaria Cases Presumed Under 5</string>
+    <string name="me_total_malaria_case_over_5"> Total Malaria Case Over 5</string>
+    <string name="me_total_malaria_case_under_5"> Total Malaria Case Under 5</string>
+    <string name="me_covid19_vaccines_age_azoxford_over_50">MOH710 AZ/Oxford doses Administered >50 years</string>
+    <string name="me_covid19_vaccines_age_azoxford_under_50">MOH710 AZ/Oxford doses Administered &lt;50 years</string>
+    <string name="me_covid19_vaccines_age_sinopharm_over_50">MOH710 Sinopharm doses Administered >50 years</string>
+    <string name="me_covid19_vaccines_age_sinopharm_under_50">MOH710 Sinopharm doses Administered &lt;50 years</string>
+    <string name="me_covid19_vaccines_age_sinovac_over_50">MOH710 Sinovac doses Administered >50 years</string>
+    <string name="me_covid19_vaccines_age_sinovac_under_50">MOH710 Sinovac doses Administered &lt;50 years</string>
+    <string name="me_malaria_test_mrdt_over_5"> Malaria Test Malaria - MRDT Over 5</string>
+    <string name="me_malaria_test_mrdt_under_5"> Malaria Test Malaria - MRDT Under 5</string>
+    <string name="me_malaria_test_microscopy_over_5"> Malaria Test Malaria - Microscopy Over 5</string>
+    <string name="me_malaria_test_microscopy_under_5"> Malaria Test Malaria - Microscopy Under 5</string>
+    <string name="me_positive_malaria_cases_mRDT_over_5"> Positive Malaria Cases Malaria - MRDT Over 5</string>
+    <string name="me_positive_malaria_cases_mRDT_under_5"> Positive Malaria Cases Malaria - MRDT Under 5</string>
+    <string name="me_positive_malaria_cases_microscopy_over_5"> Positive Malaria Cases Malaria - Microscopy Over 5</string>
+    <string name="me_positive_malaria_cases_microscopy_under_5"> Positive Malaria Cases Malaria - Microscopy Under 5</string>
+    <string name="me_total_suspected_malaria"> Total Suspected Malaria</string>
+    <string name="me_total_client_on_waiting_list">COV Clients Vaccinated</string>
+    <string name="me_total_vaccines_given">Total Vaccines Given</string>
+
+
+
+
+
+
+    <!-- End OPD reports labels -->
 
     <!-- MOH 710 -->
     <string name="side_nav_moh710">MOH 710</string>
-    <string name="moh710_report">MOH 710 Report</string>
+    <string name="moh710_report">MOH Reports</string>
     <string name="report_month">Report Month: </string>
     <string name="custom_dates">Custom Dates: </string>
     <string name="custom_date_range">Custom Date range</string>
@@ -541,12 +962,12 @@
     <string name="wrong_date_format">Wrong date format. Please use yyyy-mm-dd.</string>
     <string name="start_after_end">Please set start date before end date.</string>
     <string name="end_before_start">Please set end date after start date.</string>
-    <string name="moh_daily_tally">MOH710 Daily Report</string>
-    <string name="moh_monthly_report">MOH710 Monthly Report</string>
+    <string name="moh_daily_tally">Daily Report</string>
+    <string name="moh_monthly_report">Monthly Report</string>
 
-    <string name="moh_daily_tally_">MOH710 Daily Report > %1$s</string>
+    <string name="moh_daily_tally_">Daily Report > %1$s</string>
 
-<!--    sync reveal-->
+    <!--    sync reveal-->
 
     <string name="synced_events">Synced events:</string>
     <string name="unsynced_events">Unsynced events:</string>
@@ -567,5 +988,72 @@
 
     <string name="kip_id">KIP ID</string>
 
+    <string name="opd_send_advocacy_sms">Send Advocacy SMS</string>
+    <string name="opd_register_other_clients">Register Other Clients</string>
+    <string name="opd_register_child_under_5">Register Child Under 5</string>
+    <string name="menu_opd_clients">OPD Clients</string>
+    <string name="opd_close">OPD CLOSE</string>
+    <string name="diagnose_and_treat"><![CDATA[Click to proceed]]></string>
+    <string name="covid_risk_factor_calculate_text">Calculate Covid 19 Risk Factor</string>
+    <string name="covid19_vaccination_eligibility_check">Covid 19 Vaccination Eligibility Check</string>
+    <string name="covid19_vaccination_administration">Covid 19 Vaccine Administration</string>
+    <string name="opd_adverse_event_text">Covid 19 Report Adverse Event</string>
+    <string name="opd_influenza_adverse_event_text">Report Influenza Adverse Event</string>
+    <string name="abbrv_years_empty"></string>
+    <string name="opd_send_sms">Send SMS Reminder</string>
+    <string name="influenza_medical_condition">Influenza Vaccine Work Flow </string>
+    <string name="influenza_vaccine_administration">Influenza Vaccine Administration</string>
+
+    <string name="opd_pre_existing_condition">Pre existing conditions</string>
+    <string name="opd_other_pre_existing_condition">Other Pre existing conditions</string>
+    <string name="opd_occupation">Front line Worker?</string>
+    <string name="opd_other_occupation">Other Occupation?</string>
+    <string name="update_covid19_stock">Update Covid19 Stock (Commodities)</string>
+
+    <string name="population_characteristics">Population characteristics</string>
+    <string name="welcome_covid19_stock_settings">Welcome!\n\nTo get started, please set your covid19 stock values.</string>
+    <string name="continue_">continue</string>
+    <string name="continue_to_your_client_list">CONTINUE TO YOUR CLIENT LIST</string>
+    <string name="your_covid19_vaccine_stock_settings_for_facility_name">Your site characteristics for %1$s are all set.</string>
+    <string name="site_characteristics_are_shared_for_all">Covid19 stock values are shared by all OpenSRP users at the facility. You can update Covid19 stock values at any time.</string>
+    <string name="go_back_to_site_characteristics">Go back to Covid19 stock values</string>
+    <string name="edit"> edit </string>
+    <string name="pre_existing_conditions_label">Pre existing conditions</string>
+    <string name="other_pre_existing_conditions_label">Other Pre existing conditions</string>
+    <string name="occupation_label">Front line Worker?</string>
+    <string name="other_occupation_label">Other Occupation?</string>
+    <string name="influenza_pre_existing_conditions_label">Medical Conditions</string>
+    <string name="other_influenza_pre_existing_conditions_label">Other Medical Conditions</string>
+    <string name="influenza_allergies_label">Allergy</string>
+    <string name="other_influenza_allergies_label">Other Allergy</string>
+    <string name="influenza_tempareture_label">Temperature</string>
+
+    <string name="temperature_label">Temperature</string>
+    <string name="covid_19_history_label">Tested Positive For Covid within the last 6 months?</string>
+    <string name="oral_confirmation_label">Vaccination Oral Confirmation</string>
+    <string name="respiratory_symptoms_label">Respiratory Symptoms</string>
+    <string name="other_respiratory_symptoms_label">Other respiratory symptoms</string>
+    <string name="allergies_label">Allergies</string>
+    <string name="other_allergies_label">Allergies</string>
+
+    <string name="covid19_antigens_label">Vaccine name</string>
+    <string name="administration_date_label">Administration Date</string>
+    <string name="site_of_administration_label">Site of administration</string>
+    <string name="administration_route_label">Administration route</string>
+    <string name="lot_number_label">Lot number</string>
+    <string name="vaccine_expiry_label">expiry date</string>
+
+    <string name="covid19_vaccine_next_date_label">Next Vaccination Date</string>
+
+    <string name="influenza_vaccines_label">Influenza Vaccine name</string>
+    <string name="influenza_administration_date_label">influenza Administration Date</string>
+    <string name="influenza_site_of_vaccine_administration_label">Site of administration</string>
+    <string name="influenza_vaccine_administration_route_label">Administration route</string>
+    <string name="influenza_vaccine_lot_number_label">Lot number</string>
+    <string name="influenza_vaccine_expiry_label">expiry date</string>
+
+
+    <integer name="btnPlusView">1</integer>
+    <integer name="btnPlusPos">2</integer>
 
 </resources>

@@ -1,0 +1,7 @@
+---
+name: step1_eligibility
+description: eligibility
+priority: 1
+condition: "((step1_respiratory_symptoms != null && !step1_respiratory_symptoms.isEmpty() && step1_respiratory_symptoms.contains('none')) && (step1_allergies != null && !step1_allergies.isEmpty() && step1_allergies.contains('none')) && (step1_covid_19_history != '' && step1_covid_19_history == 'no') && (step1_oral_confirmation != '' && step1_oral_confirmation == 'yes') && (step1_temperature != '' && step1_temperature <= 38))"
+actions:
+  - 'calculation = 1'

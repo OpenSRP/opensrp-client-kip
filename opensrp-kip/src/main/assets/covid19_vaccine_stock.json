@@ -1,0 +1,49 @@
+{
+  "settingConfigurations": [
+    {
+      "identifier": "covid19_vaccine_stock",
+      "settings": [
+        {
+          "description": "12346-001:2022-02-01",
+          "label": "AZ oxford Stock Details",
+          "type": "SettingConfiguration",
+          "value": "75",
+          "key": "az_oxford_vials_amount"
+        },
+        {
+          "description": "12346-020:2022-02-01",
+          "label": "Sinopharm Stock Details",
+          "type": "SettingConfiguration",
+          "value": "76",
+          "key": "sinopharm_vials_amount"
+        },
+        {
+          "description": "978676-001:2022-02-01",
+          "label": "Sinovac Stock Details",
+          "type": "SettingConfiguration",
+          "value": "100",
+          "key": "sinovac_vials_amount"
+        },
+        {
+          "description": "978676-001:2022-02-01",
+          "label": "Moderna Stock Details",
+          "type": "SettingConfiguration",
+          "value": "100",
+          "key": "moderna_vials_amount"
+        },
+        {
+          "description": "978676-001:2022-02-01",
+          "label": "Pfizer Stock Details",
+          "type": "SettingConfiguration",
+          "value": "100",
+          "key": "pfizer_vials_amount"
+        }
+      ],
+      "type": "SettingConfiguration",
+      "teamId": "856869a8-4c84-42a9-b1b5-cf87e805dd5c",
+      "team": "Asayi",
+      "locationId": "718b6c28-4b90-4292-a919-3de2666ea811",
+      "providerId": "asayi"
+    }
+  ]
+}

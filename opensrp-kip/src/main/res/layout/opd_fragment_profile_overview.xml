@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/main_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/ll_opdFragmentProfileOverview_checkinLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tv_opdFragmentProfileOverview_checkedInTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/overview_sub_header_bg"
+                android:gravity="left"
+                android:paddingLeft="@dimen/contact_drawable_padding"
+                android:paddingTop="@dimen/contact_drawable_padding"
+                android:paddingBottom="@dimen/contact_drawable_padding"
+                android:singleLine="true"
+                android:text="@string/opd_checked_in"
+                android:textAllCaps="true"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:textColor="@color/overview_font_right" />
+
+            <Button
+                android:id="@+id/btn_opdFragmentProfileOverview_diagnoseAndTreat"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/diagnose_treat_bg"
+                android:text="@string/diagnose_and_treat"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:textColor="@color/diagnose_treat_txt_color" />
+
+            <Button
+                android:id="@+id/btn_opdFragmentProfileOverview_vaccine_eligibility"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/diagnose_treat_bg"
+                android:text="@string/covid19_vaccination_eligibility_check"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:textColor="@color/diagnose_treat_txt_color"
+                android:visibility="gone"/>
+
+            <Button
+                android:id="@+id/btn_opdFragmentProfileOverview_record_vaccine"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/diagnose_treat_bg"
+                android:text="@string/covid19_vaccination_administration"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:textColor="@color/diagnose_treat_txt_color"
+                android:visibility="gone"/>
+
+            <Button
+                android:id="@+id/btn_opdFragmentProfileOverview_influenza_medical_condition_vaccine"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/diagnose_treat_bg"
+                android:text="@string/influenza_medical_condition"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:textColor="@color/diagnose_treat_txt_color"
+                android:visibility="gone"/>
+
+            <Button
+                android:id="@+id/btn_opdFragmentProfileOverview_influenza_vaccine_administration"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/diagnose_treat_bg"
+                android:text="@string/influenza_vaccine_administration"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:textColor="@color/diagnose_treat_txt_color"
+                android:visibility="gone"/>
+
+            <Button
+                android:id="@+id/btn_opdFragmentProfileOverview_sms_reminder"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/diagnose_treat_bg"
+                android:text="@string/opd_send_sms"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:textColor="@color/diagnose_treat_txt_color"
+                android:visibility="gone"/>
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/profile_overview_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:foregroundGravity="top"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintBottom_toTopOf="@+id/patient_detail_button_footer"
+            app:layout_constraintTop_toBottomOf="@id/ll_opdFragmentProfileOverview_checkinLayout" />
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>

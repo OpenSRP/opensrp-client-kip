@@ -210,7 +210,7 @@ public class ChildDetailTabbedActivity extends BaseChildDetailTabbedActivity {
 
         try {
             SimpleDateFormat dates = new SimpleDateFormat("dd/MM/yyyy");
-            String appointmentDate = "31/05/2021";
+            String appointmentDate = "10/08/2021";
             Date apptDate;
             Date toDay = new Date();
             apptDate = dates.parse(appointmentDate);
