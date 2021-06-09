@@ -1,7 +1,7 @@
 package org.smartregister.kip.repository;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import net.sqlcipher.database.SQLiteDatabase;
 
@@ -39,6 +39,10 @@ import org.smartregister.repository.Hia2ReportRepository;
 import org.smartregister.repository.Repository;
 import org.smartregister.repository.SettingsRepository;
 import org.smartregister.repository.UniqueIdRepository;
+import org.smartregister.stock.StockLibrary;
+import org.smartregister.stock.repository.StockRepository;
+import org.smartregister.stock.repository.StockTypeRepository;
+import org.smartregister.stock.util.StockUtils;
 import org.smartregister.util.DatabaseMigrationUtils;
 
 import java.util.ArrayList;
@@ -89,6 +93,11 @@ public class KipRepository extends Repository {
 
         ClientRegisterTypeRepository.createTable(database);
         ChildAlertUpdatedRepository.createTable(database);
+
+        //stock
+//        StockRepository.createTable(database);
+//        StockTypeRepository.createTable(database);
+//        StockUtils.populateStockTypesFromAssets(context, StockLibrary.getInstance().getStockTypeRepository(), database);
 
         //reporting
         IndicatorRepository.createTable(database);
@@ -175,8 +184,8 @@ public class KipRepository extends Repository {
 
     @Override
     public SQLiteDatabase getReadableDatabase() {
-        String pass = KipApplication.getInstance().getPassword();
-        if (StringUtils.isNotBlank(pass)) {
+        byte[] pass = KipApplication.getInstance().getPassword();
+        if (pass != null && pass.length > 0) {
             return getReadableDatabase(pass);
         } else {
             throw new IllegalStateException("Password is blank");
@@ -185,9 +194,9 @@ public class KipRepository extends Repository {
 
     @Override
     public SQLiteDatabase getWritableDatabase() {
-        String pass = KipApplication.getInstance().getPassword();
-        if (StringUtils.isNotBlank(pass)) {
-            return getWritableDatabase(pass);
+        byte[] pass = KipApplication.getInstance().getPassword();
+        if (pass != null && pass.length > 0) {
+            return getReadableDatabase(pass);
         } else {
             throw new IllegalStateException("Password is blank");
         }

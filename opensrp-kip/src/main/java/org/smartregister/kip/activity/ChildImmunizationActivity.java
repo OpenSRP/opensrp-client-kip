@@ -21,6 +21,7 @@ import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.util.KipChildUtils;
 
 import java.util.Calendar;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import timber.log.Timber;
@@ -133,7 +134,7 @@ public class ChildImmunizationActivity extends BaseChildImmunizationActivity {
     }
 
     @Override
-    public void onUniqueIdFetched(Triple<String, String, String> triple, String s) {
+    public void onUniqueIdFetched(Triple<String, Map<String, String>, String> triple, String s) {
 
     }
 

@@ -3,7 +3,8 @@ package org.smartregister.kip.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.smartregister.kip.R;
 import org.smartregister.kip.application.KipApplication;

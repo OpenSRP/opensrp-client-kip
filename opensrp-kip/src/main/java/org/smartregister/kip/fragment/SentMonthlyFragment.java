@@ -3,12 +3,14 @@ package org.smartregister.kip.fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+
+import androidx.annotation.Nullable;
 
 import org.smartregister.kip.R;
 import org.smartregister.kip.activity.ReportSummaryActivity;

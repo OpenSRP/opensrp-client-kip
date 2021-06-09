@@ -1,8 +1,8 @@
 package org.smartregister.kip.presenter;
 
 import android.app.Activity;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.smartregister.domain.FetchStatus;
 import org.smartregister.kip.R;

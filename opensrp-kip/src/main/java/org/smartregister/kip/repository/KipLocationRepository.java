@@ -3,7 +3,7 @@ package org.smartregister.kip.repository;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.SQLException;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.Log;
 
 import net.sqlcipher.database.SQLiteDatabase;

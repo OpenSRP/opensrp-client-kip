@@ -1,7 +1,7 @@
 package org.smartregister.kip.activity;
 
 import android.app.Activity;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 public class ActivityConfiguration {
     private Class<? extends ChildRegisterActivity> homeRegisterActivityClass;

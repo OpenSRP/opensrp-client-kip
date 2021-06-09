@@ -1,6 +1,6 @@
 package org.smartregister.kip.model;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.contract.KipOpdProfileOverviewFragmentContract;

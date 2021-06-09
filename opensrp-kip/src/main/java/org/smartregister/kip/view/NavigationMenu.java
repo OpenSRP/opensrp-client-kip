@@ -3,15 +3,16 @@ package org.smartregister.kip.view;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +30,7 @@ import com.vijay.jsonwizard.constants.JsonFormConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.smartregister.child.util.Constants;
-import org.smartregister.child.util.JsonFormUtils;
+import org.smartregister.child.util.ChildJsonFormUtils;
 import org.smartregister.child.util.Utils;
 import org.smartregister.client.utils.domain.Form;
 import org.smartregister.domain.FetchStatus;
@@ -231,7 +232,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     private void startFormActivity(Activity activity) {
         try {
             JSONObject formJson = new FormUtils(activity).getFormJson(KipConstants.JSON_FORM.OUT_OF_CATCHMENT_SERVICE);
-            JsonFormUtils.addAvailableVaccines(activity, formJson);
+            ChildJsonFormUtils.addAvailableVaccines(activity, formJson);
 
             Form form = new Form();
             form.setWizard(false);
@@ -242,7 +243,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
             intent.putExtra(Constants.INTENT_KEY.JSON, formJson.toString());
             intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, form);
             intent.putExtra(JsonFormConstants.PERFORM_FORM_TRANSLATION, true);
-            activity.startActivityForResult(intent, JsonFormUtils.REQUEST_CODE_GET_JSON);
+            activity.startActivityForResult(intent, ChildJsonFormUtils.REQUEST_CODE_GET_JSON);
         } catch (Exception e) {
             Timber.e(e);
         }

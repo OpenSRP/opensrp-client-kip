@@ -3,8 +3,9 @@ package org.smartregister.kip.application;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.support.annotation.VisibleForTesting;
-import android.support.v7.app.AppCompatDelegate;
+import androidx.annotation.VisibleForTesting;
+import androidx.appcompat.app.AppCompatDelegate;
+
 import android.util.DisplayMetrics;
 import android.util.Pair;
 
@@ -75,6 +76,7 @@ import org.smartregister.kip.repository.OpdInfluenzaVaccineAdministrationFormRep
 import org.smartregister.kip.repository.OpdMedicalCheckFormRepository;
 import org.smartregister.kip.repository.OpdSMSReminderFormRepository;
 import org.smartregister.kip.repository.SmsEnrolledClientRepository;
+import org.smartregister.kip.repository.StockHelperRepository;
 import org.smartregister.kip.util.AppExecutors;
 import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.kip.util.KipConstants;
@@ -91,6 +93,7 @@ import org.smartregister.reporting.ReportingLibrary;
 import org.smartregister.repository.EventClientRepository;
 import org.smartregister.repository.Hia2ReportRepository;
 import org.smartregister.repository.Repository;
+import org.smartregister.stock.StockLibrary;
 import org.smartregister.sync.ClientProcessorForJava;
 import org.smartregister.sync.DrishtiSyncScheduler;
 import org.smartregister.sync.helper.ECSyncHelper;
@@ -294,6 +297,9 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
         ReportingLibrary.init(context, getRepository(), null, BuildConfig.VERSION_CODE, BuildConfig.DATABASE_VERSION);
         ReportingLibrary.getInstance().addMultiResultProcessor(new TripleResultProcessor());
 
+        //Initialize and pass optional stock helper repository for external db functions
+        StockLibrary.init(context, getRepository(), new StockHelperRepository(getRepository()));
+
         setupOpdLibrary();
 
         Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
@@ -363,13 +369,13 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
         return repository;
     }
 
-    public String getPassword() {
-        if (password == null) {
-            String username = getContext().userService().getAllSharedPreferences().fetchRegisteredANM();
-            password = getContext().userService().getGroupId(username);
-        }
-        return password;
-    }
+//    public String getPassword() {
+//        if (password == null) {
+//            String username = getContext().userService().getAllSharedPreferences().fetchRegisteredANM();
+//            password = getContext().userService().getGroupId(username);
+//        }
+//        return password;
+//    }
 
     public Context getContext() {
         return context;
@@ -458,13 +464,15 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
 
     @Override
     public void onTimeChanged() {
-        context.userService().forceRemoteLogin();
+        String username = getContext().userService().getAllSharedPreferences().fetchRegisteredANM();
+        context.userService().forceRemoteLogin(username);
         logoutCurrentUser();
     }
 
     @Override
     public void onTimeZoneChanged() {
-        context.userService().forceRemoteLogin();
+        String username = getContext().userService().getAllSharedPreferences().fetchRegisteredANM();
+        context.userService().forceRemoteLogin(username);
         logoutCurrentUser();
     }
 

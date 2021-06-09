@@ -1,6 +1,6 @@
 package org.smartregister.kip.exceptions;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 public class Covid19VaccineEligibilityException extends Exception {
     public Covid19VaccineEligibilityException() {

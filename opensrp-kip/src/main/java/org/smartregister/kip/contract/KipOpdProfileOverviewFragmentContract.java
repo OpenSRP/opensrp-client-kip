@@ -1,7 +1,7 @@
 package org.smartregister.kip.contract;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.smartregister.kip.pojo.OpdCovid19CalculateRiskFactorForm;
 import org.smartregister.kip.pojo.OpdCovid19VaccinationEligibilityCheckForm;

@@ -4,6 +4,7 @@ import org.smartregister.SyncConfiguration;
 import org.smartregister.SyncFilter;
 import org.smartregister.kip.BuildConfig;
 import org.smartregister.repository.AllSharedPreferences;
+import org.smartregister.view.activity.BaseLoginActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +64,21 @@ public class KipSyncConfiguration extends SyncConfiguration {
 
     @Override
     public String getTopAllowedLocationLevel() {
+        return null;
+    }
+
+    @Override
+    public String getOauthClientId() {
+        return null;
+    }
+
+    @Override
+    public String getOauthClientSecret() {
+        return null;
+    }
+
+    @Override
+    public Class<? extends BaseLoginActivity> getAuthenticationActivity() {
         return null;
     }
 

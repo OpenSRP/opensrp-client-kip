@@ -1,7 +1,7 @@
 package org.smartregister.kip.util;
 
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.smartregister.opd.configuration.BaseOpdRegisterProviderMetadata;
 import org.smartregister.util.Utils;

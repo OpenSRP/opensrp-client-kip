@@ -1,7 +1,7 @@
 package org.smartregister.kip.configuration;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.smartregister.child.domain.RegisterClickables;
 import org.smartregister.commonregistry.CommonPersonObjectClient;
