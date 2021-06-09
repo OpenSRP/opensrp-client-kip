@@ -27,7 +27,7 @@ import org.smartregister.child.activity.BaseChildRegisterActivity;
 import org.smartregister.child.model.BaseChildRegisterModel;
 import org.smartregister.child.presenter.BaseChildRegisterPresenter;
 import org.smartregister.child.util.Constants;
-import org.smartregister.child.util.ChildJsonFormUtils;
+import org.smartregister.child.util.JsonFormUtils;
 import org.smartregister.child.util.Utils;
 import org.smartregister.helper.BottomNavigationHelper;
 import org.smartregister.kip.R;
@@ -181,6 +181,7 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
     protected void onResumption() {
         super.onResumption();
         createDrawer();
+//        initializeCustomNavbarLIsteners();
     }
 
     private void createDrawer() {
@@ -224,7 +225,7 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
         }
         intent.putExtra(Constants.INTENT_KEY.JSON, jsonForm.toString());
         intent.putExtra(JsonFormConstants.JSON_FORM_KEY.FORM, getForm());
-        startActivityForResult(intent, ChildJsonFormUtils.REQUEST_CODE_GET_JSON);
+        startActivityForResult(intent, JsonFormUtils.REQUEST_CODE_GET_JSON);
     }
 
     public void finishActivity() {
@@ -245,15 +246,24 @@ public class ChildRegisterActivity extends BaseChildRegisterActivity implements 
         }
     }
 
-//
+
 //    private void initializeCustomNavbarLIsteners() {
 //        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//
-//        LinearLayout outofcatchment = (LinearLayout) drawer.findViewById(R.id.nav_record_vaccination_out_catchment);
-//        outofcatchment.setOnClickListener(new View.OnClickListener() {
+//        LinearLayout stockregister = (LinearLayout) drawer.findViewById(R.id.stock_control);
+//        stockregister.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-//                startFormActivity("out_of_catchment_service", null, null);
+//                Intent intent = new Intent(getApplicationContext(), StockActivity.class);
+//                startActivity(intent);
+//                drawer.closeDrawer(GravityCompat.START);
+//
+//            }
+//        });
+//
+//        LinearLayout childRegister = (LinearLayout) drawer.findViewById(R.id.child_register);
+//        childRegister.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
 //                drawer.closeDrawer(GravityCompat.START);
 //
 //            }

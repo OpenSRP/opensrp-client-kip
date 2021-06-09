@@ -369,13 +369,13 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
         return repository;
     }
 
-//    public String getPassword() {
-//        if (password == null) {
-//            String username = getContext().userService().getAllSharedPreferences().fetchRegisteredANM();
-//            password = getContext().userService().getGroupId(username);
-//        }
-//        return password;
-//    }
+    public String getPassword() {
+        if (password == null) {
+            String username = getContext().userService().getAllSharedPreferences().fetchRegisteredANM();
+            password = getContext().userService().getGroupId(username);
+        }
+        return password;
+    }
 
     public Context getContext() {
         return context;
@@ -464,15 +464,13 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
 
     @Override
     public void onTimeChanged() {
-        String username = getContext().userService().getAllSharedPreferences().fetchRegisteredANM();
-        context.userService().forceRemoteLogin(username);
+        context.userService().forceRemoteLogin();
         logoutCurrentUser();
     }
 
     @Override
     public void onTimeZoneChanged() {
-        String username = getContext().userService().getAllSharedPreferences().fetchRegisteredANM();
-        context.userService().forceRemoteLogin(username);
+        context.userService().forceRemoteLogin();
         logoutCurrentUser();
     }
 

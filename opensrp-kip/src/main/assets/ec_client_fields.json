@@ -257,6 +257,13 @@
           }
         },
         {
+          "column_name": "inactive",
+          "type": "Client",
+          "json_mapping": {
+            "field": "attributes.inactive"
+          }
+        },
+        {
           "column_name": "village",
           "type": "Client",
           "json_mapping": {
@@ -594,10 +601,24 @@
           }
         },
         {
+          "column_name": "client_reg_date",
+          "type": "Event",
+          "json_mapping": {
+            "field": "eventDate"
+          }
+        },
+        {
           "column_name": "lost_to_follow_up",
           "type": "Client",
           "json_mapping": {
             "field": "attributes.lost_to_follow_up"
+          }
+        },
+        {
+          "column_name": "dob",
+          "type": "Client",
+          "json_mapping": {
+            "field": "birthdate"
           }
         },
         {

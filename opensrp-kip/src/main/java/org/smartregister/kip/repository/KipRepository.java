@@ -94,10 +94,10 @@ public class KipRepository extends Repository {
         ClientRegisterTypeRepository.createTable(database);
         ChildAlertUpdatedRepository.createTable(database);
 
-        //stock
-//        StockRepository.createTable(database);
-//        StockTypeRepository.createTable(database);
-//        StockUtils.populateStockTypesFromAssets(context, StockLibrary.getInstance().getStockTypeRepository(), database);
+//        stock
+        StockRepository.createTable(database);
+        StockTypeRepository.createTable(database);
+        StockUtils.populateStockTypesFromAssets(context, StockLibrary.getInstance().getStockTypeRepository(), database);
 
         //reporting
         IndicatorRepository.createTable(database);
@@ -184,8 +184,8 @@ public class KipRepository extends Repository {
 
     @Override
     public SQLiteDatabase getReadableDatabase() {
-        byte[] pass = KipApplication.getInstance().getPassword();
-        if (pass != null && pass.length > 0) {
+        String pass = KipApplication.getInstance().getPassword();
+        if (StringUtils.isNotBlank(pass)) {
             return getReadableDatabase(pass);
         } else {
             throw new IllegalStateException("Password is blank");
@@ -194,8 +194,8 @@ public class KipRepository extends Repository {
 
     @Override
     public SQLiteDatabase getWritableDatabase() {
-        byte[] pass = KipApplication.getInstance().getPassword();
-        if (pass != null && pass.length > 0) {
+        String pass = KipApplication.getInstance().getPassword();
+        if (StringUtils.isNotBlank(pass)) {
             return getReadableDatabase(pass);
         } else {
             throw new IllegalStateException("Password is blank");

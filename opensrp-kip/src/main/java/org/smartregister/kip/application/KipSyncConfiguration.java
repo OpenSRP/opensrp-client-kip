@@ -67,20 +67,5 @@ public class KipSyncConfiguration extends SyncConfiguration {
         return null;
     }
 
-    @Override
-    public String getOauthClientId() {
-        return null;
-    }
-
-    @Override
-    public String getOauthClientSecret() {
-        return null;
-    }
-
-    @Override
-    public Class<? extends BaseLoginActivity> getAuthenticationActivity() {
-        return null;
-    }
-
 }
 

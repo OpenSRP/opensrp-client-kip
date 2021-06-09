@@ -21,7 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.CoreLibrary;
 import org.smartregister.child.util.ChildDbUtils;
-import org.smartregister.child.util.ChildJsonFormUtils;
+import org.smartregister.child.util.JsonFormUtils;
 import org.smartregister.child.util.Constants;
 import org.smartregister.child.util.MoveToMyCatchmentUtils;
 import org.smartregister.child.util.Utils;
@@ -29,10 +29,10 @@ import org.smartregister.clientandeventmodel.DateUtil;
 import org.smartregister.commonregistry.AllCommonsRepository;
 import org.smartregister.commonregistry.CommonFtsObject;
 import org.smartregister.commonregistry.CommonRepository;
-import org.smartregister.domain.Client;
-import org.smartregister.domain.Event;
+import org.smartregister.domain.db.Client;
+import org.smartregister.domain.db.Event;
 import org.smartregister.domain.db.EventClient;
-import org.smartregister.domain.Obs;
+import org.smartregister.domain.db.Obs;
 import org.smartregister.domain.jsonmapping.ClientClassification;
 import org.smartregister.domain.jsonmapping.ClientField;
 import org.smartregister.domain.jsonmapping.Column;
@@ -169,7 +169,7 @@ public class KipProcessorForJava extends ClientProcessorForJava implements MiniC
                         continue;
                     }
                     processService(eventClient, serviceTable);
-                } else if (eventType.equals(ChildJsonFormUtils.BCG_SCAR_EVENT)) {
+                } else if (eventType.equals(JsonFormUtils.BCG_SCAR_EVENT)) {
                     processBCGScarEvent(eventClient);
                 } else if (eventType.equals(MoveToMyCatchmentUtils.MOVE_TO_CATCHMENT_EVENT)) {
                     unsyncEvents.add(event);
