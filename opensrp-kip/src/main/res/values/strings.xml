@@ -14,6 +14,7 @@
     <string name="side_nav_add">Add new child</string>
     <string name="scan_card">Card Scanner</string>
     <string name="side_nav_out_of_catchment">Record out of catchment vaccination</string>
+    <string name="side_nav_moh510_report">MOH 510 Report</string>
 
     <string name="out_of_catchment">Record out of catchment vaccination</string>
     <string name="nav_register">Register</string>

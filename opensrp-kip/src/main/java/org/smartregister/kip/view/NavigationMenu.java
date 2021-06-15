@@ -36,6 +36,7 @@ import org.smartregister.client.utils.domain.Form;
 import org.smartregister.domain.FetchStatus;
 import org.smartregister.kip.R;
 import org.smartregister.kip.activity.Covid19VaccineStockSettingsActivity;
+import org.smartregister.kip.activity.Moh510ReportActivity;
 import org.smartregister.kip.activity.ReportRegisterActivity;
 import org.smartregister.kip.activity.KipStockActivity;
 import org.smartregister.kip.adapter.NavigationAdapter;
@@ -79,6 +80,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
     private RelativeLayout covidStockUpdate;
     private LinearLayout outOfAreaMenu;
     private LinearLayout stockControl;
+    private LinearLayout moh510Report;
 
     private View parentView;
     private LinearLayout reportView;
@@ -181,6 +183,7 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         covidStockUpdate = rootView.findViewById(R.id.covid19_vaccine_stock_section);
         outOfAreaMenu = rootView.findViewById(R.id.out_of_area_menu);
         stockControl = rootView.findViewById(R.id.stock_control);
+        moh510Report = rootView.findViewById(R.id.moh510_report_activity_view);
 
         ImageView ivLogo = rootView.findViewById(R.id.ivLogo);
         LinearLayout locationLayout = rootView.findViewById(R.id.giz_location_layout);
@@ -224,9 +227,26 @@ public class NavigationMenu implements NavigationContract.View, SyncStatusBroadc
         registerCovid19UpdateActivity(activity);
         recordOutOfArea(activity);
         recordStockControl(activity);
+        downloadMoh510Report(activity);
 
         // update all actions
         mPresenter.refreshLastSync();
+    }
+
+    private void downloadMoh510Report(final Activity parentActivity){
+        moh510Report.setOnClickListener(v -> startMoh510Report(parentActivity));
+    }
+
+    private void startMoh510Report(@Nullable Activity parentActivity){
+        if (parentActivity instanceof Moh510ReportActivity) {
+            drawer.closeDrawer(GravityCompat.START);
+            return;
+        }
+
+        if (parentActivity != null) {
+            Intent intent = new Intent(parentActivity, Moh510ReportActivity.class);
+            parentActivity.startActivity(intent);
+        }
     }
 
     private void recordStockControl(final Activity parentActivity){

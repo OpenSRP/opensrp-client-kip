@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.Moh510ReportActivity">
+
+    <include layout="@layout/toolbar_mho510_report_content" />
+
+    <include layout="@layout/moh510_content_view"
+        android:id="@+id/moh510_report_view"
+        />
+
+</LinearLayout>
