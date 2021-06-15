@@ -43,7 +43,7 @@
                 android:orientation="horizontal"
                 android:weightSum="1">
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/start_date_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -61,10 +61,10 @@
                         android:textSize="26sp" />
 
 
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/end_date_layout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -80,7 +80,7 @@
                         android:hint="@string/set_end_date"
                         android:inputType="date"
                         android:textSize="26sp" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
 
             </LinearLayout>
