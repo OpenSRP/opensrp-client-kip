@@ -55,7 +55,7 @@ public class CustomDateRangeDialogFragment extends DialogFragment {
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
 
-        ViewGroup dialogView = (ViewGroup) inflater.inflate(R.layout.custom_date_range_dialog_view, container, false);
+        ViewGroup dialogView = (ViewGroup) inflater.inflate(R.layout.moh510_content_view, container, false);
 
         final EditText startDateView = (EditText) dialogView.findViewById(R.id.start_date);
         final EditText endDateView = (EditText) dialogView.findViewById(R.id.end_date);
