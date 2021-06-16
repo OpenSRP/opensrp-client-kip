@@ -157,11 +157,11 @@ public class SmsActivity extends Activity {
 
     private List<String> getFullName(){
         List<String> list = new ArrayList<>();
-        SmsEnrolledClientRepository smsErolledClient = KipApplication.getInstance().smsEnrolledClientRepository();
-        List<SmsErolledClient> enrolledClients = smsErolledClient.getEnrolledClients();
+        SmsEnrolledClientRepository smsEnrolledClient = KipApplication.getInstance().smsEnrolledClientRepository();
+        List<SmsErolledClient> enrolledClients = smsEnrolledClient.getEnrolledClients();
         if (enrolledClients !=null){
-            for (SmsErolledClient erolledClient : enrolledClients){
-                list.add(erolledClient.getFirstName() + " " + erolledClient.getLastName() );
+            for (SmsErolledClient enrolledClient : enrolledClients){
+                list.add(enrolledClient.getFirstName() + " " + enrolledClient.getLastName() );
             }
         }
         return list;
@@ -169,11 +169,11 @@ public class SmsActivity extends Activity {
 
     public List<String> getPhoneNumber(){
         List<String> list = new ArrayList<>();
-        SmsEnrolledClientRepository smsErolledClient = KipApplication.getInstance().smsEnrolledClientRepository();
-        List<SmsErolledClient> enrolledClients = smsErolledClient.getEnrolledClients();
+        SmsEnrolledClientRepository smsEnrolledClient = KipApplication.getInstance().smsEnrolledClientRepository();
+        List<SmsErolledClient> enrolledClients = smsEnrolledClient.getEnrolledClients();
         if (enrolledClients !=null){
-            for (SmsErolledClient erolledClient : enrolledClients){
-                list.add(erolledClient.getPhoneNumber());
+            for (SmsErolledClient enrolledClient : enrolledClients){
+                list.add(enrolledClient.getPhoneNumber());
             }
         }
         return list;

@@ -1,10 +1,12 @@
 package org.smartregister.kip.activity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
+import android.widget.ImageButton;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +17,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.util.CellReference;
+import org.smartregister.child.util.Utils;
 import org.smartregister.kip.R;
 
 import java.io.File;
@@ -26,7 +29,8 @@ import java.util.List;
 
 public class Moh510ReportActivity extends AppCompatActivity {
 
-    private File filePath = new File(Environment.getExternalStorageState()+"moh510Report.xls");
+    private File filePath = new File(Environment.getExternalStorageDirectory()+"/moh510Report.xls");
+    ImageButton closeReport;
 
     private String[] columnsVariable = {"KIP ID", "CHILD'S NAME", "SEX", "DATE OF BIRTH (DD/MM/YYYY)",
             "DATE FIRST SEEN", "FATHER'S FULL NAME", "MOTHER'S FULL NAME", "MOTHER'S PHONE NUMBER","VILLAGE/ESTATE/LANDMARK",
@@ -40,9 +44,19 @@ public class Moh510ReportActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_moh510_report);
+        closeReport = findViewById(R.id.close_moh_510_report);
 
         ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
+
+        closeReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), ChildRegisterActivity.class);
+                startActivityForResult(intent, 0);
+                finish();
+            }
+        });
     }
 
     public void buttonWriteToExcel(View view){
@@ -65,14 +79,14 @@ public class Moh510ReportActivity extends AppCompatActivity {
             HSSFCell strStart = dateRange.createCell(0);
             HSSFCell startDate = dateRange.createCell(1);
             HSSFCell strEnd = dateRange.createCell(2);
-            HSSFCell enddate = dateRange.createCell(3);
+            HSSFCell endDate = dateRange.createCell(3);
             tittleCell.setCellValue("Permanent Immunization Register(MOH 510)");
             facilityCell.setCellValue("Health Facility: Asayi Dispensary");
             yearCell.setCellValue("Year of Enrollment");
 
             strStart.setCellValue("Start Date");
             strEnd.setCellValue("End Date");
-            enddate.setCellValue(dtf.format(now));
+            endDate.setCellValue(dtf.format(now));
             startDate.setCellValue(dtf.format(now));
 
 //            Column names
@@ -112,5 +126,6 @@ public class Moh510ReportActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+        Utils.showToast(this, "Report Downloaded Successfully");
     }
 }

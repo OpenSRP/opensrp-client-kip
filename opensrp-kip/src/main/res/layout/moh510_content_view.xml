@@ -115,6 +115,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
+                    android:onClick="buttonWriteToExcel"
                     android:paddingBottom="10dp"
                     android:paddingTop="10dp"
                     android:text="@string/ok"
