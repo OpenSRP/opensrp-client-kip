@@ -20,7 +20,7 @@ import org.smartregister.kip.R;
 import org.smartregister.kip.adapter.SmsEnrollmentAdapter;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.model.SmsEnrollementModel;
-import org.smartregister.kip.pojo.SmsErolledClient;
+import org.smartregister.kip.pojo.SmsEnrolledClient;
 import org.smartregister.kip.repository.SmsEnrolledClientRepository;
 
 import java.util.ArrayList;
@@ -158,9 +158,9 @@ public class SmsActivity extends Activity {
     private List<String> getFullName(){
         List<String> list = new ArrayList<>();
         SmsEnrolledClientRepository smsEnrolledClient = KipApplication.getInstance().smsEnrolledClientRepository();
-        List<SmsErolledClient> enrolledClients = smsEnrolledClient.getEnrolledClients();
+        List<SmsEnrolledClient> enrolledClients = smsEnrolledClient.getEnrolledClients();
         if (enrolledClients !=null){
-            for (SmsErolledClient enrolledClient : enrolledClients){
+            for (SmsEnrolledClient enrolledClient : enrolledClients){
                 list.add(enrolledClient.getFirstName() + " " + enrolledClient.getLastName() );
             }
         }
@@ -170,9 +170,9 @@ public class SmsActivity extends Activity {
     public List<String> getPhoneNumber(){
         List<String> list = new ArrayList<>();
         SmsEnrolledClientRepository smsEnrolledClient = KipApplication.getInstance().smsEnrolledClientRepository();
-        List<SmsErolledClient> enrolledClients = smsEnrolledClient.getEnrolledClients();
+        List<SmsEnrolledClient> enrolledClients = smsEnrolledClient.getEnrolledClients();
         if (enrolledClients !=null){
-            for (SmsErolledClient enrolledClient : enrolledClients){
+            for (SmsEnrolledClient enrolledClient : enrolledClients){
                 list.add(enrolledClient.getPhoneNumber());
             }
         }

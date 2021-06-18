@@ -9,50 +9,50 @@ import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import android.view.View;
-import android.widget.TextView;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.util.CellReference;
 import org.smartregister.child.util.Utils;
 import org.smartregister.kip.R;
-import org.smartregister.kip.listener.DatePicker;
+import org.smartregister.kip.application.KipApplication;
+import org.smartregister.kip.pojo.Moh510SummaryReport;
+import org.smartregister.kip.repository.Moh510SummaryReportRepository;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+
 
 public class Moh510ReportActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, View.OnClickListener {
 
-    private static final SimpleDateFormat MMMYYYY = new SimpleDateFormat("MMMM yyyy");
-
     private File filePath = new File(Environment.getExternalStorageDirectory()+"/moh510Report.xls");
+    private int mYear, mMonth, mDay, mHour, mMinute;
     ImageButton closeReport;
-    TextView tvDate;
-    EditText endDate;
-    EditText startDate;
-    Button btPickDate;
-    Button cancel;
+    EditText endTextDate, startEditTextDate;
+    Button cancel, endDateBtn,startDateBtn, customDateRangeBtn;
+    FrameLayout frameLayout, download;
 
     private String[] columnsVariable = {"KIP ID", "CHILD'S NAME", "SEX", "DATE OF BIRTH (DD/MM/YYYY)",
             "DATE FIRST SEEN", "FATHER'S FULL NAME", "MOTHER'S FULL NAME", "MOTHER'S PHONE NUMBER","VILLAGE/ESTATE/LANDMARK",
             "TELEPHONE NUMBER", "BCG", "POLIO BIRTH DOSE", "OPV1", "OPV2", "OPV3","IPV", "DPT/HEP.B/HIB.1","DPT/HEP.B/HIB.2",
             "DPT/HEP.B/HIB.3", "PCV 10 (PNEUMOCOCCAL) 1","PCV 10 (PNEUMOCOCCAL) 2","PCV 10 (PNEUMOCOCCAL) 3", "ROTA 1",
-            "ROTA 2", "VITAMIN A","MEASLES 1","YELLOW FEVER", "FULLY IMMUNIZED", "MEASLES 2 (MR 2)", "REMARKS"};
+            "ROTA 2", "VITAMIN A","MEASLES 1","YELLOW FEVER","Malaria 1","Malaria 2", "Malaria 3", "FULLY IMMUNIZED", "MEASLES 2 (MR 2)", "Malaria 4", "REMARKS"};
 
     private List<String> mohIndicators = Arrays.asList(columnsVariable);
 
@@ -66,15 +66,21 @@ public class Moh510ReportActivity extends AppCompatActivity implements DatePicke
 
         ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
+        endTextDate = findViewById(R.id.end_date);
+        startEditTextDate = findViewById(R.id.start_date);
+        startDateBtn = findViewById(R.id.start_date_button);
+        endDateBtn = findViewById(R.id.end_date_button);
+        customDateRangeBtn = findViewById(R.id.custom_date_button);
+        frameLayout = findViewById(R.id.custom_date);
+        download = findViewById(R.id.download);
 
-        tvDate = findViewById(R.id.tvDate);
-        endDate = findViewById(R.id.end_date);
-        startDate = findViewById(R.id.start_date);
-        btPickDate = findViewById(R.id.btPickDate);
         cancel = findViewById(R.id.cancel);
         cancel.setOnClickListener(this);
-        btPickDate.setOnClickListener(this);
+        startDateBtn.setOnClickListener(this);
+        endDateBtn.setOnClickListener(this);
+        customDateRangeBtn.setOnClickListener(this);
         closeReport.setOnClickListener(this);
+
     }
 
 
@@ -85,25 +91,98 @@ public class Moh510ReportActivity extends AppCompatActivity implements DatePicke
             Intent intent = new Intent(v.getContext(), ChildRegisterActivity.class);
             startActivityForResult(intent, 0);
             finish();
-        } else if (v == btPickDate ){
-            DatePicker mDatePickerDialogFragment;
-            mDatePickerDialogFragment = new DatePicker();
-            mDatePickerDialogFragment.show(getSupportFragmentManager(), "DATE PICK");
+        } else if (v == startDateBtn){
+
+            // Get Current Date
+            final Calendar c = Calendar.getInstance();
+            mYear = c.get(Calendar.YEAR);
+            mMonth = c.get(Calendar.MONTH);
+            mDay = c.get(Calendar.DAY_OF_MONTH);
+            DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                    new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(android.widget.DatePicker view, int year, int month, int dayOfMonth) {
+                            startEditTextDate.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
+                        }
+                    }, mYear, mMonth, mDay);
+            datePickerDialog.show();
+
+
+            if (v == startDateBtn){
+                startEditTextDate.setVisibility(View.VISIBLE);
+                startDateBtn.setVisibility(View.GONE);
+            }if (v==endDateBtn){
+                endTextDate.setVisibility(View.VISIBLE);
+                endDateBtn.setVisibility(View.GONE);
+            }
         } else if(v==cancel){
-            startDate.setText("");
-            endDate.setText("");
+            startEditTextDate.setText("");
+            endTextDate.setText("");
+            endTextDate.setVisibility(View.GONE);
+            endDateBtn.setVisibility(View.GONE);
+            endDateBtn.setVisibility(View.VISIBLE);
+            startDateBtn.setVisibility(View.VISIBLE);
+        } else if (v == endDateBtn){
+
+            // Get Current Date
+            final Calendar c = Calendar.getInstance();
+            mYear = c.get(Calendar.YEAR);
+            mMonth = c.get(Calendar.MONTH);
+            mDay = c.get(Calendar.DAY_OF_MONTH);
+            DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                    new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(android.widget.DatePicker view, int year, int month, int dayOfMonth) {
+                            endTextDate.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
+                        }
+                    }, mYear, mMonth, mDay);
+            datePickerDialog.show();
+
+
+            if (v == startDateBtn){
+                startEditTextDate.setVisibility(View.VISIBLE);
+                startDateBtn.setVisibility(View.GONE);
+            }if (v==endDateBtn){
+                endTextDate.setVisibility(View.VISIBLE);
+                endDateBtn.setVisibility(View.GONE);
+            }
+        } else if (v== customDateRangeBtn){
+            frameLayout.setVisibility(View.VISIBLE);
+            download.setVisibility(View.GONE);
         }
 
     }
 
+    private String dateConverter(String date) {
+        if (date != null) {
+            long l=Long.parseLong(date);
+
+            Date dateParser = new Date(Long.parseLong(date));
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            return dateFormat.format(dateParser);
+        }
+        return null;
+    }
+
+    Map<Integer, Object[]> reportInfo =
+            new TreeMap<Integer, Object[]>();
+
     public void buttonWriteToExcel(View view){
 
+        int i = 0;
+        for (Moh510SummaryReport report:getIndicatorValues()){
+            reportInfo.put(i++,new Object[]{report.getKipId(), report.getChildFullName(),report.getSex(),
+                    report.getDob(), report.getDateFirstSeen(), report.getFatherName(),report.getMotherName(),
+                    report.getMotherPhoneNumber(), report.getVillage(),report.getTelephone(), dateConverter(report.getBcg()),
+                    dateConverter(report.getPolioBirthDose()), dateConverter(report.getOpv1()), dateConverter(report.getOpv2()),dateConverter(report.getOpv3()), dateConverter(report.getIpv()),
+            dateConverter(report.getDpt1()),dateConverter(report.getDpt2()),dateConverter(report.getDpt3()), dateConverter(report.getPcv1()), dateConverter(report.getPcv2()),dateConverter(report.getPcv3()), dateConverter(report.getRota1()),dateConverter(report.getRota2()),
+            dateConverter(report.getVitaminA()),dateConverter(report.getMeasles1()),dateConverter(report.getYellowFever()), dateConverter(report.getMalaria1()),dateConverter(report.getMalaria2()),dateConverter(report.getMalaria3()),dateConverter(report.getFullyImmunized()),dateConverter(report.getMeasles2()),dateConverter(report.getMalaria4())});
+        }
+
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-            LocalDateTime now = LocalDateTime.now();
 
             HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
-            HSSFSheet sheets = hssfWorkbook.createSheet("moh 510 Report");
+            HSSFSheet sheets = hssfWorkbook.createSheet("ImmunizationRegister");
             HSSFRow tittle = sheets.createRow(0);
             HSSFRow facility = sheets.createRow(1);
             HSSFRow year = sheets.createRow(2);
@@ -119,12 +198,13 @@ public class Moh510ReportActivity extends AppCompatActivity implements DatePicke
             HSSFCell endDate = dateRange.createCell(3);
             tittleCell.setCellValue("Permanent Immunization Register(MOH 510)");
             facilityCell.setCellValue("Health Facility: Asayi Dispensary");
-            yearCell.setCellValue("Year of Enrollment");
+            yearCell.setCellValue("Year of Enrollment: ");
 
             strStart.setCellValue("Start Date");
             strEnd.setCellValue("End Date");
-            endDate.setCellValue(tvDate.getText().toString());
-            startDate.setCellValue(tvDate.getText().toString());
+            endDate.setCellValue(endTextDate.getText().toString());
+            startDate.setCellValue(startEditTextDate.getText().toString());
+
 
 //            Column names
             for (int cell = 0; cell<mohIndicators.size(); cell ++){
@@ -133,19 +213,20 @@ public class Moh510ReportActivity extends AppCompatActivity implements DatePicke
                 cell1.setCellValue(value);
             }
 
-            int columnNumber = 10;
+            HSSFRow queryRow;
+            int columnNumber = getIndicatorValues().size();
 
 //            row data
-            for (int dataRow = 5; dataRow < columnNumber; dataRow ++){
-
-                HSSFRow queryRow = sheets.createRow(dataRow);
-                for (int dataCell = 0; dataCell<mohIndicators.size(); dataCell ++){
-
-                    HSSFCell queryDataCell = queryRow.createCell(dataCell);
-
-                    String str = new CellReference(queryDataCell).formatAsString();
-                    queryDataCell.setCellValue(str);
+            Set<Integer> keyId = reportInfo.keySet();
+            for (Integer key: keyId){
+                queryRow = sheets.createRow(columnNumber++);
+                Object [] objectArr = reportInfo.get(key);
+                int cellId = 0;
+                for (Object obj:objectArr){
+                    HSSFCell queryDataCell = queryRow.createCell(cellId++);
+                    queryDataCell.setCellValue((String)obj);
                 }
+
             }
             try {
 
@@ -166,6 +247,12 @@ public class Moh510ReportActivity extends AppCompatActivity implements DatePicke
         Utils.showToast(this, "Report Downloaded Successfully");
     }
 
+    private List<Moh510SummaryReport> getIndicatorValues(){
+        Moh510SummaryReportRepository summaryReportRepository = KipApplication.getInstance().moh510SummaryReportRepository();
+        List<Moh510SummaryReport> reportList = summaryReportRepository.getMoh510SummaryReport();
+        return reportList;
+    }
+
     @Override
     public void onDateSet(android.widget.DatePicker view, int year, int month, int dayOfMonth) {
         Calendar mCalender = Calendar.getInstance();
@@ -173,9 +260,7 @@ public class Moh510ReportActivity extends AppCompatActivity implements DatePicke
         mCalender.set(Calendar.MONTH, month);
         mCalender.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         String selectedDate = DateFormat.getDateInstance(DateFormat.FULL).format(mCalender.getTime());
-
-        tvDate.setText(selectedDate);
-        endDate.setText(selectedDate);
-        startDate.setText(selectedDate);
+//        endDate.setText(selectedDate);
+//        startDate.setText(selectedDate);
     }
 }

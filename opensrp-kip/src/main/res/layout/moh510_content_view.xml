@@ -8,10 +8,11 @@
     android:orientation="horizontal">
 
     <FrameLayout
-        android:id="@+id/www"
+        android:id="@+id/custom_date"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/dialog_shape">
+        android:background="@drawable/dialog_shape"
+        android:visibility="gone">
 
 
         <LinearLayout
@@ -54,12 +55,26 @@
 
                     <EditText
                         android:id="@+id/start_date"
-                        android:layout_width="match_parent"
+                        android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:focusable="false"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
                         android:hint="@string/set_start_date"
                         android:inputType="date"
-                        android:textSize="26sp" />
+                        android:textSize="26sp"
+                        android:visibility="gone"/>
+
+                    <Button
+                        android:id="@+id/start_date_button"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:text="@string/set_start_date"
+                        android:src="@drawable/ic_down"
+                        android:background="@color/white"
+                        android:textAllCaps="false"
+                        />
 
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -80,7 +95,19 @@
                         android:focusable="false"
                         android:hint="@string/set_end_date"
                         android:inputType="date"
-                        android:textSize="26sp" />
+                        android:textSize="26sp"
+                        android:visibility="gone"/>
+
+                    <Button
+                        android:id="@+id/end_date_button"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:text="@string/set_end_date"
+                        android:src="@drawable/ic_down"
+                        android:background="@color/white"
+                        android:textAllCaps="false"
+                        />
                 </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -127,30 +154,92 @@
 
             </LinearLayout>
 
-            <LinearLayout
+        </LinearLayout>
+
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/download"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/dialog_shape">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+
+            <org.smartregister.view.customcontrols.CustomFontTextView
+                android:id="@+id/download_child_name"
+                style="@style/CustomFontTextViewStyle.ClientList.Medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:text="Download Immunization Register"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
 
-                <TextView
-                    android:id="@+id/tvDate"
-                    android:layout_width="wrap_content"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/moh510_start_download_layout"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="Date" />
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="0.5"
+                    android:hint="@string/set_start_date">
 
-                <Button
-                    android:id="@+id/btPickDate"
-                    android:layout_width="wrap_content"
+                    <Button
+                        android:id="@+id/custom_date_button"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:text="Custom Date Range"
+                        android:src="@drawable/ic_down"
+                        android:background="@color/white"
+                        android:textAllCaps="false"
+                        />
+
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/download_layout"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/tvDate"
-                    android:layout_centerInParent="true"
-                    android:text="Pick Date" />
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="0.5"
+                    android:hint="@string/set_end_date">
+
+                    <Button
+                        android:id="@+id/download_button"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:onClick="buttonWriteToExcel"
+                        android:text="Download Register"
+                        android:src="@drawable/ic_down"
+                        android:background="@color/white"
+                        android:textAllCaps="false"
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
+
 
             </LinearLayout>
 
@@ -158,6 +247,7 @@
 
 
     </FrameLayout>
+
 
 
 

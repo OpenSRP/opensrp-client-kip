@@ -67,6 +67,7 @@ import org.smartregister.kip.repository.KipChildRegisterQueryProvider;
 import org.smartregister.kip.repository.KipLocationRepository;
 import org.smartregister.kip.repository.KipOpdVisitSummaryRepository;
 import org.smartregister.kip.repository.KipRepository;
+import org.smartregister.kip.repository.Moh510SummaryReportRepository;
 import org.smartregister.kip.repository.MonthlyTalliesRepository;
 import org.smartregister.kip.repository.OpdCovid19CalculateRiskRepository;
 import org.smartregister.kip.repository.OpdCovid19VaccinationEligibilityRepository;
@@ -140,6 +141,7 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
     private OpdMedicalCheckFormRepository opdMedicalCheckAndVaccinateFormRepository;
     private OpdInfluenzaVaccineAdministrationFormRepository opdInfluenzaVaccineAdministrationFormRepository;
     private SmsEnrolledClientRepository smsEnrolledClientRepository;
+    private Moh510SummaryReportRepository moh510SummaryReportRepository;
 
 
     public static JsonSpecHelper getJsonSpecHelper() {
@@ -622,6 +624,13 @@ public class KipApplication extends DrishtiApplication implements TimeChangedBro
             smsEnrolledClientRepository = new SmsEnrolledClientRepository();
         }
         return smsEnrolledClientRepository;
+    }
+
+    public Moh510SummaryReportRepository moh510SummaryReportRepository(){
+        if (moh510SummaryReportRepository == null){
+            moh510SummaryReportRepository = new Moh510SummaryReportRepository();
+        }
+        return moh510SummaryReportRepository;
     }
 
     public void populateGlobalSettings() {

@@ -4,7 +4,7 @@ package org.smartregister.kip.repository;
 import net.sqlcipher.Cursor;
 import net.sqlcipher.database.SQLiteDatabase;
 
-import org.smartregister.kip.pojo.SmsErolledClient;
+import org.smartregister.kip.pojo.SmsEnrolledClient;
 import org.smartregister.repository.BaseRepository;
 
 import java.util.ArrayList;
@@ -14,8 +14,8 @@ import timber.log.Timber;
 
 public class SmsEnrolledClientRepository extends BaseRepository {
 
-    public List<SmsErolledClient> getEnrolledClients(){
-        List<SmsErolledClient> smsErolledClient = new ArrayList<>();
+    public List<SmsEnrolledClient> getEnrolledClients(){
+        List<SmsEnrolledClient> smsEnrolledClient = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
         Cursor sCursor = null;
 
@@ -24,7 +24,7 @@ public class SmsEnrolledClientRepository extends BaseRepository {
 
         try {
             sCursor = db.rawQuery(sql,null);
-            smsErolledClient = readAll(sCursor);
+            smsEnrolledClient = readAll(sCursor);
 
         } catch (Exception e){
             Timber.d("-->getEnrolledClients" + e.getMessage());
@@ -33,26 +33,26 @@ public class SmsEnrolledClientRepository extends BaseRepository {
                 sCursor.close();
             }
         }
-        return smsErolledClient;
+        return smsEnrolledClient;
     }
 
-    public SmsErolledClient getEnrolledClients(Cursor cursor){
-        SmsErolledClient smsErolledClient = new SmsErolledClient();
-        smsErolledClient.setFirstName(cursor.getString(cursor.getColumnIndex("first_name")));
-        smsErolledClient.setLastName(cursor.getString(cursor.getColumnIndex("last_name")));
-        smsErolledClient.setPhoneNumber(cursor.getString(cursor.getColumnIndex("phone_number")));
-        return smsErolledClient;
+    public SmsEnrolledClient getEnrolledClients(Cursor cursor){
+        SmsEnrolledClient smsEnrolledClient = new SmsEnrolledClient();
+        smsEnrolledClient.setFirstName(cursor.getString(cursor.getColumnIndex("first_name")));
+        smsEnrolledClient.setLastName(cursor.getString(cursor.getColumnIndex("last_name")));
+        smsEnrolledClient.setPhoneNumber(cursor.getString(cursor.getColumnIndex("phone_number")));
+        return smsEnrolledClient;
     }
 
-    private List<SmsErolledClient> readAll(Cursor cursor){
-        List<SmsErolledClient> smsErolledClients = new ArrayList<>();
+    private List<SmsEnrolledClient> readAll(Cursor cursor){
+        List<SmsEnrolledClient> smsEnrolledClients = new ArrayList<>();
         if (cursor !=null && cursor.getCount() > 0 && cursor.moveToNext()){
             cursor.moveToFirst();
             while (cursor.getCount() > 0 && !cursor.isAfterLast()){
-                smsErolledClients.add(getEnrolledClients(cursor));
+                smsEnrolledClients.add(getEnrolledClients(cursor));
                 cursor.moveToNext();
             }
         }
-        return smsErolledClients;
+        return smsEnrolledClients;
     }
 }

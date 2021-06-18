@@ -164,7 +164,7 @@ dependencies {
     }
 
 
-    api('org.smartregister:opensrp-client-core:1.12.0-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-core:1.12.01-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'id.zelory', module: 'compressor'
         exclude group: 'com.github.bmelnychuk', module: 'atv'

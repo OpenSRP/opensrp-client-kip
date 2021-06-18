@@ -1,6 +1,6 @@
 package org.smartregister.kip.pojo;
 
-public class SmsErolledClient {
+public class SmsEnrolledClient {
 
     private String phoneNumber;
     private String firstName;
