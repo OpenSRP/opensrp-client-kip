@@ -134,7 +134,7 @@ public class ChildImmunizationActivity extends BaseChildImmunizationActivity {
     }
 
     @Override
-    public void onUniqueIdFetched(Triple<String, String, String> triple, String s) {
+    public void onUniqueIdFetched(Triple<String, Map<String, String>, String> triple, String s) {
 
     }
 

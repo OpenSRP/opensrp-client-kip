@@ -44,6 +44,34 @@ android {
         buildConfigField "long", "EVENT_VERSION", System.currentTimeMillis() + "L"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
 
+        if (project.rootProject.file("local.properties").exists()) {
+
+            Properties properties = new Properties()
+            properties.load(project.rootProject.file("local.properties").newDataInputStream())
+
+            if (properties != null && properties.containsKey("oauth.client.id")) {
+
+                buildConfigField "String", "OAUTH_CLIENT_ID", properties["oauth.client.id"]
+
+            } else {
+                project.logger.error("oauth.client.id variable is not set in your local.properties")
+                buildConfigField "String", "OAUTH_CLIENT_ID", "\"sample_client_id\""
+            }
+
+
+            if (properties != null && properties.containsKey("oauth.client.secret")) {
+
+                buildConfigField "String", "OAUTH_CLIENT_SECRET", properties["oauth.client.secret"]
+
+            } else {
+                project.logger.error("oauth.client.secret variable is not set in your local.properties")
+                buildConfigField "String", "OAUTH_CLIENT_SECRET", "\"sample_client_secret\""
+            }
+        } else {
+            buildConfigField "String", "OAUTH_CLIENT_ID", '""'
+            buildConfigField "String", "OAUTH_CLIENT_SECRET", '""'
+        }
+
         javaCompileOptions {
             annotationProcessorOptions {
                 includeCompileClasspath true
@@ -112,18 +140,21 @@ android {
     }
 
     packagingOptions {
-        exclude 'META-INF/DEPENDENCIES.txt'
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/NOTICE.txt'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/LICENSE'
+        //exclude 'META-INF/DEPENDENCIES.txt'
         exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/notice.txt'
-        exclude 'META-INF/license.txt'
-        exclude 'META-INF/dependencies.txt'
-        exclude 'META-INF/LGPL2.1'
-        exclude 'LICENSE.txt'
-
+        //exclude 'META-INF/LICENSE.txt'
+        //exclude 'META-INF/NOTICE.txt'
+        //exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.md'
+        //exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.md'
+        exclude 'META-INF/INDEX.LIST'
+        //exclude 'META-INF/DEPENDENCIES'
+        //exclude 'META-INF/notice.txt'
+        //exclude 'META-INF/license.txt'
+        //exclude 'META-INF/dependencies.txt'
+        //exclude 'META-INF/LGPL2.1'
+        //exclude 'LICENSE.txt'
     }
 
     testOptions {
@@ -145,7 +176,7 @@ dependencies {
     implementation 'com.evrencoskun.library:tableview:0.8.8'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.15'
 
-    implementation('org.smartregister:opensrp-client-opd:0.0.16-SNAPSHOT@aar') {
+    implementation('org.smartregister:opensrp-client-opd:0.0.18-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
         exclude group: 'org.smartregister', module: 'opensrp-client-native-form'
@@ -153,7 +184,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
 
-    implementation('org.smartregister:opensrp-client-child:0.3.4-00-SNAPSHOT@aar') {
+    implementation('org.smartregister:opensrp-client-child:0.5.0-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'id.zelory', module: 'compressor'
         exclude group: 'org.smartregister', module: 'opensrp-client-core'
@@ -164,7 +195,7 @@ dependencies {
     }
 
 
-    api('org.smartregister:opensrp-client-core:1.12.01-SNAPSHOT@aar') {
+    api('org.smartregister:opensrp-client-core:4.3.7-SNAPSHOT@aar') {
         transitive = true
         exclude group: 'id.zelory', module: 'compressor'
         exclude group: 'com.github.bmelnychuk', module: 'atv'
@@ -176,6 +207,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'cardview-v7'
         exclude group: 'com.android.support', module: 'support-v4'
         exclude group: 'com.android.support', module: 'design'
+        exclude group: 'com.ibm.fhir', module: 'fhir-model'
     }
 
     api('org.smartregister:opensrp-client-native-form:2.0.2-SNAPSHOT@aar') {
@@ -277,6 +309,8 @@ dependencies {
     }
     implementation group: 'io.fabric.sdk.android', name: 'fabric', version: '1.4.8'
     implementation 'org.apache.poi:poi:3.17'
+    implementation "com.ibm.fhir:fhir-model:4.7.1"
+    implementation "com.ibm.fhir:fhir-path:4.7.1"
 
     def robolectricVersion = '4.1'
     testImplementation("org.robolectric:robolectric:$robolectricVersion") {

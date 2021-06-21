@@ -41,6 +41,7 @@ import org.smartregister.opd.utils.OpdUtils;
 import org.smartregister.view.fragment.BaseRegisterFragment;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import timber.log.Timber;
 
@@ -110,6 +111,11 @@ public class KipOpdRegisterActivity extends BaseOpdRegisterActivity implements N
     protected void onResumption() {
         super.onResumption();
         createDrawer();
+    }
+
+    @Override
+    public void startFormActivity(String s, String s1, Map<String, String> map) {
+
     }
 
 

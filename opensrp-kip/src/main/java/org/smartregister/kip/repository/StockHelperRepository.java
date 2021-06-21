@@ -10,6 +10,7 @@ import org.joda.time.DateTime;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartregister.kip.application.KipApplication;
+import org.smartregister.kip.dao.KipChildDao;
 import org.smartregister.repository.Repository;
 import org.smartregister.stock.StockLibrary;
 import org.smartregister.stock.domain.ActiveChildrenStats;
@@ -129,12 +130,11 @@ public class StockHelperRepository extends StockExternalRepository {
 
     @Override
     public int getVaccinesDueBasedOnSchedule(JSONObject vaccineObject) {
-//        try {
-//            return KipChildDao.getDueVaccineCount(vaccineObject.getString("name"));
-//        } catch (JSONException e) {
-//            Timber.e(e);
-//            return 0;
-//        }
-        return 10;
+        try {
+            return KipChildDao.getDueVaccineCount(vaccineObject.getString("name"));
+        } catch (JSONException e) {
+            Timber.e(e);
+            return 0;
+        }
     }
 }

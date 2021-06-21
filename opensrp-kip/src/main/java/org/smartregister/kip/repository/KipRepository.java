@@ -184,8 +184,8 @@ public class KipRepository extends Repository {
 
     @Override
     public SQLiteDatabase getReadableDatabase() {
-        String pass = KipApplication.getInstance().getPassword();
-        if (StringUtils.isNotBlank(pass)) {
+        byte[] pass = KipApplication.getInstance().getPassword();
+        if (pass != null && pass.length > 0) {
             return getReadableDatabase(pass);
         } else {
             throw new IllegalStateException("Password is blank");
@@ -194,13 +194,14 @@ public class KipRepository extends Repository {
 
     @Override
     public SQLiteDatabase getWritableDatabase() {
-        String pass = KipApplication.getInstance().getPassword();
-        if (StringUtils.isNotBlank(pass)) {
-            return getReadableDatabase(pass);
+        byte[] pass = KipApplication.getInstance().getPassword();
+        if (pass != null && pass.length > 0) {
+            return getWritableDatabase(pass);
         } else {
             throw new IllegalStateException("Password is blank");
         }
     }
+
 
     @Override
     public synchronized SQLiteDatabase getWritableDatabase(String password) {
