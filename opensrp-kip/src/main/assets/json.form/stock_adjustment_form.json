@@ -93,7 +93,7 @@
         "value": "Physical_recount",
         "v_required": {
           "value": true,
-          "err": ""
+          "err": "Please indicate reason"
         }
       },
       {
@@ -153,9 +153,9 @@
         "text": "",
         "has_bg": true,
         "top_padding": "10dp",
+        "left_padding": "20dp",
         "right_padding": "20dp",
         "bottom_padding": "10dp",
-        "left_padding": "20dp",
         "text_size": "14sp",
         "text_color": "#000000",
         "relevance": {
@@ -172,10 +172,10 @@
         "has_bg": true,
         "text_size": "10sp",
         "text_color": "#737373",
-        "top_padding": "10dp",
+        "left_padding": "20dp",
         "right_padding": "20dp",
         "bottom_padding": "10dp",
-        "left_padding": "20dp",
+        "top_padding": "10dp",
         "openmrs_entity_parent": "",
         "openmrs_entity": "",
         "openmrs_entity_id": "",

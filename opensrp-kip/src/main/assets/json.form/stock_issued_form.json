@@ -67,14 +67,13 @@
       {
         "key": "Children_Vaccinated_Count",
         "type": "label",
-        "text": "Children vaccinated on this date: <Enter date to calculate>",
-        "read_only": true,
-        "hint_on_text": true,
-        "text_color": "#000000",
-        "text_size": "14sp",
         "openmrs_entity_parent": "",
         "openmrs_entity": "",
-        "openmrs_entity_id": ""
+        "openmrs_entity_id": "",
+        "text": "Children vaccinated on this date: <Enter date to calculate>",
+        "text_color": "#000000",
+        "text_size": "14sp",
+        "hint_on_text": true
       },
       {
         "key": "Vials_Issued_Count",
@@ -83,9 +82,9 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "text": "Estimated vials issued on this date: <Enter date to calculate>",
-        "hint_on_text": true,
         "text_color": "#000000",
-        "text_size": "14sp"
+        "text_size": "14sp",
+        "hint_on_text": true
       },
       {
         "key": "divider1",
@@ -106,7 +105,7 @@
         "hint": "Actual number of [vaccine] vials issued",
         "v_min": {
           "value": "1",
-          "err": "Issued vials must be greater than 0"
+          "err": "issued vials must be greater than 0"
         },
         "v_numeric_integer": {
           "value": "true",
@@ -170,7 +169,7 @@
         "hint": "Number of wasted vials (e.g. damaged vials)",
         "v_min": {
           "value": "0",
-          "err": "Value cannot be less than zero"
+          "err": "value cannot be less than zero"
         },
         "v_numeric_integer": {
           "value": "true",
@@ -193,9 +192,9 @@
         "read_only": true,
         "has_bg": true,
         "top_padding": "10dp",
+        "left_padding": "20dp",
         "right_padding": "20dp",
         "bottom_padding": "10dp",
-        "left_padding": "20dp",
         "text_size": "14sp",
         "openmrs_entity_parent": "",
         "openmrs_entity": "",
@@ -215,9 +214,9 @@
         "text_size": "10sp",
         "text_color": "#737373",
         "top_padding": "10dp",
+        "left_padding": "20dp",
         "right_padding": "20dp",
         "bottom_padding": "10dp",
-        "left_padding": "20dp",
         "openmrs_entity_parent": "",
         "openmrs_entity": "",
         "openmrs_entity_id": "",
@@ -234,9 +233,9 @@
         "text": "Total wasted doses: 0 doses",
         "has_bg": true,
         "top_padding": "10dp",
+        "left_padding": "20dp",
         "right_padding": "20dp",
         "bottom_padding": "10dp",
-        "left_padding": "20dp",
         "text_size": "14sp",
         "text_color": "#000000",
         "openmrs_entity_parent": "",
@@ -256,13 +255,12 @@
         "has_bg": true,
         "text_size": "10sp",
         "text_color": "#737373",
-        "top_padding": "10dp",
-        "right_padding": "20dp",
         "bottom_padding": "10dp",
+        "top_padding": "10dp",
         "left_padding": "20dp",
-        "bottom_margin": "20dp",
-        "read_only": true,
+        "right_padding": "20dp",
         "openmrs_entity_parent": "",
+        "read_only": true,
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "relevance": {
