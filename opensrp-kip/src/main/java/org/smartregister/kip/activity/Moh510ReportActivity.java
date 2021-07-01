@@ -16,6 +16,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import net.sqlcipher.Cursor;
+import net.sqlcipher.database.SQLiteDatabase;
+
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -25,22 +28,31 @@ import org.smartregister.kip.R;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.pojo.Moh510SummaryReport;
 import org.smartregister.kip.repository.Moh510SummaryReportRepository;
+import org.smartregister.kip.util.KipChildUtils;
+import org.smartregister.location.helper.LocationHelper;
+import org.smartregister.opd.utils.OpdDbConstants;
+import org.smartregister.opd.utils.OpdUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import timber.log.Timber;
+
 
 public class Moh510ReportActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, View.OnClickListener {
 
+    Moh510SummaryReportRepository summaryReportRepository = KipApplication.getInstance().moh510SummaryReportRepository();
     private File filePath = new File(Environment.getExternalStorageDirectory()+"/moh510Report.xls");
     private int mYear, mMonth, mDay, mHour, mMinute;
     ImageButton closeReport;
@@ -62,8 +74,6 @@ public class Moh510ReportActivity extends AppCompatActivity implements DatePicke
         setContentView(R.layout.activity_moh510_report);
         closeReport = findViewById(R.id.close_moh_510_report);
 
-
-
         ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
         endTextDate = findViewById(R.id.end_date);
@@ -80,6 +90,13 @@ public class Moh510ReportActivity extends AppCompatActivity implements DatePicke
         endDateBtn.setOnClickListener(this);
         customDateRangeBtn.setOnClickListener(this);
         closeReport.setOnClickListener(this);
+
+        if (startEditTextDate.getText().toString() == null){
+            startEditTextDate.setVisibility(View.GONE);
+        }
+        if (endTextDate.getText().toString()==null){
+            endTextDate.setVisibility(View.GONE);
+        }
 
     }
 
@@ -102,7 +119,7 @@ public class Moh510ReportActivity extends AppCompatActivity implements DatePicke
                     new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(android.widget.DatePicker view, int year, int month, int dayOfMonth) {
-                            startEditTextDate.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
+                            startEditTextDate.setText(dayOfMonth + "-" + "0"+(month + 1) + "-" + year);
                         }
                     }, mYear, mMonth, mDay);
             datePickerDialog.show();
@@ -118,8 +135,6 @@ public class Moh510ReportActivity extends AppCompatActivity implements DatePicke
         } else if(v==cancel){
             startEditTextDate.setText("");
             endTextDate.setText("");
-            endTextDate.setVisibility(View.GONE);
-            endDateBtn.setVisibility(View.GONE);
             endDateBtn.setVisibility(View.VISIBLE);
             startDateBtn.setVisibility(View.VISIBLE);
         } else if (v == endDateBtn){
@@ -133,7 +148,8 @@ public class Moh510ReportActivity extends AppCompatActivity implements DatePicke
                     new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(android.widget.DatePicker view, int year, int month, int dayOfMonth) {
-                            endTextDate.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
+
+                            endTextDate.setText(dayOfMonth + "-" + "0"+(month + 1) + "-" + year);
                         }
                     }, mYear, mMonth, mDay);
             datePickerDialog.show();
@@ -155,10 +171,8 @@ public class Moh510ReportActivity extends AppCompatActivity implements DatePicke
 
     private String dateConverter(String date) {
         if (date != null) {
-            long l=Long.parseLong(date);
-
             Date dateParser = new Date(Long.parseLong(date));
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             return dateFormat.format(dateParser);
         }
         return null;
@@ -168,11 +182,10 @@ public class Moh510ReportActivity extends AppCompatActivity implements DatePicke
             new TreeMap<Integer, Object[]>();
 
     public void buttonWriteToExcel(View view){
-
         int i = 0;
         for (Moh510SummaryReport report:getIndicatorValues()){
-            reportInfo.put(i++,new Object[]{report.getKipId(), report.getChildFullName(),report.getSex(),
-                    report.getDob(), report.getDateFirstSeen(), report.getFatherName(),report.getMotherName(),
+            reportInfo.put(i++,new Object[]{report.getKipId(), getFullName(report.getChildFirstName(),report.getChildLastName()),report.getSex(),
+                    dateFormat(report.getDob()), dateFormat(report.getDateFirstSeen()), getFullName(report.getFatherFirstName(), report.getFatherLastName()),getFullName(report.getMotherFirstName(),report.getMotherLastName()),
                     report.getMotherPhoneNumber(), report.getVillage(),report.getTelephone(), dateConverter(report.getBcg()),
                     dateConverter(report.getPolioBirthDose()), dateConverter(report.getOpv1()), dateConverter(report.getOpv2()),dateConverter(report.getOpv3()), dateConverter(report.getIpv()),
             dateConverter(report.getDpt1()),dateConverter(report.getDpt2()),dateConverter(report.getDpt3()), dateConverter(report.getPcv1()), dateConverter(report.getPcv2()),dateConverter(report.getPcv3()), dateConverter(report.getRota1()),dateConverter(report.getRota2()),
@@ -197,7 +210,7 @@ public class Moh510ReportActivity extends AppCompatActivity implements DatePicke
             HSSFCell strEnd = dateRange.createCell(2);
             HSSFCell endDate = dateRange.createCell(3);
             tittleCell.setCellValue("Permanent Immunization Register(MOH 510)");
-            facilityCell.setCellValue("Health Facility: Asayi Dispensary");
+            facilityCell.setCellValue("Health Facility: "+ LocationHelper.getInstance().getOpenMrsReadableName(KipChildUtils.getCurrentLocality()));
             yearCell.setCellValue("Year of Enrollment: ");
 
             strStart.setCellValue("Start Date");
@@ -248,8 +261,7 @@ public class Moh510ReportActivity extends AppCompatActivity implements DatePicke
     }
 
     private List<Moh510SummaryReport> getIndicatorValues(){
-        Moh510SummaryReportRepository summaryReportRepository = KipApplication.getInstance().moh510SummaryReportRepository();
-        List<Moh510SummaryReport> reportList = summaryReportRepository.getMoh510SummaryReport();
+        List<Moh510SummaryReport> reportList = getMoh510SummaryReport();
         return reportList;
     }
 
@@ -262,5 +274,50 @@ public class Moh510ReportActivity extends AppCompatActivity implements DatePicke
         String selectedDate = DateFormat.getDateInstance(DateFormat.FULL).format(mCalender.getTime());
 //        endDate.setText(selectedDate);
 //        startDate.setText(selectedDate);
+    }
+
+    private String dateFormat(String date){
+        String datFt = "";
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+            Date formDate = dateFormat.parse(date);
+
+            datFt = OpdUtils.convertDate(formDate, "dd-MM-yyyy");
+        } catch (Exception e){
+            Timber.d("--->dateFormat %s",e.getMessage());
+        }
+
+        return datFt;
+    }
+
+    private List<Moh510SummaryReport> getMoh510SummaryReport(){
+        List<Moh510SummaryReport> moh510SummaryReports = new ArrayList<>();
+        SQLiteDatabase db = summaryReportRepository.getReadable();
+        Cursor sCursor = null;
+
+        String startDate = startEditTextDate.getText().toString();
+        String endDate = endTextDate.getText().toString();
+
+
+        try {
+            if ((startDate == null || startDate.isEmpty()) && (endDate == null || endDate.isEmpty())){
+            sCursor = db.rawQuery(summaryReportRepository.sql(),null);}
+            else {
+                sCursor = db.rawQuery(summaryReportRepository.sqlDateRange( dateFormat(startDate), dateFormat(endDate)),null);
+            }
+            moh510SummaryReports = summaryReportRepository.readAll(sCursor);
+
+        } catch (Exception e){
+            Timber.d("-->getMoh510SummaryReport" + e.getMessage());
+        } finally {
+            if (sCursor !=null){
+                sCursor.close();
+            }
+        }
+        return moh510SummaryReports;
+    }
+
+    private String getFullName(String firstName, String lastName){
+        return firstName + " " + lastName;
     }
 }

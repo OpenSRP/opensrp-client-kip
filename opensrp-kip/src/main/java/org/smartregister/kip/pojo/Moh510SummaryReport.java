@@ -2,12 +2,15 @@ package org.smartregister.kip.pojo;
 
 public class Moh510SummaryReport {
     private String kipId;
-    private String childFullName;
+    private String childFirstName;
+    private String childLastName;
     private String sex;
     private String dob;
     private String dateFirstSeen;
-    private String fatherName;
-    private String motherName;
+    private String fatherFirstName;
+    private String motherFirstName;
+    private String fatherLastName;
+    private String motherLastName;
     private String motherPhoneNumber;
     private String village;
     private String telephone;
@@ -45,12 +48,36 @@ public class Moh510SummaryReport {
         this.kipId = kipId;
     }
 
-    public String getChildFullName() {
-        return childFullName;
+    public String getChildFirstName() {
+        return childFirstName;
     }
 
-    public void setChildFullName(String childFullName) {
-        this.childFullName = childFullName;
+    public String getChildLastName() {
+        return childLastName;
+    }
+
+    public void setChildLastName(String childLastName) {
+        this.childLastName = childLastName;
+    }
+
+    public String getFatherLastName() {
+        return fatherLastName;
+    }
+
+    public void setFatherLastName(String fatherLastName) {
+        this.fatherLastName = fatherLastName;
+    }
+
+    public String getMotherLastName() {
+        return motherLastName;
+    }
+
+    public void setMotherLastName(String motherLastName) {
+        this.motherLastName = motherLastName;
+    }
+
+    public void setChildFirstName(String childFirstName) {
+        this.childFirstName = childFirstName;
     }
 
     public String getSex() {
@@ -77,20 +104,20 @@ public class Moh510SummaryReport {
         this.dateFirstSeen = dateFirstSeen;
     }
 
-    public String getFatherName() {
-        return fatherName;
+    public String getFatherFirstName() {
+        return fatherFirstName;
     }
 
-    public void setFatherName(String fatherName) {
-        this.fatherName = fatherName;
+    public void setFatherFirstName(String fatherFirstName) {
+        this.fatherFirstName = fatherFirstName;
     }
 
-    public String getMotherName() {
-        return motherName;
+    public String getMotherFirstName() {
+        return motherFirstName;
     }
 
-    public void setMotherName(String motherName) {
-        this.motherName = motherName;
+    public void setMotherFirstName(String motherFirstName) {
+        this.motherFirstName = motherFirstName;
     }
 
     public String getMotherPhoneNumber() {
@@ -313,12 +340,15 @@ public class Moh510SummaryReport {
     public String toString() {
         return "Moh510SummaryReport{" +
                 "kipId='" + kipId + '\'' +
-                ", childFullName='" + childFullName + '\'' +
+                ", childFirstName='" + childFirstName + '\'' +
+                ", childLastName='" + childLastName + '\'' +
                 ", sex='" + sex + '\'' +
                 ", dob='" + dob + '\'' +
                 ", dateFirstSeen='" + dateFirstSeen + '\'' +
-                ", fatherName='" + fatherName + '\'' +
-                ", motherName='" + motherName + '\'' +
+                ", fatherFirstName='" + fatherFirstName + '\'' +
+                ", motherFirstName='" + motherFirstName + '\'' +
+                ", fatherLastName='" + fatherLastName + '\'' +
+                ", motherLastName='" + motherLastName + '\'' +
                 ", motherPhoneNumber='" + motherPhoneNumber + '\'' +
                 ", village='" + village + '\'' +
                 ", telephone='" + telephone + '\'' +
