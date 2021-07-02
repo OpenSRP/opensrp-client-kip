@@ -12,80 +12,79 @@ import java.util.List;
 public class Moh510SummaryReportRepository extends BaseRepository {
 
     public String sql(){
-
         String sql = "SELECT client.opensrp_id AS kip_id, child_details.first_name AS child_first_name , child_details.last_name AS child_last_name,\n" +
-                "       client.gender As sex, child_details.dob, client.date AS date_first_seen, father_details.first_name AS father_first_name, father_details.last_name AS father_last_name,\n" +
+                "       client.gender As sex, strftime('%d/%m/%Y',child_details.dob) AS dob, strftime('%d/%m/%Y',client.date) AS date_first_seen, father_details.first_name AS father_first_name, father_details.last_name AS father_last_name,\n" +
                 "       mother_details.first_name AS mother_first_name, mother_details.last_name AS mother_last_name,\n" +
                 "       mother_details.phone_number AS mother_phone, client.village, mother_details.phone_number AS telephone_number,\n" +
-                "       CASE WHEN vaccines.name = 'bcg' THEN vaccines.date ELSE Null END \"bcg\",\n" +
-                "       CASE WHEN vaccines.name = 'opv_0' THEN vaccines.date ELSE Null END \"polio_birth_dose\",\n" +
-                "       CASE WHEN vaccines.name = 'opv_1' THEN vaccines.date ELSE Null END \"opv1\",\n" +
-                "       CASE WHEN vaccines.name = 'opv_2' THEN vaccines.date ELSE Null END \"opv2\",\n" +
-                "       CASE WHEN vaccines.name = 'opv_3' THEN vaccines.date ELSE Null END \"opv3\",\n" +
-                "       CASE WHEN vaccines.name = 'ipv' THEN vaccines.date ELSE Null END \"ipv\",\n" +
-                "       CASE WHEN vaccines.name = 'penta_1' THEN vaccines.date ELSE Null END \"penta1\",\n" +
-                "       CASE WHEN vaccines.name = 'penta_2' THEN vaccines.date ELSE Null END \"penta2\",\n" +
-                "       CASE WHEN vaccines.name = 'penta_3' THEN vaccines.date ELSE Null END \"penta3\",\n" +
-                "       CASE WHEN vaccines.name = 'pcv_1' THEN vaccines.date ELSE Null END \"pcv1\",\n" +
-                "       CASE WHEN vaccines.name = 'pcv_2' THEN vaccines.date ELSE Null END \"pcv2\",\n" +
-                "       CASE WHEN vaccines.name = 'pcv_3' THEN vaccines.date ELSE Null END \"pcv3\",\n" +
-                "       CASE WHEN vaccines.name = 'rota_1' THEN vaccines.date ELSE Null END \"rota1\",\n" +
-                "       CASE WHEN vaccines.name = 'rota_2' THEN vaccines.date ELSE Null END \"rota2\",\n" +
-                "       CASE WHEN vaccines.name = 'mr_1' THEN vaccines.date ELSE Null END \"mr1\",\n" +
-                "       CASE WHEN vaccines.name = 'vitamin_a' THEN vaccines.date ELSE Null END \"vitamin_a\",\n" +
-                "       CASE WHEN vaccines.name = 'yellow_fever' THEN vaccines.date ELSE Null END \"yellow_fever\",\n" +
-                "       CASE WHEN vaccines.name = 'mv_1' THEN vaccines.date ELSE Null END \"mv1\",\n" +
-                "       CASE WHEN vaccines.name = 'mv_2' THEN vaccines.date ELSE Null END \"mv2\",\n" +
-                "       CASE WHEN vaccines.name = 'mv_3' THEN vaccines.date ELSE Null END \"mv3\",\n" +
-                "       CASE WHEN vaccines.name = 'mr_1' THEN vaccines.date ELSE Null END \"fully_immunized\",\n" +
-                "       CASE WHEN vaccines.name = 'mr_2' THEN vaccines.date ELSE Null END \"mr2\",\n" +
-                "       CASE WHEN vaccines.name = 'mv_4' THEN vaccines.date ELSE Null END \"mv4\"\n" +
+                "       SUM(CASE WHEN vaccines.name = 'bcg' THEN vaccines.date ELSE Null END) \"bcg\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'opv_0' THEN vaccines.date ELSE Null END) \"polio_birth_dose\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'opv_1' THEN vaccines.date ELSE Null END) \"opv1\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'opv_2' THEN vaccines.date ELSE Null END) \"opv2\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'opv_3' THEN vaccines.date ELSE Null END) \"opv3\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'ipv' THEN vaccines.date ELSE Null END) \"ipv\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'penta_1' THEN vaccines.date ELSE Null END) \"penta1\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'penta_2' THEN vaccines.date ELSE Null END) \"penta2\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'penta_3' THEN vaccines.date ELSE Null END) \"penta3\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'pcv_1' THEN vaccines.date ELSE Null END) \"pcv1\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'pcv_2' THEN vaccines.date ELSE Null END) \"pcv2\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'pcv_3' THEN vaccines.date ELSE Null END) \"pcv3\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'rota_1' THEN vaccines.date ELSE Null END) \"rota1\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'rota_2' THEN vaccines.date ELSE Null END) \"rota2\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'mr_1' THEN vaccines.date ELSE Null END) \"mr1\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'vitamin_a' THEN vaccines.date ELSE Null END) \"vitamin_a\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'yellow_fever' THEN vaccines.date ELSE Null END) \"yellow_fever\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'mv_1' THEN vaccines.date ELSE Null END) \"mv1\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'mv_2' THEN vaccines.date ELSE Null END) \"mv2\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'mv_3' THEN vaccines.date ELSE Null END) \"mv3\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'mr_1' THEN vaccines.date ELSE Null END) \"fully_immunized\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'mr_2' THEN vaccines.date ELSE Null END) \"mr2\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'mv_4' THEN vaccines.date ELSE Null END) \"mv4\"\n" +
                 "FROM ec_child_details child_details\n" +
-                "LEFT JOIN ec_mother_details mother_details ON child_details.base_entity_id = mother_details.base_entity_id\n" +
-                "LEFT JOIN ec_father_details father_details ON child_details.base_entity_id = father_details.base_entity_id\n" +
+                "LEFT OUTER JOIN ec_mother_details mother_details ON child_details.relational_id = mother_details.base_entity_id\n" +
+                "LEFT JOIN ec_father_details father_details ON child_details.father_relational_id = father_details.base_entity_id\n" +
                 "LEFT JOIN ec_client client ON child_details.base_entity_id = client.base_entity_id\n" +
-                "LEFT JOIN vaccines ON vaccines.base_entity_id = child_details.base_entity_id\n" +
-                "GROUP BY child_details.base_entity_id;";
+                "LEFT JOIN vaccines ON vaccines.base_entity_id = child_details.base_entity_id" +
+                "GROUP BY kip_id;";
 
         return sql;
     }
 
     public String sqlDateRange( String startDate, String endDate){
-
         String sql = "SELECT client.opensrp_id AS kip_id, child_details.first_name AS child_first_name , child_details.last_name AS child_last_name,\n" +
-                "       client.gender As sex, child_details.dob, client.date AS date_first_seen, father_details.first_name AS father_first_name, father_details.last_name AS father_last_name,\n" +
+                "       client.gender As sex, strftime('%d/%m/%Y',child_details.dob) AS dob, strftime('%d/%m/%Y',client.date) AS date_first_seen, father_details.first_name AS father_first_name, father_details.last_name AS father_last_name,\n" +
                 "       mother_details.first_name AS mother_first_name, mother_details.last_name AS mother_last_name,\n" +
                 "       mother_details.phone_number AS mother_phone, client.village, mother_details.phone_number AS telephone_number,\n" +
-                "       CASE WHEN vaccines.name = 'bcg' THEN vaccines.date ELSE Null END \"bcg\",\n" +
-                "       CASE WHEN vaccines.name = 'opv_0' THEN vaccines.date ELSE Null END \"polio_birth_dose\",\n" +
-                "       CASE WHEN vaccines.name = 'opv_1' THEN vaccines.date ELSE Null END \"opv1\",\n" +
-                "       CASE WHEN vaccines.name = 'opv_2' THEN vaccines.date ELSE Null END \"opv2\",\n" +
-                "       CASE WHEN vaccines.name = 'opv_3' THEN vaccines.date ELSE Null END \"opv3\",\n" +
-                "       CASE WHEN vaccines.name = 'ipv' THEN vaccines.date ELSE Null END \"ipv\",\n" +
-                "       CASE WHEN vaccines.name = 'penta_1' THEN vaccines.date ELSE Null END \"penta1\",\n" +
-                "       CASE WHEN vaccines.name = 'penta_2' THEN vaccines.date ELSE Null END \"penta2\",\n" +
-                "       CASE WHEN vaccines.name = 'penta_3' THEN vaccines.date ELSE Null END \"penta3\",\n" +
-                "       CASE WHEN vaccines.name = 'pcv_1' THEN vaccines.date ELSE Null END \"pcv1\",\n" +
-                "       CASE WHEN vaccines.name = 'pcv_2' THEN vaccines.date ELSE Null END \"pcv2\",\n" +
-                "       CASE WHEN vaccines.name = 'pcv_3' THEN vaccines.date ELSE Null END \"pcv3\",\n" +
-                "       CASE WHEN vaccines.name = 'rota_1' THEN vaccines.date ELSE Null END \"rota1\",\n" +
-                "       CASE WHEN vaccines.name = 'rota_2' THEN vaccines.date ELSE Null END \"rota2\",\n" +
-                "       CASE WHEN vaccines.name = 'mr_1' THEN vaccines.date ELSE Null END \"mr1\",\n" +
-                "       CASE WHEN vaccines.name = 'vitamin_a' THEN vaccines.date ELSE Null END \"vitamin_a\",\n" +
-                "       CASE WHEN vaccines.name = 'yellow_fever' THEN vaccines.date ELSE Null END \"yellow_fever\",\n" +
-                "       CASE WHEN vaccines.name = 'mv_1' THEN vaccines.date ELSE Null END \"mv1\",\n" +
-                "       CASE WHEN vaccines.name = 'mv_2' THEN vaccines.date ELSE Null END \"mv2\",\n" +
-                "       CASE WHEN vaccines.name = 'mv_3' THEN vaccines.date ELSE Null END \"mv3\",\n" +
-                "       CASE WHEN vaccines.name = 'mr_1' THEN vaccines.date ELSE Null END \"fully_immunized\",\n" +
-                "       CASE WHEN vaccines.name = 'mr_2' THEN vaccines.date ELSE Null END \"mr2\",\n" +
-                "       CASE WHEN vaccines.name = 'mv_4' THEN vaccines.date ELSE Null END \"mv4\"\n" +
+                "       SUM(CASE WHEN vaccines.name = 'bcg' THEN vaccines.date ELSE Null END) \"bcg\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'opv_0' THEN vaccines.date ELSE Null END) \"polio_birth_dose\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'opv_1' THEN vaccines.date ELSE Null END) \"opv1\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'opv_2' THEN vaccines.date ELSE Null END) \"opv2\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'opv_3' THEN vaccines.date ELSE Null END) \"opv3\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'ipv' THEN vaccines.date ELSE Null END) \"ipv\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'penta_1' THEN vaccines.date ELSE Null END) \"penta1\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'penta_2' THEN vaccines.date ELSE Null END) \"penta2\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'penta_3' THEN vaccines.date ELSE Null END) \"penta3\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'pcv_1' THEN vaccines.date ELSE Null END) \"pcv1\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'pcv_2' THEN vaccines.date ELSE Null END) \"pcv2\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'pcv_3' THEN vaccines.date ELSE Null END) \"pcv3\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'rota_1' THEN vaccines.date ELSE Null END) \"rota1\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'rota_2' THEN vaccines.date ELSE Null END) \"rota2\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'mr_1' THEN vaccines.date ELSE Null END) \"mr1\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'vitamin_a' THEN vaccines.date ELSE Null END) \"vitamin_a\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'yellow_fever' THEN vaccines.date ELSE Null END) \"yellow_fever\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'mv_1' THEN vaccines.date ELSE Null END) \"mv1\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'mv_2' THEN vaccines.date ELSE Null END) \"mv2\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'mv_3' THEN vaccines.date ELSE Null END) \"mv3\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'mr_1' THEN vaccines.date ELSE Null END) \"fully_immunized\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'mr_2' THEN vaccines.date ELSE Null END) \"mr2\",\n" +
+                "       SUM(CASE WHEN vaccines.name = 'mv_4' THEN vaccines.date ELSE Null END) \"mv4\"\n" +
                 "FROM ec_child_details child_details\n" +
-                "LEFT JOIN ec_mother_details mother_details ON child_details.base_entity_id = mother_details.base_entity_id\n" +
-                "LEFT JOIN ec_father_details father_details ON child_details.base_entity_id = father_details.base_entity_id\n" +
+                "LEFT OUTER JOIN ec_mother_details mother_details ON child_details.relational_id = mother_details.base_entity_id\n" +
+                "LEFT JOIN ec_father_details father_details ON child_details.father_relational_id = father_details.base_entity_id\n" +
                 "LEFT JOIN ec_client client ON child_details.base_entity_id = client.base_entity_id\n" +
                 "LEFT JOIN vaccines ON vaccines.base_entity_id = child_details.base_entity_id\n" +
-                "WHERE client.date BETWEEN "+startDate+" AND "+endDate+"\n" +
-                "GROUP BY child_details.base_entity_id;";
+                "LEFT JOIN vaccines ON vaccines.base_entity_id = child_details.base_entity_id\n" +
+                "WHERE client.date BETWEEN '"+startDate+"' AND '"+endDate+"'" +
+                "GROUP BY kip_id;";
 
         return sql;
     }

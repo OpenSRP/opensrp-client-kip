@@ -20,9 +20,15 @@ import net.sqlcipher.Cursor;
 import net.sqlcipher.database.SQLiteDatabase;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFCreationHelper;
+import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.smartregister.child.util.Utils;
 import org.smartregister.kip.R;
 import org.smartregister.kip.application.KipApplication;
@@ -30,7 +36,6 @@ import org.smartregister.kip.pojo.Moh510SummaryReport;
 import org.smartregister.kip.repository.Moh510SummaryReportRepository;
 import org.smartregister.kip.util.KipChildUtils;
 import org.smartregister.location.helper.LocationHelper;
-import org.smartregister.opd.utils.OpdDbConstants;
 import org.smartregister.opd.utils.OpdUtils;
 
 import java.io.File;
@@ -41,6 +46,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -53,7 +59,8 @@ import timber.log.Timber;
 public class Moh510ReportActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, View.OnClickListener {
 
     Moh510SummaryReportRepository summaryReportRepository = KipApplication.getInstance().moh510SummaryReportRepository();
-    private File filePath = new File(Environment.getExternalStorageDirectory()+"/moh510Report.xls");
+    private File filePath = new File(
+            Environment.getExternalStorageDirectory()+"/"+ LocationHelper.getInstance().getOpenMrsReadableName(KipChildUtils.getCurrentLocality())+"moh510Report.xls");
     private int mYear, mMonth, mDay, mHour, mMinute;
     ImageButton closeReport;
     EditText endTextDate, startEditTextDate;
@@ -185,7 +192,7 @@ public class Moh510ReportActivity extends AppCompatActivity implements DatePicke
         int i = 0;
         for (Moh510SummaryReport report:getIndicatorValues()){
             reportInfo.put(i++,new Object[]{report.getKipId(), getFullName(report.getChildFirstName(),report.getChildLastName()),report.getSex(),
-                    dateFormat(report.getDob()), dateFormat(report.getDateFirstSeen()), getFullName(report.getFatherFirstName(), report.getFatherLastName()),getFullName(report.getMotherFirstName(),report.getMotherLastName()),
+                    report.getDob(), report.getDateFirstSeen(), getFullName(report.getFatherFirstName(), report.getFatherLastName()),getFullName(report.getMotherFirstName(),report.getMotherLastName()),
                     report.getMotherPhoneNumber(), report.getVillage(),report.getTelephone(), dateConverter(report.getBcg()),
                     dateConverter(report.getPolioBirthDose()), dateConverter(report.getOpv1()), dateConverter(report.getOpv2()),dateConverter(report.getOpv3()), dateConverter(report.getIpv()),
             dateConverter(report.getDpt1()),dateConverter(report.getDpt2()),dateConverter(report.getDpt3()), dateConverter(report.getPcv1()), dateConverter(report.getPcv2()),dateConverter(report.getPcv3()), dateConverter(report.getRota1()),dateConverter(report.getRota2()),
@@ -196,6 +203,9 @@ public class Moh510ReportActivity extends AppCompatActivity implements DatePicke
 
             HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
             HSSFSheet sheets = hssfWorkbook.createSheet("ImmunizationRegister");
+            sheets.addMergedRegion(CellRangeAddress.valueOf("A1:E1"));
+            sheets.addMergedRegion(CellRangeAddress.valueOf("A2:E2"));
+
             HSSFRow tittle = sheets.createRow(0);
             HSSFRow facility = sheets.createRow(1);
             HSSFRow year = sheets.createRow(2);
@@ -203,6 +213,7 @@ public class Moh510ReportActivity extends AppCompatActivity implements DatePicke
             HSSFRow columnName = sheets.createRow(4);
 
             HSSFCell tittleCell = tittle.createCell(0);
+
             HSSFCell facilityCell = facility.createCell(0);
             HSSFCell yearCell = year.createCell(0);
             HSSFCell strStart = dateRange.createCell(0);
@@ -227,7 +238,8 @@ public class Moh510ReportActivity extends AppCompatActivity implements DatePicke
             }
 
             HSSFRow queryRow;
-            int columnNumber = getIndicatorValues().size();
+            int columnSize = getIndicatorValues().size()+5;
+            int columnNumber = 5;
 
 //            row data
             Set<Integer> keyId = reportInfo.keySet();
@@ -241,6 +253,10 @@ public class Moh510ReportActivity extends AppCompatActivity implements DatePicke
                 }
 
             }
+
+//            for (int col = 0;col<columnSize; col++){
+//                sheets.autoSizeColumn(col);
+//            }
             try {
 
                 if (!filePath.exists()) {
@@ -282,7 +298,7 @@ public class Moh510ReportActivity extends AppCompatActivity implements DatePicke
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
             Date formDate = dateFormat.parse(date);
 
-            datFt = OpdUtils.convertDate(formDate, "dd-MM-yyyy");
+            datFt = OpdUtils.convertDate(formDate,"yyyy-MM-dd'T'HH:mm:ss.SSS'+03:00'");
         } catch (Exception e){
             Timber.d("--->dateFormat %s",e.getMessage());
         }
@@ -306,6 +322,7 @@ public class Moh510ReportActivity extends AppCompatActivity implements DatePicke
                 sCursor = db.rawQuery(summaryReportRepository.sqlDateRange( dateFormat(startDate), dateFormat(endDate)),null);
             }
             moh510SummaryReports = summaryReportRepository.readAll(sCursor);
+            Timber.i("--->getMoh510SummaryReport: %s",sCursor);
 
         } catch (Exception e){
             Timber.d("-->getMoh510SummaryReport" + e.getMessage());
