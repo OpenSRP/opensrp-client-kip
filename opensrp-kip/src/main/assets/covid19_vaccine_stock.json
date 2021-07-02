@@ -37,6 +37,13 @@
           "type": "SettingConfiguration",
           "value": "100",
           "key": "pfizer_vials_amount"
+        },
+        {
+          "description": "978676-001:2022-02-01",
+          "label": "Johnson and Johnson Stock Details",
+          "type": "SettingConfiguration",
+          "value": "100",
+          "key": "johnson_and_johnson_vials_amount"
         }
       ],
       "type": "SettingConfiguration",

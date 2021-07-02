@@ -181,6 +181,9 @@ public class KipOpdProfileActivity extends BaseOpdProfileActivity implements Kip
                             } else if (value.toLowerCase().equalsIgnoreCase("moderna") && settingsKey.equalsIgnoreCase(KipConstants.MODERNA_VIALS_AMOUNT)) {
                                 setValues(metadata);
                                 break;
+                            } else if (value.toLowerCase().equalsIgnoreCase("johnson_and_johnson") && settingsKey.equalsIgnoreCase(KipConstants.JOHNSON_AND_JOHNSON_VIALS_AMOUNT)) {
+                                setValues(metadata);
+                                break;
                             }
                         }
                     }

@@ -62,14 +62,16 @@
           "Sinopharm",
           "Sinovac",
           "Morderna",
-          "Pfizer"
+          "Pfizer",
+          "Johnson and Johnson"
         ],
         "openmrs_choice_ids": {
           "AZ Oxford": "",
           "Sinopharm": "",
           "Sinovac": "",
           "Morderna": "",
-          "Pfizer": ""
+          "Pfizer": "",
+          "Johnson and Johnson": ""
         },
         "v_required": {
           "value": true,

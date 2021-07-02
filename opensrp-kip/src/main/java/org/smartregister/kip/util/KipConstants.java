@@ -25,6 +25,7 @@ public class KipConstants {
     public static final String PFIZER_VIALS_AMOUNT = "pfizer_vials_amount";
     public static final String MODERNA_VIALS_AMOUNT = "moderna_vials_amount";
     public static final String PHONE_NUMBER = "phone_number";
+    public static final String JOHNSON_AND_JOHNSON_VIALS_AMOUNT = "johnson_and_johnson_vials_amount";
 
     public interface DateFormat {
         String HH_MM_AMPM = "h:mm a";

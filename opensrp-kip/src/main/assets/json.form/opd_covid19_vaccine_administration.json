@@ -94,14 +94,20 @@
             "openmrs_entity_id": ""
           },
           {
-            "key": "Pfizer",
-            "text": "pfizer",
+            "key": "pfizer",
+            "text": "Pfizer",
             "openmrs_entity": "",
             "openmrs_entity_id": ""
           },
           {
             "key": "moderna",
             "text": "Moderna",
+            "openmrs_entity": "",
+            "openmrs_entity_id": ""
+          },
+          {
+            "key": "johnson_and_johnson",
+            "text": "Johnson and Johnson",
             "openmrs_entity": "",
             "openmrs_entity_id": ""
           }
@@ -121,13 +127,22 @@
         "hint": "Number of AZ oxford vials"
       },
       {
+        "key": "johnson_and_johnson_vials_amount",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "type": "edit_text",
+        "read_only": true,
+        "hint": "Number Johnson and Johnson vials"
+      },
+      {
         "key": "sinopharm_vials_amount",
         "openmrs_entity_parent": "",
         "openmrs_entity": "Concept",
         "openmrs_entity_id": "",
         "type": "edit_text",
         "read_only": true,
-        "hint": "Number sinopharm vials"
+        "hint": "Number Sinopharm vials"
       },
       {
         "key": "sinovac_vials_amount",
@@ -136,7 +151,7 @@
         "openmrs_entity_id": "",
         "type": "edit_text",
         "read_only": true,
-        "hint": "Number sinovac vials"
+        "hint": "Number Sinovac vials"
       },
       {
         "key": "pfizer_vials_amount",

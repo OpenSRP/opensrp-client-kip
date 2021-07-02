@@ -52,8 +52,7 @@ public class KipJsonFormUtils extends ChildJsonFormUtils {
     public static final String SECTIONS = "sections";
     public static final String attributes = "attributes";
     public static final String ENCOUNTER = "encounter";
-    public static final String
-            AZ_OXFORD_VIALS_AMOUNT = "az_oxford_vials_amount";
+    public static final String AZ_OXFORD_VIALS_AMOUNT = "az_oxford_vials_amount";
     public static final String AZ_OXFORD_VIALS_LOT_NUMBER = "az_oxford_vials_lot_number";
     public static final String AZ_OXFORD_VIALS_EXPIRY = "az_oxford_vials_expiry";
     public static final String SINOPHARM_VIALS_AMOUNT = "sinopharm_vials_amount";
@@ -62,6 +61,10 @@ public class KipJsonFormUtils extends ChildJsonFormUtils {
     public static final String SINOVAC_VIALS_AMOUNT = "sinovac_vials_amount";
     public static final String SINOVAC_VIALS_LOT_NUMBER = "sinovac_vials_lot_number";
     public static final String SINOVAC_VIALS_EXPIRY = "sinovac_vials_expiry";
+
+    public static final String JOHNSON_AND_JOHNSON_VIALS_AMOUNT = "johnson_and_johnson_vials_amount";
+    public static final String JOHNSON_AND_JOHNSON_VIALS_EXPIRY = "johnson_and_johnson_vials_expiry";
+    public static final String JOHNSON_AND_JOHNSON_VIALS_LOT_NUMBER = "johnson_and_johnson_vials_lot_number";
 
     public static final String MODERNA_VIALS_AMOUNT = "moderna_vials_amount";
     public static final String MODERNA_VIALS_LOT_NUMBER = "moderna_vials_lot_number";
@@ -456,6 +459,7 @@ public class KipJsonFormUtils extends ChildJsonFormUtils {
         StringBuilder sinovac = new StringBuilder();
         StringBuilder mordana = new StringBuilder();
         StringBuilder pfizer = new StringBuilder();
+        StringBuilder johnsonJohnson = new StringBuilder();
         try {
             for (int i = 0; i < fields.length(); i++) {
                 JSONObject field = fields.getJSONObject(i);
@@ -475,6 +479,8 @@ public class KipJsonFormUtils extends ChildJsonFormUtils {
                     }
                     if (key.contains("pfizer_vials") && field.has(KipConstants.KeyUtils.VALUE)) {
                         sinovac.insert(0, field.optString(KipConstants.KeyUtils.VALUE) + ":");
+                    } if (key.contains("johnson_and_johnson_vials") && field.has(KipConstants.KeyUtils.VALUE)) {
+                        sinovac.insert(0, field.optString(KipConstants.KeyUtils.VALUE) + ":");
                     }
                 }
             }
@@ -482,10 +488,10 @@ public class KipJsonFormUtils extends ChildJsonFormUtils {
             Timber.e(exception);
         }
 
-        return createNewFields(fields, azOxford.toString(), sinopharm.toString(), sinovac.toString(), mordana.toString(), pfizer.toString());
+        return createNewFields(fields, azOxford.toString(), sinopharm.toString(), sinovac.toString(), mordana.toString(), pfizer.toString(), johnsonJohnson.toString());
     }
 
-    private static JSONArray createNewFields(JSONArray fields, String azOxford, String sinopharm, String sinovac, String morderna, String pfzer) {
+    private static JSONArray createNewFields(JSONArray fields, String azOxford, String sinopharm, String sinovac, String morderna, String pfzer, String johnsonJohnson) {
         JSONArray newFormFields = new JSONArray();
         try {
             for (int i = 0; i < fields.length(); i++) {
@@ -510,6 +516,11 @@ public class KipJsonFormUtils extends ChildJsonFormUtils {
                     }
                     if (key.equalsIgnoreCase(KipConstants.PFIZER_VIALS_AMOUNT)) {
                         field.put(KipConstants.KeyUtils.VALUE, pfzer);
+                        newFormFields.put(field);
+                    }
+
+                    if (key.equalsIgnoreCase(KipConstants.JOHNSON_AND_JOHNSON_VIALS_AMOUNT)) {
+                        field.put(KipConstants.KeyUtils.VALUE, johnsonJohnson);
                         newFormFields.put(field);
                     }
                 }
@@ -555,6 +566,7 @@ public class KipJsonFormUtils extends ChildJsonFormUtils {
             String[] sinovac = settings.get(KipConstants.SINOVAC_VIALS_AMOUNT).split(":");
             String[] moderna = settings.get(KipConstants.MODERNA_VIALS_AMOUNT).split(":");
             String[] pfizer = settings.get(KipConstants.PFIZER_VIALS_AMOUNT).split(":");
+            String[] johnsonAndJohnson = settings.get(KipConstants.JOHNSON_AND_JOHNSON_VIALS_AMOUNT).split(":");
 
             for (int i = 0; i < fields.length(); i++) {
                 JSONObject field = fields.getJSONObject(i);
@@ -590,6 +602,12 @@ public class KipJsonFormUtils extends ChildJsonFormUtils {
                         field.put(KipConstants.VALUE, pfizer[1]);
                     } else if (fieldKey.equalsIgnoreCase(PFIZER_VIALS_EXPIRY)) {
                         field.put(KipConstants.VALUE, pfizer[2]);
+                    } else if (fieldKey.equalsIgnoreCase(JOHNSON_AND_JOHNSON_VIALS_AMOUNT)) {
+                        field.put(KipConstants.VALUE, johnsonAndJohnson[0]);
+                    } else if (fieldKey.equalsIgnoreCase(JOHNSON_AND_JOHNSON_VIALS_LOT_NUMBER)) {
+                        field.put(KipConstants.VALUE, johnsonAndJohnson[1]);
+                    } else if (fieldKey.equalsIgnoreCase(JOHNSON_AND_JOHNSON_VIALS_EXPIRY)) {
+                        field.put(KipConstants.VALUE, johnsonAndJohnson[2]);
                     }
 
                 }

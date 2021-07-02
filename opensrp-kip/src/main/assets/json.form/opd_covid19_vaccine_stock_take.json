@@ -225,6 +225,7 @@
   },
   "step5": {
     "title": "Moderna Vaccine Stock Take",
+    "next": "step6",
     "fields": [
       {
         "key": "moderna_vials_amount",
@@ -260,6 +261,47 @@
         "v_required": {
           "value": true,
           "err": "Enter the Moderna vials Expiry Date"
+        }
+      }
+    ]
+  },
+  "step6": {
+    "title": "Johnson & Johnson Vaccine Stock Take",
+    "fields": [
+      {
+        "key": "johnson_and_johnson_vials_amount",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "type": "edit_text",
+        "hint": "Number Johnson and Johnson vials",
+        "v_required": {
+          "value": true,
+          "err": "Enter the number of Johnson and Johnson vials"
+        }
+      },
+      {
+        "key": "johnson_and_johnson_vials_lot_number",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "type": "edit_text",
+        "hint": "Enter the Johnson and Johnson vials lot number",
+        "v_required": {
+          "value": true,
+          "err": "Enter the number of Moderna vials lot number"
+        }
+      },
+      {
+        "key": "johnson_and_johnson_vials_expiry",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "Concept",
+        "openmrs_entity_id": "",
+        "hint": "Enter the Johnson and Johnson vials Expiry Date",
+        "type": "date_picker",
+        "v_required": {
+          "value": true,
+          "err": "Enter the Johnson and Johnson vials Expiry Date"
         }
       }
     ]
