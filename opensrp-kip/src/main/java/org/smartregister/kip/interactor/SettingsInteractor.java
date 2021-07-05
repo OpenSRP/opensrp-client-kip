@@ -49,6 +49,7 @@ public class SettingsInteractor implements Covid19VaccineStockSettingsContract.I
             settingObject = new JSONObject(covid19VaccineStockSettings.getValue());
         }
         localSettings = settingObject.has(AllConstants.SETTINGS) ? settingObject.getJSONArray(AllConstants.SETTINGS) : null;
+
         if (localSettings != null) {
             for (int i = 0; i < localSettings.length(); i++) {
                 JSONObject localSetting = localSettings.getJSONObject(i);
@@ -60,9 +61,12 @@ public class SettingsInteractor implements Covid19VaccineStockSettingsContract.I
                     updateSettings(covid19VaccineStockSettingsMap, localSetting, KipConstants.SINOVAC_VIALS_AMOUNT);
                 } else if (localSetting.getString(KipConstants.KeyUtils.KEY).equalsIgnoreCase(KipConstants.PFIZER_VIALS_AMOUNT)) {
                     updateSettings(covid19VaccineStockSettingsMap, localSetting, KipConstants.PFIZER_VIALS_AMOUNT);
-                } else {
+                } else if (localSetting.getString(KipConstants.KeyUtils.KEY).equalsIgnoreCase(KipConstants.MODERNA_VIALS_AMOUNT)){
                     updateSettings(covid19VaccineStockSettingsMap, localSetting, KipConstants.MODERNA_VIALS_AMOUNT);
+                } else{
+                    updateSettings(covid19VaccineStockSettingsMap, localSetting, KipConstants.JOHNSON_AND_JOHNSON_VIALS_AMOUNT);
                 }
+                System.out.println("localsettings length: ======>"+localSettings.length() + "value of :" + localSetting.toString());
             }
         }
 
@@ -84,7 +88,7 @@ public class SettingsInteractor implements Covid19VaccineStockSettingsContract.I
     }
 
     private Boolean getPropertyForInitialSaveAction(Context context) {
-        String value = Utils.getProperties(context).getProperty(KipConstants.Properties.CAN_SAVE_SITE_INITIAL_SETTING, "false");
+        String value = Utils.getProperties(context).getProperty(KipConstants.Properties.CAN_SAVE_SITE_INITIAL_SETTING, "true");
         return Boolean.valueOf(value);
     }
 

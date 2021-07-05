@@ -43,7 +43,7 @@ public class Moh510SummaryReportRepository extends BaseRepository {
                 "LEFT OUTER JOIN ec_mother_details mother_details ON child_details.relational_id = mother_details.base_entity_id\n" +
                 "LEFT JOIN ec_father_details father_details ON child_details.father_relational_id = father_details.base_entity_id\n" +
                 "LEFT JOIN ec_client client ON child_details.base_entity_id = client.base_entity_id\n" +
-                "LEFT JOIN vaccines ON vaccines.base_entity_id = child_details.base_entity_id" +
+                "LEFT JOIN vaccines ON vaccines.base_entity_id = child_details.base_entity_id\n" +
                 "GROUP BY kip_id;";
 
         return sql;
@@ -83,7 +83,7 @@ public class Moh510SummaryReportRepository extends BaseRepository {
                 "LEFT JOIN ec_client client ON child_details.base_entity_id = client.base_entity_id\n" +
                 "LEFT JOIN vaccines ON vaccines.base_entity_id = child_details.base_entity_id\n" +
                 "LEFT JOIN vaccines ON vaccines.base_entity_id = child_details.base_entity_id\n" +
-                "WHERE client.date BETWEEN '"+startDate+"' AND '"+endDate+"'" +
+                "WHERE client.date BETWEEN '"+startDate+"' AND '"+endDate+"'\n" +
                 "GROUP BY kip_id;";
 
         return sql;

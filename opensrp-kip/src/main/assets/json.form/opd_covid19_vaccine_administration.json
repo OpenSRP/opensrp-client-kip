@@ -380,6 +380,8 @@
         "openmrs_entity": "",
         "openmrs_entity_id": "",
         "type": "date_picker",
+        "min_date": "today",
+        "max_date": "today+20y",
         "hint": "Please add the expiry date",
         "v_required": {
           "value": true,

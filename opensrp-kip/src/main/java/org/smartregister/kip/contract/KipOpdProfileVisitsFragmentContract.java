@@ -3,7 +3,6 @@ package org.smartregister.kip.contract;
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 
-
 import org.jeasy.rules.api.Facts;
 import org.smartregister.kip.pojo.KipOpdVisitSummary;
 import org.smartregister.opd.contract.OpdProfileVisitsFragmentContract;

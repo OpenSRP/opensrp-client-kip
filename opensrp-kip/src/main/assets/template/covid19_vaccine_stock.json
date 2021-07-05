@@ -20,16 +20,22 @@
       "key": "sinovac_vials_amount"
     },
     {
-      "description": "978676-001:2022-02-01",
+      "description": "978677-001:2022-02-01",
       "label": "Moderna Stock Details",
       "type": "SettingConfiguration",
       "key": "moderna_vials_amount"
     },
     {
-      "description": "978676-001:2022-02-01",
+      "description": "978679-001:2022-02-01",
       "label": "Pfizer Stock Details",
       "type": "SettingConfiguration",
       "key": "pfizer_vials_amount"
+    },
+    {
+      "description": "978678-001:2022-02-01",
+      "label": "Johnson and Johnson Stock Details",
+      "type": "SettingConfiguration",
+      "key": "johnson_and_johnson_vials_amount"
     }
   ],
   "type": "SettingConfiguration"

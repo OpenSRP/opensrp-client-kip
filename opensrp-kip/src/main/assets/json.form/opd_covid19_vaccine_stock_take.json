@@ -1,5 +1,5 @@
 {
-  "count": "5",
+  "count": "6",
   "encounter_type": "OPD Covid19 Vaccine Stock Take",
   "entity_id": "",
   "relational_id": "",
@@ -89,6 +89,8 @@
         "openmrs_entity_id": "",
         "hint": "Enter the AZ oxford vials Expiry Date",
         "type": "date_picker",
+        "min_date": "today",
+        "max_date": "today+20y",
         "v_required": {
           "value": true,
           "err": "Enter the AZ oxford vials Expiry Date"
@@ -132,6 +134,8 @@
         "openmrs_entity_id": "",
         "hint": "Enter the  sinopharm vials Expiry Date",
         "type": "date_picker",
+        "min_date": "today",
+        "max_date": "today+20y",
         "v_required": {
           "value": true,
           "err": "Enter the sinopharm vials Expiry Date"
@@ -174,6 +178,8 @@
         "openmrs_entity_id": "",
         "hint": "Enter the sinovac vials Expiry Date",
         "type": "date_picker",
+        "min_date": "today",
+        "max_date": "today+20y",
         "v_required": {
           "value": true,
           "err": "Enter the sinovac vials Expiry Date"
@@ -216,6 +222,8 @@
         "openmrs_entity_id": "",
         "hint": "Enter the Pfizer vials Expiry Date",
         "type": "date_picker",
+        "min_date": "today",
+        "max_date": "today+20y",
         "v_required": {
           "value": true,
           "err": "Enter the Pfizer vials Expiry Date"
@@ -258,6 +266,8 @@
         "openmrs_entity_id": "",
         "hint": "Enter the Moderna vials Expiry Date",
         "type": "date_picker",
+        "min_date": "today",
+        "max_date": "today+20y",
         "v_required": {
           "value": true,
           "err": "Enter the Moderna vials Expiry Date"
@@ -299,6 +309,8 @@
         "openmrs_entity_id": "",
         "hint": "Enter the Johnson and Johnson vials Expiry Date",
         "type": "date_picker",
+        "min_date": "today",
+        "max_date": "today+20y",
         "v_required": {
           "value": true,
           "err": "Enter the Johnson and Johnson vials Expiry Date"
