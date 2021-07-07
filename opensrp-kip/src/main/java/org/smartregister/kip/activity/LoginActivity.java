@@ -51,27 +51,27 @@ public class LoginActivity extends BaseLoginActivity implements BaseLoginContrac
         if (remote) {
             org.smartregister.util.Utils.startAsyncTask(new SaveTeamLocationsTask(), null);
         }
-        goToCovid19VaccineStockSettings(remote);
+        gotToHomeRegister(remote);
         finish();
     }
 
-//    private void gotToHomeRegister(boolean remote) {
-//        LoginResponse loginResponse = SUCCESS;
-//        String jsonPayload = new Gson().toJson(loginResponse.payload());
-//        Intent intent = new Intent(this, ChildRegisterActivity.class);
-//        intent.putExtra(KipConstants.IntentKeyUtils.IS_REMOTE_LOGIN, remote);
-//        Intent rIntent = new Intent(this, LocationsIntentService.class);
-//        rIntent.putExtra("userInfo", jsonPayload);
-//        startService(rIntent);
-//        startActivity(intent);
-//        finish();
-//    }
-
-    private void goToCovid19VaccineStockSettings(boolean remote) {
-        Intent intent = new Intent(this, Covid19VaccineStockSettingsEnterActivity.class);
+    private void gotToHomeRegister(boolean remote) {
+        LoginResponse loginResponse = SUCCESS;
+        String jsonPayload = new Gson().toJson(loginResponse.payload());
+        Intent intent = new Intent(this, ChildRegisterActivity.class);
         intent.putExtra(KipConstants.IntentKeyUtils.IS_REMOTE_LOGIN, remote);
+        Intent rIntent = new Intent(this, LocationsIntentService.class);
+        rIntent.putExtra("userInfo", jsonPayload);
+        startService(rIntent);
         startActivity(intent);
+        finish();
     }
+
+//    private void goToCovid19VaccineStockSettings(boolean remote) {
+//        Intent intent = new Intent(this, Covid19VaccineStockSettingsEnterActivity.class);
+//        intent.putExtra(KipConstants.IntentKeyUtils.IS_REMOTE_LOGIN, remote);
+//        startActivity(intent);
+//    }
 
     @Override
     protected void attachBaseContext(Context base) {

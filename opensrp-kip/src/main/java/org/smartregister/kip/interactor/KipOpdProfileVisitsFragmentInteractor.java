@@ -5,7 +5,10 @@ import androidx.annotation.NonNull;
 import org.smartregister.kip.application.KipApplication;
 import org.smartregister.kip.contract.KipOpdProfileVisitsFragmentContract;
 import org.smartregister.kip.pojo.KipOpdVisitSummary;
+import org.smartregister.opd.OpdLibrary;
+import org.smartregister.opd.contract.OpdProfileVisitsFragmentContract;
 import org.smartregister.opd.interactor.OpdProfileVisitsFragmentInteractor;
+import org.smartregister.opd.pojo.OpdVisitSummary;
 import org.smartregister.opd.utils.AppExecutors;
 
 import java.util.List;

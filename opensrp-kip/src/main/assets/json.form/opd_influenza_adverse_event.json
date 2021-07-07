@@ -241,78 +241,56 @@
         }
       },
       {
-        "key": "influenza_aefi_action_taken",
+        "key": "influenza_client_referred",
         "openmrs_entity_parent": "",
-        "openmrs_entity": "",
-        "openmrs_entity_id": "",
-        "openmrs_data_type": "",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "163340AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "openmrs_data_type": "select one",
         "type": "native_radio",
-        "label": "Select from the Action Taken",
+        "label": "Influenza Client Referred?",
         "label_text_style": "bold",
         "options": [
           {
-            "key": "none",
-            "text": "None",
+            "key": "Yes",
+            "text": "Yes",
             "openmrs_entity_parent": "",
-            "openmrs_entity": "",
-            "openmrs_entity_id": ""
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "163340AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
           },
           {
-            "key": "referral",
-            "text": "Referred to a Facility",
+            "key": "No",
+            "text": "No",
             "openmrs_entity_parent": "",
-            "openmrs_entity": "",
-            "openmrs_entity_id": ""
-          },
-          {
-            "key": "admitted_to_hospital",
-            "text": "Admitted to the hospital",
-            "openmrs_entity_parent": "",
-            "openmrs_entity": "",
-            "openmrs_entity_id": ""
-          },
-          {
-            "key": "reported_to_aefi_form",
-            "text": "Reported to AEFI Form",
-            "openmrs_entity_parent": "",
-            "openmrs_entity": "",
-            "openmrs_entity_id": ""
-          },
-          {
-            "key": "treated",
-            "text": "Treated and Discharged",
-            "openmrs_entity_parent": "",
-            "openmrs_entity": "",
-            "openmrs_entity_id": ""
-          },
-          {
-            "key": "other",
-            "text": "Other (specify)",
-            "openmrs_entity_parent": "",
-            "openmrs_entity": "",
-            "openmrs_entity_id": ""
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "163340AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
           }
-        ],
-        "v_required": {
-          "value": false,
-          "err": "Please select at least one reaction"
-        }
+        ]
       },
       {
-        "key": "other_influenza_aefi_action_taken",
+        "key": "influenza_aefi_form",
         "openmrs_entity_parent": "",
-        "openmrs_entity": "",
-        "openmrs_entity_id": "",
-        "openmrs_data_type": "text",
-        "type": "edit_text",
-        "hint": "Other Action Taken",
-        "relevance": {
-          "rules-engine": {
-            "ex-rules": {
-              "rules-file": "opd/opd_influenza_adverse_event_relevance.yml"
-            }
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "163340AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "openmrs_data_type": "select one",
+        "type": "native_radio",
+        "label": "Was the AEFI form completed?",
+        "label_text_style": "bold",
+        "options": [
+          {
+            "key": "Yes",
+            "text": "Yes",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "163340AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          {
+            "key": "No",
+            "text": "No",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "163340AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
           }
-        }
+        ]
       }
     ]
   }

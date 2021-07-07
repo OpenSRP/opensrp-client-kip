@@ -64,7 +64,7 @@ public class Moh510ReportActivity extends AppCompatActivity implements DatePicke
     private int mYear, mMonth, mDay, mHour, mMinute;
     ImageButton closeReport;
     EditText endTextDate, startEditTextDate;
-    Button cancel, endDateBtn,startDateBtn, customDateRangeBtn;
+    Button cancel, endDateBtn,startDateBtn, customDateRangeBtn, ok;
     FrameLayout frameLayout, download;
 
     private String[] columnsVariable = {"KIP ID", "CHILD'S NAME", "SEX", "DATE OF BIRTH (DD/MM/YYYY)",
@@ -90,6 +90,7 @@ public class Moh510ReportActivity extends AppCompatActivity implements DatePicke
         customDateRangeBtn = findViewById(R.id.custom_date_button);
         frameLayout = findViewById(R.id.custom_date);
         download = findViewById(R.id.download);
+        ok = findViewById(R.id.ok);
 
         cancel = findViewById(R.id.cancel);
         cancel.setOnClickListener(this);
@@ -97,6 +98,7 @@ public class Moh510ReportActivity extends AppCompatActivity implements DatePicke
         endDateBtn.setOnClickListener(this);
         customDateRangeBtn.setOnClickListener(this);
         closeReport.setOnClickListener(this);
+        ok.setOnClickListener(this);
 
         if (startEditTextDate.getText().toString() == null){
             startEditTextDate.setVisibility(View.GONE);
@@ -172,6 +174,11 @@ public class Moh510ReportActivity extends AppCompatActivity implements DatePicke
         } else if (v== customDateRangeBtn){
             frameLayout.setVisibility(View.VISIBLE);
             download.setVisibility(View.GONE);
+        } else if (v == ok){
+            buttonWriteToExcel(v);
+            Intent intent = new Intent(v.getContext(), ChildRegisterActivity.class);
+            startActivityForResult(intent, 0);
+            finish();
         }
 
     }

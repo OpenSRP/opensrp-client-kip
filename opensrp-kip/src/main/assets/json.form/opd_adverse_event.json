@@ -1,6 +1,6 @@
 {
   "count": "1",
-  "encounter_type": "Covid AEFI",
+  "encounter_type": "Covid 19 AEFI",
   "entity_id": "",
   "metadata": {
     "start": {
@@ -47,7 +47,7 @@
     "encounter_location": ""
   },
   "step1": {
-    "title": "Covid Adverse Event Reporting",
+    "title": "Covid 19 Adverse Event Reporting",
     "fields": [
       {
         "key": "Reaction_Vaccine",
@@ -235,6 +235,58 @@
             ]
           }
         }
+      },
+      {
+        "key": "covid_19_client_referred",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "163340AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "openmrs_data_type": "select one",
+        "type": "native_radio",
+        "label": "Covid 19 Client Referred?",
+        "label_text_style": "bold",
+        "options": [
+          {
+            "key": "Yes",
+            "text": "Yes",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "163340AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          {
+            "key": "No",
+            "text": "No",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "163340AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
+        ]
+      },
+      {
+        "key": "covid_19_aefi_form",
+        "openmrs_entity_parent": "",
+        "openmrs_entity": "concept",
+        "openmrs_entity_id": "163340AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "openmrs_data_type": "select one",
+        "type": "native_radio",
+        "label": "Was the AEFI form completed?",
+        "label_text_style": "bold",
+        "options": [
+          {
+            "key": "Yes",
+            "text": "Yes",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "163340AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          },
+          {
+            "key": "No",
+            "text": "No",
+            "openmrs_entity_parent": "",
+            "openmrs_entity": "concept",
+            "openmrs_entity_id": "163340AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
+        ]
       }
     ]
   }

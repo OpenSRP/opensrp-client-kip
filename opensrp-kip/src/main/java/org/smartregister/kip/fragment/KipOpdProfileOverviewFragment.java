@@ -2,18 +2,18 @@ package org.smartregister.kip.fragment;
 
 import android.os.Bundle;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.FragmentActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -180,7 +180,7 @@ public class KipOpdProfileOverviewFragment extends OpdProfileOverviewFragment im
                         opdCheckedInTv.setText(R.string.opd_checked_in);
                         showDiagnoseAndTreatBtn();
 
-                            showInfluenzaMedicalConditionBtn();
+                        showInfluenzaMedicalConditionBtn();
 
 
                         if (StringUtils.isNotEmpty(((KipOpdProfileActivity) activity).getOpdMedicalCheck())) {

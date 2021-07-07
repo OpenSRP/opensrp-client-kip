@@ -132,9 +132,10 @@
                     android:paddingBottom="10dp"
                     android:paddingTop="10dp"
                     android:text="@string/cancel"
+                    android:background="@color/record_weight_red_bg_st"
                     android:textAllCaps="false"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/opensrp_accent"
+                    android:textColor="@color/white"
                     android:textSize="22sp" />
 
                 <Button
@@ -143,13 +144,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:onClick="buttonWriteToExcel"
+                    android:drawableLeft="@drawable/ic_down"
                     android:paddingBottom="10dp"
                     android:paddingTop="10dp"
-                    android:text="@string/ok"
+                    android:text="Download"
                     android:textAllCaps="false"
                     android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/opensrp_accent"
+                    android:textColor="@color/white"
+                    android:background="@color/light_blue"
                     android:textSize="22sp" />
 
             </LinearLayout>
@@ -210,8 +212,8 @@
                         android:layout_height="wrap_content"
                         android:focusable="false"
                         android:text="Custom Date Range"
-                        android:src="@drawable/ic_down"
-                        android:background="@color/white"
+                        android:background="@color/light_blue"
+                        android:textColor="@color/white"
                         android:textAllCaps="false"
                         />
 
@@ -234,8 +236,10 @@
                         android:focusable="false"
                         android:onClick="buttonWriteToExcel"
                         android:text="Download Register"
-                        android:src="@drawable/ic_down"
-                        android:background="@color/white"
+                        android:textColor="@color/white"
+                        android:drawableLeft="@drawable/ic_down"
+                        android:drawableRight="@drawable/ic_down"
+                        android:background="@color/light_blue"
                         android:textAllCaps="false"
                         />
                 </com.google.android.material.textfield.TextInputLayout>

@@ -66,7 +66,6 @@ public class SettingsInteractor implements Covid19VaccineStockSettingsContract.I
                 } else{
                     updateSettings(covid19VaccineStockSettingsMap, localSetting, KipConstants.JOHNSON_AND_JOHNSON_VIALS_AMOUNT);
                 }
-                System.out.println("localsettings length: ======>"+localSettings.length() + "value of :" + localSetting.toString());
             }
         }
 

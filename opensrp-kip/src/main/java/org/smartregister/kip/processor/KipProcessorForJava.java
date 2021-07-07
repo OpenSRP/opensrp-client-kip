@@ -94,7 +94,7 @@ import java.util.Map;
 
 import timber.log.Timber;
 
-public class KipProcessorForJava extends ClientProcessorForJava implements MiniClientProcessorForJava {
+public class KipProcessorForJava extends OpdMiniClientProcessorForJava implements MiniClientProcessorForJava {
 
     private static KipProcessorForJava instance;
 
